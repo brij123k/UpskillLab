@@ -3,6 +3,7 @@ import Header from '../../components/Header'
 import Footer from '../../components/Footer'
 import TexturedBorderBox from '../../components/Cards/TexturedBorderBox'
 import ImageCarousel from '../../components/ImageCarousel'
+import FAQ from '../../components/FAQ'
 
 
 
@@ -30,7 +31,9 @@ function Login() {
                 />
             </div>
             <ImageCarousel />
-            sdlkfdskfjdskfdsf
+
+            <FAQ />
+
 
             <Footer />
         </>
