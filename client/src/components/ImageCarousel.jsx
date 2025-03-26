@@ -50,7 +50,7 @@ const ImageCarousel = () => {
     }, []);
 
     return (
-        <div className="bg-white flex items-center justify-center min-h-screen">
+        <div className="bg-white flex items-center justify-center">
             <div className="w-full  space-y-4">
                 {/* First Row (line-1) */}
                 <div className="overflow-x-hidden whitespace-nowrap" ref={line1Ref}>
@@ -70,8 +70,8 @@ const ImageCarousel = () => {
                     </div>
                 </div>
 
-                {/* Second Row (line-2) */}
-                <div className="overflow-x-hidden whitespace-nowrap" ref={line2Ref}>
+
+                {/* <div className="overflow-x-hidden whitespace-nowrap" ref={line2Ref}>
                     <div className="inline-flex line-2 items-center">
                         <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
                         <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
@@ -88,7 +88,7 @@ const ImageCarousel = () => {
                     </div>
                 </div>
 
-                {/* Third Row (line-3) */}
+              
                 <div className="overflow-x-hidden whitespace-nowrap" ref={line3Ref}>
                     <div className="inline-flex line-3 items-center">
                         <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
@@ -110,7 +110,7 @@ const ImageCarousel = () => {
                         <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
                         <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
                     </div>
-                </div>
+                </div> */}
             </div>
         </div>
     );

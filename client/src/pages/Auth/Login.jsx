@@ -6,10 +6,53 @@ import FAQ from '../../components/FAQ'
 import StudentFeedBack from '../../components/Cards/StudentFeedBack'
 import CardsContainer from '../../components/Cards/CardContainer'
 import CourseCards from '../../components/Courses/CourseCards'
+import Carousel from '../../components/Carousel'
 
 
 
 function Login() {
+    const cards = [
+        <div className="flex flex-col items-center justify-center h-full">
+            <h3 className="text-2xl font-semibold">First Slide</h3>
+            <p className="text-gray-600 mt-2">This is the first card</p>
+        </div>,
+        <div className="flex flex-col items-center justify-center h-full">
+            <h3 className="text-2xl font-semibold">Second Slide</h3>
+            <p className="text-gray-600 mt-2">This is the second card</p>
+        </div>,
+        <div className="flex flex-col items-center justify-center h-full">
+            <h3 className="text-2xl font-semibold">Third Slide</h3>
+            <p className="text-gray-600 mt-2">This is the third card</p>
+        </div>,
+        <div className="flex flex-col items-center justify-center h-full">
+            <h3 className="text-2xl font-semibold">Fourth Slide</h3>
+            <p className="text-gray-600 mt-2">This is the fourth card</p>
+        </div>,
+        <div className="flex flex-col items-center justify-center h-full">
+            <h3 className="text-2xl font-semibold">Fifth Slide</h3>
+            <p className="text-gray-600 mt-2">This is the fifth card</p>
+        </div>,
+        <div className="flex flex-col items-center justify-center h-full">
+            <h3 className="text-2xl font-semibold">First Slide</h3>
+            <p className="text-gray-600 mt-2">This is the first card</p>
+        </div>,
+        <div className="flex flex-col items-center justify-center h-full">
+            <h3 className="text-2xl font-semibold">Second Slide</h3>
+            <p className="text-gray-600 mt-2">This is the second card</p>
+        </div>,
+        <div className="flex flex-col items-center justify-center h-full">
+            <h3 className="text-2xl font-semibold">Third Slide</h3>
+            <p className="text-gray-600 mt-2">This is the third card</p>
+        </div>,
+        <div className="flex flex-col items-center justify-center h-full">
+            <h3 className="text-2xl font-semibold">Fourth Slide</h3>
+            <p className="text-gray-600 mt-2">This is the fourth card</p>
+        </div>,
+        <div className="flex flex-col items-center justify-center h-full">
+            <h3 className="text-2xl font-semibold">Fifth Slide</h3>
+            <p className="text-gray-600 mt-2">This is the fifth card</p>
+        </div>,
+    ];
 
     const faqs = [
         {
@@ -84,13 +127,72 @@ function Login() {
                 <img src="/images/Arrow.png" className='hidden md:inline h-[200px]' />
 
             </div>
+
+
             <CourseCards />
-            <div className='px-4 lg:px-20'>
+            <div className='flex flex-col md:flex-row bg-[#FDF8EE] py-4 px-8'>
+                <div className='w-full md:w-[60%] lg:w-[40%] '>
+                    <img src="/images/wantToStay.png" className='max-h-[550px]' />
+                </div>
+                <div className='flex flex-col items-center flex-1 mt-10 gap-8'>
+                    <h1 className='text-3xl font-bold max-w-[400px] text-center'>
+                        <span className='text-5xl text-[#FF7426]'>W</span>ant to stay
+                        informed about new courses or have any doubts?
+                    </h1>
+                    <div className=''>
 
-                <ImageCarousel />
+                        <button className="bg-[#4D2C5E]  text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">
+                            ENROLL NOW
+                        </button>
+                    </div>
+
+                </div>
+
             </div>
+            <div className='px-4  lg:px-20 flex flex-col items-center my-12'>
+                <h1 className='text-3xl font-bold mb-4'>Hiring Partners </h1>
+                <ImageCarousel />
+                <div className='w-full flex gap-4 justify-center'>
 
-            <FAQ faqs={faqs} />
+                    <button className="bg-[#4D2C5E]  text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">
+                        ENROLL NOW
+                    </button>
+                    <button className="bg-[#4D2C5E]  text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">
+                        ENROLL NOW
+                    </button>
+                </div>
+            </div>
+            <div className='flex flex-col-reverse items-center lg:items-start lg:flex-row bg-[#FDF8EE] py-4 px-8 pr-16'>
+
+                <div className='flex flex-col items-center flex-1 mt-10 gap-8'>
+                    <h1 className='text-3xl font-bold max-w-[400px] text-start'>
+                        <span className='text-5xl'>C</span>orporate <span className=' text-[#FF7426]'>Training </span>&
+                        Professional Service
+
+                    </h1>
+                    <p className='max-w-[400px] text-lg'>Learn the latest skills quickly with a personalised curriculum created to meet your needs.</p>
+                    <div className='max-w-[400px] w-full flex lg:flex-col  lg:items-start gap-2' >
+
+                        <button className="bg-[#4D2C5E]  text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">
+                            ENROLL NOW
+                        </button>
+                        <button className="bg-[#4D2C5E]  text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">
+                            ENROLL NOW
+                        </button>
+                    </div>
+
+                </div>
+                <div className='w-full md:w-[60%] lg:w-[30%]  '>
+                    <img src="/images/trainingImage.png" className='max-h-[550px]' />
+                </div>
+
+            </div>
+            <Carousel cards={cards} />
+
+            <div className='px-8'>
+
+                <FAQ faqs={faqs} />
+            </div>
 
 
             {/* 

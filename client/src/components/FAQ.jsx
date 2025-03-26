@@ -8,18 +8,18 @@ const FAQ = ({ faqs }) => {
     };
 
     return (
-        <div className='flex flex-col py-10 justify-center items-center relative overflow-hidden'>
+        <div className='flex flex-col py-10 lg:justify-center  items-center relative overflow-hidden'>
             <div className='w-100 h-100 absolute bottom-[-100px] left-[-250px] blur-lg  rounded-full bg-[#FF74261A]'></div>
-            <h5 className='font-semibold text-3xl'>Frequently Asked Questions</h5>
-            <p className='text-[#FF7426] font-semibold'>Most Frequently or Commonly asked Questions and Doubts by Enquiries</p>
+            <h5 className='font-bold text-2xl lg:text-3xl mb-4'>Frequently Asked Questions</h5>
+            <p className='text-[#FF7426] font-bold text-center'>Most Frequently or Commonly asked Questions and Doubts by Enquiries</p>
 
-            <div className="bg-white flex flex-col lg:flex-row items-center py-10 px-8 ">
+            <div className="bg-white flex flex-col lg:flex-row items-center py-10 lg:px-8 ">
 
                 <div className='lg:w-[40%] relative overflow-hidden'>
                     <img src="/images/FAQLogo.png" className='w-[400px]' />
 
                 </div>
-                <div className="max-w-3xl mx-auto lg:px-16">
+                <div className="lg:max-w-3xl lg:px-16">
 
                     <div className="space-y-2">
                         {faqs.map((faq, index) => (
