@@ -11,6 +11,8 @@ import CardsContainer from './components/Cards/CardContainer'
 import StudentFeedBack  from './components/Cards/StudentFeedBack'
 import CourseCards from './components/Courses/CourseCards'
 import PremiumLearning from './components/PremiumLearning'
+import InquirySection from './components/InquirySection'
+import TrainingSection from "./components/TraningSection";
 
 const App = () => {
   return (
@@ -35,6 +37,8 @@ const App = () => {
    <CardsContainer/>
    <PremiumLearning/>
     <CourseCards/>
+    <InquirySection/>
+    <TrainingSection/>
         </Suspense>
       </AuthProvider>
     </Router>
