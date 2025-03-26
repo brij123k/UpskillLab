@@ -1,38 +1,15 @@
 import React, { useState } from 'react';
 
-const FAQ = () => {
+const FAQ = ({ faqs }) => {
     const [openIndex, setOpenIndex] = useState(null);
-
-    const faqs = [
-        {
-            question: "Can I download course materials for offline use?",
-            answer: "Yes, you can download course materials for offline use. Most platforms provide a download option for videos, PDFs, and other resources, but this depends on the course provider's settings. Check the course page for a download button or contact support if you don't see the option."
-        },
-        {
-            question: "How do I access my course after purchase?",
-            answer: "After purchasing a course, you can access it through your account dashboard. Log in to the platform, go to 'My Courses' or a similar section, and you'll find all your enrolled courses listed there."
-        },
-        {
-            question: "Is there a refund policy?",
-            answer: "Yes, most platforms offer a refund policy, typically within 30 days of purchase, if you haven't completed a significant portion of the course. Check the platform's refund policy for specific details."
-        },
-        {
-            question: "How do I access my course after purchase?",
-            answer: "After purchasing a course, you can access it through your account dashboard. Log in to the platform, go to 'My Courses' or a similar section, and you'll find all your enrolled courses listed there."
-        },
-        {
-            question: "Is there a refund policy?",
-            answer: "Yes, most platforms offer a refund policy, typically within 30 days of purchase, if you haven't completed a significant portion of the course. Check the platform's refund policy for specific details."
-        },
-    ];
 
     const toggleAnswer = (index) => {
         setOpenIndex(openIndex === index ? null : index);
     };
 
     return (
-        <div className='flex flex-col justify-center items-center relative overflow-hidden'>
-            <div className='w-100 h-100 absolute bottom-[-30px] blur-lg  rounded-full bg-[#FF74261A]'></div>
+        <div className='flex flex-col py-10 justify-center items-center relative overflow-hidden'>
+            <div className='w-100 h-100 absolute bottom-[-100px] left-[-250px] blur-lg  rounded-full bg-[#FF74261A]'></div>
             <h5 className='font-semibold text-3xl'>Frequently Asked Questions</h5>
             <p className='text-[#FF7426] font-semibold'>Most Frequently or Commonly asked Questions and Doubts by Enquiries</p>
 

@@ -14,26 +14,37 @@ function Header() {
                 <div className="flex lg:gap-2 xl:gap-6">
                     <img src="/images/Logo.png" className="h-8" />
 
-                    <div className="hidden md:flex space-x-6 items-center font-semibold text-md text-[#1D1D1D]">
+
+                </div>
+
+
+                <div className="hidden lg:flex gap-2 xl:gap-4">
+                    <div className="hidden md:flex space-x-6 items-center font-light text-md text-[#1D1D1D]">
                         <a href="#" className=" hover:text-gray-900">Courses</a>
                         <a href="#" className=" hover:text-gray-900">Success Stories</a>
                         <a href="#" className=" hover:text-gray-900">Upcoming Batches</a>
                         <a href="#" className=" hover:text-gray-900">Student Blog</a>
                         <a href="#" className=" hover:text-gray-900">Contact us</a>
                     </div>
-                </div>
-
-
-                <div className="hidden md:flex gap-2 xl:gap-4">
-                    <button className="bg-purple-600 text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">
+                    <button className="bg-[#4D2C5E] text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">
                         ENROLL NOW
                     </button>
-                    <button className="bg-orange-500 text-white px-2 xl:px-4 py-2 rounded-full hover:bg-orange-600">
+                    <button className="bg-[#FF7426] text-white px-2 xl:px-4 py-2 rounded-full hover:bg-orange-600">
                         SIGN UP
                     </button>
                 </div>
 
-                <div className="md:hidden">
+                <div className="lg:hidden flex">
+                    <div className='mr-4 hidden  sm:flex gap-2'>
+
+
+                        <button className="bg-[#4D2C5E] text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">
+                            ENROLL NOW
+                        </button>
+                        <button className="bg-[#FF7426] text-white px-2 xl:px-4 py-2 rounded-full hover:bg-orange-600">
+                            SIGN UP
+                        </button>
+                    </div>
                     <button onClick={toggleDrawer} className="text-gray-600 focus:outline-none bg-transparent">
                         <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path>
@@ -62,10 +73,10 @@ function Header() {
                         <a href="#" className="text-gray-600 hover:text-gray-900">Upcoming Batches</a>
                         <a href="#" className="text-gray-600 hover:text-gray-900">Student Blog</a>
                         <a href="#" className="text-gray-600 hover:text-gray-900">Contact us</a>
-                        <button className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+                        <button className="bg-[#4D2C5E] text-white px-4 py-2 rounded hover:bg-purple-700">
                             ENROLL NOW
                         </button>
-                        <button className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">
+                        <button className="bg-[#FF7426] text-white px-4 py-2 rounded hover:bg-orange-600">
                             SIGN UP
                         </button>
                     </div>
@@ -74,7 +85,7 @@ function Header() {
 
             {isDrawerOpen && (
                 <div
-                    className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+                    className="fixed inset-0 bg-transparent bg-opacity-50 z-40 md:hidden"
                     onClick={toggleDrawer}
                 ></div>
             )}

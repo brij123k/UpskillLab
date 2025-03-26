@@ -7,32 +7,35 @@ import SupportImage from '../../assets/SupportImage.png';
 const CardsContainer = () => {
   const cardsData = [
     {
-      imageSrc: MentorshipImage,
+      imageSrc: "images/hero_card1.jpeg",
       title: 'Dedicated Mentorship',
       description: 'Get dedicated mentorship on every step of learning throughout the PG programs.',
     },
     {
-      imageSrc: EvaluationImage,
+      imageSrc: "images/hero_card2.jpeg",
       title: 'Personalized Evaluation',
       description: 'Get personalized evaluation on every assignment and project by domain experts.',
     },
     {
-      imageSrc: SupportImage,
+      imageSrc: "images/hero_card3.png",
       title: '360° Career Support',
       description: 'Our Data Science PG Program offers 100 percent Placement Assurance.',
     },
   ];
 
   return (
-    <div className="w-full max-w-[1530px] h-auto py-10 px-5 md:px-10 lg:px-20 mx-auto flex flex-col md:flex-row justify-between gap-8 md:gap-4">
-      {cardsData.map((card, index) => (
-        <Mentorship 
-          key={index}
-          imageSrc={card.imageSrc} 
-          title={card.title} 
-          description={card.description} 
-        />
-      ))}
+    <div className='relative py-6'>
+      <img src="/images/bulbLogo.png" className='absolute w-16 h-16 -rotate-25 z-100' />
+      <div className="w-full py-18 md:p-15 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3   gap-16  relative ">
+        {cardsData.map((card, index) => (
+          <Mentorship
+            key={index}
+            imageSrc={card.imageSrc}
+            title={card.title}
+            description={card.description}
+          />
+        ))}
+      </div>
     </div>
   );
 };

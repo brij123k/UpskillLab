@@ -51,7 +51,7 @@ const ImageCarousel = () => {
 
     return (
         <div className="bg-white flex items-center justify-center min-h-screen">
-            <div className="w-full max-w-4xl space-y-4">
+            <div className="w-full  space-y-4">
                 {/* First Row (line-1) */}
                 <div className="overflow-x-hidden whitespace-nowrap" ref={line1Ref}>
                     <div className="inline-flex line-1 items-center">
