@@ -23,10 +23,11 @@ const CardsContainer = () => {
     },
   ];
 
+  
   return (
     <div className='relative py-6'>
       <img src="/images/bulbLogo.png" className='absolute w-16 h-16 -rotate-25 z-100' />
-      <div className="w-full py-18 md:p-15 mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3   gap-16  relative ">
+      <div className="w-full py-18 md:p-15 mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3   gap-16  relative ">
         {cardsData.map((card, index) => (
           <Mentorship
             key={index}

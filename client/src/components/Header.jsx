@@ -34,8 +34,8 @@ function Header() {
                     </button>
                 </div>
 
-                <div className="lg:hidden flex">
-                    <div className='mr-4 hidden  sm:flex gap-2'>
+                <div className="hidden">
+                    <div className='mr-4 lg:hidden  sm:flex gap-2'>
 
 
                         <button className="bg-[#4D2C5E] text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">

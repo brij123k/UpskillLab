@@ -49,7 +49,7 @@ function Footer() {
                         <h3 className="text-[#00052E] text-xl font-semibold mb-4">Contact</h3>
                         <ul className="space-y-2 text-sm">
                             <li><a href="tel:+09137053875" className="text-[#606060] hover:text-white">+0913-705-3875</a></li>
-                            <li><a href="mailto:ElizabethJ@jourrapide.com" className="text-[#606060] hover:text-white">ElizabethJ@jourrapide.com</a></li>
+                            {/* <li><a href="mailto:ElizabethJ@jourrapide.com" className="text-[#606060] hover:text-white">ElizabethJ@jourrapide.com</a></li> */}
                             <li className="text-[#606060]">4808 Skinner Hollow Road Days Creek, OR 97429</li>
                         </ul>
                     </div>

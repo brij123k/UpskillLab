@@ -5,10 +5,12 @@ import ImageCarousel from '../../components/ImageCarousel'
 import FAQ from '../../components/FAQ'
 import StudentFeedBack from '../../components/Cards/StudentFeedBack'
 import CardsContainer from '../../components/Cards/CardContainer'
+import CarouselContainer from '../../components/carousel'
 import CourseCards from '../../components/Courses/CourseCards'
-
-
-
+import EnqueryBanner from '../../components/banners/EnqueryBanner'
+import EducationBanner from '../../components/banners/EducationBanner'
+import ScrollableCategories from '../../components/Cards/Categories'
+import StudentTestimonials from '../../components/testimonial/SuccessTestimonial '
 function Login() {
 
     const faqs = [
@@ -36,6 +38,9 @@ function Login() {
     return (
         <>
             <Header />
+            <div className="py-8">
+                <CarouselContainer/>
+            </div>
             <div className="bg-[url('/images/bgStars.png')] bg-cover bg-center px-8">
 
 
@@ -52,10 +57,10 @@ function Login() {
                 </div>
                 <div p='flex w-[75%] justify-between'>
                     <div className='flex flex-1 justify-between '>
-                        <div className='max-w-[400px]'>
+                        <div className='max-w-[400px] lg:max-w-[500px]'>
 
 
-                            <h1 className='text-4xl mt-10 font-bold tracking-[2px] leading-12' >Premium <span className='text-[#FF7426]'>Learning</span>
+                            <h1 className='text-4xl xl:text-5xl mt-10 font-bold tracking-[2px] leading-12' >Premium <span className='text-[#FF7426]'>Learning</span>
                                 <br />
                                 Experience</h1>
 
@@ -63,14 +68,14 @@ function Login() {
                                 <div className='flex gap-4 items-center'>
                                     <img src="/images/heartImage.png" className='w-[52px] h-[52px]  p-3 rounded-lg bg-[#4D2C5E]' />
                                     <div >
-                                        <h1 className='text-xl font-semibold'>Easily Accessible</h1>
+                                        <h1 className='text-xl xl:text-2xl font-semibold'>Easily Accessible</h1>
                                         <h1 className='text-[#8A8A8A]'>Learning Will feel Very Comfortable With Upskilllab.</h1>
                                     </div>
                                 </div>
                                 <div className='flex gap-4 items-center'>
                                     <img src="/images/heartImage.png" className='w-[52px] h-[52px]  p-3 rounded-lg bg-[#4D2C5E]' />
                                     <div >
-                                        <h1 className='text-xl font-semibold'>Easily Accessible</h1>
+                                        <h1 className='text-xl xl:text-2xl font-semibold'>Easily Accessible</h1>
                                         <h1 className='text-[#8A8A8A]'>Learning Will feel Very Comfortable With Upskilllab.</h1>
                                     </div>
                                 </div>
@@ -85,11 +90,20 @@ function Login() {
 
             </div>
             <CourseCards />
+            <div className='py-4'>
+              <EnqueryBanner/>
+            </div>
             <div className='px-4 lg:px-20'>
 
                 <ImageCarousel />
             </div>
-
+            <EducationBanner/>
+            <div className='py-4'>
+            <ScrollableCategories/>
+            </div>
+            <div className='py-4'>
+              <StudentTestimonials/>
+            </div>
             <FAQ faqs={faqs} />
 
 

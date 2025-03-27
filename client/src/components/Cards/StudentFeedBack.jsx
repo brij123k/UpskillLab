@@ -7,28 +7,36 @@ import Expert from '../../assets/Experts.jpg';
 const StudentFeedBack = () => {
   return (
 
-    <div className="w-full flex flex-col lg:flex-row gap-3 px-8 py-8 bg-[#4D2C5E] rounded-lg">
-      {/* Card 1 */}
-      <Card
-        imageSrc={Student}
-        title={18000}
-        subtitle="Happy Students"
-      />
+    <div className="
+    w-full
+  grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3
+  gap-2
+  px-4 md:px-8
+  py-8
+  bg-[#4D2C5E] rounded-lg
+  hidden md:grid
+  ">
+    {/* Card 1 */}
+    <Card
+      imageSrc={Student}
+      title={18000}
+      subtitle="Happy Students"
+    />
 
-      {/* Card 2 */}
-      <Card
-        imageSrc={Course}
-        title={18000}
-        subtitle="Popular Courses"
-      />
+    {/* Card 2 */}
+    <Card
+      imageSrc={Course}
+      title={18000}
+      subtitle="Popular Courses"
+    />
 
-      {/* Card 3 */}
-      <Card
-        imageSrc={Student}
-        title={18000}
-        subtitle={"Expert Instructors"}
-      />
-    </div>
+    {/* Card 3 */}
+    <Card
+      imageSrc={Student}
+      title={18000}
+      subtitle="Expert Instructors"
+    />
+  </div>
 
   );
 };
