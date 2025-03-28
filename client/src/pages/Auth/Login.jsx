@@ -5,11 +5,12 @@ import ImageCarousel from '../../components/ImageCarousel'
 import FAQ from '../../components/FAQ'
 import StudentFeedBack from '../../components/Cards/StudentFeedBack'
 import CardsContainer from '../../components/Cards/CardContainer'
+import CarouselContainer from '../../components/carousel'
 import CourseCards from '../../components/Courses/CourseCards'
-import Carousel from '../../components/Carousel'
-
-
-
+import EnqueryBanner from '../../components/banners/EnqueryBanner'
+import EducationBanner from '../../components/banners/EducationBanner'
+import ScrollableCategories from '../../components/Cards/Categories'
+import StudentTestimonials from '../../components/testimonial/SuccessTestimonial '
 function Login() {
     const cards = [
         <div className="flex flex-col items-center justify-center h-full">
@@ -79,6 +80,9 @@ function Login() {
     return (
         <>
             <Header />
+            <div className="py-8">
+                <CarouselContainer />
+            </div>
             <div className="bg-[url('/images/bgStars.png')] bg-cover bg-center px-8">
 
 
@@ -95,10 +99,10 @@ function Login() {
                 </div>
                 <div p='flex w-[75%] justify-between'>
                     <div className='flex flex-1 justify-between '>
-                        <div className='max-w-[400px]'>
+                        <div className='max-w-[400px] lg:max-w-[500px]'>
 
 
-                            <h1 className='text-4xl mt-10 font-bold tracking-[2px] leading-12' >Premium <span className='text-[#FF7426]'>Learning</span>
+                            <h1 className='text-4xl xl:text-5xl mt-10 font-bold tracking-[2px] leading-12' >Premium <span className='text-[#FF7426]'>Learning</span>
                                 <br />
                                 Experience</h1>
 
@@ -106,14 +110,14 @@ function Login() {
                                 <div className='flex gap-4 items-center'>
                                     <img src="/images/heartImage.png" className='w-[52px] h-[52px]  p-3 rounded-lg bg-[#4D2C5E]' />
                                     <div >
-                                        <h1 className='text-xl font-semibold'>Easily Accessible</h1>
+                                        <h1 className='text-xl xl:text-2xl font-semibold'>Easily Accessible</h1>
                                         <h1 className='text-[#8A8A8A]'>Learning Will feel Very Comfortable With Upskilllab.</h1>
                                     </div>
                                 </div>
                                 <div className='flex gap-4 items-center'>
                                     <img src="/images/heartImage.png" className='w-[52px] h-[52px]  p-3 rounded-lg bg-[#4D2C5E]' />
                                     <div >
-                                        <h1 className='text-xl font-semibold'>Easily Accessible</h1>
+                                        <h1 className='text-xl xl:text-2xl font-semibold'>Easily Accessible</h1>
                                         <h1 className='text-[#8A8A8A]'>Learning Will feel Very Comfortable With Upskilllab.</h1>
                                     </div>
                                 </div>
@@ -130,27 +134,11 @@ function Login() {
 
 
             <CourseCards />
-            <div className='flex flex-col md:flex-row bg-[#FDF8EE] py-4 px-8'>
-                <div className='w-full md:w-[60%] lg:w-[40%] '>
-                    <img src="/images/wantToStay.png" className='max-h-[550px]' />
-                </div>
-                <div className='flex flex-col items-center flex-1 mt-10 gap-8'>
-                    <h1 className='text-3xl font-bold max-w-[400px] text-center'>
-                        <span className='text-5xl text-[#FF7426]'>W</span>ant to stay
-                        informed about new courses or have any doubts?
-                    </h1>
-                    <div className=''>
-
-                        <button className="bg-[#4D2C5E]  text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">
-                            ENROLL NOW
-                        </button>
-                    </div>
-
-                </div>
-
+            <div className='py-4'>
+                <EnqueryBanner />
             </div>
-            <div className='px-4  lg:px-20 flex flex-col items-center my-12'>
-                <h1 className='text-3xl font-bold mb-4'>Hiring Partners </h1>
+            <div className='px-4 lg:px-20'>
+
                 <ImageCarousel />
                 <div className='w-full flex gap-4 justify-center'>
 
@@ -187,12 +175,14 @@ function Login() {
                 </div>
 
             </div>
-            <Carousel cards={cards} />
-
-            <div className='px-8'>
-
-                <FAQ faqs={faqs} />
+            <EducationBanner />
+            <div className='py-4'>
+                <ScrollableCategories />
             </div>
+            <div className='py-4'>
+                <StudentTestimonials />
+            </div>
+            <FAQ faqs={faqs} />
 
 
             {/* 
