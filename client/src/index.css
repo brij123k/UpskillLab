@@ -43,6 +43,23 @@
 body {
   font-family: "Roboto", sans-serif;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+.react-multi-carousel-dot--active button {
+  width: 25px !important;
+  border-radius: 5px !important;
+  background: #4d2cfe !important;
+  border-color: #4d2cfe !important;
+}
+
 /* a {
   font-weight: 500;
   color: #646cff;

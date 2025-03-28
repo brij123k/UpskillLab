@@ -10,7 +10,10 @@ import CourseCards from '../../components/Courses/CourseCards'
 import EnqueryBanner from '../../components/banners/EnqueryBanner'
 import EducationBanner from '../../components/banners/EducationBanner'
 import ScrollableCategories from '../../components/Cards/Categories'
-import StudentTestimonials from '../../components/testimonial/SuccessTestimonial '
+import SuccessTestimonial  from '../../components/testimonial/SuccessTestimonial '
+import StudentTestimonials from '../../components/testimonial/StudentsTestimonial'
+import AdmissionForm from '../../components/Forms/AdmissionForm'
+
 function Login() {
     const cards = [
         <div className="flex flex-col items-center justify-center h-full">
@@ -80,7 +83,7 @@ function Login() {
     return (
         <>
             <Header />
-            <div className="py-8">
+            <div>
                 <CarouselContainer />
             </div>
             <div className="bg-[url('/images/bgStars.png')] bg-cover bg-center px-8">
@@ -140,39 +143,7 @@ function Login() {
             <div className='px-4 lg:px-20'>
 
                 <ImageCarousel />
-                <div className='w-full flex gap-4 justify-center'>
-
-                    <button className="bg-[#4D2C5E]  text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">
-                        ENROLL NOW
-                    </button>
-                    <button className="bg-[#4D2C5E]  text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">
-                        ENROLL NOW
-                    </button>
-                </div>
-            </div>
-            <div className='flex flex-col-reverse items-center lg:items-start lg:flex-row bg-[#FDF8EE] py-4 px-8 pr-16'>
-
-                <div className='flex flex-col items-center flex-1 mt-10 gap-8'>
-                    <h1 className='text-3xl font-bold max-w-[400px] text-start'>
-                        <span className='text-5xl'>C</span>orporate <span className=' text-[#FF7426]'>Training </span>&
-                        Professional Service
-
-                    </h1>
-                    <p className='max-w-[400px] text-lg'>Learn the latest skills quickly with a personalised curriculum created to meet your needs.</p>
-                    <div className='max-w-[400px] w-full flex lg:flex-col  lg:items-start gap-2' >
-
-                        <button className="bg-[#4D2C5E]  text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">
-                            ENROLL NOW
-                        </button>
-                        <button className="bg-[#4D2C5E]  text-white px-2 xl:px-4 py-2 rounded-full hover:bg-purple-700">
-                            ENROLL NOW
-                        </button>
-                    </div>
-
-                </div>
-                <div className='w-full md:w-[60%] lg:w-[30%]  '>
-                    <img src="/images/trainingImage.png" className='max-h-[550px]' />
-                </div>
+                
 
             </div>
             <EducationBanner />
@@ -180,11 +151,17 @@ function Login() {
                 <ScrollableCategories />
             </div>
             <div className='py-4'>
-                <StudentTestimonials />
+                <SuccessTestimonial  />
+            </div>
+            <div className='py-4'>
+            <StudentTestimonials/>
+            </div>
+            <div className='py-4'>
+            <AdmissionForm/>
             </div>
             <FAQ faqs={faqs} />
 
-
+            
             {/* 
             {/* <PremiumLearning /> 
             */}

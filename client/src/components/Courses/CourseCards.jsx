@@ -1,6 +1,6 @@
 import React from 'react';
 import CourseList from './CourseList';
-
+import { FiClock, FiUsers, FiArrowRight } from 'react-icons/fi';
 function CourseCards() {
   return (
     <div className='bg-white relative'>
@@ -16,6 +16,12 @@ function CourseCards() {
 
           </div>
           <CourseList />
+          <div className="flex justify-end mt-6">
+        <button className="bg-[#4d2c5e] hover:bg-[#3a2148] text-white px-6 py-2 rounded-lg font-medium transition-colors duration-300 flex items-center cursor-pointer">
+          Explore All
+          <FiArrowRight className="ml-2" />
+        </button>
+      </div>
         </div>
       </div>
     </div>
