@@ -1,49 +1,87 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { Story } from './stories.data';
-import { CreateStoryDto, UpdateStoryDto } from '../../dto/stories.dto';
+import { StoriesDataService } from './stories.data';
+import { CreateStoryDto } from '../../dto/stories.dto';
+import { GetStoriesResponseDTO } from '../../dto/stories.dto';
 
 @Injectable()
-export class StoriesService {
-  constructor(@InjectModel(Story.name) private storyModel: Model<Story>) {}
+export class StoriesLogicService {
+  constructor(private storiesDataService: StoriesDataService) {}
 
-  // Create a new story
-  async create(createStoryDto: CreateStoryDto): Promise<Story> {
-    const newStory = new this.storyModel(createStoryDto);
-    return newStory.save();
+  async getStories(): Promise<GetStoriesResponseDTO> {
+    const stories = await this.storiesDataService.getStories();
+    return {
+      stories: stories.map((story) => ({
+        _id: story._id.toString(),
+        name: story.name,
+        jobTitle: story.jobTitle,
+        userImageUrl: story.userImageUrl,
+        description: story.description,
+        companyLogoUrl: story.companyLogoUrl,
+        createdAt: story.createdAt,
+        updatedAt: story.updatedAt,
+      })),
+    };
   }
 
-  // Get all stories
-  async findAll(): Promise<Story[]> {
-    return this.storyModel.find().exec();
+  async createStory(createStoryDto: CreateStoryDto) {
+    const story = await this.storiesDataService.createStory(createStoryDto);
+    return {
+      story: {
+        _id: story._id.toString(),
+        name: story.name,
+        jobTitle: story.jobTitle,
+        userImageUrl: story.userImageUrl,
+        description: story.description,
+        companyLogoUrl: story.companyLogoUrl,
+        createdAt: story.createdAt,
+        updatedAt: story.updatedAt,
+      },
+    };
   }
 
-  // Get a single story by ID
-  async findOne(id: string): Promise<Story> {
-    const story = await this.storyModel.findById(id).exec();
+  async getStoryById(id: string) {
+    const story = await this.storiesDataService.getStoryById(id);
     if (!story) {
       throw new NotFoundException(`Story with ID ${id} not found`);
     }
-    return story;
+    return {
+      story: {
+        _id: story._id.toString(),
+        name: story.name,
+        jobTitle: story.jobTitle,
+        userImageUrl: story.userImageUrl,
+        description: story.description,
+        companyLogoUrl: story.companyLogoUrl,
+        createdAt: story.createdAt,
+        updatedAt: story.updatedAt,
+      },
+    };
   }
 
-  // Update a story by ID
-  async update(id: string, updateStoryDto: UpdateStoryDto): Promise<Story> {
-    const updatedStory = await this.storyModel
-      .findByIdAndUpdate(id, updateStoryDto, { new: true })
-      .exec();
-    if (!updatedStory) {
+  async updateStory(id: string, updateStoryDto: Partial<CreateStoryDto>) {
+    const story = await this.storiesDataService.updateStory(id, updateStoryDto);
+    if (!story) {
       throw new NotFoundException(`Story with ID ${id} not found`);
     }
-    return updatedStory;
+    return {
+      story: {
+        _id: story._id.toString(),
+        name: story.name,
+        jobTitle: story.jobTitle,
+        userImageUrl: story.userImageUrl,
+        description: story.description,
+        companyLogoUrl: story.companyLogoUrl,
+        createdAt: story.createdAt,
+        updatedAt: story.updatedAt,
+      },
+    };
   }
 
-  // Delete a story by ID
-  async remove(id: string): Promise<void> {
-    const result = await this.storyModel.findByIdAndDelete(id).exec();
-    if (!result) {
+  async deleteStory(id: string) {
+    const story = await this.storiesDataService.deleteStory(id);
+    if (!story) {
       throw new NotFoundException(`Story with ID ${id} not found`);
     }
+    return { message: 'Story deleted successfully' };
   }
 }

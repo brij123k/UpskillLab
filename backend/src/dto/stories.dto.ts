@@ -1,29 +1,57 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty } from 'class-validator';
 
 export class CreateStoryDto {
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  image: string;
+  jobTitle: string;
 
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  userImageUrl: string;
+
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   description: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  companyLogoUrl: string;
 }
 
-export class UpdateStoryDto {
-  @IsString()
-  @IsNotEmpty()
-  name?: string;
+export class Story {
+  @ApiProperty()
+  _id: string;
 
-  @IsString()
-  @IsNotEmpty()
-  image?: string;
+  @ApiProperty()
+  name: string;
 
-  @IsString()
-  @IsNotEmpty()
-  description?: string;
+  @ApiProperty()
+  jobTitle: string;
+
+  @ApiProperty()
+  userImageUrl: string;
+
+  @ApiProperty()
+  companyLogoUrl: string;
+
+  @ApiProperty()
+  createdAt: Date;
+
+  @ApiProperty()
+  updatedAt: Date;
+}
+
+export class GetStoriesResponseDTO {
+  @ApiProperty({ type: [Story] })
+  stories: Story[];
 }
