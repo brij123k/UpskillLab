@@ -10,7 +10,7 @@ export default defineConfig({
       clientPort: 443, // Ensures HMR works with ngrok's HTTPS tunnel
     },
     allowedHosts: [
-      '3695-2409-40d0-13a1-4362-2c98-9dbb-40e9-e27c.ngrok-free.app', // Specific ngrok host
+      '2f8a-2409-40d0-1348-81c1-b0fa-a743-67eb-11bb.ngrok-free.app', // Specific ngrok host
       'https://1993-2409-40d0-1348-81c1-2df4-f09d-6889-9a3c.ngrok-free.app',
       '.ngrok-free.app', // Wildcard for all ngrok-free.app subdomains
     ],
