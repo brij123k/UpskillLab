@@ -1,119 +1,141 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
+import Marquee from 'react-fast-marquee';
 
-const ImageCarousel = () => {
-    const line1Ref = useRef(null);
-    const line2Ref = useRef(null);
-    const line3Ref = useRef(null);
+const LogoCarousel = () => {
+  // Company logos data
+  const logos = [
+    { src: 'images/Logo1.jpeg', alt: 'Company 1' },
+    { src: 'images/Logo2.jpeg', alt: 'Company 2' },
+    { src: 'images/Logo3.png', alt: 'Company 3' },
+    { src: 'images/Logo4.png', alt: 'Company 4' },
+    { src: 'images/Logo5.png', alt: 'Company 5' },
+    { src: 'images/Logo6.png', alt: 'Company 6' },
+    { src: 'images/Logo4.png', alt: 'Company 4' },
+    { src: 'images/Logo3.png', alt: 'Company 3' },
+  ];
 
-    useEffect(() => {
-        // Define different speeds for each row (smaller values = slower)
-        const speed1 = 1.1; // Slowest for line-1
-        const speed2 = 2.1; // Medium for line-2
-        const speed3 = 1.2; // Fastest for line-3
+  // Responsive styles
+  const styles = {
+    container: {
+      backgroundColor: 'white',
+      overflow: 'hidden',
+      paddingTop: '3rem',
+      paddingBottom: '3rem',
+      '@media (min-width: 768px)': {
+        paddingTop: '4rem',
+        paddingBottom: '4rem',
+      },
+      '@media (min-width: 1024px)': {
+        paddingTop: '5rem',
+        paddingBottom: '5rem',
+      },
+    },
+    marqueeRow: {
+      paddingTop: '1rem',
+      paddingBottom: '1rem',
+      '@media (min-width: 768px)': {
+        paddingTop: '1.5rem',
+        paddingBottom: '1.5rem',
+      },
+    },
+    logoItem: {
+      marginLeft: '1rem',
+      marginRight: '1rem',
+      transition: 'transform 0.3s ease',
+      '@media (min-width: 768px)': {
+        marginLeft: '1.5rem',
+        marginRight: '1.5rem',
+      },
+      '@media (min-width: 1024px)': {
+        marginLeft: '2rem',
+        marginRight: '2rem',
+      },
+      ':hover': {
+        transform: 'scale(1.1)',
+      },
+    },
+    logoImage: {
+      height: '3rem',
+      width: 'auto',
+      objectFit: 'contain',
+      '@media (min-width: 768px)': {
+        height: '3.5rem',
+      },
+      '@media (min-width: 1024px)': {
+        height: '4rem',
+      },
+      '@media (min-width: 1280px)': {
+        height: '5rem',
+      },
+      '@media (min-width: 1536px)': {
+        height: '6rem',
+      },
+    },
+  };
 
-        const scrollRow = (ref, speed) => {
-            const container = ref.current;
-            if (!container) return;
+  return (
+    <div style={styles.container}>
+      {/* First Row - Right to Left */}
+      <Marquee 
+        direction="right"
+        speed={40}
+        gradient={false}
+        pauseOnHover
+        style={styles.marqueeRow}
+      >
+        {logos.map((logo, index) => (
+          <div key={`first-${index}`} style={styles.logoItem}>
+            <img 
+              src={logo.src} 
+              alt={logo.alt}
+              style={styles.logoImage}
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </Marquee>
 
-            const images = container.children;
-            const lastImage = images[images.length - 1];
-            const containerWidth = container.offsetWidth;
-            const lastImageRight = lastImage.offsetLeft + lastImage.offsetWidth;
+      {/* Second Row - Left to Right */}
+      <Marquee 
+        direction="left"
+        speed={50}
+        gradient={false}
+        pauseOnHover
+        style={styles.marqueeRow}
+      >
+        {logos.map((logo, index) => (
+          <div key={`second-${index}`} style={styles.logoItem}>
+            <img 
+              src={logo.src} 
+              alt={logo.alt}
+              style={styles.logoImage}
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </Marquee>
 
-            // Move the scroll position at the specified speed
-            container.scrollLeft += speed;
-
-            // Check if the last image is fully in view
-            if (lastImageRight <= containerWidth + container.scrollLeft) {
-                container.scrollLeft = 0; // Reset to start
-            }
-
-            // Continue animation
-            requestAnimationFrame(() => scrollRow(ref, speed));
-        };
-
-        const line1 = line1Ref.current;
-        const line2 = line2Ref.current;
-        const line3 = line3Ref.current;
-
-        // Start scrolling for each row with different speeds
-        const animationId1 = requestAnimationFrame(() => scrollRow(line1Ref, speed1));
-        const animationId2 = requestAnimationFrame(() => scrollRow(line2Ref, speed2));
-        const animationId3 = requestAnimationFrame(() => scrollRow(line3Ref, speed3));
-
-        // Cleanup animation frames
-        return () => {
-            cancelAnimationFrame(animationId1);
-            cancelAnimationFrame(animationId2);
-            cancelAnimationFrame(animationId3);
-        };
-    }, []);
-
-    return (
-        <div className="bg-white flex items-center justify-center">
-            <div className="w-full  space-y-4">
-                {/* First Row (line-1) */}
-                <div className="overflow-x-hidden whitespace-nowrap" ref={line1Ref}>
-                    <div className="inline-flex line-1 items-center">
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                    </div>
-                </div>
-
-
-                {/* <div className="overflow-x-hidden whitespace-nowrap" ref={line2Ref}>
-                    <div className="inline-flex line-2 items-center">
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                    </div>
-                </div>
-
-              
-                <div className="overflow-x-hidden whitespace-nowrap" ref={line3Ref}>
-                    <div className="inline-flex line-3 items-center">
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                        <img src="images/Logo1.jpeg" className="carousel-image w-32 mx-2" alt="Image 1" />
-                        <img src="images/Logo2.jpeg" className="carousel-image w-32 mx-2" alt="Image 2" />
-                    </div>
-                </div> */}
-            </div>
-        </div>
-    );
+      {/* Third Row - Right to Left */}
+      <Marquee 
+        direction="right"
+        speed={60}
+        gradient={false}
+        pauseOnHover
+        style={styles.marqueeRow}
+      >
+        {logos.map((logo, index) => (
+          <div key={`third-${index}`} style={styles.logoItem}>
+            <img 
+              src={logo.src} 
+              alt={logo.alt}
+              style={styles.logoImage}
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </Marquee>
+    </div>
+  );
 };
 
-export default ImageCarousel;
+export default LogoCarousel;
