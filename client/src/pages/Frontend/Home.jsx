@@ -96,44 +96,78 @@ function Home() {
                 <CardsContainer />
 
             </div>
-            <div className='flex flex-col px-4 py-8  items-center md:items-start md:flex-row justify-between lg:px-15 lg:py-2 bg-[#FDF8EE] font-roboto'>
-                <div className='w-[25%]'>
+            <div className='w-full bg-[#FDF8EE] font-roboto'>
+                <div className='max-w-8xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 py-8 md:py-12 lg:py-16'>
+                    <div className='flex flex-col lg:flex-row items-center justify-center gap-8 xl:gap-12 2xl:gap-16'>
+                        {/* Image Column - Responsive Width */}
+                        <div className='w-full lg:w-[50%] flex justify-center'>
+                            <img
+                                src="/images/PremiumLearning.png"
+                                alt="Premium Learning"
+                                className='w-[200px] sm:w-[250px] md:w-[280px] lg:w-full max-w-[300px] 2xl:max-w-[350px] object-contain'
+                            />
+                        </div>
 
-                    <img src="/images/PremiumLearning.png" className=' ' />
-                </div>
-                <div p='flex w-[75%] justify-between'>
-                    <div className='flex flex-1 justify-between '>
-                        <div className='max-w-[400px] lg:max-w-[500px]'>
+                        {/* Content Column - Responsive Width */}
+                        <div className='w-full lg:w-[50%] flex flex-col xl:flex-row items-center lg:items-start gap-8 xl:gap-12'>
+                            {/* Main Heading + Features */}
+                            <div className='flex-1 max-w-[600px] 2xl:max-w-[700px]'>
+                                <h1 className='text-3xl sm:text-4xl md:text-5xl xl:text-[3.25rem] 2xl:text-[3.75rem] font-bold leading-tight md:leading-snug'>
+                                    Premium <span className='text-[#FF7426]'>Learning</span> Experience
+                                </h1>
 
-
-                            <h1 className='text-4xl xl:text-5xl mt-10 font-bold tracking-[2px] leading-12' >Premium <span className='text-[#FF7426]'>Learning</span>
-                                <br />
-                                Experience</h1>
-
-                            <div className='flex flex-col gap-3 mt-16'>
-                                <div className='flex gap-4 items-center'>
-                                    <img src="/images/heartImage.png" className='w-[52px] h-[52px]  p-3 rounded-lg bg-[#4D2C5E]' />
-                                    <div >
-                                        <h1 className='text-xl xl:text-2xl font-semibold'>Easily Accessible</h1>
-                                        <h1 className='text-[#8A8A8A]'>Learning Will feel Very Comfortable With Upskilllab.</h1>
+                                <div className='mt-8 sm:mt-10 md:mt-12 space-y-4 sm:space-y-5'>
+                                    {/* Feature 1 */}
+                                    <div className='flex gap-4 sm:gap-5 items-start'>
+                                        <div className='flex-shrink-0 bg-[#4D2C5E] p-3 sm:p-4 rounded-lg'>
+                                            <img
+                                                src="/images/heartImage.png"
+                                                alt="Accessible"
+                                                className='w-8 h-8 sm:w-10 sm:h-10'
+                                            />
+                                        </div>
+                                        <div>
+                                            <h2 className='text-lg sm:text-xl md:text-2xl font-semibold text-gray-800'>
+                                                Easily Accessible
+                                            </h2>
+                                            <p className='text-gray-600 text-sm sm:text-base mt-1'>
+                                                Learning will feel very comfortable with UpskillLab.
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className='flex gap-4 items-center'>
-                                    <img src="/images/heartImage.png" className='w-[52px] h-[52px]  p-3 rounded-lg bg-[#4D2C5E]' />
-                                    <div >
-                                        <h1 className='text-xl xl:text-2xl font-semibold'>Easily Accessible</h1>
-                                        <h1 className='text-[#8A8A8A]'>Learning Will feel Very Comfortable With Upskilllab.</h1>
+
+                                    {/* Feature 2 */}
+                                    <div className='flex gap-4 sm:gap-5 items-start'>
+                                        <div className='flex-shrink-0 bg-[#4D2C5E] p-3 sm:p-4 rounded-lg'>
+                                            <img
+                                                src="/images/heartImage.png"
+                                                alt="Comfortable"
+                                                className='w-8 h-8 sm:w-10 sm:h-10'
+                                            />
+                                        </div>
+                                        <div>
+                                            <h2 className='text-lg sm:text-xl md:text-2xl font-semibold text-gray-800'>
+                                                Comfortable Learning
+                                            </h2>
+                                            <p className='text-gray-600 text-sm sm:text-base mt-1'>
+                                                Enjoy a seamless educational journey with our platform.
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            {/* Arrow Image - Hidden on mobile */}
+                            <div className='hidden xl:flex flex-shrink-0 self-center 2xl:self-start'>
+                                <img
+                                    src="/images/Arrow.png"
+                                    alt="Arrow"
+                                    className='h-[120px] xl:h-[150px] 2xl:h-[180px] object-contain'
+                                />
+                            </div>
                         </div>
-
-
                     </div>
-
                 </div>
-                <img src="/images/Arrow.png" className='hidden md:inline h-[200px]' />
-
             </div>
 
 

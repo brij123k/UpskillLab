@@ -60,6 +60,17 @@ body {
   border-color: #4d2cfe !important;
 }
 
+.carousel-container {
+  padding-bottom: 4rem !important;
+}
+
+.react-multi-carousel-dot-list {
+  bottom: 1rem !important;
+}
+.react-multi-carousel-track {
+  align-items: center !important;
+  padding-bottom: 10px !important;
+}
 
 /* a {
   font-weight: 500;
