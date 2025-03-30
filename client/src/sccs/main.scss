@@ -1,0 +1,44 @@
+.displayCenter {
+  display: flex;
+  justify-content: center;
+}
+
+.displayAlignCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.displaySpaceBetween {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.displayColumnCenter {
+  display: flex;
+  flex-direction: column;
+}
+
+.displayEnd {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.displayColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.profileColumns {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5%;
+}
+.displayTextAlignCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
