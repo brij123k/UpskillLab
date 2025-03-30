@@ -110,19 +110,19 @@ function Header() {
                                 {/* Scrollable Content Area */}
                                 <div className="flex-1 overflow-y-auto">
                                     <div className="space-y-2 px-4 pb-4">
-                                        <a href="/" className="block text-gray-700 hover:text-[#FF7426] px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
+                                        <a href="/" className="block text-block hover:text-[#FF7426] px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
                                             Courses
                                         </a>
-                                        <a href="/Success-stories" className="block text-gray-700 hover:text-[#FF7426] px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
+                                        <a href="/Success-stories" className="block text-block hover:text-[#FF7426] px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
                                             Success Stories
                                         </a>
-                                        <a href="/upcoming-batches" className="block text-gray-700 hover:text-[#FF7426] px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
+                                        <a href="/upcoming-batches" className="block text-block hover:text-[#FF7426] px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
                                             Upcoming Batches
                                         </a>
-                                        <a href="/Students-Blog" className="block text-gray-700 hover:text-[#FF7426] px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
+                                        <a href="/Students-Blog" className="block text-block hover:text-[#FF7426] px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
                                             Student Blog
                                         </a>
-                                        <a href="/ContactUs" className="block text-gray-700 hover:text-[#FF7426] px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
+                                        <a href="/ContactUs" className="block text-block hover:text-[#FF7426] px-4 py-3 text-base font-bold hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
                                             Contact us
                                         </a>
                                     </div>
