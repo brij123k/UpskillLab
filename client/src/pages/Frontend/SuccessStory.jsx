@@ -104,45 +104,45 @@ const SuccessStory = () => {
   initial="hidden"
   animate={controls}
   variants={bannerVariants}
-  className="w-full bg-gradient-to-br from-[#FF7426] via-[#D84315] to-[#FF9800] py-16 px-4 sm:px-6 lg:px-8 2xl:py-24"
+  className="w-full bg-gradient-to-br from-[#FF7426] via-[#D84315] to-[#FF9800] py-10 px-4 sm:px-6 lg:px-8" // Reduced py-16 to py-10 and removed 2xl:py-24
 >
   <div className="max-w-8xl mx-auto">
-    <div className="flex flex-col lg:flex-row items-center justify-between gap-12 2xl:gap-24">
+    <div className="flex flex-col lg:flex-row items-center justify-between gap-8"> {/* Reduced gap from 12 to 8 and removed 2xl gap */}
       {/* Text Content */}
       <motion.div 
         variants={itemVariants}
-        className="lg:w-1/2 space-y-8 text-white 2xl:space-y-12"
+        className="lg:w-1/2 space-y-6 text-white" // Reduced space-y-8 to space-y-6 and removed 2xl spacing
       >
         <motion.h1 
           variants={itemVariants}
-          className="text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl 2xl:text-7xl"
+          className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl" // Reduced text sizes by one step and removed 2xl size
         >
           <span className="block mb-2">From Learning</span>
-          <span className="block text-[#FFF3E0] drop-shadow-[0_2px_4px_rgba(216,67,21,0.4)]">To Earning</span>
+          <span className="block text-[#4d2c5e] drop-shadow-[0_2px_4px_rgba(216,67,21,0.4)]">To Earning</span>
         </motion.h1>
         
         <motion.p 
           variants={itemVariants}
-          className="text-xl 2xl:text-2xl max-w-2xl text-[#FFE0B2]"
+          className="text-lg max-w-2xl text-[#FFE0B2]" // Reduced from text-xl to text-lg
         >
           Discover how our students transformed their careers through UpskillLab programs.
         </motion.p>
         
         <motion.div 
           variants={itemVariants}
-          className="bg-white/10 backdrop-blur-sm p-6 rounded-xl border border-[#FFB74D]/30 hover:border-[#FFA726] transition-all duration-300 2xl:p-8"
+          className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-[#FFB74D]/30 hover:border-[#FFA726] transition-all duration-300" // Reduced p-6 to p-4 and removed 2xl padding
         >
           <motion.blockquote 
             variants={itemVariants}
-            className="italic text-lg 2xl:text-xl text-[#FFE0B2]"
+            className="italic text-base text-[#FFE0B2]" // Reduced from text-lg to text-base
           >
             "The Full Stack Development program gave me the skills and confidence to switch careers at 35. I went from retail management to a ₹15LPA developer role!"
           </motion.blockquote>
           <motion.div 
             variants={itemVariants}
-            className="mt-4 font-medium flex items-center"
+            className="mt-3 font-medium flex items-center" // Reduced mt-4 to mt-3
           >
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFA726] to-[#FB8C00] mr-3 overflow-hidden shadow-md">
+            <div className="w-8 h-8  rounded-full bg-gradient-to-br from-[#FFA726] to-[#FB8C00] mr-2 overflow-hidden shadow-md"> {/* Reduced size from w-10 h-10 to w-8 h-8 */}
               <img 
                 src="https://randomuser.me/api/portraits/women/42.jpg" 
                 alt="Student" 
@@ -150,8 +150,8 @@ const SuccessStory = () => {
               />
             </div>
             <div className="text-[#FFF3E0]">
-              <div>Ananya Patel</div>
-              <div className="text-sm opacity-90">Full Stack Developer at Amazon</div>
+              <div className="text-sm">Ananya Patel</div> {/* Added text-sm */}
+              <div className="text-xs opacity-90">Full Stack Developer at Amazon</div> {/* Reduced from text-sm to text-xs */}
             </div>
           </motion.div>
         </motion.div>
@@ -160,10 +160,10 @@ const SuccessStory = () => {
       {/* Image with Animation */}
       <motion.div 
         variants={imageVariants}
-        className="lg:w-1/2 flex justify-center relative 2xl:max-w-2xl"
+        className="lg:w-1/2 flex justify-center relative" // Removed 2xl max width
       >
-        <div className="relative w-full">
-          <div className="absolute -top-6 -left-6 w-full h-full border-4 border-[#FFA726] rounded-2xl z-0 2xl:-top-8 2xl:-left-8"></div>
+        <div className="relative w-[1/2]">
+          <div className="absolute -top-4 -left-4 w-full h-full border-4 border-[#FFA726] rounded-2xl z-0"></div> {/* Reduced negative positioning from -6 to -4 */}
           <motion.img 
             whileHover={{ scale: 1.03 }}
             src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
@@ -174,10 +174,10 @@ const SuccessStory = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1, type: "spring" }}
-            className=" absolute -bottom-6 right-5 bg-white text-[#E65100] px-6 py-3 rounded-lg shadow-lg font-bold 2xl:-bottom-8 2xl:-right-8 z-30"
+            className="absolute -bottom-4 right-4 bg-white text-[#E65100] px-4 py-2 rounded-lg shadow-lg font-bold z-30" // Reduced padding and negative positioning
           >
-            <div className="text-sm">Average Salary</div>
-            <div className="text-2xl text-[#FF6D00]">₹12.5 LPA</div>
+            <div className="text-xs">Average Salary</div> {/* Reduced from text-sm to text-xs */}
+            <div className="text-xl text-[#FF6D00]">₹12.5 LPA</div> {/* Reduced from text-2xl to text-xl */}
           </motion.div>
         </div>
       </motion.div>
@@ -188,18 +188,18 @@ const SuccessStory = () => {
 
       {/* driven Career section  */}
       <section className="py-8 md:py-10 px-4 sm:px-6 bg-white">
-  <div className="max-w-4xl mx-auto">
+  <div className="max-w-4xl 2xl:max-w-6xl mx-auto">
     <motion.h2 
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
       viewport={{ once: true }}
-      className="text-xl sm:text-2xl font-bold text-center mb-6 sm:mb-8 text-gray-900"
+      className="text-xl sm:text-2xl 2xl:text-4xl font-bold text-center mb-6 sm:mb-8 2xl:mb-10 text-[#4d2c5e]"
     >
       Driving <span className="text-[#FF7426]">Career Impact</span>
     </motion.h2>
 
-    <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4">
+    <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 2xl:gap-6">
       {stats.map((stat, index) => (
         <motion.div
           key={index}
@@ -209,13 +209,13 @@ const SuccessStory = () => {
           viewport={{ once: true }}
           whileHover={{ scale: 1.03 }}
           onClick={() => setActiveStat(index)}
-          className={`cursor-pointer p-3 sm:p-4 rounded-lg transition-all duration-200 flex flex-col items-center text-center ${
+          className={`cursor-pointer p-3 sm:p-4 2xl:p-6 rounded-lg transition-all duration-200 flex flex-col items-center text-center ${
             activeStat === index 
               ? 'bg-[#FFF5EF] border border-[#FFB38A] shadow-sm' 
               : 'bg-gray-50 hover:bg-[#FFF5EF] border border-gray-200'
           }`}
         >
-          <div className={`text-xl sm:text-2xl mb-1 sm:mb-2 ${
+          <div className={`text-xl sm:text-2xl 2xl:text-3xl mb-1 sm:mb-2 2xl:mb-3 ${
             activeStat === index ? 'text-[#FF7426]' : 'text-gray-600'
           }`}>
             {stat.icon}
@@ -224,7 +224,7 @@ const SuccessStory = () => {
             animate={{ 
               color: activeStat === index ? '#FF7426' : '#4B5563'
             }}
-            className="text-xl sm:text-2xl font-bold mb-1"
+            className="text-xl sm:text-2xl 2xl:text-3xl font-bold mb-1 2xl:mb-2"
           >
             {stat.value}
           </motion.div>
@@ -232,7 +232,7 @@ const SuccessStory = () => {
             animate={{ 
               color: activeStat === index ? '#FF7426' : '#111827'
             }}
-            className="text-xs sm:text-sm font-semibold mb-1"
+            className="text-xs sm:text-sm 2xl:text-base font-semibold mb-1 2xl:mb-2"
           >
             {stat.title}
           </motion.h3>
@@ -240,7 +240,7 @@ const SuccessStory = () => {
             animate={{ 
               color: activeStat === index ? '#7F4B2A' : '#6B7280'
             }}
-            className="text-xs"
+            className="text-xs 2xl:text-sm"
           >
             {stat.description}
           </motion.p>
@@ -254,7 +254,7 @@ const SuccessStory = () => {
       whileInView={{ opacity: 1 }}
       transition={{ delay: 0.3 }}
       viewport={{ once: true }}
-      className="mt-6 sm:mt-8 bg-gray-100 rounded-full h-1.5 sm:h-2 overflow-hidden max-w-[200px] xs:max-w-xs mx-auto"
+      className="mt-6 sm:mt-8 2xl:mt-10 bg-gray-100 rounded-full h-1.5 sm:h-2 overflow-hidden max-w-[200px] xs:max-w-xs 2xl:max-w-sm mx-auto"
     >
       <motion.div
         initial={{ width: 0 }}
@@ -266,6 +266,8 @@ const SuccessStory = () => {
     </motion.div>
   </div>
 </section>
+
+
     <SuccessStoriesCarousel />
         <WallOfFame />
     

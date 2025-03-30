@@ -30,9 +30,9 @@ const TrainingBanner = () =>{
           initial={{ y: -10 }}
           animate={{ y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight text-gray-900"
+          className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight text-[#4d2c5e]"
         >
-          Fast Forward your career in Tech Fields with <span className="text-[#FF7426]">Meritshot's</span>
+          Fast Forward your career in Tech Fields with <span className="text-[#FF7426]">UpskillLab's</span>
         </motion.h1>
         <motion.p
           initial={{ opacity: 0 }}

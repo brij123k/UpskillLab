@@ -5,95 +5,11 @@ import Footer from '../../components/Footer';
 import BatchCard from '../../components/Cards/BatchCard';
 import TrainingBanner from '../../components//banners/TrainingBanner';
 import FeedbaackBanner from '../../components/banners/FeedbackBanner';
+import {Btches} from '../../data'; // Assuming you have a data file with batch information
 const UpcomingBatches = () => {
     // Using a free educational image from Pexels
     const bannerImageUrl = "https://images.pexels.com/photos/4144225/pexels-photo-4144225.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
-    const batches = [
-        {
-            id: 1,
-            startDate: "01 Mar. 2025",
-            price: "1,90,000",
-            title: "PGP in Data Science and Machine Learning",
-            batchId: "11130001",
-            batchTime: "9:00 PM",
-            duration: "11 Months",
-            mode: "Online"
-        },
-        {
-            id: 2,
-            startDate: "15 Apr. 2025",
-            price: "1,75,000",
-            title: "PGP in Artificial Intelligence",
-            batchId: "11130002",
-            batchTime: "8:00 PM",
-            duration: "10 Months",
-            mode: "Online"
-        },
-        {
-            id: 3,
-            startDate: "01 May 2025",
-            price: "2,10,000",
-            title: "PGP in Full Stack Development",
-            batchId: "11130003",
-            batchTime: "7:30 PM",
-            duration: "12 Months",
-            mode: "Hybrid"
-        },
-        {
-            id: 4,
-            startDate: "15 Jun. 2025",
-            price: "1,60,000",
-            title: "PGP in Cloud Computing",
-            batchId: "11130004",
-            batchTime: "8:00 PM",
-            duration: "9 Months",
-            mode: "Online"
-        }
-        ,
-        {
-            id: 5,
-            startDate: "15 Jun. 2025",
-            price: "1,60,000",
-            title: "PGP in Cloud Computing",
-            batchId: "11130004",
-            batchTime: "8:00 PM",
-            duration: "9 Months",
-            mode: "Online"
-        }
-        ,
-        {
-            id: 6,
-            startDate: "15 Jun. 2025",
-            price: "1,60,000",
-            title: "PGP in Cloud Computing",
-            batchId: "11130004",
-            batchTime: "8:00 PM",
-            duration: "9 Months",
-            mode: "Online"
-        }
-        ,
-        {
-            id: 7,
-            startDate: "15 Jun. 2025",
-            price: "1,60,000",
-            title: "PGP in Cloud Computing",
-            batchId: "11130004",
-            batchTime: "8:00 PM",
-            duration: "9 Months",
-            mode: "Online"
-        }
-        ,
-        {
-            id: 8,
-            startDate: "15 Jun. 2025",
-            price: "1,60,000",
-            title: "PGP in Cloud Computing",
-            batchId: "11130004",
-            batchTime: "8:00 PM",
-            duration: "9 Months",
-            mode: "Online"
-        }
-    ];
+    const batches = Btches
     // Animation variants
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -123,92 +39,92 @@ const UpcomingBatches = () => {
 
             {/* Modern Split Banner */}
             <motion.section
-                initial="hidden"
-                animate="visible"
-                variants={containerVariants}
-                className="relative bg-gradient-to-r from-[#ff7426] via-[#ff5e3a] to-[#ff2d6e] py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
-            >
-                {/* Abstract background shapes */}
+    initial="hidden"
+    animate="visible"
+    variants={containerVariants}
+    className="relative bg-gradient-to-r from-[#ff7426] via-[#ff5e3a] to-[#ff2d6e] py-10 px-4 sm:px-6 lg:px-8 overflow-hidden"
+>
+    {/* Abstract background shapes */}
+    <motion.div
+        className="absolute inset-0 overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+    >
+        <div className="absolute top-1/4 -left-20 w-64 h-64 rounded-full bg-white/5"></div>
+        <div className="absolute bottom-1/4 -right-20 w-72 h-72 rounded-full bg-white/5"></div>
+    </motion.div>
+
+    <div className="relative max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-6 lg:gap-8 h-full">
+        {/* Image on left */}
+        <motion.div
+            className="w-full lg:w-1/2 h-full"
+            variants={itemVariants}
+        >
+            <div className="relative rounded-xl overflow-hidden shadow-2xl h-[300px] sm:h-[350px] lg:h-full">
+                <img
+                    src={bannerImageUrl}
+                    alt="Students learning together at UpSkillLab"
+                    className="w-full h-full object-cover rounded-xl"
+                    loading="lazy"
+                />
                 <motion.div
-                    className="absolute inset-0 overflow-hidden"
+                    className="absolute inset-0 bg-[#4D2C5E]/20 mix-blend-multiply"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 1 }}
-                >
-                    <div className="absolute top-1/4 -left-20 w-64 h-64 rounded-full bg-white/5"></div>
-                    <div className="absolute bottom-1/4 -right-20 w-72 h-72 rounded-full bg-white/5"></div>
-                </motion.div>
+                    transition={{ duration: 1, delay: 0.5 }}
+                />
+            </div>
+        </motion.div>
 
-                <div className="relative max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-8 lg:gap-12">
-                    {/* Image on left */}
+        {/* Content on right */}
+        <motion.div
+            className="w-full lg:w-1/2 text-center lg:text-left py-4 lg:py-0"
+            variants={containerVariants}
+        >
+            <motion.h1
+                className="text-3xl sm:text-4xl font-bold text-white mb-4"
+                variants={itemVariants}
+                whileHover={{ scale: 1.02 }}
+            >
+                Upcoming <span className="text-[#4d2c5e]">Batches</span>
+            </motion.h1>
+
+            <motion.p
+                className="text-lg text-white/90 mb-6"
+                variants={itemVariants}
+            >
+                Join our next cohort of aspiring professionals and transform your career
+            </motion.p>
+
+            {/* Animated decorative elements */}
+            <motion.div
+                className="flex justify-center lg:justify-start space-x-4"
+                variants={itemVariants}
+            >
+                {['📅', '👩‍💻', '🎓'].map((icon, index) => (
                     <motion.div
-                        className="w-full lg:w-1/2"
-                        variants={itemVariants}
+                        key={index}
+                        className="text-3xl"
+                        animate={{
+                            rotate: [0, 10, -10, 0],
+                            y: [0, -8, 0]
+                        }}
+                        transition={{
+                            duration: 6,
+                            repeat: Infinity,
+                            repeatType: "reverse",
+                            delay: index * 0.5
+                        }}
+                        whileHover={{ scale: 1.2 }}
                     >
-                        <div className="relative rounded-xl overflow-hidden shadow-2xl aspect-video lg:aspect-auto lg:h-full">
-                            <img
-                                src={bannerImageUrl}
-                                alt="Students learning together at UpSkillLab"
-                                className="w-full h-full object-cover rounded-xl"
-                                loading="lazy"
-                            />
-                            <motion.div
-                                className="absolute inset-0 bg-[#4D2C5E]/20 mix-blend-multiply"
-                                initial={{ opacity: 0 }}
-                                animate={{ opacity: 1 }}
-                                transition={{ duration: 1, delay: 0.5 }}
-                            />
-                        </div>
+                        {icon}
                     </motion.div>
-
-                    {/* Content on right */}
-                    <motion.div
-                        className="w-full lg:w-1/2 text-center lg:text-left"
-                        variants={containerVariants}
-                    >
-                        <motion.h1
-                            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6"
-                            variants={itemVariants}
-                            whileHover={{ scale: 1.02 }}
-                        >
-                            Upcoming <span className="text-[#000000]">Batches</span>
-                        </motion.h1>
-
-                        <motion.p
-                            className="text-lg sm:text-xl text-white/90 mb-6 sm:mb-8"
-                            variants={itemVariants}
-                        >
-                            Join our next cohort of aspiring professionals and transform your career
-                        </motion.p>
-
-                        {/* Animated decorative elements */}
-                        <motion.div
-                            className="flex justify-center lg:justify-start space-x-4 sm:space-x-6"
-                            variants={itemVariants}
-                        >
-                            {['📅', '👩‍💻', '🎓'].map((icon, index) => (
-                                <motion.div
-                                    key={index}
-                                    className="text-3xl sm:text-4xl"
-                                    animate={{
-                                        rotate: [0, 10, -10, 0],
-                                        y: [0, -8, 0]
-                                    }}
-                                    transition={{
-                                        duration: 6,
-                                        repeat: Infinity,
-                                        repeatType: "reverse",
-                                        delay: index * 0.5
-                                    }}
-                                    whileHover={{ scale: 1.2 }}
-                                >
-                                    {icon}
-                                </motion.div>
-                            ))}
-                        </motion.div>
-                    </motion.div>
-                </div>
-            </motion.section>
+                ))}
+            </motion.div>
+        </motion.div>
+    </div>
+</motion.section>
 
             {/* Batch Listings Section */}
             <motion.div
@@ -217,8 +133,8 @@ const UpcomingBatches = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
             >
-                <h2 className="text-3xl sm:text-4xl font-bold text-[#000000] text-center mb-12">
-                    Our <spna className='text-[#ff7426]'>Upcoming Batches</spna>
+                <h2 className="text-3xl sm:text-4xl font-bold text-[#4d2c5e] text-center mb-12">
+                    Our <span className='text-[#ff7426]'>Upcoming Batches</span>
                 </h2>
 
                 <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

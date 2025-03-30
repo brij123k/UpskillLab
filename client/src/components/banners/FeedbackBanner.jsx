@@ -28,7 +28,7 @@ const FeedbackBanner = () => {
         className="text-center md:text-left"
       >
         <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">
-          Get In Touch
+          Get In <span className="text-[#4d2c5e]">Touch</span>
         </h2>
         <p className="text-[#FFE0B2] text-sm sm:text-base">
           For Queries, Feedback or Assistance

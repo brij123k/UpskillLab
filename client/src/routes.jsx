@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import GuestLayout from "./layout/GuestLayout";
 // import AccountLayout from "./layouts/GuestLayout/AccountLayout";
 // import Privacy from "./layouts/PrivacyLayout/Privacy";
 
@@ -14,7 +15,7 @@ const ContactUs = lazy(() => import("./pages/Frontend/ContactUs"));
 // const Login = lazy(() => import("./pages/Auth/Login"));
 
 export const routes = [
-  { exact: true, path: "/", layout: Index, component: Home },
+  { exact: true, path: "/", layout: GuestLayout, component: Home },
   { exact: true, path: "/Success-stories", layout: Index, component: Success},
   { exact: true, path: "/upcoming-batches", layout: Index, component: upcomingBatches},
   { exact: true, path: "/Students-Blog", layout: Index, component: StudentsBlog},

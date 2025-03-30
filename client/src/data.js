@@ -1,0 +1,109 @@
+export const Btches = [
+    {
+        id: 1,
+        startDate: "01 Mar. 2025",
+        price: "1,90,000",
+        title: "PGP in Data Science and Machine Learning",
+        batchId: "11130001",
+        batchTime: "9:00 PM",
+        duration: "11 Months",
+        mode: "Online"
+    },
+    {
+        id: 2,
+        startDate: "15 Apr. 2025",
+        price: "1,75,000",
+        title: "PGP in Artificial Intelligence",
+        batchId: "11130002",
+        batchTime: "8:00 PM",
+        duration: "10 Months",
+        mode: "Online"
+    },
+    {
+        id: 3,
+        startDate: "01 May 2025",
+        price: "2,10,000",
+        title: "PGP in Full Stack Development",
+        batchId: "11130003",
+        batchTime: "7:30 PM",
+        duration: "12 Months",
+        mode: "Hybrid"
+    },
+    {
+        id: 4,
+        startDate: "15 Jun. 2025",
+        price: "1,60,000",
+        title: "PGP in Cloud Computing",
+        batchId: "11130004",
+        batchTime: "8:00 PM",
+        duration: "9 Months",
+        mode: "Online"
+    }
+    ,
+    {
+        id: 5,
+        startDate: "15 Jun. 2025",
+        price: "1,60,000",
+        title: "PGP in Cloud Computing",
+        batchId: "11130004",
+        batchTime: "8:00 PM",
+        duration: "9 Months",
+        mode: "Online"
+    }
+    ,
+    {
+        id: 6,
+        startDate: "15 Jun. 2025",
+        price: "1,60,000",
+        title: "PGP in Cloud Computing",
+        batchId: "11130004",
+        batchTime: "8:00 PM",
+        duration: "9 Months",
+        mode: "Online"
+    }
+    ,
+    {
+        id: 7,
+        startDate: "15 Jun. 2025",
+        price: "1,60,000",
+        title: "PGP in Cloud Computing",
+        batchId: "11130004",
+        batchTime: "8:00 PM",
+        duration: "9 Months",
+        mode: "Online"
+    }
+    ,
+    {
+        id: 8,
+        startDate: "15 Jun. 2025",
+        price: "1,60,000",
+        title: "PGP in Cloud Computing",
+        batchId: "11130004",
+        batchTime: "8:00 PM",
+        duration: "9 Months",
+        mode: "Online"
+    }
+];
+
+export const Faqs = [
+    {
+        question: "Can I download course materials for offline use?",
+        answer: "Yes, you can download course materials for offline use. Most platforms provide a download option for videos, PDFs, and other resources, but this depends on the course provider's settings. Check the course page for a download button or contact support if you don't see the option."
+    },
+    {
+        question: "How do I access my course after purchase?",
+        answer: "After purchasing a course, you can access it through your account dashboard. Log in to the platform, go to 'My Courses' or a similar section, and you'll find all your enrolled courses listed there."
+    },
+    {
+        question: "Is there a refund policy?",
+        answer: "Yes, most platforms offer a refund policy, typically within 30 days of purchase, if you haven't completed a significant portion of the course. Check the platform's refund policy for specific details."
+    },
+    {
+        question: "How do I access my course after purchase?",
+        answer: "After purchasing a course, you can access it through your account dashboard. Log in to the platform, go to 'My Courses' or a similar section, and you'll find all your enrolled courses listed there."
+    },
+    {
+        question: "Is there a refund policy?",
+        answer: "Yes, most platforms offer a refund policy, typically within 30 days of purchase, if you haven't completed a significant portion of the course. Check the platform's refund policy for specific details."
+    },
+];

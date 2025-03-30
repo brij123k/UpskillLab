@@ -14,76 +14,13 @@ import ScrollableCategories from '../../components/Cards/Categories'
 import SuccessTestimonial from '../../components/testimonial/SuccessTestimonial '
 import StudentTestimonials from '../../components/testimonial/StudentsTestimonial'
 import AdmissionForm from '../../components/Forms/AdmissionForm'
-
+import { Faqs } from '../../data';
 function Home() {
-    const cards = [
-        <div className="flex flex-col items-center justify-center h-full">
-            <h3 className="text-2xl font-semibold">First Slide</h3>
-            <p className="text-gray-600 mt-2">This is the first card</p>
-        </div>,
-        <div className="flex flex-col items-center justify-center h-full">
-            <h3 className="text-2xl font-semibold">Second Slide</h3>
-            <p className="text-gray-600 mt-2">This is the second card</p>
-        </div>,
-        <div className="flex flex-col items-center justify-center h-full">
-            <h3 className="text-2xl font-semibold">Third Slide</h3>
-            <p className="text-gray-600 mt-2">This is the third card</p>
-        </div>,
-        <div className="flex flex-col items-center justify-center h-full">
-            <h3 className="text-2xl font-semibold">Fourth Slide</h3>
-            <p className="text-gray-600 mt-2">This is the fourth card</p>
-        </div>,
-        <div className="flex flex-col items-center justify-center h-full">
-            <h3 className="text-2xl font-semibold">Fifth Slide</h3>
-            <p className="text-gray-600 mt-2">This is the fifth card</p>
-        </div>,
-        <div className="flex flex-col items-center justify-center h-full">
-            <h3 className="text-2xl font-semibold">First Slide</h3>
-            <p className="text-gray-600 mt-2">This is the first card</p>
-        </div>,
-        <div className="flex flex-col items-center justify-center h-full">
-            <h3 className="text-2xl font-semibold">Second Slide</h3>
-            <p className="text-gray-600 mt-2">This is the second card</p>
-        </div>,
-        <div className="flex flex-col items-center justify-center h-full">
-            <h3 className="text-2xl font-semibold">Third Slide</h3>
-            <p className="text-gray-600 mt-2">This is the third card</p>
-        </div>,
-        <div className="flex flex-col items-center justify-center h-full">
-            <h3 className="text-2xl font-semibold">Fourth Slide</h3>
-            <p className="text-gray-600 mt-2">This is the fourth card</p>
-        </div>,
-        <div className="flex flex-col items-center justify-center h-full">
-            <h3 className="text-2xl font-semibold">Fifth Slide</h3>
-            <p className="text-gray-600 mt-2">This is the fifth card</p>
-        </div>,
-    ];
 
-    const faqs = [
-        {
-            question: "Can I download course materials for offline use?",
-            answer: "Yes, you can download course materials for offline use. Most platforms provide a download option for videos, PDFs, and other resources, but this depends on the course provider's settings. Check the course page for a download button or contact support if you don't see the option."
-        },
-        {
-            question: "How do I access my course after purchase?",
-            answer: "After purchasing a course, you can access it through your account dashboard. Log in to the platform, go to 'My Courses' or a similar section, and you'll find all your enrolled courses listed there."
-        },
-        {
-            question: "Is there a refund policy?",
-            answer: "Yes, most platforms offer a refund policy, typically within 30 days of purchase, if you haven't completed a significant portion of the course. Check the platform's refund policy for specific details."
-        },
-        {
-            question: "How do I access my course after purchase?",
-            answer: "After purchasing a course, you can access it through your account dashboard. Log in to the platform, go to 'My Courses' or a similar section, and you'll find all your enrolled courses listed there."
-        },
-        {
-            question: "Is there a refund policy?",
-            answer: "Yes, most platforms offer a refund policy, typically within 30 days of purchase, if you haven't completed a significant portion of the course. Check the platform's refund policy for specific details."
-        },
-    ];
+    const faqs = Faqs;
     return (
         <>
-            <Header />
+      
             <div>
                 <CarouselContainer />
             </div>
@@ -234,7 +171,7 @@ function Home() {
             {/* 
             {/* <PremiumLearning /> 
             */}
-            <Footer />
+          
         </>
     )
 }

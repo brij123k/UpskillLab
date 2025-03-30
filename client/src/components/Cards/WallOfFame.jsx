@@ -74,24 +74,24 @@ const WallOfFame = () => {
   };
 
   return (
-    <section className="py-12 px-4 sm:px-6 lg:px-8 bg-[#FFF9F5]">
-  <div className="max-w-7xl mx-auto">
+    <section className="py-12 px-4 sm:px-6 lg:px-8 2xl:px-10 bg-[#FFF9F5]">
+  <div className="max-w-7xl 2xl:max-w-8xl mx-auto">
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       viewport={{ once: true }}
-      className="text-center mb-12"
+      className="text-center mb-12 2xl:mb-16"
     >
-      <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+      <h2 className="text-3xl font-bold text-[#4d2c5e] sm:text-4xl 2xl:text-5xl">
         Our <span className="text-[#FF7426]">Wall of Fame</span>
       </h2>
-      <p className="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">
+      <p className="mt-4 2xl:mt-6 text-lg 2xl:text-xl text-gray-600 max-w-3xl 2xl:max-w-4xl mx-auto">
         Celebrating the outstanding achievements of our alumni
       </p>
     </motion.div>
 
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 2xl:gap-8">
       {students.map((student, index) => (
         <motion.div
           key={student.id}
@@ -101,45 +101,59 @@ const WallOfFame = () => {
           viewport={{ once: true, margin: "0px 0px -100px 0px" }}
           transition={{ delay: index * 0.1 }}
           whileHover={{ y: -5 }}
-          className="bg-white rounded-xl shadow-md overflow-hidden border border-[#FFD9C5] hover:shadow-lg transition-all duration-300"
+          className="bg-white rounded-xl 2xl:rounded-2xl shadow-md 2xl:shadow-lg overflow-hidden border border-[#FFD9C5] hover:shadow-lg 2xl:hover:shadow-xl transition-all duration-300 relative isolate"
         >
-          <div className="p-6">
+          {/* Enhanced Ribbon Design */}
+          <div className="absolute right-0 top-0 h-full w-8 2xl:w-10 bg-[#FF7426] z-0">
+            {/* Ribbon folds */}
+            <div className="absolute top-1/4 -left-1 w-2 h-3 bg-[#FF9142] rotate-45 transform origin-right"></div>
+            <div className="absolute top-1/2 -left-1 w-2 h-3 bg-[#FF9142] -rotate-45 transform origin-right"></div>
+            <div className="absolute top-3/4 -left-1 w-2 h-3 bg-[#FF9142] rotate-45 transform origin-right"></div>
+            
+            {/* Ribbon text */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transform -rotate-90 whitespace-nowrap">
+              <span className="text-xs 2xl:text-sm font-bold uppercase tracking-wider text-white">
+                {['ACHIEVER', 'TOP TALENT', 'STAR'][index % 3]}
+              </span>
+            </div>
+          </div>
+
+          {/* Ribbon end effect */}
+          <div className="absolute right-8 2xl:right-10 top-0 w-3 h-3 bg-[#D4560E]"></div>
+          <div className="absolute right-8 2xl:right-10 bottom-0 w-3 h-3 bg-[#D4560E]"></div>
+
+          <div className="p-6 2xl:p-8 pr-12 2xl:pr-14 relative z-10"> {/* Increased right padding */}
             <div className="flex items-start">
-              <div className="relative mr-4">
-                <div className="absolute -inset-1 rounded-full bg-gradient-to-r from-[#FF9142] to-[#FF7426] opacity-20 blur-sm"></div>
+              <div className="relative mr-4 2xl:mr-5">
+                <div className="absolute -inset-1 2xl:-inset-1.5 rounded-full bg-gradient-to-r from-[#FF9142] to-[#FF7426] opacity-20 blur-sm"></div>
                 <img 
                   src={student.photo} 
                   alt={student.name} 
-                  className="relative w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm"
+                  className="relative w-16 h-16 2xl:w-20 2xl:h-20 rounded-full object-cover border-2 border-white shadow-sm"
                 />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-gray-900">{student.name}</h3>
-                <p className="text-gray-600">{student.position}</p>
-                <div className="flex items-center mt-2">
+                <h3 className="text-lg 2xl:text-xl font-bold text-gray-900">{student.name}</h3>
+                <p className="text-gray-600 2xl:text-lg">{student.position}</p>
+                <div className="flex items-center mt-2 2xl:mt-3">
                   <img 
                     src={student.companyLogo} 
                     alt={student.company} 
-                    className="h-5 mr-2 object-contain"
+                    className="h-5 2xl:h-6 mr-2 object-contain"
                   />
-                  <span className="text-sm text-gray-500">{student.company}</span>
+                  <span className="text-sm 2xl:text-base text-gray-500">{student.company}</span>
                 </div>
               </div>
             </div>
-            <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
-              <span className="text-xs font-medium text-[#FF7426] bg-[#FFF0E5] px-2 py-1 rounded">
+            <div className="mt-4 2xl:mt-6 pt-4 2xl:pt-5 border-t border-gray-100 flex justify-between items-center">
+              <span className="text-xs 2xl:text-sm font-medium text-[#FF7426] bg-[#FFF0E5] px-2 py-1 2xl:px-3 2xl:py-1.5 rounded">
                 Batch of {student.joined}
               </span>
-              {/* <button className="text-xs font-medium text-[#FF7426] hover:text-[#E55C00] transition-colors">
-                View Story →
-              </button> */}
             </div>
           </div>
         </motion.div>
       ))}
     </div>
-
-    
   </div>
 </section>
   );
