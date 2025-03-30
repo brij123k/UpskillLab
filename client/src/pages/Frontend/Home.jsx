@@ -6,7 +6,7 @@ import { FiArrowRight } from 'react-icons/fi';
 import FAQ from '../../components/FAQ'
 import StudentFeedBack from '../../components/Cards/StudentFeedBack'
 import CardsContainer from '../../components/Cards/CardContainer'
-import CarouselContainer from '../../components/carousel'
+import CarouselContainer from '../../components/Carouselcard'
 import CourseCards from '../../components/Courses/CourseCards'
 import EnqueryBanner from '../../components/banners/EnqueryBanner'
 import EducationBanner from '../../components/banners/EducationBanner'
