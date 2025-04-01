@@ -119,19 +119,26 @@ const [isHovered, setIsHovered] = useState(false);
 
 const CardsContainer = () => {
   const features = [
-    {
+            {
               title: "Dedicated Mentorship",
-              description:
-                "Get dedicated mentorship on every step of learning throughout the PG programs.",
+              description: "Get dedicated mentorship on every step of learning...",
               icon: <FiUser />,
               image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+              modalData: {
+                details: "Includes weekly 1:1 sessions, progress tracking, and Q&A support.",
+                pricing: "$99/month",
+                // Add more fields
+              }
             },
             {
               title: "Personalized Evaluation",
-              description:
-                "Get personalized evaluation on every assignment and project by domain experts.",
+              description: "Get personalized evaluation on every assignment...",
               icon: <FiAward />,
               image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+              modalData: {
+                details: "Expert feedback on projects, code reviews, and career guidance.",
+                pricing: "Included in program",
+              }
             },
             {
               title: "360° Career Support",

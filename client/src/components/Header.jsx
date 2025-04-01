@@ -1,10 +1,21 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";  // ✅ Correct import
 
 function Header() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const navigate = useNavigate();
 
+    const handleEnrollClick = () => {
+        navigate('/#AdmissionForm'); // Navigate first
+        
+        // Scroll after a slight delay (ensures page loads)
+        setTimeout(() => {
+          const form = document.getElementById('AdmissionForm');
+          if (form) form.scrollIntoView({ behavior: 'smooth' });
+        }, 300); // Adjust delay if needed
+      };
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
         document.body.style.overflow = isDrawerOpen ? 'auto' : 'hidden';
@@ -73,12 +84,13 @@ function Header() {
                         </NavLink>
                     </div>
                     <div className="flex space-x-3 ml-6 xl:ml-8 2xl:ml-10">
-                        <motion.button 
-                            whileHover={{ y: -2 }}
-                            className="bg-[#4D2C5E] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#3A2150] transition-all shadow-sm hover:shadow-md whitespace-nowrap"
-                        >
-                            ENROLL NOW
-                        </motion.button>
+                    <motion.button 
+  onClick={handleEnrollClick}
+  whileHover={{ y: -2 }}
+  className="bg-[#4D2C5E] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#3A2150] transition-all shadow-sm hover:shadow-md whitespace-nowrap"
+>
+  ENROLL NOW
+</motion.button>
                         <motion.button 
                             whileHover={{ y: -2 }}
                             className="bg-[#FF7426] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#E65100] transition-all shadow-sm hover:shadow-md whitespace-nowrap"

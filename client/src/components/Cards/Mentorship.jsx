@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '../Modal/CommonModal';
 import { motion } from 'framer-motion';
-const MentorshipCard = ({ image, title,icon, description }) => {
+const MentorshipCard = ({ image, title,icon, description,modalData  }) => {
   const [openModal, setOpenModal] = useState(false);
 
   return (
@@ -108,7 +108,157 @@ const MentorshipCard = ({ image, title,icon, description }) => {
         ))}
       </motion.div>
 
-      <Modal isOpen={openModal} onClose={() => setOpenModal(false)} />
+      <Modal isOpen={openModal} onClose={() => setOpenModal(false)} title={title}>
+  <motion.div
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.2, duration: 0.3 }}
+    className="space-y-6 p-1 MentorshipModal "
+  >
+    {/* Header with animated underline */}
+    <div className="overflow-hidden">
+      <motion.h3 
+        initial={{ y: 20 }}
+        animate={{ y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="text-2xl font-bold text-[#4D2C5E]"
+      >
+        {title}
+      </motion.h3>
+      <motion.div
+        initial={{ width: 0 }}
+        animate={{ width: "100%" }}
+        transition={{ delay: 0.4, duration: 0.5 }}
+        className="h-1 bg-[#FF7426] mt-2 rounded-full"
+      />
+    </div>
+
+    {/* Animated description */}
+    <motion.p
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.5, duration: 0.4 }}
+      className="text-gray-600 leading-relaxed"
+    >
+      {description}
+    </motion.p>
+
+    {/* Details section with staggered animation */}
+    {modalData && (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+      >
+        <motion.div
+          initial={{ x: -20 }}
+          animate={{ x: 0 }}
+          className="flex items-start gap-3 mt-6"
+        >
+          <div className="p-2 bg-[#4D2C5E]/10 rounded-full">
+            <svg
+              className="w-5 h-5 text-[#FF7426]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </div>
+          <div>
+            <h4 className="font-semibold text-[#4D2C5E]">Program Details</h4>
+            <motion.ul
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ staggerChildren: 0.1 }}
+              className="mt-2 space-y-2 text-gray-600"
+            >
+              {modalData.details.split('.').filter(Boolean).map((item, i) => (
+                <motion.li
+                  key={i}
+                  initial={{ x: -10 }}
+                  animate={{ x: 0 }}
+                  className="flex items-start gap-2"
+                >
+                  <span className="text-[#FF7426]">•</span>
+                  <span>{item.trim()}.</span>
+                </motion.li>
+              ))}
+            </motion.ul>
+          </div>
+        </motion.div>
+
+        {/* Pricing with pulse animation */}
+        <motion.div
+          initial={{ scale: 0.95 }}
+          animate={{ scale: 1 }}
+          transition={{ 
+            delay: 0.9,
+            type: "spring",
+            stiffness: 300
+          }}
+          className="mt-8 p-4 bg-gradient-to-r from-[#FF7426]/10 to-[#4D2C5E]/10 rounded-xl border-l-4 border-[#FF7426]"
+        >
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-sm text-gray-500">Investment</p>
+              <p className="text-xl font-bold text-[#4D2C5E]">
+                {modalData.pricing}
+              </p>
+            </div>
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="px-6 py-2 bg-gradient-to-r from-[#FF7426] to-[#FF5722] text-white rounded-full shadow-md"
+            >
+              Enroll Now
+            </motion.button>
+          </div>
+        </motion.div>
+      </motion.div>
+    )}
+
+    {/* Animated close indicator */}
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 1.2 }}
+      className="text-center mt-6"
+    >
+      <motion.div
+        animate={{
+          y: [0, -5, 0],
+        }}
+        transition={{
+          repeat: Infinity,
+          duration: 2,
+          ease: "easeInOut"
+        }}
+        className="inline-block"
+      >
+        <svg
+          className="w-6 h-6 text-[#4D2C5E]"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 14l-7 7m0 0l-7-7m7 7V3"
+          />
+        </svg>
+      </motion.div>
+      <p className="text-xs text-gray-400 mt-1">Scroll for more details</p>
+    </motion.div>
+  </motion.div>
+</Modal>
     </>
   );
 };

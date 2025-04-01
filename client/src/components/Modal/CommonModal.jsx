@@ -42,7 +42,7 @@ const Modal = ({ isOpen, onClose, children, title = "Modal" }) => {
                             </button>
                         </div>
 
-                        <div className="p-4 max-h-[70vh] overflow-y-auto">
+                        <div className="p-4 max-h-[70vh] overflow-y-auto MentorshipModal">
                             {children}
                         </div>
 

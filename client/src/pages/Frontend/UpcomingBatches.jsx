@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion,AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import BatchCard from '../../components/Cards/BatchCard';
@@ -126,43 +126,53 @@ const UpcomingBatches = () => {
     </div>
 </motion.section>
 
-<AnimatePresence>           {/* Batch Listings Section */}
+            {/* Batch Listings Section */}
 <motion.div
     className="py-16 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto"
     initial={{ opacity: 0, y: 40 }}
     animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8, delay: 0.4 }}
+    transition={{ duration: 0.8 }}
 >
     <h2 className="text-3xl sm:text-4xl font-bold text-[#4d2c5e] text-center mb-12">
         Our <span className='text-[#ff7426]'>Upcoming Batches</span>
     </h2>
 
-    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {batches.map((batch, index) => (
+    <motion.div 
+        className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        initial="hidden"
+        animate="visible"
+        variants={{
+            hidden: { opacity: 0 },
+            visible: {
+                opacity: 1,
+                transition: {
+                    staggerChildren: 0.1,
+                    delayChildren: 0.3
+                }
+            }
+        }}
+    >
+        {batches.map((batch) => (
             <motion.div
                 key={batch.id}
-                initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                animate={{ 
-                    opacity: 1, 
-                    y: 0, 
-                    scale: 1,
-                    transition: { 
-                        delay: index * 0.1,
-                        duration: 0.5,
-                        ease: "easeOut"
+                variants={{
+                    hidden: { opacity: 0, y: 20, scale: 0.95 },
+                    visible: { 
+                        opacity: 1, 
+                        y: 0, 
+                        scale: 1,
+                        transition: {
+                            duration: 0.5,
+                            ease: "easeOut"
+                        }
                     }
-                }}
-                exit={{ 
-                    opacity: 0, 
-                    y: -20,
-                    scale: 0.95,
-                    transition: { duration: 0.3 }
                 }}
                 whileHover={{
                     y: -5,
                     boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
                     transition: { duration: 0.2 }
                 }}
+                className="relative"
             >
                 <BatchCard
                     startDate={batch.startDate}
@@ -175,9 +185,9 @@ const UpcomingBatches = () => {
                 />
             </motion.div>
         ))}
-    </div>
+    </motion.div>
 </motion.div>
-</AnimatePresence>
+
 
             <TrainingBanner />
             <FeedbaackBanner />
