@@ -12,6 +12,8 @@ const Success = lazy(() => import("./pages/Frontend/SuccessStory"));
 const upcomingBatches = lazy(() => import("./pages/Frontend/UpcomingBatches"));
 const StudentsBlog = lazy(() => import("./pages/Frontend/StudentsBlog"));
 const ContactUs = lazy(() => import("./pages/Frontend/ContactUs"));
+const Register = lazy(() => import("./pages/Auth/Register"));
+const Login = lazy(() => import("./pages/Auth/Login"));
 // const Login = lazy(() => import("./pages/Auth/Login"));
 
 export const routes = [
@@ -20,5 +22,7 @@ export const routes = [
   { exact: true, path: "/upcoming-batches", layout: Index, component: upcomingBatches},
   { exact: true, path: "/Students-Blog", layout: Index, component: StudentsBlog},
   { exact: true, path: "/ContactUs", layout: Index, component: ContactUs},
+  { exact: true, path: "/Register", layout: Index, component: Register},
+  { exact: true, path: "/Login", layout: Index, component: Login},
   { exact: true, path: "*", component: Success },
 ];

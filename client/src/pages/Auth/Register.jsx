@@ -3,20 +3,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { NavLink } from 'react-router-dom';
-
-const LoginPage = () => {
+const RegistrationPage = () => {
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const formik = useFormik({
         initialValues: {
+            fullName: '',
             email: '',
             password: '',
+            confirmPassword: '',
             rememberMe: false
         },
         validationSchema: Yup.object({
+            fullName: Yup.string().required('Required'),
             email: Yup.string().email('Invalid email address').required('Required'),
             password: Yup.string()
                 .min(8, 'Must be at least 8 characters')
+                .required('Required'),
+            confirmPassword: Yup.string()
+                .oneOf([Yup.ref('password'), null], 'Passwords must match')
                 .required('Required')
         }),
         onSubmit: values => {
@@ -57,7 +63,7 @@ const LoginPage = () => {
             >
                 {/* Left Side - Registration Form */}
                 <motion.div 
-                    className="w-full lg:w-1/2 p-6 sm:p-8 md:p-10 bg-white shadow-2xl rounded-4xl lg:p-12 xl:p-14 2xl:p-16"
+                    className="w-full lg:w-1/2 p-6 sm:p-8 md:p-10 lg:p-12 xl:p-14 2xl:p-16 bg-white shadow-2xl rounded-4xl flex flex-col items-center justify-center"
                     variants={container}
                     initial="hidden"
                     animate="show"
@@ -67,7 +73,7 @@ const LoginPage = () => {
                         className="text-2xl xs:text-3xl sm:text-4xl text-center font-bold mb-6 sm:mb-8 lg:mb-10 text-gray-800"
                         variants={item}
                     >
-                        Log <motion.span 
+                        Create <motion.span 
                             className='text-[#FF7426]'
                             animate={{ 
                                 scale: [1, 1.05, 1],
@@ -79,12 +85,49 @@ const LoginPage = () => {
                                 repeatDelay: 3
                             }}
                         >
-                            In
+                            Account
                         </motion.span>
                     </motion.h2>
 
                     {/* Form */}
                     <form onSubmit={formik.handleSubmit} className="space-y-4 sm:space-y-5 md:space-y-6">
+                        {/* Full Name */}
+                        <motion.div variants={item}>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    id="fullName"
+                                    name="fullName"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.fullName}
+                                    className="w-full px-0 py-2 text-sm sm:text-base border-0 border-b border-gray-300 focus:border-[#4D2C5E] focus:outline-none focus:ring-0 peer"
+                                />
+                                <label
+                                    htmlFor="fullName"
+                                    className={`absolute left-0 pt-2 lg:pt-0 text-gray-500 transition-all duration-200 pointer-events-none
+                                        ${formik.values.fullName ? 
+                                        'text-[#4D2C5E]   text-xs sm:text-sm -translate-y-5' : 
+                                        'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
+                                    `}
+                                >
+                                    Full Name
+                                </label>
+                            </div>
+                            <AnimatePresence>
+                                {formik.touched.fullName && formik.errors.fullName && (
+                                    <motion.p
+                                        className="mt-1 text-xs sm:text-sm text-red-500"
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                    >
+                                        {formik.errors.fullName}
+                                    </motion.p>
+                                )}
+                            </AnimatePresence>
+                        </motion.div>
+
                         {/* Email */}
                         <motion.div variants={item}>
                             <div className="relative">
@@ -178,6 +221,64 @@ const LoginPage = () => {
                                 )}
                             </AnimatePresence>
                         </motion.div>
+
+                        {/* Confirm Password */}
+                        <motion.div variants={item}>
+                            <div className="relative">
+                                <input
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.confirmPassword}
+                                    className="w-full px-0 py-2 text-sm sm:text-base border-0 border-b border-gray-300 focus:border-[#4D2C5E] focus:outline-none focus:ring-0 peer pr-8"
+                                />
+                                <label
+                                    htmlFor="confirmPassword"
+                                    className={`absolute left-0 pt-2 lg:pt-0 text-gray-500 transition-all duration-200 pointer-events-none
+                                        ${formik.values.confirmPassword ? 
+                                        'text-[#4D2C5E] text-xs sm:text-sm -translate-y-5' : 
+                                        'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
+                                    `}
+                                >
+                                    Confirm Password
+                                </label>
+                                <motion.button
+                                    type="button"
+                                    className="absolute right-0 bottom-2 text-gray-500 hover:text-[#FF7426]"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    whileHover={{ scale: 1.1 }}
+                                    whileTap={{ scale: 0.9 }}
+                                >
+                                    {showConfirmPassword ? (
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                            <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                                            <path d="M3.293 3.293a1 1 0 011.414 0l12 12a1 1 0 01-1.414 1.414l-12-12a1 1 0 010-1.414z" />
+                                        </svg>
+                                    ) : (
+                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                                            <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                                        </svg>
+                                    )}
+                                </motion.button>
+                            </div>
+                            <AnimatePresence>
+                                {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                                    <motion.p
+                                        className="mt-1 text-xs sm:text-sm text-red-500"
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                    >
+                                        {formik.errors.confirmPassword}
+                                    </motion.p>
+                                )}
+                            </AnimatePresence>
+                        </motion.div>
+
                         {/* Remember Me */}
                         <motion.div 
                             className="flex items-center"
@@ -209,7 +310,7 @@ const LoginPage = () => {
                             }}
                             whileTap={{ scale: 0.98 }}
                         >
-                            <span className="relative z-10">Login</span>
+                            <span className="relative z-10">Create</span>
                             <motion.span
                                 className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100"
                                 initial={{ scale: 0 }}
@@ -223,15 +324,14 @@ const LoginPage = () => {
                             className="text-center text-sm sm:text-base mt-4"
                             variants={item}
                         >
-                            <span className="text-gray-600">Don’t have an Account? </span>
-                            <NavLink to="/Register"> 
-
+                            <span className="text-gray-600">Already Created? </span>
+                            <NavLink
+                                to="/login">
                             <motion.span
-                                
-                                className="text-[#FF7426] font-medium hover:underline cursor-pointer"
+                                className="text-[#FF7426] font-medium hover:underline"
                                 whileHover={{ scale: 1.05 }}
                             >
-                                Signup Here
+                                Login Here
                             </motion.span>
                             </NavLink>
                         </motion.div>
@@ -255,61 +355,31 @@ const LoginPage = () => {
                         </motion.div>
 
                         {/* Social Sign In */}
-                            
-                            <motion.div variants={item}>
+                        <motion.div 
+                            className="grid grid-cols-3 gap-2 sm:gap-3 md:gap-4"
+                            variants={item}
+                        >
+                            {['google', 'facebook', 'apple'].map((social, i) => (
                                 <motion.button
+                                    key={social}
                                     type="button"
-                                    className="flex items-center justify-center w-full py-3 border border-gray-300 rounded-lg mb-2 hover:bg-gray-50 transition-colors cursor-pointer"
+                                    className="flex items-center justify-center w-full py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                                     whileHover={{ y: -3, scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
+                                    custom={i}
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.1 * i }}
                                 >
                                     <img 
-                                        src={`/images/google.svg`} 
-                                        alt={"google"} 
+                                        src={`/images/${social}.svg`} 
+                                        alt={social} 
                                         className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" 
                                     />
-                                    <span className="text-xs sm:text-sm">Login With Google</span>
+                                    <span className="text-xs sm:text-sm">Sign In</span>
                                 </motion.button>
-                                </motion.div>
-                                <motion.div variants={item}>
-                                <motion.button
-                                    type="button"
-                                    className="flex items-center justify-center w-full py-3 bg-[#3575dc] rounded-lg mb-2 hover:bg-[#3575dc56]  transition-colors cursor-pointer"
-                                    whileHover={{ y: -3, scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                >
-                                    <img 
-                                        src={`/images/facebook.svg`} 
-                                        alt={"facebook"} 
-                                        className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" 
-                                    />
-                                    <span className="text-xs sm:text-sm">Login With Facebook</span>
-                                </motion.button>
-                                </motion.div>
-
-
-                                <motion.div variants={item}>
-                                <motion.button
-                                    type="button"
-                                    className="flex items-center justify-center w-full py-3 border bg-[#404040] text-white rounded-lg hover:bg-[#202020] transition-colors cursor-pointer"
-                                    whileHover={{ y: -3, scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                >
-                                    <img 
-                                        src={`/images/apple.svg`} 
-                                        alt={"apple"} 
-                                        className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" 
-                                    />
-                                    <span className="text-xs sm:text-sm">Login With Google</span>
-                                </motion.button>
-                                </motion.div>
-                        
+                            ))}
+                        </motion.div>
 
                         {/* Terms */}
                         <motion.p
@@ -344,7 +414,7 @@ const LoginPage = () => {
                     transition={{ delay: 0.3 }}
                 >
                     <motion.img
-                        src="/images/LoginFrame.png"
+                        src="/images/RegisterFrame.png"
                         alt="Signup Illustration"
                         className="relative z-10 w-full h-auto max-h-[80%] object-contain"
                         animate={{
@@ -387,4 +457,4 @@ const LoginPage = () => {
     );
 };
 
-export default LoginPage;
+export default RegistrationPage;

@@ -199,14 +199,14 @@ const SuccessTestimonial = () => {
               exit="exit"
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <h3 className="text-xl md:text-2xl xxl:text-3xl font-semibold text-gray-800">
+              <h3 className="text-xl text-center lg:text-left md:text-2xl xxl:text-3xl font-semibold text-gray-800">
                 {testimonials[activeStudent]?.name}
               </h3>
-              <p className="text-[#4D2C5E] text-md xxl:text-xl font-medium">
+              <p className="text-[#4D2C5E] text-center lg:text-left text-md xxl:text-xl font-medium">
                 {testimonials[activeStudent]?.email}
               </p>
               <motion.p 
-                className="text-lg text-gray-600 xxl:text-xl mt-4"
+                className="text-lg text-gray-600 xxl:text-xl mt-4 text-center lg:text-left"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
