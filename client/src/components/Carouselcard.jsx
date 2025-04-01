@@ -1,17 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 
 const TextCarousel = ({ slides }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(null);
+  const carouselRef = useRef(null);
+  const isInView = useInView(carouselRef, { margin: "-100px" });
 
-  // Auto-advance every 8 seconds
+  // Auto-advance every 8 seconds only when visible
   useEffect(() => {
+    if (!isInView) return;
+    
     const interval = setInterval(() => {
       goToNext();
     }, 8000);
     return () => clearInterval(interval);
-  }, [currentIndex]);
+  }, [currentIndex, isInView]);
 
   const goToNext = () => {
     setDirection('right');
@@ -51,6 +55,21 @@ const TextCarousel = ({ slides }) => {
     })
   };
 
+  // Viewport animations
+  const viewportVariants = {
+    hidden: { opacity: 0, y: 50 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, ease: "easeOut" }
+    },
+    exit: {
+      opacity: 0,
+      y: -50,
+      transition: { duration: 0.5 }
+    }
+  };
+
   // Text animation variants
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -78,7 +97,13 @@ const TextCarousel = ({ slides }) => {
   };
 
   return (
-    <div className="relative w-full h-[500px] overflow-hidden bg-[#FDF8EE]">
+    <motion.div 
+      ref={carouselRef}
+      className="relative w-full h-[500px] overflow-hidden bg-[#FDF8EE]"
+      initial="hidden"
+      animate={isInView ? "visible" : "exit"}
+      variants={viewportVariants}
+    >
       {/* Subtle background pattern animation */}
       <motion.div 
         className="absolute inset-0 opacity-10"
@@ -106,8 +131,8 @@ const TextCarousel = ({ slides }) => {
           exit="exit"
           className="absolute 2xl:w-3/4 inset-0 flex flex-col md:flex-row 2xl:m-auto"
         >
-          {/* Text Content */}
-          <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col justify-center">
+          {/* Content - Left on desktop, bottom on mobile */}
+          <div className="w-full md:w-1/2 order-2 md:order-1 p-6 md:p-12 flex flex-col justify-center">
             <motion.h1
               custom={0}
               initial="hidden"
@@ -147,17 +172,17 @@ const TextCarousel = ({ slides }) => {
             </motion.p>
           </div>
 
-          {/* Image */}
-          <div className="w-full md:w-1/2  flex items-center justify-center p-4 md:p-8 2xl:p-12">
+          {/* Image - Right on desktop, top on mobile */}
+          <div className="w-full md:w-1/2 order-1 md:order-2 flex items-center justify-center p-4 md:p-8 2xl:p-12">
             <motion.div
               variants={floatVariants}
               animate="float"
-              className="relative h-full w-full flex items-center justify-center"
+              className="relative h-[200px] md:h-full w-full flex items-center justify-center"
             >
               <motion.img
                 src={`/${slides[currentIndex].image}`}
                 alt={slides[currentIndex].heading}
-                className="h-[250px] md:h-[80%] 2xl:[90%] w-auto object-contain mix-blend-multiply"
+                className="h-full w-auto object-contain mix-blend-multiply"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
@@ -184,7 +209,7 @@ const TextCarousel = ({ slides }) => {
           />
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
