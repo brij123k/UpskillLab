@@ -15,6 +15,7 @@ import SuccessTestimonial from '../../components/testimonial/SuccessTestimonial 
 import StudentTestimonials from '../../components/testimonial/StudentsTestimonial'
 import AdmissionForm from '../../components/Forms/AdmissionForm'
 import { Faqs } from '../../data';
+import { NavLink } from 'react-router-dom';
 function Home() {
   const controls = useAnimation();
   const ref = useRef(null);
@@ -264,7 +265,7 @@ function Home() {
               </motion.div>
               
               <motion.div variants={itemVariants}>
-                <a href='/ContactUs'>
+                <NavLink href='/ContactUs'>
                   <motion.button 
                     className="bg-[#4d2c5e] hover:bg-[#3a2148] text-white font-bold py-3 px-6 rounded-4xl transition-all duration-300 flex items-center"
                     whileHover={{ scale: 1.05 }}
@@ -272,7 +273,7 @@ function Home() {
                   >
                     Contact Us <FiArrowRight className="ml-2" />
                   </motion.button>
-                </a>
+                </NavLink>
               </motion.div>
             </motion.div>
 

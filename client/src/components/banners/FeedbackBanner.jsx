@@ -1,5 +1,6 @@
 import React from "react";
 import { motion, useAnimation } from 'framer-motion';
+import { NavLink } from "react-router-dom";
 
 const FeedbackBanner = () => {
     return (
@@ -41,13 +42,13 @@ const FeedbackBanner = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <a href="/ContactUs"><button className="px-6 py-3 bg-white text-[#FF7426] font-medium rounded-lg hover:bg-[#FFF2E8] transition-all shadow-md hover:shadow-lg text-sm sm:text-base cursor-pointer">
+        <NavLink to="/ContactUs"><button className="px-6 py-3 bg-white text-[#FF7426] font-medium rounded-lg hover:bg-[#FFF2E8] transition-all shadow-md hover:shadow-lg text-sm sm:text-base cursor-pointer">
           Contact Us
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 inline-block ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
           </svg>
         </button>
-        </a>
+        </NavLink>
       </motion.div>
     </div>
 

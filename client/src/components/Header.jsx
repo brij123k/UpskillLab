@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { NavLink } from 'react-router-dom';
 
 function Header() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -9,30 +10,67 @@ function Header() {
         document.body.style.overflow = isDrawerOpen ? 'auto' : 'hidden';
     };
 
+    // NavLink active style
+    const navLinkStyle = ({ isActive }) => ({
+        color: isActive ? '#FF7426' : '#374151',
+        fontWeight: isActive ? '600' : '400'
+    });
+
     return (
         <header className="bg-white shadow-sm sticky top-0 z-50">
             <nav className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-3 flex items-center justify-between">
                 {/* Logo */}
-                <a href="/"><motion.div 
-                    whileHover={{ scale: 1.05 }}
-                    className="flex-shrink-0"
-                >
-                    <img 
-                        src="/images/Logo.png" 
-                        alt="Meritshot Logo" 
-                        className="h-8 sm:h-10 lg:h-12 2xl:h-14 transition-all duration-200"
-                    />
-                </motion.div>
-                </a>
+                <NavLink to="/">
+                    <motion.div 
+                        whileHover={{ scale: 1.05 }}
+                        className="flex-shrink-0"
+                    >
+                        <img 
+                            src="/images/Logo.png" 
+                            alt="Meritshot Logo" 
+                            className="h-8 sm:h-10 lg:h-12 2xl:h-14 transition-all duration-200"
+                        />
+                    </motion.div>
+                </NavLink>
 
                 {/* Desktop Navigation - Optimized for 1024-1150px */}
                 <div className="hidden lg:flex items-center">
                     <div className="flex items-center space-x-6 xl:space-x-8 2xl:space-x-10">
-                        <a href="" className="text-gray-700 hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap">Courses</a>
-                        <a href="/Success-stories" className="text-gray-700 hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap">Success Stories</a>
-                        <a href="/upcoming-batches" className="text-gray-700 hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap">Upcoming Batches</a>
-                        <a href="/Students-Blog" className="text-gray-700 hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap">Student Blog</a>
-                        <a href="/ContactUs" className="text-gray-700 hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap">Contact us</a>
+                        <NavLink 
+                            to="/courses" 
+                            style={navLinkStyle}
+                            className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap"
+                        >
+                            Courses
+                        </NavLink>
+                        <NavLink 
+                            to="/Success-stories" 
+                            style={navLinkStyle}
+                            className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap"
+                        >
+                            Success Stories
+                        </NavLink>
+                        <NavLink 
+                            to="/upcoming-batches" 
+                            style={navLinkStyle}
+                            className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap"
+                        >
+                            Upcoming Batches
+                        </NavLink>
+                        <NavLink 
+                            to="/Students-Blog" 
+                            style={navLinkStyle}
+                            className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap"
+                        >
+                            Student Blog
+                        </NavLink>
+                        <NavLink 
+                            to="/ContactUs" 
+                            style={navLinkStyle}
+                            className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap"
+                        >
+                            Contact us
+                        </NavLink>
                     </div>
                     <div className="flex space-x-3 ml-6 xl:ml-8 2xl:ml-10">
                         <motion.button 
@@ -110,21 +148,46 @@ function Header() {
                                 {/* Scrollable Content Area */}
                                 <div className="flex-1 overflow-y-auto">
                                     <div className="space-y-2 px-4 pb-4">
-                                        <a href="/" className="block text-block hover:text-[#FF7426] px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
+                                        <NavLink 
+                                            to="/courses" 
+                                            style={navLinkStyle}
+                                            className="block px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" 
+                                            onClick={toggleDrawer}
+                                        >
                                             Courses
-                                        </a>
-                                        <a href="/Success-stories" className="block text-block hover:text-[#FF7426] px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
+                                        </NavLink>
+                                        <NavLink 
+                                            to="/Success-stories" 
+                                            style={navLinkStyle}
+                                            className="block px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" 
+                                            onClick={toggleDrawer}
+                                        >
                                             Success Stories
-                                        </a>
-                                        <a href="/upcoming-batches" className="block text-block hover:text-[#FF7426] px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
+                                        </NavLink>
+                                        <NavLink 
+                                            to="/upcoming-batches" 
+                                            style={navLinkStyle}
+                                            className="block px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" 
+                                            onClick={toggleDrawer}
+                                        >
                                             Upcoming Batches
-                                        </a>
-                                        <a href="/Students-Blog" className="block text-block hover:text-[#FF7426] px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
+                                        </NavLink>
+                                        <NavLink 
+                                            to="/Students-Blog" 
+                                            style={navLinkStyle}
+                                            className="block px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all" 
+                                            onClick={toggleDrawer}
+                                        >
                                             Student Blog
-                                        </a>
-                                        <a href="/ContactUs" className="block text-block hover:text-[#FF7426] px-4 py-3 text-base font-bold hover:bg-[#FFF5EF] rounded-lg transition-all" onClick={toggleDrawer}>
+                                        </NavLink>
+                                        <NavLink 
+                                            to="/ContactUs" 
+                                            style={navLinkStyle}
+                                            className="block px-4 py-3 text-base font-bold hover:bg-[#FFF5EF] rounded-lg transition-all" 
+                                            onClick={toggleDrawer}
+                                        >
                                             Contact us
-                                        </a>
+                                        </NavLink>
                                     </div>
                                 </div>
 
