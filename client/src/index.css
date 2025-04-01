@@ -43,7 +43,9 @@
 body {
   font-family: "Roboto", sans-serif;
 }
-
+body #root{
+  overflow-x: hidden;
+}
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
