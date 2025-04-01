@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-
+import { FiUser, FiAward, FiBriefcase, FiArrowRight } from "react-icons/fi"
+import MentorshipCard from './Mentorship';
 const OrangeCard = ({ title, description, image }) => {
-  const [isHovered, setIsHovered] = useState(false);
+const [isHovered, setIsHovered] = useState(false);
 
   return (
     <motion.div
@@ -117,45 +118,43 @@ const OrangeCard = ({ title, description, image }) => {
 };
 
 const CardsContainer = () => {
-  const cardData = [
+  const features = [
     {
-      title: "Dedicated Mentorship",
-      description: "Get dedicated mentorship on every step of learning throughout the PG programs.",
-      image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-    },
-    {
-      title: "Personalized Evaluation", 
-      description: "Get personalized evaluation on every assignment and project by domain experts.",
-      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-    },
-    {
-      title: "360° Career Support",
-      description: "Our Data Science PG Program offers 100 percent Placement Assurance.",
-      image: "https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=500&q=80"
-    }
+              title: "Dedicated Mentorship",
+              description:
+                "Get dedicated mentorship on every step of learning throughout the PG programs.",
+              icon: <FiUser />,
+              image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            },
+            {
+              title: "Personalized Evaluation",
+              description:
+                "Get personalized evaluation on every assignment and project by domain experts.",
+              icon: <FiAward />,
+              image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            },
+            {
+              title: "360° Career Support",
+              description:
+                "Our Data Science PG Program offers 100 percent Placement Assurance.",
+              icon: <FiBriefcase />,
+              image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            },
   ];
 
   return (
-    <div className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {cardData.map((card, index) => (
+    <div className="max-w-7xl mx-auto mt-10">
             <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.8 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
             >
-              <OrangeCard
-                title={card.title}
-                description={card.description}
-                image={card.image}
-              />
+              {features.map((feature, index) => (
+                <MentorshipCard key={index} {...feature} />
+              ))}
             </motion.div>
-          ))}
-        </div>
-      </div>
-    </div>
+          </div>
   );
 };
 

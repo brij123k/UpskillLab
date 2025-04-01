@@ -1,167 +1,191 @@
-import { useRef } from 'react';
+import { motion } from 'framer-motion';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { motion, useInView } from 'framer-motion';
+import { useState } from 'react';
 
-// Custom Dot Component
-const CustomDot = ({ onClick, active }) => {
-  return (
-    <button
-      className={`w-3 h-3 rounded-full mx-1.5 transition-all duration-300 ${
-        active ? 'bg-[#4d2c5e] scale-125' : 'bg-gray-300'
-      }`}
-      onClick={() => onClick()}
-      aria-label={`Go to slide ${active ? 'current' : ''}`}
-    />
-  );
-};
-
-// CategoryCard Component with responsive sizing
-const CategoryCard = ({ imageSrc, categoryName }) => (
-  <motion.div
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-    className="flex-shrink-0 w-full bg-[#f3f4f8] rounded-xl overflow-hidden shadow-md transition-all duration-300 cursor-pointer p-6 sm:p-8 md:p-10 lg:p-12 xl:p-14 2xl:p-16 mx-1 sm:mx-2"
-  >
-    <motion.div
-      className="relative aspect-square"
-      whileHover={{ scale: 1.1 }}
-      transition={{ duration: 0.5 }}
-    >
-      <img
-        src={imageSrc}
-        alt={categoryName}
-        className="absolute w-full h-full object-cover"
-        loading="lazy"
-      />
-    </motion.div>
-    <div className="text-center mt-3 sm:mt-4 md:mt-5">
-      <h3 className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold text-gray-800 truncate">
-        {categoryName}
-      </h3>
-    </div>
-  </motion.div>
-);
-
-const ScrollableCategories = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
+const CategoryCarousel = () => {
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const colors = ['#FF7426', '#4d2c5e']; // Our two brand colors
 
   const categories = [
-    { imageSrc: "/images/Design.png", categoryName: "Design" },
-    { imageSrc: "/images/Development.png", categoryName: "Development" },
-    { imageSrc: "/images/Marketing.png", categoryName: "Marketing" },
-    { imageSrc: "/images/business.png", categoryName: "Business" },
-    { imageSrc: "/images/business.png", categoryName: "Business" },
+    {
+      title: 'Business',
+      image: 'https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      title: 'Design',
+      image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      title: 'Development',
+      image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      title: 'Marketing',
+      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      title: 'Photography',
+      image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+    },
+    {
+      title: 'Media',
+      image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80'
+    }
   ];
 
-  // Enhanced responsive breakpoints with XXL support
   const responsive = {
-    xxl: {
-      breakpoint: { max: 4000, min: 1920 },
-      items: 5,
-      partialVisibilityGutter: 60
-    },
-    xl: {
-      breakpoint: { max: 1920, min: 1536 },
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 2500 },
       items: 4,
-      partialVisibilityGutter: 50
     },
-    lg: {
-      breakpoint: { max: 1536, min: 1280 },
-      items: 4,
-      partialVisibilityGutter: 40
-    },
-    md: {
-      breakpoint: { max: 1280, min: 1024 },
+    desktop: {
+      breakpoint: { max: 2500, min: 1024 },
       items: 3,
-      partialVisibilityGutter: 30
     },
-    sm: {
-      breakpoint: { max: 1024, min: 768 },
+    tablet: {
+      breakpoint: { max: 1024, min: 640 },
       items: 2,
-      partialVisibilityGutter: 20
     },
-    xs: {
-      breakpoint: { max: 768, min: 640 },
-      items: 2,
-      partialVisibilityGutter: 15
-    },
-    xxs: {
+    mobile: {
       breakpoint: { max: 640, min: 0 },
       items: 1,
-      partialVisibilityGutter: 10
     }
   };
 
-  // Animation variants
-  const headingVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
+  const CustomDot = ({ onClick, active }) => {
+    return (
+      <button
+        onClick={onClick}
+        className={`mx-1 h-2 w-6 rounded-full transition-all duration-300 ${
+          active ? 'bg-[#FF7426]' : 'bg-gray-300'
+        }`}
+      />
+    );
   };
 
   return (
-    <div className='bg-white relative' ref={ref}>
-      {/* Background elements */}
-      <div className='hidden lg:block w-[400px] h-[400px] xl:w-[500px] xl:h-[500px] 2xl:w-[600px] 2xl:h-[600px] absolute top-20 left-[-150px] xl:left-[-100px] 2xl:left-[-50px] blur-lg rounded-full bg-[#FF74261A] z-0'></div>
-      <img
-        src="/images/PlanetIconImage.png"
-        alt="Planet Icon"
-        className="hidden sm:block absolute top-4 right-4 h-10 sm:h-12 md:h-14 lg:h-16 xl:h-20 2xl:h-24 z-10"
-      />
+    <div className="max-w-7xl mx-auto py-12 px-4 ">
+      <h2 className="text-3xl 2xl:text-5xl font-bold text-center mb-12 text-gray-800">
+        Explore <span className="text-[#FF7426]">Categories</span>
+      </h2>
 
-      <div className="relative bg-gradient-to-b from-[#f2f0ff] to-white py-12 sm:py-16 lg:py-20 xl:py-24 2xl:py-28 px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 z-20">
-        <div className="container mx-auto max-w-8xl">
-          <motion.h2
-            variants={headingVariants}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            transition={{ duration: 0.5 }}
-            className="text-2xl lg:text-4xl 2xl:text-5xl font-semibold text-center mb-10 sm:mb-12 lg:mb-16 xl:mb-20"
-          >
-            Explore Our World's Best Courses
-          </motion.h2>
-
-          {/* Carousel Implementation */}
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <Carousel
-              responsive={responsive}
-              swipeable={true}
-              draggable={true}
-              showDots={true}
-              infinite={true}
-              autoPlay={true}
-              customDot={<CustomDot />}
-              autoPlaySpeed={3000}
-              keyBoardControl={true}
-              customTransition="transform 500ms ease-in-out"
-              transitionDuration={500}
-              containerClass="carousel-container pb-10"
-              removeArrowOnDeviceType={["xxs", "xs", "sm", "md", "lg", "xl", "xxl"]}
-              dotListClass="custom-dot-list-style mt-6 sm:mt-8 lg:mt-10 absolute bottom-0 left-0 right-0 flex justify-center mt-4"
-              itemClass="px-3 sm:px-4 lg:px-5"
-              sliderClass="gap-x-6 sm:gap-x-8 lg:gap-x-10"
-              centerMode={false}
-              additionalTransfrom={0}
-            >
-              {categories.map((category, index) => (
-                <div key={index} className="h-full">
-                  <CategoryCard
-                    imageSrc={category.imageSrc}
-                    categoryName={category.categoryName}
+      <div className="relative pb-10">
+        <Carousel
+          responsive={responsive}
+          infinite={true}
+          autoPlay={true}
+          autoPlaySpeed={3000}
+          keyBoardControl={true}
+          customTransition="transform 300ms ease-in-out"
+          containerClass="carousel-container"
+          itemClass="px-2"
+          showDots={true}
+          customDot={<CustomDot />}
+          arrows={false}
+          renderDotsOutside={true}
+          dotListClass="flex justify-center mt-6"
+          additionalTransfrom={0}
+        >
+          {categories.map((category, index) => {
+            // Alternate between the two colors
+            const color = colors[index % colors.length];
+            const secondaryColor = colors[(index + 1) % colors.length];
+            
+            return (
+              <motion.div
+                key={index}
+                className="h-64 relative rounded-xl overflow-hidden shadow-lg cursor-pointer"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ 
+                  opacity: 1, 
+                  y: 0,
+                  transition: { 
+                    delay: index * 0.1,
+                    duration: 0.5 
+                  }
+                }}
+                exit={{ opacity: 0, y: -20 }}
+                whileHover={{ 
+                  scale: 1.05,
+                  boxShadow: `0 15px 30px ${color}40`
+                }}
+                onHoverStart={() => setHoveredIndex(index)}
+                onHoverEnd={() => setHoveredIndex(null)}
+                transition={{ 
+                  type: 'spring',
+                  stiffness: 300,
+                  damping: 20
+                }}
+              >
+                {/* Background Image with Gradient */}
+                <div className="absolute inset-0">
+                  <img 
+                    src={category.image} 
+                    alt={category.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div 
+                    className="absolute inset-0 bg-gradient-to-t"
+                    style={{
+                      background: `linear-gradient(to top, ${color} 0%, ${secondaryColor}80 30%, transparent 70%)`
+                    }}
                   />
                 </div>
-              ))}
-            </Carousel>
-          </motion.div>
-        </div>
+
+                {/* Animated Border */}
+                <motion.div
+                  className="absolute inset-0 border-4 pointer-events-none"
+                  style={{ borderColor: color }}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ 
+                    opacity: hoveredIndex === index ? 1 : 0,
+                    scale: hoveredIndex === index ? 1 : 0.95,
+                  }}
+                  transition={{ duration: 0.3 }}
+                />
+
+                {/* Category Name */}
+                <motion.div 
+                  className="absolute bottom-0 left-0 right-0 p-4 text-center"
+                  style={{ backgroundColor: color }}
+                  initial={{ y: 0 }}
+                  animate={{ 
+                    y: hoveredIndex === index ? -10 : 0
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <motion.h3 
+                    className="text-xl 2xl:text-2xl font-bold text-white"
+                    initial={{ scale: 1 }}
+                    animate={{ 
+                      scale: hoveredIndex === index ? 1.1 : 1
+                    }}
+                  >
+                    {category.title}
+                  </motion.h3>
+                </motion.div>
+
+                {/* Floating Tag */}
+                <motion.div
+                  className="absolute top-4 right-4 px-3 py-1 rounded-full text-xs font-bold text-white"
+                  style={{ backgroundColor: secondaryColor }}
+                  initial={{ y: -20, opacity: 0 }}
+                  animate={{ 
+                    y: hoveredIndex === index ? 0 : -20,
+                    opacity: hoveredIndex === index ? 1 : 0
+                  }}
+                  transition={{ duration: 0.3 }}
+                >
+                  New
+                </motion.div>
+              </motion.div>
+            );
+          })}
+        </Carousel>
       </div>
     </div>
   );
 };
 
-export default ScrollableCategories;
+export default CategoryCarousel;

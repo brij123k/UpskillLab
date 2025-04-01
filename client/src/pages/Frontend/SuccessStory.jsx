@@ -104,7 +104,7 @@ const SuccessStory = () => {
   initial="hidden"
   animate={controls}
   variants={bannerVariants}
-  className="w-full bg-gradient-to-br from-[#FF7426] via-[#D84315] to-[#FF9800] py-10 px-4 sm:px-6 lg:px-8" // Reduced py-16 to py-10 and removed 2xl:py-24
+  className="w-full bg-gradient-to-br from-[#ff7426] to-[#ff8e3a] py-10 px-4 sm:px-6 lg:px-8" // Reduced py-16 to py-10 and removed 2xl:py-24
 >
   <div className="max-w-8xl mx-auto">
     <div className="flex flex-col lg:flex-row items-center justify-between gap-8"> {/* Reduced gap from 12 to 8 and removed 2xl gap */}

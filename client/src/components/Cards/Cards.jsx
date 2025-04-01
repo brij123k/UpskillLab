@@ -29,7 +29,7 @@ const Cards = ({ imageSrc, title, subtitle }) => {
     const targetNumber = Number(title);
     if (isNaN(targetNumber)) return;
 
-    const duration = 4000;
+    const duration = 8000;
     const increment = targetNumber / (duration / 60);
     let currentCount = 0;
 

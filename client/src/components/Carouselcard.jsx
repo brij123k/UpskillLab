@@ -1,179 +1,221 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-
-// Main Carousel Component
 const TextCarousel = ({ slides }) => {
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [direction, setDirection] = useState('left');
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(null);
 
-    // Auto-advance every 5 seconds
-    useEffect(() => {
-        const interval = setInterval(() => {
-            goToNext();
-        }, 10000);
-        return () => clearInterval(interval);
-    }, [currentIndex]);
+  // Auto-advance every 8 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      goToNext();
+    }, 8000);
+    return () => clearInterval(interval);
+  }, [currentIndex]);
 
-    const goToNext = () => {
-        setDirection('right');
-        setCurrentIndex(prev => (prev === slides.length - 1 ? 0 : prev + 1));
-    };
+  const goToNext = () => {
+    setDirection('right');
+    setCurrentIndex(prev => (prev === slides.length - 1 ? 0 : prev + 1));
+  };
 
-    const goToPrev = () => {
-        setDirection('left');
-        setCurrentIndex(prev => (prev === 0 ? slides.length - 1 : prev - 1));
-    };
+  const goToPrev = () => {
+    setDirection('left');
+    setCurrentIndex(prev => (prev === 0 ? slides.length - 1 : prev - 1));
+  };
 
-    const goToSlide = (index) => {
-        setDirection(index > currentIndex ? 'right' : 'left');
-        setCurrentIndex(index);
-    };
+  const goToSlide = (index) => {
+    if (index !== currentIndex) {
+      setDirection(index > currentIndex ? 'right' : 'left');
+      setCurrentIndex(index);
+    }
+  };
 
-    // Animation variants
-    const slideVariants = {
-        hiddenRight: { x: '100%', opacity: 0 },
-        hiddenLeft: { x: '-100%', opacity: 0 },
-        visible: {
-            x: '0',
-            opacity: 1,
-            transition: {
-                type: 'spring',
-                stiffness: 100,
-                damping: 20,
-                duration: 0.5
-            }
-        },
-        exitRight: { x: '-100%', opacity: 0 },
-        exitLeft: { x: '100%', opacity: 0 }
-    };
+  // Animation variants
+  const slideVariants = {
+    enter: (direction) => ({
+      x: direction === 'right' ? '100%' : '-100%',
+      opacity: 0
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        x: { type: 'spring', stiffness: 300, damping: 30 },
+        opacity: { duration: 0.4 }
+      }
+    },
+    exit: (direction) => ({
+      x: direction === 'right' ? '-30%' : '30%',
+      opacity: 0,
+      transition: { duration: 0.3 }
+    })
+  };
 
-    return (
-        <div className="relative w-full h-[400px] md:h-[500px] bg-[#FDF8EE] overflow-hidden rounded-xl shadow-lg">
+  // Text animation variants
+  const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1 + 0.3,
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    })
+  };
 
-            <AnimatePresence mode="wait" custom={direction}>
-                <motion.div
-                    key={currentIndex}
-                    custom={direction}
-                    initial={direction === 'right' ? 'hiddenRight' : 'hiddenLeft'}
-                    animate="visible"
-                    exit={direction === 'right' ? 'exitLeft' : 'exitRight'}
-                    variants={slideVariants}
-                    className="absolute inset-0 flex "
+  // Floating animation for images
+  const floatVariants = {
+    float: {
+      y: [0, -10, 0],
+      transition: {
+        duration: 5,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }
+    }
+  };
+
+  return (
+    <div className="relative w-full h-[500px] overflow-hidden bg-[#FDF8EE]">
+      {/* Subtle background pattern animation */}
+      <motion.div 
+        className="absolute inset-0 opacity-10"
+        animate={{
+          backgroundPosition: ['0% 0%', '100% 100%'],
+        }}
+        transition={{
+          duration: 20,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+        style={{
+          backgroundImage: 'radial-gradient(#FF7426 1px, transparent 1px)',
+          backgroundSize: '40px 40px'
+        }}
+      />
+
+      <AnimatePresence custom={direction} initial={false}>
+        <motion.div
+          key={currentIndex}
+          custom={direction}
+          variants={slideVariants}
+          initial="enter"
+          animate="center"
+          exit="exit"
+          className="absolute 2xl:w-3/4 inset-0 flex flex-col md:flex-row 2xl:m-auto"
+        >
+          {/* Text Content */}
+          <div className="w-full md:w-1/2 p-6 md:p-12 flex flex-col justify-center">
+            <motion.h1
+              custom={0}
+              initial="hidden"
+              animate="visible"
+              variants={textVariants}
+              className="text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl font-bold mb-3 md:mb-4"
+            >
+              {slides[currentIndex].heading.split(' ').map((word, i) => (
+                <motion.span 
+                  key={i} 
+                  className={i === 0 ? 'text-[#FF7426]' : 'text-gray-900'}
+                  whileHover={{ scale: 1.05 }}
                 >
-                    {/* Text Content */}
-                    <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center ">
-                        <motion.h1
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="text-3xl
-    md:text-4xl
-    lg:text-5xl 
-    xl:text-6xl
-    font-bold sm:text-black md:text-gray-900 mb-4 "
-                        >
-                            {slides[currentIndex].heading.split(' ').map((word, index) => (
-                                <span key={index} className={index === 0 ? 'text-[#FF7426]' : 'text-gray-900'}>
-                                    {word}{' '}
-                                </span>
-                            ))}
-                        </motion.h1>
+                  {word}{' '}
+                </motion.span>
+              ))}
+            </motion.h1>
 
+            <motion.h2
+              custom={1}
+              initial="hidden"
+              animate="visible"
+              variants={textVariants}
+              className="text-xl md:text-2xl lg:text-3xl 2xl:text-4xl text-gray-700 mb-4 md:mb-6"
+            >
+              {slides[currentIndex].subheading}
+            </motion.h2>
 
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4 }}
-                            className="text-lg md:text-xl
-    lg:text-2xl 
-    xl:text-3xl sm:text-black md:text-gray-700 mb-6"
-                        >
-                            {slides[currentIndex].subheading}
-                        </motion.p>
+            <motion.p
+              custom={2}
+              initial="hidden"
+              animate="visible"
+              variants={textVariants}
+              className="text-base md:text-lg 2xl:text-xl text-gray-600 mb-6 md:mb-8"
+            >
+              {slides[currentIndex].description}
+            </motion.p>
+          </div>
 
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.6 }}
-                            className="text-sm md:text-base
-    lg:text-lg 
-    xl:text-xl sm:text-black md:text-gray-500"
-                        >
-                            {slides[currentIndex].description}
-                        </motion.p>
-                    </div>
+          {/* Image */}
+          <div className="w-full md:w-1/2  flex items-center justify-center p-4 md:p-8 2xl:p-12">
+            <motion.div
+              variants={floatVariants}
+              animate="float"
+              className="relative h-full w-full flex items-center justify-center"
+            >
+              <motion.img
+                src={`/${slides[currentIndex].image}`}
+                alt={slides[currentIndex].heading}
+                className="h-[250px] md:h-[80%] 2xl:[90%] w-auto object-contain mix-blend-multiply"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+              />
+            </motion.div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
 
-                    {/* Image */}
-                    <div className="
-  absolute right-0 inset-0 
-  flex items-center justify-center
-  md:relative md:w-1/2
-">
-                        <motion.img
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: 0.3, duration: 0.5 }}
-                            src={slides[currentIndex].image}
-                            alt={slides[currentIndex].heading}
-                            className="
-      max-h-[80%] max-w-[80%] 
-      object-contain 
-      mix-blend-multiply
-      opacity-100  // Low opacity on small screens
-      md:opacity-100  // Full opacity on medium+
-      blur-sm  // Slight blur on small screens
-      md:blur-none  // Clear on medium+
-      z-0  // Behind text
-    "
-                        />
-                    </div>
-                </motion.div>
-            </AnimatePresence>
-
-            {/* Navigation Dots */}
-            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
-                {slides.map((_, index) => (
-                    <button
-                        key={index}
-                        onClick={() => goToSlide(index)}
-                        className={`w-3 h-3 rounded-full transition-all ${currentIndex === index ? 'bg-gray-800 w-6' : 'bg-gray-300'}`}
-                    />
-                ))}
-            </div>
-        </div>
-    );
+      {/* Navigation Dots */}
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2">
+        {slides.map((_, index) => (
+          <motion.button
+            key={index}
+            onClick={() => goToSlide(index)}
+            className={`w-3 h-3 rounded-full ${currentIndex === index ? 'bg-[#FF7426]' : 'bg-gray-300'}`}
+            whileHover={{ scale: 1.2 }}
+            whileTap={{ scale: 0.9 }}
+            animate={{
+              scale: currentIndex === index ? [1, 1.2, 1] : 1,
+              backgroundColor: currentIndex === index ? '#FF7426' : '#E5E7EB'
+            }}
+            transition={{ duration: 0.3 }}
+          />
+        ))}
+      </div>
+    </div>
+  );
 };
 
-// Sample Data (could also be passed as props)
+// Sample data
 const carouselSlides = [
-    {
-        heading: "Redefine Your Career",
-        subheading: "with Industry relevant PG Programs",
-        description: "Upskilllab is an education and career transformation pioneer specializing in today’s most in-demand corporate skills.",
-        image: "images/carouselimage.png"
-    },
-    {
-        heading: "Redefine Your Career",
-        subheading: "with Industry relevant PG Programs",
-        description: "Upskilllab is an education and career transformation pioneer specializing in today’s most in-demand corporate skills.",
-        image: "images/carouselimage.png"
-    },
-    {
-        heading: "Redefine Your Career",
-        subheading: "with Industry relevant PG Programs",
-        description: "Upskilllab is an education and career transformation pioneer specializing in today’s most in-demand corporate skills.",
-        image: "images/carouselimage.png"
-    }
+  {
+    heading: "Transform Your Career",
+    subheading: "Industry-Relevant Programs",
+    description: "Gain practical skills that employers are looking for in today's competitive job market.",
+    image: "images/carouselimage.png"
+  },
+  {
+    heading: "Learn From Experts",
+    subheading: "Real-World Experience",
+    description: "Our instructors are industry professionals who bring current best practices to your learning.",
+    image: "images/carouselimage.png"
+  },
+  {
+    heading: "Career Support",
+    subheading: "Job Placement Assistance",
+    description: "We provide comprehensive career services to help you land your dream role.",
+    image: "images/carouselimage.png"
+  }
 ];
 
-// Container Component that uses the Carousel
 const CarouselContainer = () => {
-    return (
-        <div className="w-full">
-            <TextCarousel slides={carouselSlides} />
-        </div>
-    );
+  return (
+    <div className="w-full">
+      <TextCarousel slides={carouselSlides} />
+    </div>
+  );
 };
 
 export default CarouselContainer;
