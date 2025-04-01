@@ -2,6 +2,7 @@
 const url = "https://shark-app-ixo3s.ondigitalocean.app";
 const ApiConfig = {
   url,
-  testimonial: `${url}/testimonial`,
+  testimonial: `${url}/testimonials`,
+  category: `${url}/category`,
 };
 export default ApiConfig;

@@ -12,7 +12,9 @@ function CourseList() {
       duration: '3 Months',
       studentsEnrolled: 1250,
       originalPrice: 199,
-      discountedPrice: 149
+      discountedPrice: 149,
+      remainingSheets: 3, // Very limited availability
+      badgeColor: 'bg-red-500' // Red for urgent low availability
     },
     {
       imageUrl: Course2,
@@ -20,7 +22,9 @@ function CourseList() {
       duration: '4 Months',
       studentsEnrolled: 980,
       originalPrice: 179,
-      discountedPrice: 129
+      discountedPrice: 129,
+      remainingSheets: 8, // Low availability
+      badgeColor: 'bg-orange-500' // Orange for low availability
     },
     {
       imageUrl: Course3,
@@ -28,7 +32,9 @@ function CourseList() {
       duration: '6 Months',
       studentsEnrolled: 2100,
       originalPrice: 249,
-      discountedPrice: 199
+      discountedPrice: 199,
+      remainingSheets: 15, // Moderate availability
+      badgeColor: 'bg-blue-500' // Blue for moderate availability
     },
     {
       imageUrl: Course1,
@@ -36,7 +42,9 @@ function CourseList() {
       duration: '3 Months',
       studentsEnrolled: 750,
       originalPrice: 159,
-      discountedPrice: 119
+      discountedPrice: 119,
+      remainingSheets: 25, // Good availability
+      badgeColor: 'bg-green-500' // Green for good availability
     },
   ];
 

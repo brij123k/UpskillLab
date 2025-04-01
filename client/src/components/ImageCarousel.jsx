@@ -1,111 +1,125 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { NavLink } from 'react-router-dom';
 
-const HiringPartnersCarousel = () => {
-  // Sample company logos (replace with your actual logos)
-  const companies = [
-    'company1.svg',
-    'company2.svg',
-    'company3.svg',
-    'company4.svg',
-    'company5.svg',
-    'company6.svg',
-    'company7.svg',
-    'company8.svg',
-    'company9.svg',
-    'company10.svg',
+const HiringPartnersShowcase = () => {
+  const logos = [
+    'company1.svg', 'company2.svg', 'company3.svg', 'company4.svg',
+    'company5.svg', 'company6.svg', 'company7.svg', 'company8.svg',
+    'company9.svg', 'company10.svg', 'company11.svg', 'company12.svg'
   ];
 
-  // Duplicate the array to create seamless looping
-  const duplicatedCompanies = [...companies, ...companies];
+  // Double the array for seamless looping
+  const doubledLogos = [...logos, ...logos];
 
   return (
-    <div className="py-12 bg-gray-50 overflow-hidden">
+    <div className="py-16 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800">
-          Our Hiring  <span className='text-[#FF7426]'>Partners</span>
-        </h2>
-        
-        {/* First Line - Right to Left */}
-        <div className="mb-2">
+        {/* Title with color accent */}
+        <motion.h2 
+          className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Our <span className="text-[#FF7426]">Hiring Partners</span>
+        </motion.h2>
+
+        {/* Primary Marquee - Right to Left */}
+        <div className="py-2 mb-3 relative overflow-hidden">
           <motion.div
-            className="flex"
+            className="flex items-center"
             animate={{
               x: ['0%', '-100%'],
             }}
             transition={{
-              duration: 40,
+              duration: 10,
               repeat: Infinity,
               ease: 'linear',
             }}
             whileHover={{ animationPlayState: 'paused' }}
           >
-            {duplicatedCompanies.map((company, index) => (
-              <div key={`line1-${index}`} className="flex-shrink-0 mx-8">
+            {doubledLogos.map((logo, index) => (
+              <motion.div 
+                key={`marquee1-${index}`}
+                className="flex-shrink-0 mx-8"
+                whileHover={{
+                  scale: 1.2,
+                  transition: { duration: 0.3 }
+                }}
+              >
                 <img 
-                  src={`./images/${company}`} 
-                  alt="Company Logo" 
-                  className="h-16 object-contain transition-all duration-300"
+                  src={`./images/${logo}`} 
+                  alt="Partner logo" 
+                  className="h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500"
                 />
-              </div>
+              </motion.div>
             ))}
           </motion.div>
+          {/* Gradient fade edges */}
+          <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
+          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
         </div>
 
-        {/* Second Line - Left to Right */}
-        <div className="mb-2">
+        {/* Secondary Marquee - Left to Right (smaller logos) */}
+        <div className="py-6 relative overflow-hidden">
           <motion.div
-            className="flex"
+            className="flex items-center"
             animate={{
               x: ['-100%', '0%'],
             }}
             transition={{
-              duration: 45,
+              duration: 15,
               repeat: Infinity,
               ease: 'linear',
             }}
             whileHover={{ animationPlayState: 'paused' }}
           >
-            {duplicatedCompanies.map((company, index) => (
-              <div key={`line2-${index}`} className="flex-shrink-0 mx-8">
+            {doubledLogos.map((logo, index) => (
+              <motion.div 
+                key={`marquee2-${index}`}
+                className="flex-shrink-0 mx-6"
+                whileHover={{
+                  scale: 1.3,
+                  rotate: [0, -5, 5, 0],
+                  transition: { duration: 0.5 }
+                }}
+              >
                 <img 
-                  src={`./images/${company}`} 
-                  alt="Company Logo" 
-                  className="h-16 object-contain transition-all duration-300"
+                  src={`./images/${logo}`} 
+                  alt="Partner logo" 
+                  className="h-12 object-contain opacity-90 hover:opacity-100 transition-all duration-300"
                 />
-              </div>
+              </motion.div>
             ))}
           </motion.div>
+          {/* Gradient fade edges */}
+          <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
+          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
         </div>
 
-        {/* Third Line - Right to Left */}
-        <div>
-          <motion.div
-            className="flex"
-            animate={{
-              x: ['0%', '-100%'],
+        {/* CTA with accent color */}
+        <motion.div 
+          className="mt-16 text-center"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+        >
+        <NavLink to="/ContactUs">  <motion.button
+            className="px-8 py-3 bg-[#4D2C5E] text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all cursor-pointer"  
+            whileHover={{ 
+              scale: 1.05,
+              backgroundColor: '#5F3A73'
             }}
-            transition={{
-              duration: 50,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
-            whileHover={{ animationPlayState: 'paused' }}
+            whileTap={{ scale: 0.95 }}
           >
-            {duplicatedCompanies.map((company, index) => (
-              <div key={`line3-${index}`} className="flex-shrink-0 mx-8">
-                <img 
-                  src={`./images/${company}`} 
-                  alt="Company Logo" 
-                  className="h-16 object-contain transition-all duration-300"
-                />
-              </div>
-            ))}
-          </motion.div>
-        </div>
+            Become a Partner
+          </motion.button>
+          </NavLink>
+        </motion.div>
       </div>
     </div>
   );
 };
 
-export default HiringPartnersCarousel;
+export default HiringPartnersShowcase;

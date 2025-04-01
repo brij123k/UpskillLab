@@ -8,7 +8,8 @@ const CourseCard = ({
   duration, 
   studentsEnrolled, 
   originalPrice, 
-  discountedPrice 
+  discountedPrice,
+  remainingSheets // New prop for remaining sheets count
 }) => {
   return (
     <motion.div
@@ -17,8 +18,22 @@ const CourseCard = ({
       viewport={{ once: true, margin: "-50px 0px" }}
       whileHover={{ y: -5 }}
       transition={{ type: "spring", stiffness: 300 }}
-      className="w-full max-w-xl bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col h-full cursor-pointer border m-auto border-gray-100 hover:border-[#FF7426]/50 transition-all duration-300 group"
+      className="w-full max-w-xl bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col h-full cursor-pointer border m-auto border-gray-100 hover:border-[#FF7426]/50 transition-all duration-300 group relative"
     >
+      {/* Remaining Sheets Label - Top Right Corner */}
+      {remainingSheets && (
+        <motion.div 
+          className="absolute top-0 right-0 bg-[#FF7426] text-white px-3 py-1 rounded-bl-lg z-10 flex items-center"
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4 }}
+        >
+          <span className="text-xs font-semibold whitespace-nowrap">
+            {remainingSheets < 10 ? `Only ${remainingSheets} left!` : `${remainingSheets} available`}
+          </span>
+        </motion.div>
+      )}
+
       {/* Image with hover zoom */}
       <motion.div 
         className="relative h-48 overflow-hidden"
@@ -33,20 +48,13 @@ const CourseCard = ({
           transition={{ duration: 1 }}
           loading="lazy"
         />
-        {/* Bookmark button */}
-        <motion.button
-          className="absolute top-3 right-3 bg-white/90 p-2 rounded-full shadow-sm"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-        >
-          <FiBookmark className="text-[#4d2c5e]" />
-        </motion.button>
+        
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#4d2c5e]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
       </motion.div>
 
       {/* Content */}
-      <div className="p-2 flex flex-col flex-grow">
+      <div className="p-5 flex flex-col flex-grow">
         {/* Title */}
         <motion.h3 
           className="text-lg font-bold text-gray-900 mb-3 line-clamp-2"
@@ -59,12 +67,12 @@ const CourseCard = ({
 
         {/* Metadata */}
         <motion.div 
-          className="flex items-center text-sm text-gray-600 mb-4 mt-auto"
+          className="flex flex-wrap items-center text-sm text-gray-600 mb-4 gap-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <div className="flex items-center mr-4">
+          <div className="flex items-center">
             <motion.div whileHover={{ scale: 1.1 }}>
               <FiClock className="mr-1.5 text-[#4d2c5e]" />
             </motion.div>
@@ -80,13 +88,15 @@ const CourseCard = ({
 
         {/* Price and CTA */}
         <motion.div 
-          className="flex items-center justify-between border-t border-gray-100 pt-4"
+          className="flex items-center justify-between border-t border-gray-100 pt-4 mt-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
           <div className="flex items-baseline">
-            <span className="text-gray-400 line-through mr-2 text-sm">${originalPrice}</span>
+            {originalPrice && (
+              <span className="text-gray-400 line-through mr-2 text-sm">${originalPrice}</span>
+            )}
             <span className="text-lg font-bold text-[#FF7426]">${discountedPrice}</span>
           </div>
           <motion.div
@@ -107,6 +117,16 @@ const CourseCard = ({
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Urgency indicator for low remaining sheets */}
+      {remainingSheets && remainingSheets < 5 && (
+        <motion.div 
+          className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF7426] to-[#ff0000]"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ duration: 0.5 }}
+        />
+      )}
 
       {/* Floating accent elements */}
       <motion.div 

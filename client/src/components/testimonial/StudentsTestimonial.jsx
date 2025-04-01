@@ -161,7 +161,7 @@ const StudentTestimonials = () => {
     xxl: { breakpoint: { max: 4000, min: 1920 }, items: 4 },
     xl: { breakpoint: { max: 1920, min: 1536 }, items: 3 },
     lg: { breakpoint: { max: 1536, min: 1280 }, items: 3 },
-    md: { breakpoint: { max: 1280, min: 1024 }, items: 2 },
+    md: { breakpoint: { max: 1280, min: 1024 }, items: 3 },
     tablet: { breakpoint: { max: 1024, min: 768 }, items: 2 },
     sm: { breakpoint: { max: 768, min: 640 }, items: 1 },
     xs: { breakpoint: { max: 640, min: 0 }, items: 1 }
