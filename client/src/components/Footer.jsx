@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { NavLink } from 'react-router-dom';
 function Footer() {
     return (
         <footer className="bg-[#FDF8EE] text-[#606060] w-full py-8 sm:py-12 lg:py-16">
@@ -24,9 +24,9 @@ function Footer() {
                         <div>
                             <h3 className="text-[#00052E] text-lg sm:text-xl md:text-xl font-semibold mb-3 sm:mb-4">Company</h3>
                             <ul className="space-y-2 sm:space-y-3">
-                                <li><a href="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">How to work?</a></li>
-                                <li><a href="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Popular Course</a></li>
-                                <li><a href="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Service</a></li>
+                                <li><NavLink to="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">How to work?</NavLink></li>
+                                <li><NavLink to="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Popular Course</NavLink></li>
+                                <li><NavLink to="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Service</NavLink></li>
                             </ul>
                         </div>
 
@@ -34,9 +34,9 @@ function Footer() {
                         <div>
                             <h3 className="text-[#00052E] text-lg sm:text-xl md:text-xl font-semibold mb-3 sm:mb-4">Resources</h3>
                             <ul className="space-y-2 sm:space-y-3">
-                                <li><a href="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">How to work?</a></li>
-                                <li><a href="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Popular Course</a></li>
-                                <li><a href="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Service</a></li>
+                                <li><NavLink to="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">How to work?</NavLink></li>
+                                <li><NavLink to="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Popular Course</NavLink></li>
+                                <li><NavLink to="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Service</NavLink></li>
                             </ul>
                         </div>
 
@@ -44,10 +44,10 @@ function Footer() {
                         <div>
                             <h3 className="text-[#00052E] text-lg sm:text-xl md:text-xl font-semibold mb-3 sm:mb-4">Support</h3>
                             <ul className="space-y-2 sm:space-y-3">
-                                <li><a href="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">FAQ</a></li>
-                                <li><a href="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Help Center</a></li>
-                                <li><a href="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Career</a></li>
-                                <li><a href="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Privacy</a></li>
+                                <li><NavLink to="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">FAQ</NavLink></li>
+                                <li><NavLink to="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Help Center</NavLink></li>
+                                <li><NavLink to="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Career</NavLink></li>
+                                <li><NavLink to="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">Privacy</NavLink></li>
                             </ul>
                         </div>
 
@@ -55,7 +55,7 @@ function Footer() {
                         <div>
                             <h3 className="text-[#00052E] text-lg sm:text-xl md:text-xl font-semibold mb-3 sm:mb-4">Contact</h3>
                             <ul className="space-y-2 sm:space-y-3">
-                                <li><a href="tel:+09137053875" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">+0913-705-3875</a></li>
+                                <li><NavLink to="tel:+09137053875" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors">+0913-705-3875</NavLink></li>
                                 <li className="text-[#606060] text-sm sm:text-base">4808 Skinner Hollow Road<br />Days Creek, OR 97429</li>
                             </ul>
                         </div>

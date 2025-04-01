@@ -270,7 +270,6 @@ const StudentTestimonials = () => {
             containerClass="carousel-container pb-12"
             removeArrowOnDeviceType={["xs"]}
             itemClass="px-2"
-            sliderClass="gap-x-2"
             beforeChange={(nextSlide) => setActiveItem(nextSlide)}
             customButtonGroup={<ButtonGroup />}
             arrows={false}

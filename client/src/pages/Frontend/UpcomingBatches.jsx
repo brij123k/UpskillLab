@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion,AnimatePresence } from 'framer-motion';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import BatchCard from '../../components/Cards/BatchCard';
@@ -42,7 +42,7 @@ const UpcomingBatches = () => {
     initial="hidden"
     animate="visible"
     variants={containerVariants}
-    className="relative bg-gradient-to-r from-[#ff7426] via-[#ff5e3a] to-[#ff2d6e] py-10 px-4 sm:px-6 lg:px-8 overflow-hidden"
+    className="relative bg-gradient-to-r from-[#FF9142] to-[#FF7426] py-10 px-4 sm:px-6 lg:px-8 overflow-hidden"
 >
     {/* Abstract background shapes */}
     <motion.div
@@ -126,33 +126,58 @@ const UpcomingBatches = () => {
     </div>
 </motion.section>
 
-            {/* Batch Listings Section */}
+<AnimatePresence>           {/* Batch Listings Section */}
+<motion.div
+    className="py-16 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto"
+    initial={{ opacity: 0, y: 40 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8, delay: 0.4 }}
+>
+    <h2 className="text-3xl sm:text-4xl font-bold text-[#4d2c5e] text-center mb-12">
+        Our <span className='text-[#ff7426]'>Upcoming Batches</span>
+    </h2>
+
+    <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {batches.map((batch, index) => (
             <motion.div
-                className="py-16 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto"
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
+                key={batch.id}
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ 
+                    opacity: 1, 
+                    y: 0, 
+                    scale: 1,
+                    transition: { 
+                        delay: index * 0.1,
+                        duration: 0.5,
+                        ease: "easeOut"
+                    }
+                }}
+                exit={{ 
+                    opacity: 0, 
+                    y: -20,
+                    scale: 0.95,
+                    transition: { duration: 0.3 }
+                }}
+                whileHover={{
+                    y: -5,
+                    boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+                    transition: { duration: 0.2 }
+                }}
             >
-                <h2 className="text-3xl sm:text-4xl font-bold text-[#4d2c5e] text-center mb-12">
-                    Our <span className='text-[#ff7426]'>Upcoming Batches</span>
-                </h2>
-
-                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {batches.map((batch, index) => (
-                        <BatchCard
-                            key={batch.id}
-                            startDate={batch.startDate}
-                            price={batch.price}
-                            title={batch.title}
-                            batchId={batch.batchId}
-                            batchTime={batch.batchTime}
-                            duration={batch.duration}
-                            mode={batch.mode}
-                        />
-                    ))}
-                </div>
+                <BatchCard
+                    startDate={batch.startDate}
+                    price={batch.price}
+                    title={batch.title}
+                    batchId={batch.batchId}
+                    batchTime={batch.batchTime}
+                    duration={batch.duration}
+                    mode={batch.mode}
+                />
             </motion.div>
-
+        ))}
+    </div>
+</motion.div>
+</AnimatePresence>
 
             <TrainingBanner />
             <FeedbaackBanner />

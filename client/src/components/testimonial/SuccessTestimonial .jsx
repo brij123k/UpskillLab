@@ -12,6 +12,7 @@ const SuccessTestimonial  = () => {
   const handleTestimonialsData = async () => {
     try {
       const res = await getDataHandler("testimonial");
+      console.log(res)
       if (res) {
         const newTestimonials = res.testimonials.map((testimonial, index) => ({
           id: index + 1,

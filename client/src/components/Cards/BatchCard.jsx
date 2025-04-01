@@ -14,7 +14,7 @@ const BatchCard = ({
 
   return (
     <motion.div
-  className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#FFE5D5] hover:shadow-md transition-all flex flex-col h-full"
+  className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#FFE5D5] hover:shadow-md transition-all flex flex-col h-full cursor-pointer"
   whileHover={{ y: -3 }}
   initial={{ opacity: 0 }}
   animate={{ opacity: 1 }}
