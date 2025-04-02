@@ -76,7 +76,7 @@ const TrainingBanner = () => {
       ))}
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <div className="flex flex-col lg:flex-row items-center gap-8">
+        <div className="lg:flex  flex-col lg:flex-row items-center gap-8">
           {/* Text Content */}
           <motion.div 
             className="lg:w-1/2 space-y-4"

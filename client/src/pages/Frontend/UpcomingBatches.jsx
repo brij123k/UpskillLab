@@ -35,14 +35,13 @@ const UpcomingBatches = () => {
 
     return (
         <div className='bg-[#F7F7F7] min-h-screen'>
-            <Header />
 
             {/* Modern Split Banner */}
             <motion.section
     initial="hidden"
     animate="visible"
     variants={containerVariants}
-    className="relative bg-gradient-to-r from-[#FF9142] to-[#FF7426] py-10 px-4 sm:px-6 lg:px-8 overflow-hidden"
+    className="relative bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] py-10 px-4 sm:px-6 lg:px-8 overflow-hidden"
 >
     {/* Abstract background shapes */}
     <motion.div
@@ -51,8 +50,8 @@ const UpcomingBatches = () => {
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
     >
-        <div className="absolute top-1/4 -left-20 w-64 h-64 rounded-full bg-white/5"></div>
-        <div className="absolute bottom-1/4 -right-20 w-72 h-72 rounded-full bg-white/5"></div>
+        <div className="absolute top-1/4 -left-20 w-64 h-64 rounded-full bg-[#FF7426]/10"></div>
+        <div className="absolute bottom-1/4 -right-20 w-72 h-72 rounded-full bg-[#FF7426]/10"></div>
     </motion.div>
 
     <div className="relative max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-6 lg:gap-8 h-full">
@@ -69,7 +68,7 @@ const UpcomingBatches = () => {
                     loading="lazy"
                 />
                 <motion.div
-                    className="absolute inset-0 bg-[#4D2C5E]/20 mix-blend-multiply"
+                    className="absolute inset-0 bg-[#FF7426]/20 mix-blend-multiply"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 0.5 }}
@@ -87,7 +86,7 @@ const UpcomingBatches = () => {
                 variants={itemVariants}
                 whileHover={{ scale: 1.02 }}
             >
-                Upcoming <span className="text-[#4d2c5e]">Batches</span>
+                Upcoming <span className="text-[#FF7426]">Batches</span>
             </motion.h1>
 
             <motion.p
@@ -192,7 +191,6 @@ const UpcomingBatches = () => {
             <TrainingBanner />
             <FeedbaackBanner />
 
-            <Footer />
         </div>
     );
 };

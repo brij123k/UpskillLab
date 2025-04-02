@@ -96,7 +96,6 @@ const SuccessStory = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
-      <Header />
       
       {/* Animated Success Stories Banner */}
       <motion.div 
@@ -104,54 +103,62 @@ const SuccessStory = () => {
   initial="hidden"
   animate={controls}
   variants={bannerVariants}
-  className="w-full bg-gradient-to-br from-[#ff7426] to-[#ff8e3a] py-10 px-4 sm:px-6 lg:px-8" // Reduced py-16 to py-10 and removed 2xl:py-24
+  className="w-full bg-gradient-to-br from-[#4D2C5E] to-[#7B4B9E] py-10 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
 >
-  <div className="max-w-8xl mx-auto">
-    <div className="flex flex-col lg:flex-row items-center justify-between gap-8"> {/* Reduced gap from 12 to 8 and removed 2xl gap */}
+  {/* Floating decorative elements */}
+  <div className="absolute top-0 left-0 w-full h-full opacity-10">
+    <div className="absolute top-20 left-20 w-40 h-40 rounded-full bg-[#FF7426] mix-blend-multiply"></div>
+    <div className="absolute bottom-10 right-32 w-32 h-32 rounded-full bg-[#FF7426] mix-blend-multiply"></div>
+  </div>
+
+  <div className="max-w-8xl mx-auto relative z-10">
+    <div className="flex flex-col lg:flex-row items-center justify-between gap-8">
       {/* Text Content */}
       <motion.div 
         variants={itemVariants}
-        className="lg:w-1/2 space-y-6 text-white" // Reduced space-y-8 to space-y-6 and removed 2xl spacing
+        className="lg:w-1/2 space-y-6 text-white"
       >
         <motion.h1 
           variants={itemVariants}
-          className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl" // Reduced text sizes by one step and removed 2xl size
+          className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl"
         >
           <span className="block mb-2">From Learning</span>
-          <span className="block text-[#4d2c5e] drop-shadow-[0_2px_4px_rgba(216,67,21,0.4)]">To Earning</span>
+          <span className="block text-[#FF7426] drop-shadow-[0_2px_4px_rgba(77,44,94,0.3)]">
+            To Earning
+          </span>
         </motion.h1>
         
         <motion.p 
           variants={itemVariants}
-          className="text-lg max-w-2xl text-[#FFE0B2]" // Reduced from text-xl to text-lg
+          className="text-lg max-w-2xl text-white/90"
         >
           Discover how our students transformed their careers through UpskillLab programs.
         </motion.p>
         
         <motion.div 
           variants={itemVariants}
-          className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-[#FFB74D]/30 hover:border-[#FFA726] transition-all duration-300" // Reduced p-6 to p-4 and removed 2xl padding
+          className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-[#FFB74D]/30 hover:border-[#FFA726] transition-all duration-300"
         >
           <motion.blockquote 
             variants={itemVariants}
-            className="italic text-base text-[#FFE0B2]" // Reduced from text-lg to text-base
+            className="italic text-base text-white/90"
           >
             "The Full Stack Development program gave me the skills and confidence to switch careers at 35. I went from retail management to a ₹15LPA developer role!"
           </motion.blockquote>
           <motion.div 
             variants={itemVariants}
-            className="mt-3 font-medium flex items-center" // Reduced mt-4 to mt-3
+            className="mt-3 font-medium flex items-center"
           >
-            <div className="w-8 h-8  rounded-full bg-gradient-to-br from-[#FFA726] to-[#FB8C00] mr-2 overflow-hidden shadow-md"> {/* Reduced size from w-10 h-10 to w-8 h-8 */}
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FFA726] to-[#FB8C00] mr-2 overflow-hidden shadow-md">
               <img 
                 src="https://randomuser.me/api/portraits/women/42.jpg" 
                 alt="Student" 
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="text-[#FFF3E0]">
-              <div className="text-sm">Ananya Patel</div> {/* Added text-sm */}
-              <div className="text-xs opacity-90">Full Stack Developer at Amazon</div> {/* Reduced from text-sm to text-xs */}
+            <div className="text-white/90">
+              <div className="text-sm">Ananya Patel</div>
+              <div className="text-xs opacity-90">Full Stack Developer at Amazon</div>
             </div>
           </motion.div>
         </motion.div>
@@ -160,24 +167,24 @@ const SuccessStory = () => {
       {/* Image with Animation */}
       <motion.div 
         variants={imageVariants}
-        className="lg:w-1/2 flex justify-center relative" // Removed 2xl max width
+        className="lg:w-1/2 flex justify-center relative"
       >
-        <div className="relative w-[1/2]">
-          <div className="absolute -top-4 -left-4 w-full h-full border-4 border-[#FFA726] rounded-2xl z-0"></div> {/* Reduced negative positioning from -6 to -4 */}
+        <div className="relative w-full">
+          <div className="absolute -top-4 -left-4 w-full h-full rounded-2xl bg-[#FF7426]/20 z-0"></div>
           <motion.img 
             whileHover={{ scale: 1.03 }}
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" 
-            alt="Successful students celebrating" 
-            className="relative rounded-xl w-full h-auto object-cover shadow-2xl z-10"
+            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
+            alt="Successful students celebrating"
+            className="relative rounded-xl w-full h-auto object-cover shadow-2xl z-10 border-4 border-white"
           />
           <motion.div 
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1, type: "spring" }}
-            className="absolute -bottom-4 right-4 bg-white text-[#E65100] px-4 py-2 rounded-lg shadow-lg font-bold z-30" // Reduced padding and negative positioning
+            className="absolute -bottom-4 -right-4 bg-white text-[#4D2C5E] px-4 py-2 rounded-lg shadow-lg font-bold z-30 border-2 border-[#FF7426]"
           >
-            <div className="text-xs">Average Salary</div> {/* Reduced from text-sm to text-xs */}
-            <div className="text-xl text-[#FF6D00]">₹12.5 LPA</div> {/* Reduced from text-2xl to text-xl */}
+            <div className="text-xs">Average Salary</div>
+            <div className="text-xl text-[#FF7426]">₹12.5 LPA</div>
           </motion.div>
         </div>
       </motion.div>
@@ -274,9 +281,6 @@ const SuccessStory = () => {
 
         <TrainingBanner/>
         <FeedbaackBanner/>
-
-        {/* Footer */}
-      <Footer />
     </div>
   );
 };

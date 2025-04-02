@@ -131,41 +131,39 @@ const StudentsBlog = () => {
 
   return (
     <div className='bg-[#F7F7F7] min-h-screen'>
-      <Header />
-
       {/* Blog Banner */}
       <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className="relative bg-gradient-to-r from-[#ff7426] to-[#ff8e3a] py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
-      >
-        {/* Decorative elements */}
-        <div className="absolute inset-0 overflow-hidden opacity-10">
-          <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-white"></div>
-          <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full bg-white"></div>
-        </div>
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 0.8 }}
+  className="relative bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
+>
+  {/* Decorative elements */}
+  <div className="absolute inset-0 overflow-hidden opacity-10">
+    <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-[#FF7426]"></div>
+    <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full bg-[#FF7426]"></div>
+  </div>
 
-        <div className="relative max-w-7xl mx-auto text-center">
-          <motion.h1
-            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
-            initial={{ y: -20 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            UpSkillLab <span className="text-[#4D2C5E]">Student Blog</span>
-          </motion.h1>
+  <div className="relative max-w-7xl mx-auto text-center">
+    <motion.h1
+      className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
+      initial={{ y: -20 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      UpSkillLab <span className="text-[#FF7426]">Student Blog</span>
+    </motion.h1>
 
-          <motion.p
-            className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto"
-            initial={{ y: 20 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            Insights, stories and tips from our students and alumni
-          </motion.p>
-        </div>
-      </motion.section>
+    <motion.p
+      className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto"
+      initial={{ y: 20 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+    >
+      Insights, stories and tips from our students and alumni
+    </motion.p>
+  </div>
+</motion.section>
 
       {/* Main Blog Content - Only Blog Cards */}
       <motion.main
@@ -206,7 +204,6 @@ const StudentsBlog = () => {
       </div>
       <TrainingBanner />
       <FeedbaackBanner />
-      <Footer />
     </div>
   );
 };

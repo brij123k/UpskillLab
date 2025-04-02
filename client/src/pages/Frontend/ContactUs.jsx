@@ -112,46 +112,45 @@ const ContactPage = () => {
 
   return (
     <div className='bg-[#F7F7F7] min-h-screen'>
-      <Header />
       
       {/* Animated Banner */}
       <motion.section 
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
-        className="relative bg-gradient-to-r from-[#ff7426] to-[#ff8e3a] py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
-      >
-        {/* Decorative elements */}
-        <motion.div
-          className="absolute top-0 left-0 w-full h-full"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.1 }}
-          transition={{ duration: 1.5 }}
-        >
-          <div className="absolute top-20 left-20 w-40 h-40 rounded-full bg-white"></div>
-          <div className="absolute bottom-10 right-10 w-60 h-60 rounded-full bg-white"></div>
-        </motion.div>
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 0.8 }}
+  className="relative bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] py-16 sm:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
+>
+  {/* Decorative elements */}
+  <motion.div
+    className="absolute top-0 left-0 w-full h-full"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 0.1 }}
+    transition={{ duration: 1.5 }}
+  >
+    <div className="absolute top-20 left-20 w-40 h-40 rounded-full bg-[#FF7426]"></div>
+    <div className="absolute bottom-10 right-10 w-60 h-60 rounded-full bg-[#FF7426]"></div>
+  </motion.div>
 
-        <div className="relative max-w-7xl mx-auto text-center">
-          <motion.h1 
-            className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
-            initial={{ y: -30 }}
-            animate={{ y: 0 }}
-            transition={{ type: "spring", stiffness: 100 }}
-          >
-            Contact <span className="text-[#4D2C5E]">UpSkillLab</span>
-          </motion.h1>
-          
-          <motion.p
-            className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto"
-            initial={{ y: 30 }}
-            animate={{ y: 0 }}
-            transition={{ type: "spring", stiffness: 100, delay: 0.1 }}
-          >
-            We'd love to hear from you! Reach out for inquiries, support, or partnerships.
-          </motion.p>
-        </div>
-      </motion.section>
+  <div className="relative max-w-7xl mx-auto text-center">
+    <motion.h1 
+      className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
+      initial={{ y: -30 }}
+      animate={{ y: 0 }}
+      transition={{ type: "spring", stiffness: 100 }}
+    >
+      Contact <span className="text-[#FF7426]">UpSkillLab</span>
+    </motion.h1>
+    
+    <motion.p
+      className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto"
+      initial={{ y: 30 }}
+      animate={{ y: 0 }}
+      transition={{ type: "spring", stiffness: 100, delay: 0.1 }}
+    >
+      We'd love to hear from you! Reach out for inquiries, support, or partnerships.
+    </motion.p>
+  </div>
+</motion.section>
 
       {/* Contact Cards */}
       <motion.section 
@@ -197,8 +196,6 @@ const ContactPage = () => {
           </motion.div>
         </div>
       </motion.section>
-
-      <Footer />
     </div>
   );
 };
