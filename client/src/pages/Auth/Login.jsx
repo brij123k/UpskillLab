@@ -48,23 +48,23 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="w-full min-h-screen bg-[#fdf8ee] flex items-center justify-center p-4 sm:p-6 lg:p-8 xl:p-10 2xl:p-12">
+        <div className="w-full min-h-screen bg-[#fdf8ee] flex items-center justify-center p-4">
             <motion.div 
-                className="w-full max-w-6xl rounded-xl overflow-hidden flex flex-col lg:flex-row"
+                className="w-full max-w-5xl rounded-xl overflow-hidden flex flex-col lg:flex-row"
                 initial={{ scale: 0.98 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.3 }}
             >
-                {/* Left Side - Registration Form */}
+                {/* Left Side - Login Form */}
                 <motion.div 
-                    className="w-full lg:w-1/2 p-6 sm:p-8 md:p-10 bg-white shadow-2xl rounded-4xl lg:p-12 xl:p-14 2xl:p-16"
+                    className="w-full lg:w-1/2 p-6 sm:p-8 bg-white shadow-2xl rounded-4xl flex flex-col justify-center"
                     variants={container}
                     initial="hidden"
                     animate="show"
                 >
                     {/* Title */}
                     <motion.h2 
-                        className="text-2xl xs:text-3xl sm:text-4xl text-center font-bold mb-6 sm:mb-8 lg:mb-10 text-gray-800"
+                        className="text-2xl sm:text-3xl text-center font-bold mb-4 sm:mb-6 text-gray-800"
                         variants={item}
                     >
                         Log <motion.span 
@@ -84,7 +84,7 @@ const LoginPage = () => {
                     </motion.h2>
 
                     {/* Form */}
-                    <form onSubmit={formik.handleSubmit} className="space-y-4 sm:space-y-5 md:space-y-6">
+                    <form onSubmit={formik.handleSubmit} className="space-y-3 sm:space-y-4">
                         {/* Email */}
                         <motion.div variants={item}>
                             <div className="relative">
@@ -99,7 +99,7 @@ const LoginPage = () => {
                                 />
                                 <label
                                     htmlFor="email"
-                                    className={`absolute left-0 pt-2 lg:pt-0 text-gray-500 transition-all duration-200 pointer-events-none
+                                    className={`absolute left-0 text-gray-500 transition-all duration-200 pointer-events-none
                                         ${formik.values.email ? 
                                         'text-[#4D2C5E] text-xs sm:text-sm -translate-y-5' : 
                                         'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
@@ -123,61 +123,77 @@ const LoginPage = () => {
                         </motion.div>
 
                         {/* Password */}
-                        <motion.div variants={item}>
-                            <div className="relative">
-                                <input
-                                    type={showPassword ? "text" : "password"}
-                                    id="password"
-                                    name="password"
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    value={formik.values.password}
-                                    className="w-full px-0 py-2 text-sm sm:text-base border-0 border-b border-gray-300 focus:border-[#4D2C5E] focus:outline-none focus:ring-0 peer pr-8"
-                                />
-                                <label
-                                    htmlFor="password"
-                                    className={`absolute left-0 pt-2 lg:pt-0 text-gray-500 transition-all duration-200 pointer-events-none
-                                        ${formik.values.password ? 
-                                        'text-[#4D2C5E] text-xs sm:text-sm -translate-y-5' : 
-                                        'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
-                                    `}
-                                >
-                                    Password
-                                </label>
-                                <motion.button
-                                    type="button"
-                                    className="absolute right-0 bottom-2 text-gray-500 hover:text-[#FF7426]"
-                                    onClick={() => setShowPassword(!showPassword)}
-                                    whileHover={{ scale: 1.1 }}
-                                    whileTap={{ scale: 0.9 }}
-                                >
-                                    {showPassword ? (
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                            <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                                            <path d="M3.293 3.293a1 1 0 011.414 0l12 12a1 1 0 01-1.414 1.414l-12-12a1 1 0 010-1.414z" />
-                                        </svg>
-                                    ) : (
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                                            <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                                        </svg>
-                                    )}
-                                </motion.button>
-                            </div>
-                            <AnimatePresence>
-                                {formik.touched.password && formik.errors.password && (
-                                    <motion.p
-                                        className="mt-1 text-xs sm:text-sm text-red-500"
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: 'auto' }}
-                                        exit={{ opacity: 0, height: 0 }}
-                                    >
-                                        {formik.errors.password}
-                                    </motion.p>
-                                )}
-                            </AnimatePresence>
-                        </motion.div>
+<motion.div variants={item}>
+    <div className="relative">
+        <input
+            type={showPassword ? "text" : "password"}
+            id="password"
+            name="password"
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.password}
+            className="w-full px-0 py-2 text-sm sm:text-base border-0 border-b border-gray-300 focus:border-[#4D2C5E] focus:outline-none focus:ring-0 peer pr-8"
+        />
+        <label
+            htmlFor="password"
+            className={`absolute left-0 text-gray-500 transition-all duration-200 pointer-events-none
+                ${formik.values.password ? 
+                'text-[#4D2C5E] text-xs sm:text-sm -translate-y-5' : 
+                'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
+            `}
+        >
+            Password
+        </label>
+        <motion.button
+            type="button"
+            className="absolute right-0 bottom-2 text-gray-500 hover:text-[#FF7426]"
+            onClick={() => setShowPassword(!showPassword)}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+        >
+            {showPassword ? (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                    <path d="M3.293 3.293a1 1 0 011.414 0l12 12a1 1 0 01-1.414 1.414l-12-12a1 1 0 010-1.414z" />
+                </svg>
+            ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
+                </svg>
+            )}
+        </motion.button>
+    </div>
+    <div className="flex justify-between items-start">
+        <AnimatePresence>
+            {formik.touched.password && formik.errors.password && (
+                <motion.p
+                    className="mt-1 text-xs sm:text-sm text-red-500"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                >
+                    {formik.errors.password}
+                </motion.p>
+            )}
+        </AnimatePresence>
+        <motion.div
+            className="text-right"
+            variants={item}
+        >
+            <NavLink to="/ForgetPassword">
+                <motion.span
+                    className="text-xs sm:text-sm text-[#FF7426] hover:underline"
+                    whileHover={{ scale: 1.05 }}
+                >
+                    Forgot Password?
+                </motion.span>
+            </NavLink>
+        </motion.div>
+    </div>
+</motion.div>
+
                         {/* Remember Me */}
                         <motion.div 
                             className="flex items-center"
@@ -198,10 +214,10 @@ const LoginPage = () => {
                             </label>
                         </motion.div>
 
-                        {/* Create Button */}
+                        {/* Login Button */}
                         <motion.button
                             type="submit"
-                            className="w-full bg-[#4D2C5E] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#5F3A73] transition-colors relative overflow-hidden group text-sm sm:text-base"
+                            className="w-full bg-[#4D2C5E] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#5F3A73] transition-colors relative overflow-hidden group text-sm sm:text-base"
                             variants={item}
                             whileHover={{ 
                                 scale: 1.02,
@@ -218,27 +234,25 @@ const LoginPage = () => {
                             />
                         </motion.button>
 
-                        {/* Already Created */}
+                        {/* Sign Up Link */}
                         <motion.div 
-                            className="text-center text-sm sm:text-base mt-4"
+                            className="text-center text-sm sm:text-base mt-3"
                             variants={item}
                         >
-                            <span className="text-gray-600">Don’t have an Account? </span>
-                            <NavLink to="/Register"> 
-
-                            <motion.span
-                                
-                                className="text-[#FF7426] font-medium hover:underline cursor-pointer"
-                                whileHover={{ scale: 1.05 }}
-                            >
-                                Signup Here
-                            </motion.span>
+                            <span className="text-gray-600">Don't have an Account? </span>
+                            <NavLink to="/Register">
+                                <motion.span
+                                    className="text-[#FF7426] font-medium hover:underline cursor-pointer"
+                                    whileHover={{ scale: 1.05 }}
+                                >
+                                    Signup Here
+                                </motion.span>
                             </NavLink>
                         </motion.div>
 
                         {/* Divider */}
                         <motion.div 
-                            className="relative my-4 sm:my-6"
+                            className="relative my-3 sm:my-4"
                             variants={item}
                         >
                             <div className="absolute inset-0 flex items-center">
@@ -254,66 +268,64 @@ const LoginPage = () => {
                             </div>
                         </motion.div>
 
-                        {/* Social Sign In */}
-                            
-                            <motion.div variants={item}>
-                                <motion.button
-                                    type="button"
-                                    className="flex items-center justify-center w-full py-3 border border-gray-300 rounded-lg mb-2 hover:bg-gray-50 transition-colors cursor-pointer"
-                                    whileHover={{ y: -3, scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                >
-                                    <img 
-                                        src={`/images/google.svg`} 
-                                        alt={"google"} 
-                                        className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" 
-                                    />
-                                    <span className="text-xs sm:text-sm">Login With Google</span>
-                                </motion.button>
-                                </motion.div>
-                                <motion.div variants={item}>
-                                <motion.button
-                                    type="button"
-                                    className="flex items-center justify-center w-full py-3 bg-[#3575dc] rounded-lg mb-2 hover:bg-[#3575dc56]  transition-colors cursor-pointer"
-                                    whileHover={{ y: -3, scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                >
-                                    <img 
-                                        src={`/images/facebook.svg`} 
-                                        alt={"facebook"} 
-                                        className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" 
-                                    />
-                                    <span className="text-xs sm:text-sm">Login With Facebook</span>
-                                </motion.button>
-                                </motion.div>
-
-
-                                <motion.div variants={item}>
-                                <motion.button
-                                    type="button"
-                                    className="flex items-center justify-center w-full py-3 border bg-[#404040] text-white rounded-lg hover:bg-[#202020] transition-colors cursor-pointer"
-                                    whileHover={{ y: -3, scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                >
-                                    <img 
-                                        src={`/images/apple.svg`} 
-                                        alt={"apple"} 
-                                        className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" 
-                                    />
-                                    <span className="text-xs sm:text-sm">Login With Google</span>
-                                </motion.button>
-                                </motion.div>
+                        {/* Social Login Buttons */}
+                        <motion.div variants={item}>
+                            <motion.button
+                                type="button"
+                                className="flex items-center justify-center w-full py-2 border border-gray-300 rounded-lg mb-2 hover:bg-gray-50 transition-colors cursor-pointer"
+                                whileHover={{ y: -3, scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                            >
+                                <img 
+                                    src="/images/google.svg" 
+                                    alt="google" 
+                                    className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" 
+                                />
+                                <span className="text-xs sm:text-sm">Login With Google</span>
+                            </motion.button>
+                        </motion.div>
                         
+                        <motion.div variants={item}>
+                            <motion.button
+                                type="button"
+                                className="flex items-center justify-center w-full py-2 bg-[#3575dc] text-white rounded-lg mb-2 hover:bg-[#3575dc]/90 transition-colors cursor-pointer"
+                                whileHover={{ y: -3, scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                            >
+                                <img 
+                                    src="/images/facebook_w.svg" 
+                                    alt="facebook" 
+                                    className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" 
+                                />
+                                <span className="text-xs sm:text-sm">Login With Facebook</span>
+                            </motion.button>
+                        </motion.div>
+
+                        <motion.div variants={item}>
+                            <motion.button
+                                type="button"
+                                className="flex items-center justify-center w-full py-2 bg-[#404040] text-white rounded-lg hover:bg-[#202020] transition-colors cursor-pointer"
+                                whileHover={{ y: -3, scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                            >
+                                <img 
+                                    src="/images/apple_w.svg" 
+                                    alt="apple" 
+                                    className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" 
+                                />
+                                <span className="text-xs sm:text-sm">Login With Apple</span>
+                            </motion.button>
+                        </motion.div>
 
                         {/* Terms */}
                         <motion.p
-                            className="text-xs sm:text-sm text-center text-gray-500 mt-4 sm:mt-6"
+                            className="text-xs sm:text-sm text-center text-gray-500 mt-3 sm:mt-4"
                             variants={item}
                         >
                             By continuing, you agree to the{' '}
@@ -338,15 +350,15 @@ const LoginPage = () => {
 
                 {/* Right Side - Animated Image */}
                 <motion.div 
-                    className="hidden lg:flex w-1/2 items-center justify-center p-8 relative overflow-hidden"
+                    className="hidden lg:flex w-1/2 items-center justify-center p-6 relative overflow-hidden"
                     initial={{ opacity: 0, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.3 }}
                 >
                     <motion.img
                         src="/images/LoginFrame.png"
-                        alt="Signup Illustration"
-                        className="relative z-10 w-full h-auto max-h-[80%] object-contain"
+                        alt="Login Illustration"
+                        className="relative z-10 w-full h-auto max-h-[70%] object-contain"
                         animate={{
                             y: [0, -15, 0],
                             scale: [1, 1.02, 1]

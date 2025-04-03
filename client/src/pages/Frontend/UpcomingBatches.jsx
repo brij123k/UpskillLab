@@ -1,42 +1,140 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import BatchCard from '../../components/Cards/BatchCard';
-import TrainingBanner from '../../components//banners/TrainingBanner';
+import TrainingBanner from '../../components/banners/TrainingBanner';
 import FeedbaackBanner from '../../components/banners/FeedbackBanner';
-import {Btches} from '../../data'; // Assuming you have a data file with batch information
+import { Btches } from '../../data';
+import Modal from '../../components/Modal/CommonModal';
+import BatchEnrollmentModal from '../../components/Modal/BatchEnrollmentModal';
+
+const BatchDetailsModal = ({ batch, onClose }) => {
+    return (
+      <Modal isOpen={true} onClose={onClose} title={`Batch Details: ${batch.title}`}>
+        <div className="space-y-6">
+          {/* Header Section */}
+          <div className="bg-[#4D2C5E] text-white p-4 rounded-lg">
+            <div className="flex justify-between mt-2">
+              <span>Batch ID: {batch.batchId}</span>
+              <span className="font-bold">₹{batch.price}</span>
+            </div>
+          </div>
+  
+          {/* Key Information */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-[#FFF5EF] p-3 rounded-lg">
+              <p className="text-sm text-gray-500">Start Date</p>
+              <p className="font-medium">{batch.startDate}</p>
+            </div>
+            <div className="bg-[#FFF5EF] p-3 rounded-lg">
+              <p className="text-sm text-gray-500">Schedule</p>
+              <p className="font-medium">{batch.batchTime}</p>
+            </div>
+            <div className="bg-[#FFF5EF] p-3 rounded-lg">
+              <p className="text-sm text-gray-500">Duration</p>
+              <p className="font-medium">{batch.duration}</p>
+            </div>
+            <div className="bg-[#FFF5EF] p-3 rounded-lg">
+              <p className="text-sm text-gray-500">Mode</p>
+              <p className="font-medium">{batch.mode}</p>
+            </div>
+          </div>
+  
+          {/* Curriculum Section */}
+          <div>
+            <h4 className="text-lg font-semibold mb-3 text-[#4D2C5E]">Curriculum Plan</h4>
+            <div className="space-y-3">
+              {batch.curriculum?.map((item, index) => (
+                <div key={index} className="flex items-start">
+                  <div className="w-6 h-6 bg-[#FF7426] rounded-full flex items-center justify-center text-white mr-3 mt-1">
+                    {index + 1}
+                  </div>
+                  <div>
+                    <p className="font-medium">{item.module}</p>
+                    <p className="text-sm text-gray-600">{item.duration} • {item.topics.join(', ')}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+  
+          {/* Additional Information */}
+          {batch.additionalInfo && (
+            <div>
+              <h4 className="text-lg font-semibold mb-2 text-[#4D2C5E]">Additional Information</h4>
+              <p className="text-gray-700">{batch.additionalInfo}</p>
+            </div>
+          )}
+        </div>
+      </Modal>
+    );
+  };
+
+
 const UpcomingBatches = () => {
-    // Using a free educational image from Pexels
+    const [selectedBatch, setSelectedBatch] = useState(null);
+    const [enrollCourse, setEnrollCourse] = useState(null);
     const bannerImageUrl = "https://images.pexels.com/photos/4144225/pexels-photo-4144225.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
-    const batches = Btches
+    const batches = Btches;
+    const controls = useAnimation();
+    const ref = useRef();
+    const [visible, setVisible] = useState(false);
+
+    // Intersection Observer setup
+    useEffect(() => {
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setVisible(true);
+                    controls.start("visible");
+                }
+            },
+            {
+                root: null,
+                rootMargin: "0px",
+                threshold: 0.1
+            }
+        );
+
+        if (ref.current) {
+            observer.observe(ref.current);
+        }
+
+        return () => {
+            if (ref.current) {
+                observer.unobserve(ref.current);
+            }
+        };
+    }, [controls]);
+
     // Animation variants
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.2,
-                delayChildren: 0.3
+                staggerChildren: 0.1,
+                delayChildren: 0.2
             }
         }
     };
 
     const itemVariants = {
-        hidden: { x: -20, opacity: 0 },
+        hidden: { y: 20, opacity: 0 },
         visible: {
-            x: 0,
+            y: 0,
             opacity: 1,
             transition: {
-                duration: 0.6
+                duration: 0.5,
+                ease: "easeOut"
             }
         }
     };
 
     return (
         <div className='bg-[#F7F7F7] min-h-screen'>
-
-            {/* Modern Split Banner */}
+            {/* Banner Section (unchanged) */}
             <motion.section
     initial="hidden"
     animate="visible"
@@ -125,72 +223,60 @@ const UpcomingBatches = () => {
     </div>
 </motion.section>
 
-            {/* Batch Listings Section */}
-<motion.div
-    className="py-16 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto"
-    initial={{ opacity: 0, y: 40 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8 }}
->
-    <h2 className="text-3xl sm:text-4xl font-bold text-[#4d2c5e] text-center mb-12">
-        Our <span className='text-[#ff7426]'>Upcoming Batches</span>
-    </h2>
-
-    <motion.div 
-        className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
-        initial="hidden"
-        animate="visible"
-        variants={{
-            hidden: { opacity: 0 },
-            visible: {
-                opacity: 1,
-                transition: {
-                    staggerChildren: 0.1,
-                    delayChildren: 0.3
-                }
-            }
-        }}
-    >
-        {batches.map((batch) => (
+            {/* Batch Listings Section with Scroll Trigger */}
             <motion.div
-                key={batch.id}
-                variants={{
-                    hidden: { opacity: 0, y: 20, scale: 0.95 },
-                    visible: { 
-                        opacity: 1, 
-                        y: 0, 
-                        scale: 1,
-                        transition: {
-                            duration: 0.5,
-                            ease: "easeOut"
-                        }
-                    }
-                }}
-                whileHover={{
-                    y: -5,
-                    boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
-                    transition: { duration: 0.2 }
-                }}
-                className="relative"
+                ref={ref}
+                className="py-16 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto"
+                initial="hidden"
+                animate={controls}
+                variants={containerVariants}
             >
-                <BatchCard
-                    startDate={batch.startDate}
-                    price={batch.price}
-                    title={batch.title}
-                    batchId={batch.batchId}
-                    batchTime={batch.batchTime}
-                    duration={batch.duration}
-                    mode={batch.mode}
-                />
-            </motion.div>
-        ))}
-    </motion.div>
-</motion.div>
+                <h2 className="text-3xl sm:text-4xl font-bold text-[#4d2c5e] text-center mb-12">
+                    Our <span className='text-[#ff7426]'>Upcoming Batches</span>
+                </h2>
 
+                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                    {batches.map((batch, index) => (
+                        <motion.div
+                            key={batch.id}
+                            variants={itemVariants}
+                            whileHover={{
+                                y: -5,
+                                boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+                                transition: { duration: 0.2 }
+                            }}
+                            custom={index}
+                        >
+                            <BatchCard
+                                startDate={batch.startDate}
+                                price={batch.price}
+                                title={batch.title}
+                                batchId={batch.batchId}
+                                batchTime={batch.batchTime}
+                                duration={batch.duration}
+                                mode={batch.mode}
+                                onViewDetails={() => setSelectedBatch(batch)}
+                                onEnroll={() => setEnrollCourse(batch)}
+                            />
+                        </motion.div>
+                    ))}
+                </div>
+                {selectedBatch && (
+        <BatchDetailsModal 
+          batch={selectedBatch} 
+          onClose={() => setSelectedBatch(null)} 
+        />
+      )}
+                {enrollCourse && (
+                    <BatchEnrollmentModal 
+                        batch={enrollCourse} 
+                        onClose={() => setEnrollCourse(null)} 
+                    />
+                )}
+            </motion.div>
 
             <TrainingBanner />
             <FeedbaackBanner />
-
         </div>
     );
 };
