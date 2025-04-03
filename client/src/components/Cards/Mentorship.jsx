@@ -115,16 +115,8 @@ const MentorshipCard = ({ image, title,icon, description,modalData  }) => {
     transition={{ delay: 0.2, duration: 0.3 }}
     className="space-y-6 p-1 MentorshipModal "
   >
-    {/* Header with animated underline */}
+    {/*animated underline */}
     <div className="overflow-hidden">
-      <motion.h3 
-        initial={{ y: 20 }}
-        animate={{ y: 0 }}
-        transition={{ delay: 0.3 }}
-        className="text-2xl font-bold text-[#4D2C5E]"
-      >
-        {title}
-      </motion.h3>
       <motion.div
         initial={{ width: 0 }}
         animate={{ width: "100%" }}

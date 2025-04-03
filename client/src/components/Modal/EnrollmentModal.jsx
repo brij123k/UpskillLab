@@ -1,151 +1,220 @@
 import { motion } from 'framer-motion';
 import Modal from './CommonModal';
-import React,{ useState } from 'react';
-const EnrollmentModal = ({ course, isOpen, onClose, onEnroll }) => {
+import React, { useState } from 'react';
+import { FiCheck, FiCreditCard, FiUser, FiMail, FiPhone, FiLock } from 'react-icons/fi';
+
+const PurchaseModal = ({ course, isOpen, onClose, onPurchase }) => {
     const [selectedPayment, setSelectedPayment] = useState(null);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        phone: '',
+        agreeTerms: false
+    });
+
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    };
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose} title={`Enroll in ${course?.name}`}>
+        <Modal isOpen={isOpen} onClose={onClose} title={`Purchase ${course?.title}`}>
             <div className="space-y-6">
-                {/* Course Summary */}
-                <div className="flex gap-4">
+                {/* Course Summary with Price Highlight */}
+                <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex gap-4 p-4 bg-[#FFF5EF] rounded-lg"
+                >
                     <div className="w-1/3 min-w-[100px]">
                         <img
-                            src={course.image}
-                            alt={course.name}
+                            src={course.imageUrl}
+                            alt={course.title}
                             className="w-full h-auto rounded-lg object-cover shadow-sm"
                         />
                     </div>
                     <div className="w-2/3">
-                        <h3 className="text-xl font-bold text-[#4D2C5E]">{course.name}</h3>
+                        <h3 className="text-xl font-bold text-[#4D2C5E]">{course.title}</h3>
                         <div className="flex items-center mt-1 mb-2">
-                            <span className={`text-xs px-2 py-1 rounded-full ${course.level === 'Beginner' ? 'bg-blue-100 text-blue-800' :
-                                    course.level === 'Intermediate' ? 'bg-purple-100 text-purple-800' :
-                                        'bg-[#FF7426]/20 text-[#FF7426]'
-                                }`}>
+                            <span className={`text-xs px-2 py-1 rounded-full ${
+                                course.level === 'Beginner' ? 'bg-blue-100 text-blue-800' :
+                                course.level === 'Intermediate' ? 'bg-purple-100 text-purple-800' :
+                                'bg-[#FF7426]/20 text-[#FF7426]'
+                            }`}>
                                 {course.level}
                             </span>
-                            <div className="flex items-center ml-3 text-yellow-500">
-                                <span className="text-sm font-bold mr-1">{course.rating}</span>
-                                <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                                </svg>
-                            </div>
                         </div>
-                        <p className="text-gray-600">{course.category}</p>
-                        <p className="text-lg font-bold text-[#4D2C5E] mt-2">${course.price}</p>
+                        <div className="flex items-end mt-2">
+                            <p className="text-2xl font-bold text-[#FF7426]">${course.discountedPrice}</p>
+                            {course.originalPrice && (
+                                <p className="ml-2 text-sm text-gray-500 line-through">${course.originalPrice}</p>
+                            )}
+                        </div>
                     </div>
-                </div>
+                </motion.div>
 
-                {/* Enrollment Form */}
-                <div className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-medium text-[#4D2C5E] mb-1">Full Name</label>
-                        <motion.input
+                {/* Buyer Information */}
+                <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="space-y-4"
+                >
+                    <h4 className="text-lg font-semibold text-[#4D2C5E] border-b pb-2">Your Information</h4>
+                    
+                    <div className="relative">
+                        <FiUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#4D2C5E]/50" />
+                        <input
+                            name="name"
                             type="text"
-                            whileFocus={{ borderColor: "#FF7426" }}
-                            className="w-full px-3 py-2 border border-[#4D2C5E]/30 rounded-lg focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
-                            placeholder="Enter your full name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            placeholder="Full Name"
+                            className="w-full pl-10 pr-4 py-3 border border-[#4D2C5E]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
+                            required
                         />
                     </div>
 
-                    <div>
-                        <label className="block text-sm font-medium text-[#4D2C5E] mb-1">Email</label>
-                        <motion.input
+                    <div className="relative">
+                        <FiMail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#4D2C5E]/50" />
+                        <input
+                            name="email"
                             type="email"
-                            whileFocus={{ borderColor: "#FF7426" }}
-                            className="w-full px-3 py-2 border border-[#4D2C5E]/30 rounded-lg focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
-                            placeholder="Enter your email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Email Address"
+                            className="w-full pl-10 pr-4 py-3 border border-[#4D2C5E]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
+                            required
                         />
                     </div>
 
+                    <div className="relative">
+                        <FiPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#4D2C5E]/50" />
+                        <input
+                            name="phone"
+                            type="tel"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            placeholder="Phone Number"
+                            className="w-full pl-10 pr-4 py-3 border border-[#4D2C5E]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
+                            required
+                        />
+                    </div>
+                </motion.div>
+
+                {/* Payment Options */}
+                <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
+                    className="space-y-4"
+                >
+                    <h4 className="text-lg font-semibold text-[#4D2C5E] border-b pb-2">Payment Method</h4>
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                        <motion.button
+                            onClick={() => setSelectedPayment('credit-card')}
+                            whileHover={{ scale: 1.02 }}
+                            className={`flex items-center p-3 border-2 rounded-lg transition-all ${
+                                selectedPayment === 'credit-card' 
+                                    ? 'border-[#FF7426] bg-[#FF7426]/10' 
+                                    : 'border-[#4D2C5E]/20 hover:border-[#4D2C5E]/40'
+                            }`}
+                        >
+                            <FiCreditCard className="text-[#4D2C5E] mr-2" />
+                            <span>Credit Card</span>
+                        </motion.button>
+
+                        <motion.button
+                            onClick={() => setSelectedPayment('paypal')}
+                            whileHover={{ scale: 1.02 }}
+                            className={`flex items-center p-3 border-2 rounded-lg transition-all ${
+                                selectedPayment === 'paypal' 
+                                    ? 'border-[#FF7426] bg-[#FF7426]/10' 
+                                    : 'border-[#4D2C5E]/20 hover:border-[#4D2C5E]/40'
+                            }`}
+                        >
+                            <img src="images/paypal.svg" alt="PayPal" className="h-5 mr-2" />
+                            <span>PayPal</span>
+                        </motion.button>
+                    </div>
+
+                    {selectedPayment === 'credit-card' && (
+                        <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            className="space-y-3 mt-3"
+                        >
+                            <div className="relative">
+                                <FiCreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#4D2C5E]/50" />
+                                <input
+                                    placeholder="Card Number"
+                                    className="w-full pl-10 pr-4 py-3 border border-[#4D2C5E]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF7426]"
+                                />
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                                <input
+                                    placeholder="MM/YY"
+                                    className="w-full px-4 py-3 border border-[#4D2C5E]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF7426]"
+                                />
+                                <div className="relative">
+                                    <FiLock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#4D2C5E]/50" />
+                                    <input
+                                        placeholder="CVV"
+                                        className="w-full pl-10 pr-4 py-3 border border-[#4D2C5E]/20 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF7426]"
+                                    />
+                                </div>
+                            </div>
+                        </motion.div>
+                    )}
+                </motion.div>
+
+                {/* Terms and Purchase Button */}
+                <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="space-y-4"
+                >
                     <div className="flex items-center">
                         <input
                             type="checkbox"
                             id="terms"
-                            className="h-4 w-4 rounded  focus:ring-[#FF7426] cursor-pointer appearance-none border-2 border-[#4D2C5E]/50 checked:bg-[#FF7426] checked:border-[#FF7426]"
+                            name="agreeTerms"
+                            checked={formData.agreeTerms}
+                            onChange={handleChange}
+                            className="h-5 w-5 rounded border-2 border-[#4D2C5E]/50 checked:bg-[#FF7426] checked:border-[#FF7426] focus:ring-0"
                         />
-                        <label htmlFor="terms" className="ml-2 block text-sm text-[#4D2C5E]">
+                        <label htmlFor="terms" className="ml-2 text-sm text-[#4D2C5E]">
                             I agree to the <a href="#" className="text-[#FF7426] hover:underline">terms and conditions</a>
                         </label>
                     </div>
-                </div>
-{/* Payment Options */}
-<div className="border-t border-[#4D2C5E]/10 pt-4">
-  <h4 className="text-sm font-medium text-[#4D2C5E] mb-3">Payment Method</h4>
-  <div className="grid grid-cols-3 gap-3">
-    {/* Google Pay */}
-    <motion.button
-    onClick={() => setSelectedPayment('google-pay')}
-      whileHover={{ scale: 1.05, borderColor: "#FF7426" }}
-      whileTap={{ scale: 0.95 }}
-      className={`flex flex-col items-center cursor-pointer p-3 border rounded-lg transition-colors ${
-        selectedPayment === 'google-pay' 
-          ? 'border-[#FF7426] bg-[#FF7426]/10' 
-          : 'border-[#4D2C5E]/20'
-      }`}
-    
-    >
-      <img src="images/google-pay.svg" alt="Google Pay" className="h-6 mb-2" />
-      <span className="text-xs text-[#4D2C5E]">Google Pay</span>
-    </motion.button>
 
-    {/* Mastercard */}
-    <motion.button
-    onClick={() => setSelectedPayment('mastercard')}
-      whileHover={{ scale: 1.05, borderColor: "#FF7426" }}
-      whileTap={{ scale: 0.95 }}
-      className={`flex flex-col items-center cursor-pointer p-3 border rounded-lg transition-colors ${
-        selectedPayment === 'mastercard' 
-          ? 'border-[#FF7426] bg-[#FF7426]/10' 
-          : 'border-[#4D2C5E]/20'
-      }`}
-    
-    >
-      <img src="images/mastercard.svg" alt="Mastercard" className="h-6 mb-2" />
-      <span className="text-xs text-[#4D2C5E]">Mastercard</span>
-    </motion.button>
-
-    {/* PhonePe */}
-    <motion.button
-    onClick={() => setSelectedPayment('phonePe')}
-      whileHover={{ scale: 1.05, borderColor: "#FF7426" }}
-      whileTap={{ scale: 0.95 }}
-      className={`flex flex-col items-center cursor-pointer p-3 border rounded-lg transition-colors ${
-        selectedPayment === 'phonePe' 
-          ? 'border-[#FF7426] bg-[#FF7426]/10' 
-          : 'border-[#4D2C5E]/20'
-      }`}
-    
-    >
-      <img src="images/phone-pe.svg" alt="PhonePe" className="h-6 mb-2" />
-      <span className="text-xs text-[#4D2C5E]">PhonePe</span>
-    </motion.button>
-  </div>
-</div>
-
-
-                {/* Action Buttons */}
-                <div className="flex justify-end gap-3 pt-4 border-t border-[#4D2C5E]/10">
                     <motion.button
-                        whileHover={{ backgroundColor: "#4D2C5E/10" }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={onClose}
-                        className="px-4 py-2 text-sm font-medium text-[#4D2C5E] border border-[#4D2C5E]/30 rounded-lg hover:bg-[#4D2C5E]/5 transition-colors"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => {
+                            if (formData.agreeTerms) {
+                                onPurchase();
+                                onClose();
+                            }
+                        }}
+                        disabled={!formData.agreeTerms}
+                        className={`w-full py-3 text-lg font-bold text-white rounded-lg shadow-md ${
+                            formData.agreeTerms 
+                                ? 'bg-gradient-to-r cursor-pointer from-[#FF7426] to-[#E65100] hover:from-[#E65100] hover:to-[#C04100]' 
+                                : 'bg-gray-400 cursor-not-allowed'
+                        }`}
                     >
-                        Cancel
+                        Complete Purchase - ${course.discountedPrice}
                     </motion.button>
-                    <motion.button
-                        whileHover={{ backgroundColor: "#E65100" }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={onEnroll}
-                        className="px-6 py-2 text-sm font-bold text-white bg-[#FF7426] rounded-lg shadow-md hover:shadow-lg transition-colors"
-                    >
-                        Complete Enrollment
-                    </motion.button>
-                </div>
+                </motion.div>
             </div>
         </Modal>
     );
 };
 
-export default EnrollmentModal;
+export default PurchaseModal;

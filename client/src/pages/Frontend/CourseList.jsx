@@ -5,7 +5,7 @@ import TrainingBanner from '../../components/banners/TrainingBanner';
 import FeedbaackBanner from '../../components/banners/FeedbackBanner';
 import { FiFilter, FiX, FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import EnrollmentModal from '../../components/Modal/EnrollmentModal';
-
+import { AllCourses } from '../../data';
 const bannerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -58,159 +58,7 @@ const CourseList = () => {
 
 
     // Enhanced course data
-    const allCourses = [
-        {
-            id: 1,
-            name: "Full Stack Development",
-            duration: "6 months",
-            image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c",
-            level: "Advanced",
-            bestseller: true,
-            students: 1250,
-            category: "Web Development",
-            rating: 4.8,
-            instructor: "Sarah Johnson",
-            language: "English",
-            price: 299,
-            tags: ["JavaScript", "React", "Node.js", "MongoDB"]
-        },
-        {
-            id: 2,
-            name: "Data Science Fundamentals",
-            duration: "4 months",
-            image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
-            level: "Intermediate",
-            bestseller: false,
-            students: 890,
-            category: "Data Science",
-            rating: 4.5,
-            instructor: "Michael Chen",
-            language: "English",
-            price: 249,
-            tags: ["Python", "Pandas", "Machine Learning", "Statistics"]
-        },
-        {
-            id: 3,
-            name: "Mobile App Development with Flutter",
-            duration: "3 months",
-            image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c",
-            level: "Beginner",
-            bestseller: true,
-            students: 1800,
-            category: "Mobile Development",
-            rating: 4.7,
-            instructor: "David Kim",
-            language: "Spanish",
-            price: 199,
-            tags: ["Flutter", "Dart", "Firebase", "UI/UX"]
-        },
-        {
-            id: 4,
-            name: "AWS Cloud Practitioner",
-            duration: "2 months",
-            image: "https://images.unsplash.com/photo-1629904853893-c2c8981a1dc5",
-            level: "Beginner",
-            bestseller: true,
-            students: 2100,
-            category: "Cloud Computing",
-            rating: 4.9,
-            instructor: "Emma Wilson",
-            language: "English",
-            price: 179,
-            tags: ["AWS", "Cloud", "DevOps", "Infrastructure"]
-        },
-        {
-            id: 5,
-            name: "Cybersecurity Essentials",
-            duration: "5 months",
-            image: "https://images.unsplash.com/photo-1563986768609-322da13575f3",
-            level: "Intermediate",
-            bestseller: false,
-            students: 750,
-            category: "Security",
-            rating: 4.6,
-            instructor: "James Rodriguez",
-            language: "English",
-            price: 349,
-            tags: ["Ethical Hacking", "Network Security", "Encryption"]
-        },
-        {
-            id: 6,
-            name: "UX/UI Design Masterclass",
-            duration: "3 months",
-            image: "https://images.unsplash.com/photo-1496171367470-9ed9a91ea931",
-            level: "Intermediate",
-            bestseller: true,
-            students: 1450,
-            category: "Design",
-            rating: 4.8,
-            instructor: "Sophia Lee",
-            language: "French",
-            price: 279,
-            tags: ["Figma", "Prototyping", "User Research", "Wireframing"]
-        },
-        {
-            id: 7,
-            name: "Machine Learning with Python",
-            duration: "6 months",
-            image: "https://images.unsplash.com/photo-1504639725590-34d0984388bd",
-            level: "Advanced",
-            bestseller: true,
-            students: 1100,
-            category: "Data Science",
-            rating: 4.7,
-            instructor: "Raj Patel",
-            language: "English",
-            price: 399,
-            tags: ["TensorFlow", "Neural Networks", "Scikit-learn", "Deep Learning"]
-        },
-        {
-            id: 8,
-            name: "iOS Development with Swift",
-            duration: "4 months",
-            image: "https://images.unsplash.com/photo-1542621334-a254cf47733d",
-            level: "Intermediate",
-            bestseller: false,
-            students: 920,
-            category: "Mobile Development",
-            rating: 4.4,
-            instructor: "Alex Wong",
-            language: "English",
-            price: 329,
-            tags: ["Swift", "Xcode", "UIKit", "SwiftUI"]
-        },
-        {
-            id: 9,
-            name: "DevOps Engineering",
-            duration: "5 months",
-            image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
-            level: "Advanced",
-            bestseller: true,
-            students: 1350,
-            category: "Cloud Computing",
-            rating: 4.9,
-            instructor: "Emma Wilson",
-            language: "English",
-            price: 379,
-            tags: ["Docker", "Kubernetes", "CI/CD", "Terraform"]
-        },
-        {
-            id: 10,
-            name: "Blockchain Fundamentals",
-            duration: "3 months",
-            image: "https://images.unsplash.com/photo-1621570072951-6d96d5f9b9c0",
-            level: "Beginner",
-            bestseller: false,
-            students: 680,
-            category: "Blockchain",
-            rating: 4.3,
-            instructor: "Carlos Mendez",
-            language: "Spanish",
-            price: 259,
-            tags: ["Ethereum", "Smart Contracts", "Solidity", "Web3"]
-        }
-    ];
-
+    const allCourses = AllCourses
     // State for filters
     const [filters, setFilters] = useState({
         category: '',
@@ -264,18 +112,18 @@ const CourseList = () => {
             (!filters.instructor || course.instructor === filters.instructor) &&
             (!filters.language || course.language === filters.language) &&
             (!filters.priceRange || (
-                filters.priceRange === '0-100' && course.price < 100 ||
-                filters.priceRange === '100-200' && course.price >= 100 && course.price <= 200 ||
-                filters.priceRange === '200-300' && course.price > 200 && course.price <= 300 ||
-                filters.priceRange === '300-1000' && course.price > 300
+                filters.priceRange === '0-100' && course.originalPrice < 100 ||
+                filters.priceRange === '100-200' && course.originalPrice >= 100 && course.originalPrice <= 200 ||
+                filters.priceRange === '200-300' && course.originalPrice > 200 && course.originalPrice <= 300 ||
+                filters.priceRange === '300-1000' && course.originalPrice > 300
             ))
         );
     });
 
     // Compact Dropdown Filter Component
-    const DropdownFilter = ({ name, label }) => {
+    const DropdownFilter = ({ title, label }) => {
         const getFilterColor = (value) => {
-            switch (name) {
+            switch (title) {
                 case 'category':
                     return 'bg-[#4D2C5E]/10 text-[#4D2C5E] border-[#4D2C5E]/30';
                 case 'level':
@@ -296,19 +144,19 @@ const CourseList = () => {
         return (
             <div className="relative">
                 <button
-                    onClick={() => toggleDropdown(name)}
-                    className={`flex items-center justify-between px-3 py-2 text-sm rounded-lg border-2 ${filters[name] ? getFilterColor(filters[name]) : 'border-gray-200 hover:border-[#FF7426]/50'
+                    onClick={() => toggleDropdown(title)}
+                    className={`flex items-center justify-between px-3 py-2 text-sm rounded-lg border-2 ${filters[title] ? getFilterColor(filters[title]) : 'border-gray-200 hover:border-[#FF7426]/50'
                         } transition-colors min-w-[120px]`}
                 >
-                    <span className="truncate">{filters[name] || label}</span>
-                    {dropdownOpen === name ? (
+                    <span className="truncate">{filters[title] || label}</span>
+                    {dropdownOpen === title ? (
                         <FiChevronUp className="ml-2 text-[#4D2C5E]" />
                     ) : (
                         <FiChevronDown className="ml-2 text-[#4D2C5E]" />
                     )}
                 </button>
 
-                {dropdownOpen === name && (
+                {dropdownOpen === title && (
                     <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -316,15 +164,15 @@ const CourseList = () => {
                         className={`absolute z-10 mt-1 w-48 p-2 bg-white rounded-lg shadow-lg border border-[#4D2C5E]/20 overflow-hidden `}
                     >
                         <div className="max-h-60 overflow-y-auto custom-scrollbar">
-                            {filterOptions[name].map(option => {
+                            {filterOptions[title].map(option => {
                                 const value = typeof option === 'object' ? option.value : option;
                                 const label = typeof option === 'object' ? option.label : option;
 
                                 return (
                                     <button
                                         key={value}
-                                        onClick={() => handleFilterSelect(name, value)}
-                                        className={`block w-full text-left cursor-pointer px-4 py-2 text-sm transition-colors ${filters[name] === value
+                                        onClick={() => handleFilterSelect(title, value)}
+                                        className={`block w-full text-left cursor-pointer px-4 py-2 text-sm transition-colors ${filters[title] === value
                                                 ? getFilterColor(value) + ' font-bold'
                                                 : 'text-gray-700 hover:bg-[#4D2C5E]/5'
                                             }`}
@@ -427,7 +275,7 @@ const CourseList = () => {
                                 <motion.img
                                     whileHover={{ scale: 1.03 }}
                                     src="https://images.unsplash.com/photo-1593642634524-b40b5baae6bb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
-                                    alt="Students collaborating"
+                                    alt="studentsEnrolled collaborating"
                                     className="relative rounded-xl w-full h-auto object-cover shadow-2xl z-10 border-4 border-white"
                                 />
                                 <motion.div
@@ -490,11 +338,11 @@ const CourseList = () => {
                     transition={{ delay: 0.2 }}
                     className="flex flex-wrap gap-3 mb-8"
                 >
-                    <DropdownFilter name="category" label="Category" />
-                    <DropdownFilter name="level" label="Level" />
-                    <DropdownFilter name="instructor" label="Instructor" />
-                    <DropdownFilter name="language" label="Language" />
-                    <DropdownFilter name="priceRange" label="Price" />
+                    <DropdownFilter title="category" label="Category" />
+                    <DropdownFilter title="level" label="Level" />
+                    <DropdownFilter title="instructor" label="Instructor" />
+                    <DropdownFilter title="language" label="Language" />
+                    <DropdownFilter title="priceRange" label="Price" />
                 </motion.div>
 
                 {/* Active Filters */}
@@ -563,8 +411,8 @@ const CourseList = () => {
                         {/* Course Image Section */}
                         <div className="relative">
                             <motion.img
-                                src={course.image}
-                                alt={course.name}
+                                src={course.imageUrl}
+                                alt={course.title}
                                 className="w-full h-48 object-cover"
                                 whileHover={{ scale: 1.05 }}
                                 transition={{ duration: 0.3 }}
@@ -608,15 +456,15 @@ const CourseList = () => {
                                 </div>
                             </div>
                     
-                            <h3 className="text-xl font-bold text-[#4D2C5E] mb-2">{course.name}</h3>
+                            <h3 className="text-xl font-bold text-[#4D2C5E] mb-2">{course.title}</h3>
                             <p className="text-gray-600 mb-4">{course.category}</p>
                     
                             <div className="flex items-center justify-between mb-4">
                                 <div className="text-sm text-gray-500">
-                                    {course.students.toLocaleString()}+ students
+                                    {course.studentsEnrolled.toLocaleString()}+ studentsEnrolled
                                 </div>
                                 <div className="text-sm font-bold text-[#4D2C5E]">
-                                    ${course.price}
+                                    ${course.originalPrice}
                                 </div>
                             </div>
                         </div>
@@ -624,7 +472,7 @@ const CourseList = () => {
                         {/* Action Buttons Section */}
                         <div className="px-6 pb-6 pt-0 flex justify-between gap-3">
                             <NavLink
-                                to={`/courses/${course.id}`}
+                                to={`/CourseDetails/${course.id}`}
                                 className="flex-1 text-center text-[#4D2C5E] font-medium hover:underline flex items-center justify-center py-2 border border-[#4D2C5E]/30 rounded-lg hover:bg-[#4D2C5E]/5 transition-colors cursor-pointer"
                             >
                                 View Details

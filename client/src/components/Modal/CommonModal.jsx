@@ -2,7 +2,7 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const Modal = ({ isOpen, onClose, children, title = "Modal" }) => {
+const Modal = ({ isOpen, onClose, children, title = "Modal", disableOutsideClick = true }) => {
     return createPortal(
         <AnimatePresence>
             {isOpen && (
@@ -13,14 +13,13 @@ const Modal = ({ isOpen, onClose, children, title = "Modal" }) => {
                     transition={{ duration: 0.3, ease: "easeInOut" }}
                     className="fixed inset-0 z-50 flex items-center justify-center p-4"
                 >
-                    {/* Backdrop with subtle blur */}
+                    {/* Backdrop - Removed onClick handler to prevent closing */}
                     <motion.div
                         initial={{ backdropFilter: 'blur(0px)' }}
                         animate={{ backdropFilter: 'blur(4px)' }}
                         exit={{ backdropFilter: 'blur(0px)' }}
                         transition={{ duration: 0.3 }}
-                        className="fixed inset-0 bg-transpatent bg-opacity-50 backdrop-blur-sm"
-                        onClick={onClose}
+                        className="fixed inset-0 bg-transparent bg-opacity-30 backdrop-blur-sm"
                     />
 
                     {/* Modal container */}
@@ -62,12 +61,12 @@ const Modal = ({ isOpen, onClose, children, title = "Modal" }) => {
                                 </div>
                             </div>
 
-                            {/* Scrollable content */}
+                            {/* Scrollable content with custom scrollbar */}
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
                                 transition={{ delay: 0.3 }}
-                                className="max-h-[70vh] overflow-y-auto p-6"
+                                className="max-h-[70vh] overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-[#4D2C5E] scrollbar-track-[#F3F4F6] scrollbar-thumb-rounded-full scrollbar-track-rounded-full"
                             >
                                 {children}
                             </motion.div>
@@ -82,8 +81,6 @@ const Modal = ({ isOpen, onClose, children, title = "Modal" }) => {
                                 <button
                                     onClick={onClose}
                                     className="px-5 py-2 text-sm font-medium text-[#4D2C5E] border border-[#4D2C5E] rounded-md hover:bg-[#4D2C5E] hover:text-white transition-colors"
-                                    whileHover={{ scale: 1.03 }}
-                                    whileTap={{ scale: 0.98 }}
                                 >
                                     Close
                                 </button>

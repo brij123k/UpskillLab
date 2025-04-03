@@ -1,9 +1,10 @@
-import React from "react";
+import React,{useState} from "react";
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
-
+import AdmissionFormModal from "../Modal/BasicEnrollNowModal";
 const TrainingBanner = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const controls = useAnimation();
   const [ref, inView] = useInView({
     threshold: 0.1,
@@ -150,6 +151,7 @@ const TrainingBanner = () => {
                 </motion.button>
                 
                 <motion.button
+                onClick={() => setIsModalOpen(true)}
                   whileHover={{ 
                     scale: 1.05,
                     boxShadow: "0 10px 25px -5px rgba(77, 44, 94, 0.4)"
@@ -220,7 +222,12 @@ const TrainingBanner = () => {
           </motion.div>
         </div>
       </div>
+      <AdmissionFormModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </motion.div>
+    
   );
 };
 

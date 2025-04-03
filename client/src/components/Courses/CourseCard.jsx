@@ -1,8 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FiClock, FiUsers, FiArrowRight, FiBookmark } from 'react-icons/fi';
+import { NavLink } from 'react-router-dom';
 
 const CourseCard = ({ 
+  id,
   imageUrl, 
   title, 
   duration, 
@@ -103,7 +105,7 @@ const CourseCard = ({
             className="flex items-center text-[#4d2c5e] hover:text-[#FF7426] transition-colors"
             whileHover={{ x: 3 }}
           >
-            <span className="mr-1 font-medium">View more</span>
+            <NavLink to={`/courseDetails/${id}`}><span className="mr-1 font-medium">View more</span></NavLink>
             <motion.div
               animate={{ x: [0, 3, 0] }}
               transition={{ 

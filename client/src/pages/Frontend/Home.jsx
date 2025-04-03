@@ -16,18 +16,10 @@ import StudentTestimonials from '../../components/testimonial/StudentsTestimonia
 import AdmissionForm from '../../components/Forms/AdmissionForm'
 import { Faqs } from '../../data';
 import { NavLink } from 'react-router-dom';
-// import VideoModal from '../../components/Modal/VideoModal';
-// import { LandingVideoModal } from '../../components/Modal/LandingVideoModal';
 function Home() {
   const controls = useAnimation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, margin: "-100px" });
-//   const {
-//     isVideoModalOpen,
-//     videoSrc,
-//     openVideoModal,
-//     closeVideoModal
-// } = LandingVideoModal();
   useEffect(() => {
     if (isInView) {
       controls.start("visible");
@@ -272,9 +264,9 @@ function Home() {
               </motion.div>
               
               <motion.div variants={itemVariants}>
-                <NavLink href='/ContactUs'>
+                <NavLink to='/ContactUs'>
                   <motion.button 
-                    className="bg-[#4d2c5e] hover:bg-[#3a2148] text-white font-bold py-3 px-6 rounded-4xl transition-all duration-300 flex items-center"
+                    className="bg-[#4d2c5e] hover:bg-[#3a2148] text-white font-bold py-3 px-6 rounded-4xl transition-all duration-300 flex items-center cursor-pointer"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
@@ -304,16 +296,6 @@ function Home() {
         </div>
       </div>
     </div>
-      
-      {/* Video Modal */}
-      {/* <VideoModal
-                isOpen={isVideoModalOpen}
-                onClose={closeVideoModal}
-                videoSrc={videoSrc}
-                title="Product Demo"
-                autoPlay={true}
-                showControls={true}
-            /> */}
 
           
         </>

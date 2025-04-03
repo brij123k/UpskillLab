@@ -66,68 +66,7 @@ const BlogCard = ({
 // Main Blog Page Component
 const StudentsBlog = () => {
   // Sample blog data
-  const blogs = [
-    {
-      id: 1,
-      title: "How I Transitioned from Mechanical Engineering to Data Science",
-      excerpt: "My journey from traditional engineering to cutting-edge data science with UpSkillLab's PGP program and how it transformed my career path completely.",
-      author: "Rahul Sharma",
-      date: "May 15, 2023",
-      readTime: "5 min",
-      category: "Student Stories",
-      imageUrl: "https://images.pexels.com/photos/4144225/pexels-photo-4144225.jpeg"
-    },
-    {
-      id: 2,
-      title: "10 Python Libraries Every Data Science Beginner Should Know",
-      excerpt: "Essential Python libraries that helped me during my UpSkillLab journey and how to get started with each of them effectively.",
-      author: "Priya Patel",
-      date: "Jun 2, 2023",
-      readTime: "7 min",
-      category: "Learning Tips",
-      imageUrl: "https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg"
-    },
-    {
-      id: 3,
-      title: "Balancing Full-Time Work with UpSkillLab's Evening Batches",
-      excerpt: "Practical strategies I used to manage my job while completing the PGP in Data Science through UpSkillLab's flexible learning model.",
-      author: "Arjun Mehta",
-      date: "Apr 28, 2023",
-      readTime: "4 min",
-      category: "Student Stories",
-      imageUrl: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg"
-    },
-    {
-      id: 4,
-      title: "My Capstone Project Experience at UpSkillLab",
-      excerpt: "A deep dive into how my capstone project helped me land my first data science role at a Fortune 500 company.",
-      author: "Neha Gupta",
-      date: "Jul 10, 2023",
-      readTime: "6 min",
-      category: "Projects",
-      imageUrl: "https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg"
-    },
-    {
-      id: 5,
-      title: "The Complete Guide to UpSkillLab's Placement Support",
-      excerpt: "How I utilized UpSkillLab's career services to prepare for interviews and secure multiple job offers in the AI field.",
-      author: "Vikram Singh",
-      date: "Mar 22, 2023",
-      readTime: "8 min",
-      category: "Career Guidance",
-      imageUrl: "https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg"
-    },
-    {
-      id: 6,
-      title: "From Basics to Advanced: My Machine Learning Journey",
-      excerpt: "How UpSkillLab's structured curriculum helped me build machine learning expertise from scratch in just 6 months.",
-      author: "Ananya Reddy",
-      date: "Aug 5, 2023",
-      readTime: "9 min",
-      category: "Learning Tips",
-      imageUrl: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg"
-    }
-  ];
+  
 
   return (
     <div className='bg-[#F7F7F7] min-h-screen'>
@@ -185,16 +124,6 @@ const StudentsBlog = () => {
               imageUrl={blog.imageUrl}
             />
           ))}
-        </div>
-
-        {/* Pagination */}
-        <div className="mt-12 flex justify-center">
-          <nav className="flex items-center space-x-2">
-            <button className="px-3 py-1 rounded-md bg-[#ff7426] text-white font-medium">1</button>
-            <button className="px-3 py-1 rounded-md hover:bg-gray-200">2</button>
-            <button className="px-3 py-1 rounded-md hover:bg-gray-200">3</button>
-            <button className="px-3 py-1 rounded-md hover:bg-gray-200">Next →</button>
-          </nav>
         </div>
       </motion.main>
 

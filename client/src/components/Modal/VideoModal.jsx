@@ -33,16 +33,11 @@ const VideoModal = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-end justify-end p-4"
         >
-          {/* Backdrop */}
+          {/* Backdrop without click handler */}
           <motion.div
-            initial={{ backdropFilter: 'blur(0px)' }}
-            animate={{ backdropFilter: 'blur(4px)' }}
-            exit={{ backdropFilter: 'blur(0px)' }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 bg-transpatent bg-opacity-50 backdrop-blur-sm"
-            onClick={onClose}
+            className="fixed inset-0"
           />
 
           {/* Modal container */}
@@ -56,16 +51,15 @@ const VideoModal = ({
               stiffness: 300,
               duration: 0.3
             }}
-            className="relative z-10 w-full max-w-4xl mx-auto"
-            onClick={(e) => e.stopPropagation()}
+            className="relative z-10 w-full max-w-md mx-4 mb-4"
           >
             {/* Modal content */}
             <div className="bg-white rounded-xl shadow-2xl overflow-hidden">
               {/* Header */}
-              <div className="bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] p-5">
+              <div className="bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] p-3">
                 <div className="flex items-center justify-between">
                   <motion.h2 
-                    className="text-xl font-bold text-white"
+                    className="text-lg font-bold text-white truncate max-w-xs"
                     initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 }}
@@ -78,7 +72,7 @@ const VideoModal = ({
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                   </motion.button>
@@ -90,7 +84,8 @@ const VideoModal = ({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3 }}
-                className="relative aspect-video bg-black"
+                className="relative w-full aspect-video bg-black"
+                style={{ height: '240px' }}
               >
                 <iframe
                   src={isOpen ? `${videoSrc}${autoPlay ? '&autoplay=1' : ''}` : ''}
@@ -103,14 +98,14 @@ const VideoModal = ({
 
               {/* Footer */}
               <motion.div 
-                className="bg-gray-50 px-6 py-4 flex justify-end border-t border-gray-200"
+                className="bg-gray-50 px-4 py-2 flex justify-end border-t border-gray-200"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
               >
                 <button
                   onClick={onClose}
-                  className="px-5 py-2 text-sm font-medium text-[#4D2C5E] border border-[#4D2C5E] rounded-md hover:bg-[#4D2C5E] hover:text-white transition-colors"
+                  className="px-3 py-1 text-sm font-medium text-[#4D2C5E] border border-[#4D2C5E] rounded-md hover:bg-[#4D2C5E] hover:text-white transition-colors"
                 >
                   Close
                 </button>

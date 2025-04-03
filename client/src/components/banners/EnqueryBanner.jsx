@@ -2,6 +2,7 @@ import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 import { FiClock, FiUsers, FiArrowRight, FiBookmark } from 'react-icons/fi';
+import { NavLink } from 'react-router-dom';
 const EnqueryBanner = () => {
   const controls = useAnimation();
   const [ref, inView] = useInView({
@@ -134,13 +135,14 @@ const EnqueryBanner = () => {
             className="flex flex-col sm:flex-row gap-4 pt-4"
             variants={itemVariants}
           >
+            <NavLink to="/Contactus">
             <motion.button
               whileHover={{ 
                 scale: 1.05,
                 boxShadow: "0 10px 25px -5px rgba(255, 116, 38, 0.4)"
               }}
               whileTap={{ scale: 0.95 }}
-              className="bg-[#FF7426] text-white px-8 py-3 rounded-lg font-semibold text-lg shadow-md hover:shadow-lg transition-all m-auto cursor-pointer relative overflow-hidden"
+              className="bg-[#FF7426] text-white px-8 py-3 rounded-lg font-semibold text-lg shadow-md hover:shadow-lg transition-all m-auto cursor-pointer relative overflow-hidden cursor-pointer"
               variants={itemVariants}
             >
               <motion.span
@@ -168,6 +170,7 @@ const EnqueryBanner = () => {
                 <FiArrowRight />
               </motion.div>
             </motion.button>
+            </NavLink>
           </motion.div>
         </motion.div>
       </div>

@@ -147,6 +147,13 @@ const CardsContainer = () => {
               icon: <FiBriefcase />,
               image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
             },
+            {
+              title: "360° Career Support",
+              description:
+                "Our Data Science PG Program offers 100 percent Placement Assurance.",
+              icon: <FiBriefcase />,
+              image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            },
   ];
 
   return (
@@ -155,7 +162,7 @@ const CardsContainer = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
             >
               {features.map((feature, index) => (
                 <MentorshipCard key={index} {...feature} />

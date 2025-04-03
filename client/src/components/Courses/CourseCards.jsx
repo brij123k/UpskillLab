@@ -1,6 +1,7 @@
 import React from 'react';
 import CourseList from './CourseList';
 import { FiClock, FiUsers, FiArrowRight } from 'react-icons/fi';
+import { NavLink } from 'react-router-dom';
 
 function CourseCards() {
   return (
@@ -28,10 +29,12 @@ function CourseCards() {
 
           {/* Explore All button - properly aligned */}
           <div className="flex justify-center lg:justify-end mt-12 w-full">
-            <button className="bg-[#4d2c5e] hover:bg-[#3a2148] text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300 flex items-center shadow-md hover:shadow-lg">
+            <NavLink to="/CourseList" className="hidden lg:block">
+            <button className="bg-[#4d2c5e] hover:bg-[#3a2148] text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300 flex items-center shadow-md hover:shadow-lg cursor-pointer">
               Explore All
               <FiArrowRight className="ml-2 transition-transform group-hover:translate-x-1" />
             </button>
+            </NavLink>
           </div>
         </div>
       </div>

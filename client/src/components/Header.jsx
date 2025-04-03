@@ -2,125 +2,54 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
-
+import { AllCourses } from '../data';
+import AdmissionFormModal from './Modal/BasicEnrollNowModal';
 function Header() {
     const [isDrawerOpen, setIsDrawerOpen] = useState(false);
     const [isCoursesDropdownOpen, setIsCoursesDropdownOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
-    // Sample course data
     const courseCategories = [
         {
-            id: 1,
-            name: "Web Development",
-            courses: [
-                {
-                    id: 1,
-                    name: "Full Stack Development",
-                    duration: "6 months",
-                    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-                    level: "Advanced",
-                    bestseller: true,
-                    students: 1250
-                },
-                {
-                    id: 2,
-                    name: "Frontend with React",
-                    duration: "3 months",
-                    image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-                    level: "Intermediate",
-                    students: 980
-                },
-                {
-                    id: 3,
-                    name: "Backend with Node.js",
-                    duration: "3 months",
-                    image: "https://images.unsplash.com/photo-1565106430482-8f6e74349ca1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-                    level: "Intermediate",
-                    bestseller: true,
-                    students: 1120
-                }
-            ]
+          id: 1,
+          name: "Web Development",
+          courses: AllCourses.filter(course => course.category === "Web Development").map(course => ({
+            id: course.id,
+            name: course.title,
+            image: course.imageUrl,
+          }))
         },
         {
-            id: 2,
-            name: "Data Science",
-            courses: [
-                {
-                    id: 4,
-                    name: "Python for Data Science",
-                    duration: "4 months",
-                    image: "https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-                    level: "Beginner",
-                    students: 850
-                },
-                {
-                    id: 5,
-                    name: "Machine Learning",
-                    duration: "5 months",
-                    image: "https://images.unsplash.com/photo-1504639725590-34d0984388bd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-                    level: "Advanced",
-                    bestseller: true,
-                    students: 1450
-                }
-            ]
+          id: 2,
+          name: "Data Science",
+          courses: AllCourses.filter(course => course.category === "Data Science").map(course => ({
+            id: course.id,
+            name: course.title,
+            image: course.imageUrl,
+          }))
         },
         {
-            id: 3,
-            name: "Mobile Development",
-            courses: [
-                {
-                    id: 6,
-                    name: "Flutter Development",
-                    duration: "4 months",
-                    image: "https://images.unsplash.com/photo-1607252650355-f7fd0460ccdb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-                    level: "Intermediate",
-                    students: 760
-                },
-                {
-                    id: 7,
-                    name: "React Native",
-                    duration: "3 months",
-                    image: "https://images.unsplash.com/photo-1613068687893-5e85b4638b56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-                    level: "Intermediate",
-                    bestseller: true,
-                    students: 920
-                }
-            ]
+          id: 3,
+          name: "Design",
+          courses: AllCourses.filter(course => course.category === "Design").map(course => ({
+            id: course.id,
+            name: course.title,
+            image: course.imageUrl,
+          }))
         },
         {
-            id: 4,
-            name: "Cloud Computing",
-            courses: [
-                {
-                    id: 8,
-                    name: "AWS Certification",
-                    duration: "4 months",
-                    image: "https://images.unsplash.com/photo-1610563166150-b34df4f3bcd6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-                    level: "Advanced",
-                    bestseller: true,
-                    students: 1100
-                },
-                {
-                    id: 9,
-                    name: "Azure Fundamentals",
-                    duration: "3 months",
-                    image: "https://images.unsplash.com/photo-1523474253046-8cd2748b5fd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=400&q=80",
-                    level: "Intermediate",
-                    students: 680
-                }
-            ]
+          id: 4,
+          name: "Security",
+          courses: AllCourses.filter(course => course.category === "Security").map(course => ({
+            id: course.id,
+            name: course.title,
+            image: course.imageUrl,
+          }))
         }
-    ];
+      ].filter(category => category.courses.length > 0);
 
-    const handleEnrollClick = () => {
-        navigate('/#AdmissionForm');
-        setTimeout(() => {
-            const form = document.getElementById('AdmissionForm');
-            if (form) form.scrollIntoView({ behavior: 'smooth' });
-        }, 300);
-    };
 
     const toggleDrawer = () => {
         setIsDrawerOpen(!isDrawerOpen);
@@ -232,52 +161,66 @@ function Header() {
                                 
                                         {/* Courses List */}
                                         <div className="w-full lg:w-2/3 overflow-y-auto">
-                                            <div className="p-4">
-                                                <div className="flex items-center justify-between mb-4">
-                                                    <h3 className="text-lg font-semibold text-gray-800">
-                                                        {selectedCategory ? selectedCategory.name + ' Courses' : 'Select a category'}
-                                                    </h3>
-                                                </div>
-                                                
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                                    {selectedCategory ? (
-                                                        selectedCategory.courses.map((course) => (
-                                                            <div 
-                                                                key={course.id} 
-                                                                className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group"
-                                                                onClick={() => {
-                                                                    // Add your course click handler here
-                                                                    setIsCoursesDropdownOpen(false);
-                                                                }}
-                                                            >
-                                                                <div className="flex items-start">
-                                                                    <img
-                                                                        src={course.image}
-                                                                        alt={course.name}
-                                                                        className="w-12 h-12 object-cover rounded-md mr-3 flex-shrink-0"
-                                                                    />
-                                                                    <div className="min-w-0">
-                                                                        <h4 className="font-medium text-gray-800 group-hover:text-[#FF7426] truncate">
-                                                                            {course.name}
-                                                                        </h4>
-                                                                        
-                                                                    
-                                                                        
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        ))
-                                                    ) : (
-                                                        <div className="col-span-2 flex flex-col items-center justify-center h-64">
-                                                            <svg className="w-16 h-16 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                                                            </svg>
-                                                            <p className="text-gray-500 text-center">Select a category to view available courses</p>
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            </div>
-                                        </div>
+  <div className="p-4">
+    <div className="flex items-center justify-between mb-4">
+      <h3 className="text-lg font-semibold text-gray-800">
+        {selectedCategory ? selectedCategory.name + ' Courses' : 'Featured Courses'}
+      </h3>
+    </div>
+    
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {selectedCategory ? (
+        selectedCategory.courses.map((course) => (
+          <NavLink 
+            to={`/courseDetails/${course.id}`}
+            key={course.id} 
+            className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group"
+            onClick={() => {
+              setIsCoursesDropdownOpen(false);
+            }}
+          >
+            <div className="flex items-start">
+              <img
+                src={course.image}
+                alt={course.name}
+                className="w-12 h-12 object-cover rounded-md mr-3 flex-shrink-0"
+              />
+              <div className="min-w-0">
+                <h4 className="font-medium text-gray-800 group-hover:text-[#FF7426] truncate">
+                  {course.name}
+                </h4>
+              </div>
+            </div>
+          </NavLink>
+        ))
+      ) : (
+        AllCourses.slice(0, 4).map((course) => (
+          <NavLink
+            to={`/courseDetails/${course.id}`}
+            key={course.id} 
+            className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group"
+            onClick={() => {
+              setIsCoursesDropdownOpen(false);
+            }}
+          >
+            <div className="flex items-start">
+              <img
+                src={course.imageUrl}
+                alt={course.title}
+                className="w-12 h-12 object-cover rounded-md mr-3 flex-shrink-0"
+              />
+              <div className="min-w-0">
+                <h4 className="font-medium text-gray-800 group-hover:text-[#FF7426] truncate">
+                  {course.title}
+                </h4>
+              </div>
+            </div>
+          </NavLink>
+        ))
+      )}
+    </div>
+  </div>
+</div>
                                     </div>
                                 
                                     {/* All Courses Link */}
@@ -329,7 +272,7 @@ function Header() {
                     </div>
                     <div className="flex space-x-3 ml-6 xl:ml-8 2xl:ml-10">
                         <motion.button
-                            onClick={handleEnrollClick}
+                           onClick={() => setIsModalOpen(true)}
                             whileHover={{ y: -2 }}
                             className="bg-[#4D2C5E] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#3A2150] transition-all shadow-sm hover:shadow-md whitespace-nowrap"
                         >
@@ -350,7 +293,7 @@ function Header() {
                 <div className="lg:hidden flex items-center">
                     <div className='hidden sm:flex gap-3 mr-4'>
                         <button className="bg-[#4D2C5E] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-[#3A2150] transition-colors whitespace-nowrap"
-                            onClick={handleEnrollClick}
+                            onClick={() => setIsModalOpen(true)}
                         >
                             ENROLL
                         </button>
@@ -546,7 +489,7 @@ function Header() {
 
                     <div className="p-4 border-t border-gray-100 shrink-0">
                         <button className="w-full bg-[#4D2C5E] text-white px-6 py-3 rounded-full text-base font-medium hover:bg-[#3A2150] transition-colors shadow-sm mb-3"
-                            onClick={handleEnrollClick}
+                            onClick={() => setIsModalOpen(true)}
                         >
                             ENROLL NOW
                         </button>
@@ -561,6 +504,10 @@ function Header() {
         </>
     )}
 </AnimatePresence>
+<AdmissionFormModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
         </header>
     );
 }

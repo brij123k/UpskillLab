@@ -11,6 +11,7 @@ const Home = lazy(() => import("./pages/Frontend/Home"));
 const Success = lazy(() => import("./pages/Frontend/SuccessStory"));
 const upcomingBatches = lazy(() => import("./pages/Frontend/UpcomingBatches"));
 const StudentsBlog = lazy(() => import("./pages/Frontend/StudentsBlog"));
+const BlogDetailPage = lazy(()=>import("./pages/Frontend/BlogDetail"))
 const ContactUs = lazy(() => import("./pages/Frontend/ContactUs"));
 const CourseList = lazy(() => import("./pages/Frontend/CourseList"));
 const Register = lazy(() => import("./pages/Auth/Register"));
@@ -19,7 +20,7 @@ const ForgotPasswordPage = lazy(() => import("./pages/Auth/ForgetPassword"));
 const ResetPasswordPage = lazy(() => import("./pages/Auth/ResetPassword"));
 const VerifyOTPPage = lazy(() => import("./pages/Auth/VerifyOTP"));
 const NotFoundPage = lazy(() => import("./pages/NotFound"));
-// const CourseDetails = lazy(() => import("./pages/Frontend/CourseDetails"));
+const CourseDetailsPage = lazy(() => import("./pages/Frontend/CourseDetails"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 
@@ -28,9 +29,10 @@ export const routes = [
   { exact: true, path: "/Success-stories", layout: GuestLayout, component: Success},
   { exact: true, path: "/upcoming-batches", layout: GuestLayout, component: upcomingBatches},
   { exact: true, path: "/Students-Blog", layout: GuestLayout, component: StudentsBlog},
+  { exact: true, path: "/BlogDetail",layout:GuestLayout,component:BlogDetailPage},
   { exact: true, path: "/ContactUs", layout: GuestLayout, component: ContactUs},
   { exact: true, path: "/CourseList", layout: GuestLayout, component: CourseList},
-  // { exact: true, path: "/CourseDetails/:id", layout: Index, component: CourseDetails},
+  { exact: true, path: "/CourseDetails/:id", layout: GuestLayout, component: CourseDetailsPage},
   { exact: true, path: "/Register", layout: Index, component: Register},
   { exact: true, path: "/Login", layout: Index, component: Login},
   { exact: true, path: "/ForgetPassword", layout: Index, component: ForgotPasswordPage},

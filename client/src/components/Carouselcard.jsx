@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import VideoModal from './Modal/VideoModal';
 import {useVideoModal} from './Modal/LandingVideoModal';
-
+import { NavLink } from 'react-router-dom';
 const TextCarousel = ({ slides, autoPlayVideo = false }) => {
   const {
     isVideoModalOpen,
@@ -188,21 +188,95 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
             >
               {slides[currentIndex].description}
             </motion.p>
-
-            <motion.button
-              onClick={() => openVideoModal(demoVideoUrl)}
-              custom={2}
-              initial="hidden"
-              animate="visible"
-              variants={textVariants}
-              className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg hover:bg-[#7B4B9E] transition-colors flex items-center cursor-pointer w-fit"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              Watch Demo
-            </motion.button>
+            <div className='flex flex-row gap-4'>
+  <NavLink to='/Contactus'>
+    <motion.button
+      custom={2}
+      initial="hidden"
+      animate="visible"
+      variants={textVariants}
+      whileHover={{ 
+        scale: 1.05,
+        backgroundColor: "#4D2C5E",
+        color: "white",
+        transition: { 
+          duration: 0.3,
+          ease: "easeInOut" 
+        }
+      }}
+      whileTap={{ scale: 0.95 }}
+      className="bg-transparent border-2 border-[#4D2C5E] text-[#4D2C5E] px-6 py-3 rounded-lg transition-all flex items-center cursor-pointer w-fit shadow-md hover:shadow-lg"
+    >
+      <motion.span
+        whileHover={{ scale: 1.1 }}
+        transition={{ type: "spring", stiffness: 400, damping: 10 }}
+      >
+        <svg 
+          className="w-5 h-5 mr-2" 
+          fill="none" 
+          stroke="currentColor" 
+          viewBox="0 0 24 24"
+        >
+          <path 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            strokeWidth="2" 
+            d="
+              M3 8 a2 2 0 0 1 2-2 h14 a2 2 0 0 1 2 2 v10 a2 2 0 0 1-2 2 h-5 l-5 4 v-4 H5 a2 2 0 0 1-2-2 V8 z
+              M8 10 a1 1 0 1 0 0 0 a1 1 0 1 0 0 0
+              M12 10 a1 1 0 1 0 0 0 a1 1 0 1 0 0 0
+              M16 10 a1 1 0 1 0 0 0 a1 1 0 1 0 0 0
+            " 
+          />
+        </svg>
+      </motion.span>
+      Get In Touch
+    </motion.button>
+  </NavLink>
+  
+  <motion.button
+    onClick={() => openVideoModal(demoVideoUrl)}
+    custom={2}
+    initial="hidden"
+    animate="visible"
+    variants={textVariants}
+    whileHover={{ 
+      scale: 1.05,
+      backgroundColor: "white",
+      color: "#4D2C5E",
+      borderColor: "#4D2C5E",
+      transition: { 
+        duration: 0.3,
+        ease: "easeInOut" 
+      }
+    }}
+    whileTap={{ scale: 0.95 }}
+    className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg border-2 border-[#4D2C5E] transition-all flex items-center cursor-pointer w-fit shadow-md hover:shadow-lg"
+  >
+    <motion.span
+      whileHover={{ scale: 1.2 }}
+      transition={{ type: "spring", stiffness: 400, damping: 10 }}
+    >
+      <svg 
+        className="w-5 h-5 mr-2" 
+        fill="none" 
+        stroke="currentColor" 
+        viewBox="0 0 24 24"
+      >
+        <path 
+          strokeLinecap="round" 
+          strokeLinejoin="round" 
+          strokeWidth="2" 
+          d="
+            M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87 v4.263 a1 1 0 001.555.832 l3.197-2.132 a1 1 0 000-1.664 z
+            M21 12 a9 9 0 11-18 0 9 9 0 0118 0 z
+          " 
+        />
+      </svg>
+    </motion.span>
+    Watch Demo
+  </motion.button>
+</div>
           </div>
 
           {/* Image - Right on desktop, top on mobile */}
