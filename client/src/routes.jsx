@@ -20,7 +20,8 @@ const ResetPasswordPage = lazy(() => import("./pages/Auth/ResetPassword"));
 const VerifyOTPPage = lazy(() => import("./pages/Auth/VerifyOTP"));
 const NotFoundPage = lazy(() => import("./pages/NotFound"));
 // const CourseDetails = lazy(() => import("./pages/Frontend/CourseDetails"));
-// const Privacy = lazy(() => import("./pages/Privacy"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 
 export const routes = [
   { exact: true, path: "/", layout: GuestLayout, component: Home },
@@ -36,7 +37,7 @@ export const routes = [
   // { exact: true, path: "/ResetPassword/:token", layout: Index, component: ResetPasswordPage},
   { exact: true, path: "/ResetPassword", layout: Index, component: ResetPasswordPage},
   { exact: true, path: "/VerifyOTP", layout: Index, component: VerifyOTPPage},
-  // { exact: true, path: "/PrivacyPolicy", layout: Privacy, component: Privacy},
-  // { exact: true, path: "/TermsAndConditions", layout: Privacy, component: Privacy},
+  { exact: true, path: "/TermsOfService", layout: Index, component: TermsOfService},
+  { exact: true, path: "/PrivacyPolicy", layout: Index, component: PrivacyPolicy},
   { exact: true, path: "*", component: NotFoundPage },
 ];

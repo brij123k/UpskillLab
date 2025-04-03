@@ -101,7 +101,7 @@ const LoginPage = () => {
                                     htmlFor="email"
                                     className={`absolute left-0 text-gray-500 transition-all duration-200 pointer-events-none
                                         ${formik.values.email ? 
-                                        'text-[#4D2C5E] text-xs sm:text-sm -translate-y-5' : 
+                                        'text-[#4D2C5E] text-xs sm:text-sm -translate-y-3' : 
                                         'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
                                     `}
                                 >
@@ -138,7 +138,7 @@ const LoginPage = () => {
             htmlFor="password"
             className={`absolute left-0 text-gray-500 transition-all duration-200 pointer-events-none
                 ${formik.values.password ? 
-                'text-[#4D2C5E] text-xs sm:text-sm -translate-y-5' : 
+                'text-[#4D2C5E] text-xs sm:text-sm -translate-y-3' : 
                 'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
             `}
         >

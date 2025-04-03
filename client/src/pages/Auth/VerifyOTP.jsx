@@ -117,7 +117,7 @@ const VerifyOTPPage = () => {
                         animate="visible"
                         exit="exit"
                     >
-                        <div className={`px-6 py-3 rounded-lg shadow-lg flex items-center ${
+                        <div className={`px-6 py-3 rounded-lg shadow-lg flex items-center w-[90vw] max-w-xs sm:max-w-md ${
                             verificationStatus === 'success' 
                                 ? 'bg-green-100 border border-green-400 text-green-700' 
                                 : verificationStatus === 'resent'

@@ -109,7 +109,7 @@ const ForgotPasswordPage = () => {
                         animate="visible"
                         exit="exit"
                     >
-                        <div className={`px-6 py-3 rounded-lg shadow-lg flex items-center ${
+                        <div className={`px-6 py-3 rounded-lg shadow-lg flex items-center w-[90vw] max-w-xs sm:max-w-md${
                             submissionStatus === 'success' 
                                 ? 'bg-green-100 border border-green-400 text-green-700' 
                                 : 'bg-red-100 border border-red-400 text-red-700'
@@ -194,7 +194,7 @@ const ForgotPasswordPage = () => {
                                     htmlFor="email"
                                     className={`absolute left-0 text-gray-500 transition-all duration-200 pointer-events-none
                                         ${formik.values.email ? 
-                                        'text-[#4D2C5E] text-xs sm:text-sm -translate-y-5' : 
+                                        'text-[#4D2C5E] text-xs sm:text-sm -translate-y-3' : 
                                         'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
                                     `}
                                 >

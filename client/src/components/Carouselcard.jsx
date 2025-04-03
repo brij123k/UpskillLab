@@ -1,7 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
-import { NavLink } from 'react-router-dom';
-const TextCarousel = ({ slides }) => {
+import VideoModal from './Modal/VideoModal';
+import {useVideoModal} from './Modal/LandingVideoModal';
+
+const TextCarousel = ({ slides, autoPlayVideo = false }) => {
+  const {
+    isVideoModalOpen,
+    videoSrc,
+    openVideoModal,
+    closeVideoModal,
+    hasAutoPlayed
+  } = useVideoModal();
+  
+  const demoVideoUrl = "https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&mute=1";
+
+  // Auto-play video on component mount if enabled
+  useEffect(() => {
+    if (autoPlayVideo && !hasAutoPlayed) {
+      openVideoModal(demoVideoUrl, true);
+    }
+  }, [autoPlayVideo, hasAutoPlayed, openVideoModal]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(null);
   const carouselRef = useRef(null);
@@ -170,6 +188,21 @@ const TextCarousel = ({ slides }) => {
             >
               {slides[currentIndex].description}
             </motion.p>
+
+            <motion.button
+              onClick={() => openVideoModal(demoVideoUrl)}
+              custom={2}
+              initial="hidden"
+              animate="visible"
+              variants={textVariants}
+              className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg hover:bg-[#7B4B9E] transition-colors flex items-center cursor-pointer w-fit"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              Watch Demo
+            </motion.button>
           </div>
 
           {/* Image - Right on desktop, top on mobile */}
@@ -180,7 +213,7 @@ const TextCarousel = ({ slides }) => {
               className="relative h-[200px] md:h-full w-full flex items-center justify-center"
             >
               <motion.img
-                src={`/${slides[currentIndex].image}`}
+                src={slides[currentIndex].image}
                 alt={slides[currentIndex].heading}
                 className="h-full w-auto object-contain mix-blend-multiply"
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -209,11 +242,23 @@ const TextCarousel = ({ slides }) => {
           />
         ))}
       </div>
+
+      {/* Video Modal */}
+      <VideoModal
+        isOpen={isVideoModalOpen}
+        onClose={closeVideoModal}
+        videoSrc={videoSrc}
+        title="Product Demo"
+        autoPlay={true}
+        showControls={true}
+      />
+      
     </motion.div>
+
+    
   );
 };
 
-// Sample data
 const carouselSlides = [
   {
     heading: "Transform Your Career",
@@ -238,7 +283,7 @@ const carouselSlides = [
 const CarouselContainer = () => {
   return (
     <div className="w-full">
-      <TextCarousel slides={carouselSlides} />
+      <TextCarousel slides={carouselSlides} autoPlayVideo={true} />
     </div>
   );
 };

@@ -16,11 +16,18 @@ import StudentTestimonials from '../../components/testimonial/StudentsTestimonia
 import AdmissionForm from '../../components/Forms/AdmissionForm'
 import { Faqs } from '../../data';
 import { NavLink } from 'react-router-dom';
+// import VideoModal from '../../components/Modal/VideoModal';
+// import { LandingVideoModal } from '../../components/Modal/LandingVideoModal';
 function Home() {
   const controls = useAnimation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, margin: "-100px" });
-
+//   const {
+//     isVideoModalOpen,
+//     videoSrc,
+//     openVideoModal,
+//     closeVideoModal
+// } = LandingVideoModal();
   useEffect(() => {
     if (isInView) {
       controls.start("visible");
@@ -297,9 +304,17 @@ function Home() {
         </div>
       </div>
     </div>
-            {/* 
-            {/* <PremiumLearning /> 
-            */}
+      
+      {/* Video Modal */}
+      {/* <VideoModal
+                isOpen={isVideoModalOpen}
+                onClose={closeVideoModal}
+                videoSrc={videoSrc}
+                title="Product Demo"
+                autoPlay={true}
+                showControls={true}
+            /> */}
+
           
         </>
     )
