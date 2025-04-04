@@ -188,7 +188,6 @@ export const getDataHandler = async (endPoint, query, data) => {
       data: data,
       params: query,
     });
-    console.log("ddfjd", res);
 
 
     if (res?.status === 200) {

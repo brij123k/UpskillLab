@@ -20,7 +20,7 @@ const ForgotPasswordPage = lazy(() => import("./pages/Auth/ForgetPassword"));
 const ResetPasswordPage = lazy(() => import("./pages/Auth/ResetPassword"));
 const VerifyOTPPage = lazy(() => import("./pages/Auth/VerifyOTP"));
 const NotFoundPage = lazy(() => import("./pages/NotFound"));
-const CourseDetailsPage = lazy(() => import("./pages/Frontend/CourseDetails"));
+const CourseDetailsPage = lazy(() => import("./pages/Frontend/CourseDetail"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 

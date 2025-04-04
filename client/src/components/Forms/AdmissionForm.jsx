@@ -4,32 +4,58 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
+import {
+  validateFullName,
+  validateEmail,
+  validatePhone,
+  validateCourse,
+  validateStudentType
+} from '../Validations';
+
+
 const AdmissionForm = () => {
-  // Form validation schema
+  // Form validation schema using external validators
   const validationSchema = Yup.object().shape({
     fullName: Yup.string()
-      .required('Full name is required')
-      .min(3, 'Name must be at least 3 characters'),
+      .required('Required')
+      .test('fullname-validation', function(value) {
+        const error = validateFullName(value);
+        return error ? this.createError({ message: error }) : true;
+      }),
     email: Yup.string()
-      .email('Invalid email address')
-      .required('Email is required'),
+      .required('Required')
+      .test('email-validation', function(value) {
+        const error = validateEmail(value);
+        return error ? this.createError({ message: error }) : true;
+      }),
     phone: Yup.string()
-      .matches(/^[0-9]{10}$/, 'Phone number must be 10 digits')
-      .required('Phone number is required'),
+      .required('Required')
+      .test('phone-validation', function(value) {
+        const error = validatePhone(value);
+        return error ? this.createError({ message: error }) : true;
+      }),
     course: Yup.string()
-      .required('Course selection is required'),
-    studentType: Yup.array()
-      .min(1, 'Please select at least one option')
+      .required('Required')
+      .test('course-validation', function(value) {
+        const error = validateCourse(value);
+        return error ? this.createError({ message: error }) : true;
+      }),
+    studentType: Yup.string()
+      .required('Please select a student type')
+      .test('student-type-validation', function(value) {
+        const error = validateStudentType(value);
+        return error ? this.createError({ message: error }) : true;
+      })
   });
 
-  // Formik hook
+  // Rest of your component remains exactly the same...
   const formik = useFormik({
     initialValues: {
       fullName: '',
       email: '',
       phone: '',
       course: '',
-      studentType: []
+      studentType: ''
     },
     validationSchema,
     onSubmit: (values) => {
@@ -39,7 +65,7 @@ const AdmissionForm = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8" id='AdmissionForm'>
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -56,7 +82,7 @@ const AdmissionForm = () => {
           </p>
         </div>
 
-        <div className="flex flex-col lg:flex-row gap-8" id='AdmissionForm'>
+        <div className="flex flex-col lg:flex-row gap-8">
           {/* Info Section */}
           <motion.div 
             initial={{ opacity: 0, x: 20 }}
@@ -135,6 +161,7 @@ const AdmissionForm = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="w-full lg:w-1/2"
+            id='AdmissionForm'
           >
             <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
               <h2 className="text-2xl font-bold text-[#4D2C5E] mb-6">Application Form</h2>
@@ -226,37 +253,37 @@ const AdmissionForm = () => {
 
                 {/* Student Type Checkboxes */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    I am a: <span className="text-[#FF7426]">*</span>
-                  </label>
-                  <div className="space-y-2">
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        name="studentType"
-                        value="fresher"
-                        onChange={formik.handleChange}
-                        checked={formik.values.studentType.includes('fresher')}
-                        className="h-4 w-4 text-[#4D2C5E] focus:ring-[#FF7426] border-gray-300 rounded"
-                      />
-                      <span className="ml-2 text-gray-700">Fresher</span>
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        name="studentType"
-                        value="working"
-                        onChange={formik.handleChange}
-                        checked={formik.values.studentType.includes('working')}
-                        className="h-4 w-4 text-[#4D2C5E] focus:ring-[#FF7426] border-gray-300 rounded"
-                      />
-                      <span className="ml-2 text-gray-700">Working Professional</span>
-                    </label>
-                  </div>
-                  {formik.errors.studentType && (
-                    <div className="text-red-500 text-sm mt-1">{formik.errors.studentType}</div>
-                  )}
-                </div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    I am a: <span className="text-[#FF7426]">*</span>
+  </label>
+  <div className="space-y-2">
+    <label className="flex items-center">
+      <input
+        type="radio"
+        name="studentType"
+        value="fresher"
+        onChange={formik.handleChange}
+        checked={formik.values.studentType === 'fresher'}
+        className="h-4 w-4 text-[#4D2C5E] focus:ring-[#FF7426] border-gray-300 rounded"
+      />
+      <span className="ml-2 text-gray-700">Fresher</span>
+    </label>
+    <label className="flex items-center">
+      <input
+        type="radio"
+        name="studentType"
+        value="working"
+        onChange={formik.handleChange}
+        checked={formik.values.studentType === 'working'}
+        className="h-4 w-4 text-[#4D2C5E] focus:ring-[#FF7426] border-gray-300 rounded"
+      />
+      <span className="ml-2 text-gray-700">Working Professional</span>
+    </label>
+  </div>
+  {formik.errors.studentType && (
+    <div className="text-red-500 text-sm mt-1">{formik.errors.studentType}</div>
+  )}
+</div>
 
                 {/* Submit Button */}
                 <motion.button

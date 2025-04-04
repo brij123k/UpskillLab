@@ -189,7 +189,7 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
               {slides[currentIndex].description}
             </motion.p>
             <div className='flex flex-col sm:flex-row gap-4 w-full'>
-  <NavLink to='/Contactus' className='w-full sm:w-auto'>
+  <a href='#AdmissionForm' className='w-full sm:w-auto'>
     <motion.button
       custom={2}
       initial="hidden"
@@ -232,7 +232,7 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
       </motion.span>
       Get In Touch
     </motion.button>
-  </NavLink>
+  </a>
   
   <motion.button
     onClick={() => openVideoModal(demoVideoUrl)}

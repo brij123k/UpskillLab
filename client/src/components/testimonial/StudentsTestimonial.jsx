@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { use, useState,useEffect } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { motion } from 'framer-motion';
-
+import { getDataHandler } from '../../config/services';
 const TestimonialCard = ({ 
   imageUrl, 
   name, 
@@ -156,7 +156,24 @@ const TestimonialCard = ({
 
 const StudentTestimonials = () => {
   const [activeItem, setActiveItem] = useState(0);
-  
+  const [successStory,setSuccessStory] = useState([]);
+
+  const handelSuccessStory = async () => {
+    const res= await getDataHandler("successStroy")
+    if(res){
+      const newsuccessStorys =res.stories.map((story,index)=>({
+        id:index+1,
+        imageUrl:story.userImageUrl,
+        name:story.name,
+        message:story.description,
+        companyLogoUrl:story.companyLogoUrl
+      }));
+      setSuccessStory(newsuccessStorys);
+    }
+  }
+  useEffect(() => {
+    handelSuccessStory()
+  }, []);
   const responsive = {
     xxl: { breakpoint: { max: 4000, min: 1920 }, items: 4 },
     xl: { breakpoint: { max: 1920, min: 1536 }, items: 3 },
@@ -167,50 +184,50 @@ const StudentTestimonials = () => {
     xs: { breakpoint: { max: 640, min: 0 }, items: 1 }
   };
 
-  const testimonials = [
-    {
-      id: 1,
-      imageUrl: "./images/Rectangle 33.png",
-      name: "John Doe",
-      message: "I'm incredibly grateful for the opportunity to work with such an amazing team. The support and guidance I received were instrumental in my success.",
-      companyLogoUrl: "./images/company4.svg"
-    },
-    {
-      id: 2,
-      imageUrl: "./images/Rectangle 33.png",
-      name: "Jane Smith",
-      message: "This program transformed my career. The practical knowledge I gained helped me secure my dream job in just 3 months!",
-      companyLogoUrl: "./images/company5.svg"
-    },
-    {
-      id: 3,
-      imageUrl: "./images/Rectangle 33.png",
-      name: "Robert Johnson",
-      message: "The mentorship and hands-on projects gave me the confidence to excel in my field. Highly recommend to anyone looking to upskill.",
-      companyLogoUrl: "./images/company6.svg"
-    },
-    {
-      id: 4,
-      imageUrl: "./images/Rectangle 33.png",
-      name: "Sarah Williams",
-      message: "The curriculum was perfectly structured with real-world applications. I went from beginner to job-ready in record time.",
-      companyLogoUrl: "./images/company7.svg"
-    },
-    {
-      id: 5,
-      imageUrl: "./images/Rectangle 33.png",
-      name: "Michael Brown",
-      message: "Exceptional learning experience with industry-relevant projects that helped me build a strong portfolio.",
-      companyLogoUrl: "./images/company8.svg"
-    },
-    {
-      id: 6,
-      imageUrl: "./images/Rectangle 33.png",
-      name: "Emily Davis",
-      message: "The career support team was phenomenal. They helped me negotiate a 30% higher salary than I expected!",
-      companyLogoUrl: "./images/company9.svg"
-    }
-  ];
+  // const testimonials = [
+  //   {
+  //     id: 1,
+  //     imageUrl: "./images/Rectangle 33.png",
+  //     name: "John Doe",
+  //     message: "I'm incredibly grateful for the opportunity to work with such an amazing team. The support and guidance I received were instrumental in my success.",
+  //     companyLogoUrl: "./images/company4.svg"
+  //   },
+  //   {
+  //     id: 2,
+  //     imageUrl: "./images/Rectangle 33.png",
+  //     name: "Jane Smith",
+  //     message: "This program transformed my career. The practical knowledge I gained helped me secure my dream job in just 3 months!",
+  //     companyLogoUrl: "./images/company5.svg"
+  //   },
+  //   {
+  //     id: 3,
+  //     imageUrl: "./images/Rectangle 33.png",
+  //     name: "Robert Johnson",
+  //     message: "The mentorship and hands-on projects gave me the confidence to excel in my field. Highly recommend to anyone looking to upskill.",
+  //     companyLogoUrl: "./images/company6.svg"
+  //   },
+  //   {
+  //     id: 4,
+  //     imageUrl: "./images/Rectangle 33.png",
+  //     name: "Sarah Williams",
+  //     message: "The curriculum was perfectly structured with real-world applications. I went from beginner to job-ready in record time.",
+  //     companyLogoUrl: "./images/company7.svg"
+  //   },
+  //   {
+  //     id: 5,
+  //     imageUrl: "./images/Rectangle 33.png",
+  //     name: "Michael Brown",
+  //     message: "Exceptional learning experience with industry-relevant projects that helped me build a strong portfolio.",
+  //     companyLogoUrl: "./images/company8.svg"
+  //   },
+  //   {
+  //     id: 6,
+  //     imageUrl: "./images/Rectangle 33.png",
+  //     name: "Emily Davis",
+  //     message: "The career support team was phenomenal. They helped me negotiate a 30% higher salary than I expected!",
+  //     companyLogoUrl: "./images/company9.svg"
+  //   }
+  // ];
 
   const ButtonGroup = ({ next, previous }) => {
     return (
@@ -275,7 +292,7 @@ const StudentTestimonials = () => {
             arrows={false}
             renderButtonGroupOutside={true}
           >
-            {testimonials.map((testimonial, index) => (
+            {successStory.map((testimonial, index) => (
               <div key={testimonial.id} className="h-full py-4">
                 <TestimonialCard
                   imageUrl={testimonial.imageUrl}

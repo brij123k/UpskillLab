@@ -1,6 +1,8 @@
+import React,{useState,useEffect} from 'react';
 import { motion } from 'framer-motion';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import { getDataHandler } from '../../config/services';
 import { 
   FiBriefcase, 
   FiPenTool, 
@@ -13,56 +15,75 @@ import {
 } from 'react-icons/fi';
 
 const CategoryCarousel = () => {
-  const categories = [
-    {
-      title: 'Business',
-      icon: <FiBriefcase size={32} />,
-      image: 'https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      color: '#4d2c5e'
-    },
-    {
-      title: 'Design',
-      icon: <FiPenTool size={32} />,
-      image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      color: '#FF7426'
-    },
-    {
-      title: 'Development',
-      icon: <FiCode size={32} />,
-      image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      color: '#4d2c5e'
-    },
-    {
-      title: 'Marketing',
-      icon: <FiBarChart2 size={32} />,
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      color: '#FF7426'
-    },
-    {
-      title: 'Photography',
-      icon: <FiCamera size={32} />,
-      image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      color: '#4d2c5e'
-    },
-    {
-      title: 'Media',
-      icon: <FiMic size={32} />,
-      image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      color: '#FF7426'
-    },
-    {
-      title: 'Music',
-      icon: <FiMusic size={32} />,
-      image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      color: '#4d2c5e'
-    },
-    {
-      title: 'Film',
-      icon: <FiFilm size={32} />,
-      image: 'https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      color: '#FF7426'
-    }
-  ];
+const colorPalette = ['#FF7426', '#4D2C5E'];
+const [categories, setCategories] = useState([]);
+const handelCategories = async () => {
+  const res=await getDataHandler('category');
+  if(res){
+    const newCategories = res.data.map((category,index) => ({
+      id: index+1,
+      title: category.categoryName,
+      image: category.categoryImage,
+      color: colorPalette[index % colorPalette.length],
+  }))
+  setCategories(newCategories);
+}
+}
+
+useEffect(() => {
+  handelCategories();
+},[]);
+
+// const categories = [
+  //   {
+  //     title: 'Business',
+  //     icon: <FiBriefcase size={32} />,
+  //     image: 'https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+  //     color: '#4d2c5e'
+  //   },
+  //   {
+  //     title: 'Design',
+  //     icon: <FiPenTool size={32} />,
+  //     image: 'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+  //     color: '#FF7426'
+  //   },
+  //   {
+  //     title: 'Development',
+  //     icon: <FiCode size={32} />,
+  //     image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+  //     color: '#4d2c5e'
+  //   },
+  //   {
+  //     title: 'Marketing',
+  //     icon: <FiBarChart2 size={32} />,
+  //     image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+  //     color: '#FF7426'
+  //   },
+  //   {
+  //     title: 'Photography',
+  //     icon: <FiCamera size={32} />,
+  //     image: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+  //     color: '#4d2c5e'
+  //   },
+  //   {
+  //     title: 'Media',
+  //     icon: <FiMic size={32} />,
+  //     image: 'https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+  //     color: '#FF7426'
+  //   },
+  //   {
+  //     title: 'Music',
+  //     icon: <FiMusic size={32} />,
+  //     image: 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+  //     color: '#4d2c5e'
+  //   },
+  //   {
+  //     title: 'Film',
+  //     icon: <FiFilm size={32} />,
+  //     image: 'https://images.unsplash.com/photo-1518676590629-3dcbd9c5a5c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+  //     color: '#FF7426'
+  //   }
+  // ];
 
   const responsive = {
     superLargeDesktop: {

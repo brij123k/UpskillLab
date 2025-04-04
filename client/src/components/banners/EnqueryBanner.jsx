@@ -142,7 +142,7 @@ const EnqueryBanner = () => {
                 boxShadow: "0 10px 25px -5px rgba(255, 116, 38, 0.4)"
               }}
               whileTap={{ scale: 0.95 }}
-              className="bg-[#FF7426] text-white px-8 py-3 rounded-lg font-semibold text-lg shadow-md hover:shadow-lg transition-all m-auto cursor-pointer relative overflow-hidden cursor-pointer"
+              className="bg-[#FF7426] text-white px-8 py-3 rounded-lg font-semibold text-lg shadow-md hover:shadow-lg transition-all m-auto cursor-pointer relative overflow-hidden"
               variants={itemVariants}
             >
               <motion.span

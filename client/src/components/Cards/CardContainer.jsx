@@ -158,17 +158,23 @@ const CardsContainer = () => {
 
   return (
     <div className="max-w-7xl mx-auto mt-10">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8 }}
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
-            >
-              {features.map((feature, index) => (
-                <MentorshipCard key={index} {...feature} />
-              ))}
-            </motion.div>
-          </div>
+  <motion.div
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    transition={{ duration: 0.8 }}
+    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+  >
+    {/* Always render all items but hide some on mobile */}
+    {features.map((feature, index) => (
+      <div 
+        key={index}
+        className={`${index >= 3 ? 'hidden md:block' : ''}`}
+      >
+        <MentorshipCard {...feature} />
+      </div>
+    ))}
+  </motion.div>
+</div>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import TrainingBanner from '../../components/banners/TrainingBanner';
 import FeedbaackBanner from '../../components/banners/FeedbackBanner';
 import { FiFilter, FiX, FiChevronDown, FiChevronUp } from 'react-icons/fi';
@@ -42,6 +42,7 @@ const imageVariants = {
 };
 
 const CourseList = () => {
+   const navigation = useNavigate()
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
 
@@ -63,9 +64,7 @@ const CourseList = () => {
     const [filters, setFilters] = useState({
         category: '',
         level: '',
-        instructor: '',
         language: '',
-        priceRange: ''
     });
 
     const [dropdownOpen, setDropdownOpen] = useState(null);
@@ -74,16 +73,7 @@ const CourseList = () => {
     const filterOptions = {
         category: [...new Set(allCourses.map(course => course.category))],
         level: [...new Set(allCourses.map(course => course.level))],
-        instructor: [...new Set(allCourses.map(course => course.instructor))],
-        language: [...new Set(allCourses.map(course => course.language))],
-        priceRange: [
-            { label: "All Prices", value: "" },
-            { label: "Free", value: "Free" },
-            { label: "Under $100", value: "0-100" },
-            { label: "$100-$200", value: "100-200" },
-            { label: "$200-$300", value: "200-300" },
-            { label: "Over $300", value: "300-1000" }
-        ]
+        language: [...new Set(allCourses.map(course => course.language))]
     };
 
     const toggleDropdown = (filterName) => {
@@ -99,9 +89,8 @@ const CourseList = () => {
         setFilters({
             category: '',
             level: '',
-            instructor: '',
             language: '',
-            priceRange: ''
+            // priceRange: ''
         });
     };
 
@@ -109,14 +98,8 @@ const CourseList = () => {
         return (
             (!filters.category || course.category === filters.category) &&
             (!filters.level || course.level === filters.level) &&
-            (!filters.instructor || course.instructor === filters.instructor) &&
-            (!filters.language || course.language === filters.language) &&
-            (!filters.priceRange || (
-                filters.priceRange === '0-100' && course.originalPrice < 100 ||
-                filters.priceRange === '100-200' && course.originalPrice >= 100 && course.originalPrice <= 200 ||
-                filters.priceRange === '200-300' && course.originalPrice > 200 && course.originalPrice <= 300 ||
-                filters.priceRange === '300-1000' && course.originalPrice > 300
-            ))
+            (!filters.language || course.language === filters.language)
+
         );
     });
 
@@ -130,12 +113,8 @@ const CourseList = () => {
                     if (value === 'Beginner') return 'bg-blue-100/80 text-blue-800 border-blue-200';
                     if (value === 'Intermediate') return 'bg-purple-100/80 text-purple-800 border-purple-200';
                     return 'bg-[#FF7426]/20 text-[#FF7426] border-[#FF7426]/30';
-                case 'instructor':
-                    return 'bg-[#7B4B9E]/10 text-[#4D2C5E] border-[#7B4B9E]/30';
                 case 'language':
                     return 'bg-[#FF7426]/10 text-[#FF7426] border-[#FF7426]/30';
-                case 'priceRange':
-                    return 'bg-[#4D2C5E]/10 text-[#4D2C5E] border-[#4D2C5E]/30';
                 default:
                     return 'bg-gray-100 text-gray-700 border-gray-300';
             }
@@ -319,7 +298,7 @@ const CourseList = () => {
                         whileHover={{ scale: 1.05 }}
                         className="hidden sm:flex items-center space-x-2"
                     >
-                        {(filters.category || filters.level || filters.instructor || filters.language || filters.priceRange) && (
+                        {(filters.category || filters.level || filters.language) && (
                             <button
                                 onClick={resetFilters}
                                 className="text-sm text-[#FF7426] hover:underline flex items-center"
@@ -340,13 +319,13 @@ const CourseList = () => {
                 >
                     <DropdownFilter title="category" label="Category" />
                     <DropdownFilter title="level" label="Level" />
-                    <DropdownFilter title="instructor" label="Instructor" />
+                    {/* <DropdownFilter title="instructor" label="Instructor" /> */}
                     <DropdownFilter title="language" label="Language" />
-                    <DropdownFilter title="priceRange" label="Price" />
+                    {/* <DropdownFilter title="priceRange" label="Price" /> */}
                 </motion.div>
 
                 {/* Active Filters */}
-                {(filters.category || filters.level || filters.instructor || filters.language || filters.priceRange) && (
+                {(filters.category || filters.level|| filters.language) && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -471,8 +450,9 @@ const CourseList = () => {
                     
                         {/* Action Buttons Section */}
                         <div className="px-6 pb-6 pt-0 flex justify-between gap-3">
-                            <NavLink
-                                to={`/CourseDetails/${course.id}`}
+                            <div
+                                // to={`/CourseDetails/${course.id}`}
+                                onClick={()=>{navigation(`/CourseDetails/${course.id}`,state={rishabh:"myname is rishabh"})}}
                                 className="flex-1 text-center text-[#4D2C5E] font-medium hover:underline flex items-center justify-center py-2 border border-[#4D2C5E]/30 rounded-lg hover:bg-[#4D2C5E]/5 transition-colors cursor-pointer"
                             >
                                 View Details
@@ -485,7 +465,7 @@ const CourseList = () => {
                                 >
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                 </motion.svg>
-                            </NavLink>
+                            </div>
                             
                             <motion.button
                                 whileHover={{ 
