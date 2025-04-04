@@ -33,7 +33,7 @@ const VideoModal = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="fixed inset-0 z-50 flex items-end justify-end p-4"
+          className="fixed inset-0 z-50 flex items-end justify-center sm:justify-end p-4"
         >
           {/* Backdrop without click handler */}
           <motion.div

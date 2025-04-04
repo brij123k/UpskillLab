@@ -181,7 +181,7 @@ import { FiSend, FiUser, FiMail, FiMessageSquare } from "react-icons/fi";
 const ContactForm = () => {
   return (
     <motion.div
-      className="bg-white rounded-2xl shadow-xl overflow-hidden border-4 border-[#FF7426]/20"
+      className=" bg-white rounded-2xl shadow-xl overflow-hidden border-4 border-[#FF7426]/20"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       whileHover={{
@@ -323,7 +323,7 @@ const ContactForm = () => {
 
       {/* Decorative elements */}
       <motion.div
-        className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-[#FF7426]/10"
+        className="absolute -bottom-4 right-4 w-24 h-24 rounded-full bg-[#FF7426]/10"
         animate={{
           scale: [1, 1.1, 1],
           transition: { repeat: Infinity, duration: 6 }
@@ -374,7 +374,7 @@ const ContactPage = () => {
 >
   {/* Decorative elements */}
   <motion.div
-    className="absolute top-0 left-0 w-full h-full"
+    className="absolute top-0 left-0 w-full h-full overflow-hidden"
     initial={{ opacity: 0 }}
     animate={{ opacity: 0.1 }}
     transition={{ duration: 1.5 }}

@@ -105,7 +105,7 @@ const PurchaseModal = ({ course, isOpen, onClose, onPurchase }) => {
                     </div>
                 </motion.div>
 
-                {/* Payment Options */}
+                {/* Payment Options
                 <motion.div 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -170,7 +170,7 @@ const PurchaseModal = ({ course, isOpen, onClose, onPurchase }) => {
                             </div>
                         </motion.div>
                     )}
-                </motion.div>
+                </motion.div> */}
 
                 {/* Terms and Purchase Button */}
                 <motion.div 
@@ -209,7 +209,7 @@ const PurchaseModal = ({ course, isOpen, onClose, onPurchase }) => {
                                 : 'bg-gray-400 cursor-not-allowed'
                         }`}
                     >
-                        Complete Purchase - ${course.discountedPrice}
+                        Add To Cart - ${course.discountedPrice}
                     </motion.button>
                 </motion.div>
             </div>

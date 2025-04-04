@@ -53,7 +53,7 @@ const CourseDetailsPage = () => {
     { id: 'faq', label: 'FAQ' },
     { id: 'brochure', label: 'Download Brochure' },
     { id: 'certificate', label: 'Certificate' },
-    { id: 'job', label: 'Jobs' }
+    // { id: 'job', label: 'Jobs' }
   ];
 
   if (loading) {
@@ -172,83 +172,83 @@ const CourseDetailsPage = () => {
           </div>
         )
       },
-      job: {
-        content: (
-          <div>
-            <h3 className="text-xl font-bold mb-6 text-[#4D2C5E]">Related Job Opportunities</h3>
-            <div className="space-y-6">
-              {[
-                {
-                  title: `${courseData.category} Developer`,
-                  companies: ["TechCorp", "DevSolutions", "InnovateX"],
-                  salary: "$80,000 - $120,000",
-                  skills: courseData.tags.slice(0, 3).concat("Problem Solving", "Teamwork")
-                },
-                {
-                  title: `Senior ${courseData.category} Engineer`,
-                  companies: ["DigitalSystems", "WebCraft"],
-                  salary: "$100,000 - $150,000",
-                  skills: courseData.tags.concat("Leadership", "System Design")
-                },
-                {
-                  title: `${courseData.category} Consultant`,
-                  companies: ["GlobalTech", "ITPartners"],
-                  salary: "$90,000 - $130,000",
-                  skills: courseData.tags.slice(0, 2).concat("Communication", "Client Management")
-                }
-              ].map((job, index) => (
-                <motion.div 
-                  key={index}
-                  whileHover={{ y: -5 }}
-                  className="border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
-                >
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-                    <div>
-                      <h4 className="text-lg font-bold text-[#4D2C5E]">{job.title}</h4>
-                      <p className="text-gray-600 mt-1">
-                        Hiring Companies: {job.companies.join(", ")}
-                      </p>
-                      <p className="text-[#FF7426] font-medium mt-2">{job.salary}</p>
-                    </div>
-                    <div>
-                      <div className="flex flex-wrap gap-2 mt-2 md:mt-0">
-                        {job.skills.map((skill, i) => (
-                          <span 
-                            key={i}
-                            className="px-3 py-1 bg-[#4D2C5E]/10 text-[#4D2C5E] text-sm rounded-full"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <button className="mt-4 text-[#FF7426] font-medium flex items-center">
-                    View Details
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </button>
-                </motion.div>
-              ))}
-            </div>
+      // job: {
+      //   content: (
+      //     <div>
+      //       <h3 className="text-xl font-bold mb-6 text-[#4D2C5E]">Related Job Opportunities</h3>
+      //       <div className="space-y-6">
+      //         {[
+      //           {
+      //             title: `${courseData.category} Developer`,
+      //             companies: ["TechCorp", "DevSolutions", "InnovateX"],
+      //             salary: "$80,000 - $120,000",
+      //             skills: courseData.tags.slice(0, 3).concat("Problem Solving", "Teamwork")
+      //           },
+      //           {
+      //             title: `Senior ${courseData.category} Engineer`,
+      //             companies: ["DigitalSystems", "WebCraft"],
+      //             salary: "$100,000 - $150,000",
+      //             skills: courseData.tags.concat("Leadership", "System Design")
+      //           },
+      //           {
+      //             title: `${courseData.category} Consultant`,
+      //             companies: ["GlobalTech", "ITPartners"],
+      //             salary: "$90,000 - $130,000",
+      //             skills: courseData.tags.slice(0, 2).concat("Communication", "Client Management")
+      //           }
+      //         ].map((job, index) => (
+      //           <motion.div 
+      //             key={index}
+      //             whileHover={{ y: -5 }}
+      //             className="border border-gray-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow"
+      //           >
+      //             <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+      //               <div>
+      //                 <h4 className="text-lg font-bold text-[#4D2C5E]">{job.title}</h4>
+      //                 <p className="text-gray-600 mt-1">
+      //                   Hiring Companies: {job.companies.join(", ")}
+      //                 </p>
+      //                 <p className="text-[#FF7426] font-medium mt-2">{job.salary}</p>
+      //               </div>
+      //               <div>
+      //                 <div className="flex flex-wrap gap-2 mt-2 md:mt-0">
+      //                   {job.skills.map((skill, i) => (
+      //                     <span 
+      //                       key={i}
+      //                       className="px-3 py-1 bg-[#4D2C5E]/10 text-[#4D2C5E] text-sm rounded-full"
+      //                     >
+      //                       {skill}
+      //                     </span>
+      //                   ))}
+      //                 </div>
+      //               </div>
+      //             </div>
+      //             <button className="mt-4 text-[#FF7426] font-medium flex items-center">
+      //               View Details
+      //               <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      //                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+      //               </svg>
+      //             </button>
+      //           </motion.div>
+      //         ))}
+      //       </div>
             
-            <div className="mt-8 bg-[#4D2C5E]/5 p-6 rounded-xl border border-[#4D2C5E]/10">
-              <h4 className="text-lg font-bold text-[#4D2C5E] mb-3">Career Guidance</h4>
-              <p className="mb-4">Completing this course prepares you for these exciting career paths. Our career services team can help with:</p>
-              <ul className="list-disc pl-5 space-y-2">
-                <li>Resume and LinkedIn profile optimization</li>
-                <li>Interview preparation and mock interviews</li>
-                <li>Job search strategies</li>
-                <li>Connections to our hiring partners</li>
-              </ul>
-              <button className="mt-4 bg-[#FF7426] text-white px-4 py-2 rounded-lg font-medium">
-                Connect with Career Counselor
-              </button>
-            </div>
-          </div>
-        )
-      },
+      //       <div className="mt-8 bg-[#4D2C5E]/5 p-6 rounded-xl border border-[#4D2C5E]/10">
+      //         <h4 className="text-lg font-bold text-[#4D2C5E] mb-3">Career Guidance</h4>
+      //         <p className="mb-4">Completing this course prepares you for these exciting career paths. Our career services team can help with:</p>
+      //         <ul className="list-disc pl-5 space-y-2">
+      //           <li>Resume and LinkedIn profile optimization</li>
+      //           <li>Interview preparation and mock interviews</li>
+      //           <li>Job search strategies</li>
+      //           <li>Connections to our hiring partners</li>
+      //         </ul>
+      //         <button className="mt-4 bg-[#FF7426] text-white px-4 py-2 rounded-lg font-medium">
+      //           Connect with Career Counselor
+      //         </button>
+      //       </div>
+      //     </div>
+      //   )
+      // },
       brochure: {
         content: (
           <div className="text-center">
