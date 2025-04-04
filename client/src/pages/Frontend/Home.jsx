@@ -62,7 +62,7 @@ function Home() {
     return (
         <>
       
-            <div>
+            <div className='min-h-fit'>
                 <CarouselContainer />
             </div>
             <div className="bg-[url('/images/bgStars.png')] bg-cover bg-center px-8">

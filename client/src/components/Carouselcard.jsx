@@ -117,7 +117,7 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
   return (
     <motion.div 
       ref={carouselRef}
-      className="relative w-full h-[500px] overflow-hidden bg-[#FDF8EE]"
+      className="relative w-full h-[600px] overflow-hidden bg-[#FDF8EE]"
       initial="hidden"
       animate={isInView ? "visible" : "exit"}
       variants={viewportVariants}
@@ -188,8 +188,8 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
             >
               {slides[currentIndex].description}
             </motion.p>
-            <div className='flex flex-row gap-4'>
-  <NavLink to='/Contactus'>
+            <div className='flex flex-col sm:flex-row gap-4 w-full'>
+  <NavLink to='/Contactus' className='w-full sm:w-auto'>
     <motion.button
       custom={2}
       initial="hidden"
@@ -205,7 +205,7 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
         }
       }}
       whileTap={{ scale: 0.95 }}
-      className="bg-transparent border-2 border-[#4D2C5E] text-[#4D2C5E] px-6 py-3 rounded-lg transition-all flex items-center cursor-pointer w-fit shadow-md hover:shadow-lg"
+      className="bg-transparent border-2 border-[#4D2C5E] text-[#4D2C5E] px-6 py-3 rounded-lg transition-all flex items-center justify-center cursor-pointer w-full sm:w-fit shadow-md hover:shadow-lg"
     >
       <motion.span
         whileHover={{ scale: 1.1 }}
@@ -251,7 +251,7 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
       }
     }}
     whileTap={{ scale: 0.95 }}
-    className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg border-2 border-[#4D2C5E] transition-all flex items-center cursor-pointer w-fit shadow-md hover:shadow-lg"
+    className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg border-2 border-[#4D2C5E] transition-all flex items-center justify-center cursor-pointer w-full sm:w-fit shadow-md hover:shadow-lg"
   >
     <motion.span
       whileHover={{ scale: 1.2 }}
@@ -277,7 +277,7 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
     Watch Demo
   </motion.button>
 </div>
-          </div>
+</div>
 
           {/* Image - Right on desktop, top on mobile */}
           <div className="w-full md:w-1/2 order-1 md:order-2 flex items-center justify-center p-4 md:p-8 2xl:p-12">
@@ -300,7 +300,7 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
       </AnimatePresence>
 
       {/* Navigation Dots */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex gap-2">
+      <div className="hidden absolute bottom-6 left-1/2 transform -translate-x-1/2 lg:flex gap-2">
         {slides.map((_, index) => (
           <motion.button
             key={index}

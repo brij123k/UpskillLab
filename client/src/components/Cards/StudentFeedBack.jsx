@@ -5,7 +5,6 @@ import Card from './Cards';
 import Student from '../../assets/Students.jpg';
 import Course from '../../assets/Course.jpg';
 import Expert from '../../assets/Experts.jpg';
-
 const StudentFeedBack = () => {
   const controls = useAnimation();
   const [ref, inView] = useInView({
@@ -71,7 +70,7 @@ const StudentFeedBack = () => {
   }, [inView, controls]);
 
   return (
-    <div ref={ref} className="w-full px-3 md:px-4 py-6 md:py-8 bg-[#4D2C5E] rounded-2xl overflow-hidden relative">
+    <div ref={ref} className="hidden lg:block w-full px-3 md:px-4 py-6 md:py-8 bg-[#4D2C5E] rounded-2xl overflow-hidden relative">
       {/* Floating decorative elements */}
       {inView && (
         <>

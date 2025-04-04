@@ -315,7 +315,7 @@ function Header() {
                 </div>
             </nav>
 
-            {/* Mobile Drawer */}
+            
 {/* Mobile Drawer */}
 <AnimatePresence>
     {isDrawerOpen && (
@@ -409,7 +409,7 @@ function Header() {
                                                 {category.courses.map((course) => (
                                                     <NavLink
                                                         key={course.id}
-                                                        to={`/courses/${course.id}`}
+                                                        to={`/courseDetails/${course.id}`}
                                                         onClick={() => {
                                                             toggleDrawer();
                                                             setIsCoursesDropdownOpen(false);

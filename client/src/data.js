@@ -643,7 +643,7 @@ export const AllCourses = [
 
 
     // Sample blog data
-export  const blogs = [
+export  const Blogs = [
       {
         id: 1,
         title: "How I Transitioned from Mechanical Engineering to Data Science",

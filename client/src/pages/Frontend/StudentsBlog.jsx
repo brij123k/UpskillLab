@@ -6,7 +6,7 @@ import StudentFeedBack from '../../components/Cards/StudentFeedBack';
 import TrainingBanner from '../../components/banners/TrainingBanner';
 import FeedbaackBanner from '../../components/banners/FeedbackBanner';
 import AdmissionForm from '../../components/Forms/AdmissionForm';
-
+import { Blogs } from '../../data';
 // Blog Card Component
 const BlogCard = ({
   title,
@@ -66,7 +66,7 @@ const BlogCard = ({
 // Main Blog Page Component
 const StudentsBlog = () => {
   // Sample blog data
-  
+  const blogs = Blogs;
 
   return (
     <div className='bg-[#F7F7F7] min-h-screen'>
