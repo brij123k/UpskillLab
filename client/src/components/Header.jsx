@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { NavLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import AdmissionFormModal from "./Modal/BasicEnrollNowModal";
 import { useQuery } from "@tanstack/react-query";
 // import { categoryAPI, courseAPI } from "../config/api-repository";
@@ -55,7 +54,7 @@ function Header() {
     queryKey: ["featuredCourses"],
     queryFn: async () => {
       const courses = await getDataHandler("courseDisplay", null, {
-        limit: 10,
+        limit: 4,
         featured: true,
       });
       return courses.data;
@@ -215,14 +214,14 @@ function Header() {
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             {selectedCategory
                               ? selectedCategory.courses.map((course) => (
-                                  <NavLink
-                                    to={`/courseDetails/${course.id}`}
-                                    key={course.id}
-                                    className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group"
-                                    onClick={() => {
-                                      setIsCoursesDropdownOpen(false);
-                                    }}
-                                  >
+                                <div 
+                                key={course.id}
+                                className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group"
+                                onClick={() => {
+                                  navigate('/courseDetails', { state: { courseId: course.id } });
+                                  setIsCoursesDropdownOpen(false);
+                                }}
+                              >
                                     <div className="flex items-start">
                                       <img
                                         src={course.image}
@@ -235,30 +234,30 @@ function Header() {
                                         </h4>
                                       </div>
                                     </div>
-                                  </NavLink>
+                                  </div>
                                 ))
                               : AllCourses.slice(0, 4).map((course) => (
-                                  <NavLink
-                                    to={`/courseDetails/${course.id}`}
-                                    key={course.id}
-                                    className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group"
-                                    onClick={() => {
-                                      setIsCoursesDropdownOpen(false);
-                                    }}
-                                  >
-                                    <div className="flex items-start">
-                                      <img
-                                        src={course.imageUrl}
-                                        alt={course.title}
-                                        className="w-12 h-12 object-cover rounded-md mr-3 flex-shrink-0"
-                                      />
-                                      <div className="min-w-0">
-                                        <h4 className="font-medium text-gray-800 group-hover:text-[#FF7426] truncate">
-                                          {course.title}
-                                        </h4>
-                                      </div>
-                                    </div>
-                                  </NavLink>
+                                <button 
+                                key={course.id}
+                                className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group"
+                                onClick={() => {
+                                  navigate('/courseDetails', { state: { courseId: course.id } });
+                                  setIsCoursesDropdownOpen(false);
+                                }}
+                              >
+                                <div className="flex items-start">
+                                  <img
+                                    src={course.imageUrl}
+                                    alt={course.title}
+                                    className="w-12 h-12 object-cover rounded-md mr-3 flex-shrink-0"
+                                  />
+                                  <div className="min-w-0">
+                                    <h4 className="font-medium text-gray-800 group-hover:text-[#FF7426] truncate">
+                                      {course.title}
+                                    </h4>
+                                  </div>
+                                </div>
+                              </button>
                                 ))}
                           </div>
                         </div>
@@ -494,10 +493,10 @@ function Header() {
                                   {isCategoryOpen && (
                                     <div className="mt-2 ml-4 space-y-2">
                                       {category.courses.map((course) => (
-                                        <NavLink
+                                        <button
                                           key={course.id}
-                                          to={`/courseDetails/${course.id}`}
                                           onClick={() => {
+                                            navigate('/courseDetails', { state: { courseId: course.id } });
                                             toggleDrawer();
                                             setIsCoursesDropdownOpen(false);
                                           }}
@@ -518,7 +517,7 @@ function Header() {
                                               </p>
                                             </div>
                                           </div>
-                                        </NavLink>
+                                        </button>
                                       ))}
                                     </div>
                                   )}

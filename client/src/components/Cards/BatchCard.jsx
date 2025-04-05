@@ -1,13 +1,14 @@
 import React from "react";
 import { motion } from "framer-motion";
-
+import { useNavigate } from "react-router-dom";
 const BatchCard = ({
-  onViewDetails,
   onEnroll,
   startDate,
   price,
   title,
   batchId,
+  courseId,
+  batchCode,
   batchTime,
   duration,
   mode,
@@ -15,7 +16,7 @@ const BatchCard = ({
   const day = startDate.getDate();
   const month = startDate.toLocaleString("default", { month: "short" });
   const year = startDate.getFullYear();
-
+  const navigate = useNavigate();
   return (
     <motion.div
       className="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-md transition-all flex flex-col h-full cursor-pointer relative"
@@ -121,7 +122,7 @@ const BatchCard = ({
             <div className="w-6 h-6 bg-[#4D2C5E] rounded-full mr-2 flex items-center justify-center text-white">
               🔢
             </div>
-            <span className="text-sm text-[#4D2C5E]">ID: {batchId}</span>
+            <span className="text-sm text-[#4D2C5E]">ID: {batchCode}</span>
           </motion.div>
         </div>
       </div>
@@ -131,7 +132,7 @@ const BatchCard = ({
         <div className="flex justify-between gap-3">
           <motion.button
             className="text-[#4D2C5E] text-sm font-medium px-4 py-2 rounded-md border-2 border-[#4D2C5E] hover:bg-[#4D2C5E] hover:text-white transition-colors flex-1"
-            onClick={onViewDetails}
+            onClick={() => navigate('/courseDetails', { state: { courseId,batchId,batchCode } })}
             whileHover={{
               scale: 1.02,
               boxShadow: "0 2px 8px -1px rgba(77, 44, 94, 0.3)",

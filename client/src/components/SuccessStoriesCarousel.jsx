@@ -1,65 +1,133 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { getDataHandler } from '../config/services';
 const SuccessStoriesCarousel = () => {
+  const [successStories, setSuccessStories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [direction, setDirection] = useState(1);
+  
+    // Auto-rotate stories every 8 seconds
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setDirection(1);
+        setCurrentIndex((prevIndex) => 
+          prevIndex === successStories.length - 1 ? 0 : prevIndex + 1
+        );
+      }, 8000);
+      return () => clearInterval(interval);
+    }, [successStories.length]);
+  
+    const student = successStories[currentIndex];
+
+
+    const handleTransformativeStories = async () => {
+        try {
+          setIsLoading(true);
+          const res = await getDataHandler('successStroy');
+          console.log("Success Stories API response:", res.stories);
+          if (!res || !res.stories) {
+            throw new Error('Invalid API response structure');
+          }
+    
+          const newStory = res.stories.map((item, index) => ({
+            id: index + 1,
+            name: item.name || 'Default Heading',
+            role: item.jobTitle || 'Default Subheading',
+            company: item.companyName || 'Default Company',
+            photo: item.userImageUrl || 'default-image.png',
+            story: item.description || 'Default Story',
+            salaryIncrease: item.salaryIncrease || 'Default description',
+            skills: item.skills || ['Default Skill'],
+            before: item.before || 'Default Before',
+            after: item.after || 'Default After',
+            duration: item.duration || 'Default Subheading'
+          }));
+    
+          setSuccessStories(newStory);
+          setError(null);
+        } catch (err) {
+          console.error("Failed to load banners:", err);
+          setError(err.message);
+          setSuccessStories([]);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+    
+      useEffect(() => {
+        handleTransformativeStories();
+      }, []);
+    
+      if (isLoading) {
+        return (
+          <div className="w-full h-[600px] flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF7426]"></div>
+          </div>
+        );
+      }
+    
+      if (error) {
+        return (
+          <div className="w-full h-[600px] flex items-center justify-center text-red-500">
+            Error loading These Stories: {error}
+            <button 
+              onClick={handleTransformativeStories}
+              className="ml-4 px-4 py-2 bg-[#FF7426] text-white rounded"
+            >
+              Retry
+            </button>
+          </div>
+        );
+      }
+
+
+
   // Sample student success stories data
-  const successStories = [
-    {
-      id: 1,
-      name: "Rahul Sharma",
-      role: "Senior Software Engineer",
-      company: "Microsoft",
-      photo: "https://randomuser.me/api/portraits/men/32.jpg",
-      story: "After completing the Full Stack Development program, I transitioned from a support role to a ₹22 LPA engineering position at Microsoft within 6 months. The hands-on projects and career coaching were game-changers for me.",
-      salaryIncrease: "300%",
-      duration: "6 months",
-      skills: ["React", "Node.js", "AWS"],
-      before: "IT Support Engineer",
-      after: "Senior Software Engineer"
-    },
-    {
-      id: 2,
-      name: "Priya Patel",
-      role: "Data Scientist",
-      company: "Amazon",
-      photo: "https://randomuser.me/api/portraits/women/44.jpg",
-      story: "The Data Science bootcamp gave me the practical skills I needed. I went from analyst to Data Scientist with a 200% salary hike in just 4 months! The real-world datasets we worked with prepared me perfectly for interviews.",
-      salaryIncrease: "200%",
-      duration: "4 months",
-      skills: ["Python", "Machine Learning", "SQL"],
-      before: "Business Analyst",
-      after: "Data Scientist II"
-    },
-    {
-      id: 3,
-      name: "Arjun Singh",
-      role: "Product Manager",
-      company: "Google",
-      photo: "https://randomuser.me/api/portraits/men/67.jpg",
-      story: "The Product Management certification helped me systemize my approach. I now lead a team of 10 PMs at Google after switching from marketing. The capstone project became a key talking point in my interviews.",
-      salaryIncrease: "180%",
-      duration: "8 months",
-      skills: ["Agile", "UX", "Roadmapping"],
-      before: "Marketing Manager",
-      after: "Product Lead"
-    }
-  ];
+  // const successStories = [
+  //   {
+  //     id: 1,
+  //     name: "Rahul Sharma",
+  //     role: "Senior Software Engineer",
+  //     company: "Microsoft",
+  //     photo: "https://randomuser.me/api/portraits/men/32.jpg",
+  //     story: "After completing the Full Stack Development program, I transitioned from a support role to a ₹22 LPA engineering position at Microsoft within 6 months. The hands-on projects and career coaching were game-changers for me.",
+  //     salaryIncrease: "300%",
+  //     duration: "6 months",
+  //     skills: ["React", "Node.js", "AWS"],
+  //     before: "IT Support Engineer",
+  //     after: "Senior Software Engineer"
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Priya Patel",
+  //     role: "Data Scientist",
+  //     company: "Amazon",
+  //     photo: "https://randomuser.me/api/portraits/women/44.jpg",
+  //     story: "The Data Science bootcamp gave me the practical skills I needed. I went from analyst to Data Scientist with a 200% salary hike in just 4 months! The real-world datasets we worked with prepared me perfectly for interviews.",
+  //     salaryIncrease: "200%",
+  //     duration: "4 months",
+  //     skills: ["Python", "Machine Learning", "SQL"],
+  //     before: "Business Analyst",
+  //     after: "Data Scientist II"
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Arjun Singh",
+  //     role: "Product Manager",
+  //     company: "Google",
+  //     photo: "https://randomuser.me/api/portraits/men/67.jpg",
+  //     story: "The Product Management certification helped me systemize my approach. I now lead a team of 10 PMs at Google after switching from marketing. The capstone project became a key talking point in my interviews.",
+  //     salaryIncrease: "180%",
+  //     duration: "8 months",
+  //     skills: ["Agile", "UX", "Roadmapping"],
+  //     before: "Marketing Manager",
+  //     after: "Product Lead"
+  //   }
+  // ];
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
-
-  // Auto-rotate stories every 8 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDirection(1);
-      setCurrentIndex((prevIndex) => 
-        prevIndex === successStories.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 8000);
-    return () => clearInterval(interval);
-  }, [successStories.length]);
-
-  const student = successStories[currentIndex];
+ 
 
   return (
     <section className="py-8 sm:py-12 2xl:py-16 px-4 sm:px-6 lg:px-8 bg-[#FFF9F5]">

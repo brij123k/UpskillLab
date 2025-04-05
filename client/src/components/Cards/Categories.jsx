@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { getDataHandler } from '../../config/services';
+import { useNavigate } from 'react-router-dom';
 import { 
   FiBriefcase, 
   FiPenTool, 
@@ -15,6 +16,10 @@ import {
 } from 'react-icons/fi';
 
 const CategoryCarousel = () => {
+const navigate = useNavigate();
+const handleCategoryClick = (category) => {
+  navigate(`/CourseList/`, { state: { category } });
+};
 const colorPalette = ['#FF7426', '#4D2C5E'];
 const [categories, setCategories] = useState([]);
 const handelCategories = async () => {
@@ -22,6 +27,7 @@ const handelCategories = async () => {
   if(res){
     const newCategories = res.data.map((category,index) => ({
       id: index+1,
+      categoryId: category._id,
       title: category.categoryName,
       image: category.categoryImage,
       icon: category.categoryLogo,
@@ -92,8 +98,9 @@ useEffect(() => {
         >
         {categories.map((category, index) => (
           <motion.div
+            onClick={() => handleCategoryClick(category)}
             key={index}
-            className="h-[300px] mx-2 relative rounded-2xl overflow-hidden shadow-xl"
+            className="h-[300px] mx-2 relative rounded-2xl overflow-hidden shadow-xl cursor-pointer"
             style={{ 
               borderBottom: `5px solid ${category.color}`,
               boxShadow: `0 10px 20px ${category.color}20`

@@ -1,8 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FiClock, FiUsers, FiArrowRight, FiBookmark } from 'react-icons/fi';
-import { NavLink } from 'react-router-dom';
-
+import { NavLink,useNavigate } from 'react-router-dom';
 const CourseCard = ({ 
   id,
   courseId,
@@ -14,6 +13,7 @@ const CourseCard = ({
   discountedPrice,
   remainingSheets // New prop for remaining sheets count
 }) => {
+  const navigate = useNavigate();
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -110,7 +110,11 @@ const CourseCard = ({
             className="flex items-center text-[#4d2c5e] hover:text-[#FF7426] transition-colors"
             whileHover={{ x: 3 }}
           >
-            <NavLink to={`/courseDetails/${courseId}`}><span className="mr-1 font-medium">View more</span></NavLink>
+           <button 
+  onClick={() => navigate('/courseDetails', { state: { courseId } })}
+  className="flex items-center text-[#FF7426] hover:text-[#FF915E] transition-colors"
+>
+  <span className="mr-1 font-medium">View more</span>
             <motion.div
               animate={{ x: [0, 3, 0] }}
               transition={{ 
@@ -121,6 +125,7 @@ const CourseCard = ({
             >
               <FiArrowRight />
             </motion.div>
+            </button>
           </motion.div>
         </motion.div>
       </div>

@@ -7,9 +7,21 @@ import WallOfFame from '../../components/Cards/WallOfFame';
 import SuccessStoriesCarousel from '../../components/SuccessStoriesCarousel';
 import TrainingBanner from '../../components//banners/TrainingBanner';
 import FeedbaackBanner from '../../components/banners/FeedbackBanner';
+import { getDataHandler } from '../../config/services';
 const SuccessStory = () => {
+  const [story, setStory] = useState([]);
   const [activeStat, setActiveStat] = useState(0);
   const controls = useAnimation();
+
+  const handleStory = async () => {
+  
+    const res = await getDataHandler('successStroy');
+    setStory(res.stories[0]);
+  }
+    useEffect(() => {
+      handleStory();
+    }, []);
+
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: false
@@ -140,25 +152,28 @@ const SuccessStory = () => {
           className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-[#FFB74D]/30 hover:border-[#FFA726] transition-all duration-300"
         >
           <motion.blockquote 
-            variants={itemVariants}
-            className="italic text-base text-white/90"
-          >
-            "The Full Stack Development program gave me the skills and confidence to switch careers at 35. I went from retail management to a ₹15LPA developer role!"
-          </motion.blockquote>
+  variants={itemVariants}
+  className="italic text-base text-white/90"
+>
+  {story?.description 
+    ? `${story.description}:`
+    : '"The Full Stack Development program gave me...'
+  }
+</motion.blockquote>
           <motion.div 
             variants={itemVariants}
             className="mt-3 font-medium flex items-center"
           >
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#FFA726] to-[#FB8C00] mr-2 overflow-hidden shadow-md">
               <img 
-                src="https://randomuser.me/api/portraits/women/42.jpg" 
-                alt="Student" 
+                src={story?.userImageUrl?`${story?.userImageUrl}`:"https://randomuser.me/api/portraits/women/42.jpg" }
+                alt={story?.name?`${story?.name}`:"Student" }
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="text-white/90">
-              <div className="text-sm">Ananya Patel</div>
-              <div className="text-xs opacity-90">Full Stack Developer at Amazon</div>
+              <div className="text-sm">{story?.name?`${story?.name}`:"Ananya Patel" }</div>
+              <div className="text-xs opacity-90">{story?.jobTitle} at {story?.companyName}</div>
             </div>
           </motion.div>
         </motion.div>

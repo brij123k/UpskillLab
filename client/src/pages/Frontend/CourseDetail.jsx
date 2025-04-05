@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState,useEffect  } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { FiDownload, FiChevronRight ,FiFilm, FiCode} from 'react-icons/fi';
 
@@ -9,6 +9,22 @@ import { FiCreditCard } from 'react-icons/fi';
 import { FiBarChart2 } from 'react-icons/fi';
 // import RazorpayLogo from '../assets/razorpay-logo.svg'; // Replace with actual import
 const CourseHero = ({ course }) => {
+    const location = useLocation();
+    const courseId = location.state?.courseId;
+    const batchId = location.state?.batchId;
+    const batchCode = location.state?.batchCode;
+  
+    useEffect(() => {
+      if (!courseId) {
+        // Handle case where courseId isn't passed
+        console.error("No courseId found in navigation state");
+        // Optionally redirect back or to a fallback page
+      }else if(!batchId){
+        console.error("No courseId found in navigation state");
+      }
+
+    }, [courseId]);
+    console.log(courseId,batchId,batchCode)
     return (
         <motion.div
             initial={{ opacity: 0 }}

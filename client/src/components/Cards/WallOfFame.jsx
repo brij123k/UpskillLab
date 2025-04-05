@@ -1,64 +1,126 @@
-import React from 'react';
+import React,{useState,useEffect } from 'react';
 import { motion } from 'framer-motion';
-
+import { getDataHandler } from '../../config/services';
 const WallOfFame = () => {
+    const [successstudents, setSuccessstudents] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+      const [error, setError] = useState(null);
+
+      const handleSuccessstudents = async () => {
+              try {
+                setIsLoading(true);
+                const res = await getDataHandler('successStroy');
+                console.log("Success Stories API response:", res.stories);
+                if (!res || !res.stories) {
+                  throw new Error('Invalid API response structure');
+                }
+          
+                const newStory = res.stories.map((item, index) => ({
+                  id: index + 1,
+                  name: item.name || 'Unknown Name',
+                  position: item.jobTitle || 'N/A',
+                  company: item.companyName || 'N/A',
+                  companyLogo: item.companyLogoUrl || 'N/A.png',
+                  photo: item.userImageUrl || 'N/A.png',
+                  joined: item.batch_Year || 'N/A'
+                }));
+          
+                setSuccessstudents(newStory);
+                setError(null);
+              } catch (err) {
+                console.error("Failed to load banners:", err);
+                setError(err.message);
+                setSuccessstudents([]);
+              } finally {
+                setIsLoading(false);
+              }
+            };
+          
+            useEffect(() => {
+              handleSuccessstudents();
+            }, []);
+          
+            if (isLoading) {
+              return (
+                <div className="w-full h-[600px] flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF7426]"></div>
+                </div>
+              );
+            }
+          
+            if (error) {
+              return (
+                <div className="w-full h-[600px] flex items-center justify-center text-red-500">
+                  Error loading These Stories: {error}
+                  <button 
+                    onClick={handleSuccessstudents}
+                    className="ml-4 px-4 py-2 bg-[#FF7426] text-white rounded"
+                  >
+                    Retry
+                  </button>
+                </div>
+              );
+            }
+
+            const students = successstudents;
+            console.log("Students data:", students);
   // Sample student data
-  const students = [
-    {
-      id: 1,
-      name: "Rahul Sharma",
-      position: "Senior Software Engineer",
-      company: "Microsoft",
-      companyLogo: "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg",
-      photo: "https://randomuser.me/api/portraits/men/32.jpg",
-      joined: "2022"
-    },
-    {
-      id: 2,
-      name: "Priya Patel",
-      position: "Data Scientist",
-      company: "Google",
-      companyLogo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
-      photo: "https://randomuser.me/api/portraits/women/44.jpg",
-      joined: "2021"
-    },
-    {
-      id: 3,
-      name: "Arjun Singh",
-      position: "Product Manager",
-      company: "Amazon",
-      companyLogo: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
-      photo: "https://randomuser.me/api/portraits/men/67.jpg",
-      joined: "2023"
-    },
-    {
-      id: 4,
-      name: "Neha Gupta",
-      position: "UX Designer",
-      company: "Adobe",
-      companyLogo: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Adobe_Systems_logo.svg",
-      photo: "https://randomuser.me/api/portraits/women/63.jpg",
-      joined: "2022"
-    },
-    {
-      id: 5,
-      name: "Vikram Joshi",
-      position: "DevOps Engineer",
-      company: "Netflix",
-      companyLogo: "https://upload.wikimedia.org/wikipedia/commons/7/75/Netflix_icon.svg",
-      photo: "https://randomuser.me/api/portraits/men/52.jpg",
-      joined: "2021"
-    },
-    {
-      id: 6,
-      name: "Ananya Reddy",
-      position: "Machine Learning Engineer",
-      company: "Tesla",
-      companyLogo: "https://upload.wikimedia.org/wikipedia/commons/b/bd/Tesla_Motors.svg",
-      photo: "https://randomuser.me/api/portraits/women/68.jpg",
-      joined: "2023"
-    }
-  ];
+  // const students = [
+  //   {
+  //     id: 1,
+  //     name: "Rahul Sharma",
+  //     position: "Senior Software Engineer",
+  //     company: "Microsoft",
+  //     companyLogo: "https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg",
+  //     photo: "https://randomuser.me/api/portraits/men/32.jpg",
+  //     joined: "2022"
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Priya Patel",
+  //     position: "Data Scientist",
+  //     company: "Google",
+  //     companyLogo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
+  //     photo: "https://randomuser.me/api/portraits/women/44.jpg",
+  //     joined: "2021"
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Arjun Singh",
+  //     position: "Product Manager",
+  //     company: "Amazon",
+  //     companyLogo: "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg",
+  //     photo: "https://randomuser.me/api/portraits/men/67.jpg",
+  //     joined: "2023"
+  //   },
+  //   {
+  //     id: 4,
+  //     name: "Neha Gupta",
+  //     position: "UX Designer",
+  //     company: "Adobe",
+  //     companyLogo: "https://upload.wikimedia.org/wikipedia/commons/7/7b/Adobe_Systems_logo.svg",
+  //     photo: "https://randomuser.me/api/portraits/women/63.jpg",
+  //     joined: "2022"
+  //   },
+  //   {
+  //     id: 5,
+  //     name: "Vikram Joshi",
+  //     position: "DevOps Engineer",
+  //     company: "Netflix",
+  //     companyLogo: "https://upload.wikimedia.org/wikipedia/commons/7/75/Netflix_icon.svg",
+  //     photo: "https://randomuser.me/api/portraits/men/52.jpg",
+  //     joined: "2021"
+  //   },
+  //   {
+  //     id: 6,
+  //     name: "Ananya Reddy",
+  //     position: "Machine Learning Engineer",
+  //     company: "Tesla",
+  //     companyLogo: "https://upload.wikimedia.org/wikipedia/commons/b/bd/Tesla_Motors.svg",
+  //     photo: "https://randomuser.me/api/portraits/women/68.jpg",
+  //     joined: "2023"
+  //   }
+  // ];
 
   // Animation variants
   const cardVariants = {

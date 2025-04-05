@@ -7,13 +7,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./context/AuthContext";
 import AuthGuard from "./AuthGuard";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
+import ScrollToTop from "./components/ScrollToTop";
 const queryClient = new QueryClient();
 
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
+      <ScrollToTop/>
         <AuthProvider>
           <ToastContainer
             position="top-right"
@@ -42,6 +43,7 @@ function RenderRoutes({ data }) {
   return (
     <div>
       <Routes>
+      {/* <ScrollToTop /> */}
         {data.map((route, i) => {
           const Component = route.component;
           const Layout = route.layout || Fragment;

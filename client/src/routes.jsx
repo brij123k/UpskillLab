@@ -32,7 +32,7 @@ export const routes = [
   { exact: true, path: "/BlogDetail",layout:GuestLayout,component:BlogDetailPage},
   { exact: true, path: "/ContactUs", layout: GuestLayout, component: ContactUs},
   { exact: true, path: "/CourseList", layout: GuestLayout, component: CourseList},
-  { exact: true, path: "/CourseDetails/:id", layout: GuestLayout, component: CourseDetailsPage},
+  { exact: true, path: "/CourseDetails/", layout: GuestLayout, component: CourseDetailsPage},
   { exact: true, path: "/Register", layout: Index, component: Register},
   { exact: true, path: "/Login", layout: Index, component: Login},
   { exact: true, path: "/ForgetPassword", layout: Index, component: ForgotPasswordPage},

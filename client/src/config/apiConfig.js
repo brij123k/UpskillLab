@@ -29,6 +29,15 @@ const ApiConfig = {
   premiumBanner:`${url}/premium-learning-experiences`,
   banner3:`${url}/banner3`,
   banner4s:`${url}/banner4`,
+
+  //demosessions
+  demoSession: `${url}/demosessions`,
+
+  //Contact Us
+  contactUs: `${url}/contact-us`,
+
+  // Hiring Partner
+  hiringPartners: `${url}/hiring-partners`,
 };
 
 export default ApiConfig;

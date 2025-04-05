@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -11,9 +11,11 @@ import {
   validateCourse,
   validateStudentType
 } from '../Validations';
-
+import { postDataHandler } from '../../config/services';
+import { toast } from "react-toastify";
 
 const AdmissionForm = () => {
+  const [loader, setLoader] = useState(false);
   // Form validation schema using external validators
   const validationSchema = Yup.object().shape({
     fullName: Yup.string()
@@ -48,6 +50,34 @@ const AdmissionForm = () => {
       })
   });
 
+  const demoSessionHandler = async (values) => {
+    try {
+      setLoader(true);
+      const { fullName, email, phone, course, studentType } = values;
+      let data = {
+        fullName: fullName,
+         email: email,
+        phoneNumber: phone,
+        course: course,
+        experience: studentType
+      }
+      const res = await postDataHandler('demoSession', data)
+      if (res) {
+        toast.success('Demo session booked successfully!');
+      }
+      
+    } catch (error) {
+      toast.error('Demo session booking Failed!');
+    } finally { 
+      setLoader(false);
+    }
+
+   
+
+
+
+  }
+
   // Rest of your component remains exactly the same...
   const formik = useFormik({
     initialValues: {
@@ -59,8 +89,8 @@ const AdmissionForm = () => {
     },
     validationSchema,
     onSubmit: (values) => {
+      demoSessionHandler(values)
       console.log('Form submitted:', values);
-      alert('Form submitted successfully!');
     }
   });
 
@@ -261,9 +291,9 @@ const AdmissionForm = () => {
       <input
         type="radio"
         name="studentType"
-        value="fresher"
+        value="Fresher"
         onChange={formik.handleChange}
-        checked={formik.values.studentType === 'fresher'}
+        checked={formik.values.studentType === 'Fresher'}
         className="h-4 w-4 text-[#4D2C5E] focus:ring-[#FF7426] border-gray-300 rounded"
       />
       <span className="ml-2 text-gray-700">Fresher</span>
@@ -272,9 +302,9 @@ const AdmissionForm = () => {
       <input
         type="radio"
         name="studentType"
-        value="working"
+        value="Working"
         onChange={formik.handleChange}
-        checked={formik.values.studentType === 'working'}
+        checked={formik.values.studentType === 'Working'}
         className="h-4 w-4 text-[#4D2C5E] focus:ring-[#FF7426] border-gray-300 rounded"
       />
       <span className="ml-2 text-gray-700">Working Professional</span>

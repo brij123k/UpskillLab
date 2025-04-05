@@ -96,8 +96,10 @@ const UpcomingBatches = () => {
     queryFn: () => getDataHandler("upcomingBatches", { limit: 20 }),
     select: (data) =>
       data.map((batch) => ({
+        
         id: batch.batchId,
         batchId: batch.batchId,
+        courseId: batch.courseId,
         startDate: new Date(batch.startDate),
         title: batch.courseName,
         price: batch.fees,
@@ -271,7 +273,9 @@ const UpcomingBatches = () => {
                   startDate={batch.startDate}
                   price={batch.price}
                   title={batch.title}
-                  batchId={batch.batchCode}
+                  batchCode={batch.batchCode}
+                  courseId={batch.courseId}
+                  batchId={batch.batchId}
                   batchTime={batch.startTime}
                   duration={batch.duration}
                   mode={batch.mode === "LIVE_ONLINE" ? "Online" : "Offline"}

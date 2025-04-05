@@ -368,21 +368,28 @@ const CourseList = () => {
   const [queryParams, setQueryParams] = useState({
     skip: 0,
     limit: 25,
-    categoryIds: [],
+    categoryIds: location.state?.category 
+      ? [location.state.category.categoryId] 
+      : [],
     languageIds: [],
     courseLevels: [],
     search: "",
   });
 
+
   // State for filters
   const [filters, setFilters] = useState({
-    category: [],
+    category: location.state?.category 
+      ? [{ 
+          value: location.state.category.categoryId, 
+          label: location.state.category.title 
+        }] 
+      : [],
     level: [],
     instructor: [],
     language: [],
     priceRange: [],
   });
-
   const { data: coursesData } = useQuery({
     queryKey: ["courses", queryParams],
     queryFn: () => getDataHandler("courseDisplay", null, queryParams),
@@ -398,6 +405,20 @@ const CourseList = () => {
     }));
   }, [filters]);
 
+  useEffect(() => {
+    if (location.state?.category) {
+      const { categoryId, title } = location.state.category;
+      setFilters(prev => ({
+        ...prev,
+        category: [{ value: categoryId, label: title }]
+      }));
+      
+      setQueryParams(prev => ({
+        ...prev,
+        categoryIds: [categoryId]
+      }));
+    }
+  }, [location.state?.category]);
   const [dropdownOpen, setDropdownOpen] = useState(null);
 
   const toggleDropdown = (filterName) => {

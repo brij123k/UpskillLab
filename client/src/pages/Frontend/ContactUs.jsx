@@ -1,9 +1,11 @@
-import React from 'react';
+import React,{useState} from 'react';
 import { motion } from 'framer-motion';
 import { FaMapMarkerAlt, FaPhone, FaEnvelope } from "react-icons/fa";
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import {FaPlus, FaMinus, FaLocationArrow } from 'react-icons/fa';
+import { toast } from 'react-toastify';
+import { postDataHandler } from '../../config/services';
 // const ContactCard = ({ icon, title, info, description }) => {
 //   return (
 //     <motion.div
@@ -146,6 +148,55 @@ const ContactCard = ({ icon, title, info, description }) => {
 import { FiSend, FiUser, FiMail, FiMessageSquare } from "react-icons/fi";
 
 const ContactForm = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+  
+    try {
+      // Transform data to match API requirements if needed
+      const apiData = {
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message
+        // Add any other required fields from your Swagger
+      };
+  
+      const response = await postDataHandler("contactUs", apiData);
+      
+      // Handle success
+      toast.success('Message sent successfully!');
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: ''
+      });
+  
+    } catch (error) {
+      console.error('Submission error:', error);
+      toast.error(error.message || 'Failed to send message');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+
   return (
     <motion.div
       className="bg-white rounded-3xl shadow-lg overflow-hidden"
@@ -174,7 +225,7 @@ const ContactForm = () => {
         </div>
       </motion.div>
 
-      <form className="p-6 sm:p-8 space-y-6">
+      <form className="p-6 sm:p-8 space-y-6" onSubmit={handleSubmit}>
         {/* Grid layout for name and email */}
         <motion.div 
           className="grid grid-cols-1 sm:grid-cols-2 gap-6"
@@ -207,6 +258,8 @@ const ContactForm = () => {
                 <input
                   type="text"
                   id="name"
+                  value={formData.name}
+                  onChange={handleChange}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF7426]/50 focus:border-[#FF7426] transition-all"
                   placeholder="Enter your name"
                 />
@@ -231,6 +284,8 @@ const ContactForm = () => {
                 <input
                   type="email"
                   id="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF7426]/50 focus:border-[#FF7426] transition-all"
                   placeholder="Enter your email"
                 />
@@ -251,6 +306,8 @@ const ContactForm = () => {
           <input
             type="text"
             id="subject"
+            value={formData.subject}
+                  onChange={handleChange}
             className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF7426]/50 focus:border-[#FF7426] transition-all"
             placeholder="What's this about?"
           />
@@ -271,6 +328,8 @@ const ContactForm = () => {
             </div>
             <textarea
               id="message"
+              value={formData.message}
+                  onChange={handleChange}
               rows="4"
               className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#FF7426]/50 focus:border-[#FF7426] transition-all"
               placeholder="Type your message here..."
@@ -285,25 +344,29 @@ const ContactForm = () => {
           transition={{ delay: 0.4 }}
         >
           <motion.button
-            type="submit"
-            className="w-full bg-gradient-to-r from-[#FF7426] to-[#FF915E] text-white py-4 px-6 rounded-xl font-medium relative overflow-hidden group"
-            whileHover={{ 
-              scale: 1.02,
-              boxShadow: "0 5px 15px rgba(255, 116, 38, 0.4)"
-            }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <span className="relative z-10 flex items-center justify-center gap-2">
-              <FiSend className="text-lg" />
-              Send Message
-            </span>
-            <motion.span
-              className="absolute inset-0 bg-gradient-to-r from-[#FF915E] to-[#FF7426] opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              initial={{ x: "-100%" }}
-              whileHover={{ x: "0%" }}
-              transition={{ duration: 0.4 }}
-            />
-          </motion.button>
+    type="submit"
+    className="w-full bg-gradient-to-r from-[#FF7426] to-[#FF915E] text-white py-4 px-6 rounded-xl font-medium relative overflow-hidden group"
+    whileHover={{ 
+      scale: isSubmitting ? 1 : 1.02,
+      boxShadow: isSubmitting ? "none" : "0 5px 15px rgba(255, 116, 38, 0.4)"
+    }}
+    whileTap={{ scale: isSubmitting ? 1 : 0.98 }}
+    disabled={isSubmitting}
+  >
+    <span className="relative z-10 flex items-center justify-center gap-2">
+      {isSubmitting ? (
+        <span className="flex items-center gap-2">
+          {/* <FiLoader className="animate-spin" /> */}
+          Sending...
+        </span>
+      ) : (
+        <>
+          <FiSend className="text-lg" />
+          Send Message
+        </>
+      )}
+    </span>
+  </motion.button>
         </motion.div>
       </form>
 
