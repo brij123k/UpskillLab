@@ -97,7 +97,7 @@ const UpcomingBatches = () => {
       data.map((batch) => ({
         id: batch.batchId,
         batchId: batch.batchId,
-        startDate: new Date(batch.startDate).toLocaleDateString(),
+        startDate: new Date(batch.startDate),
         title: batch.courseName,
         price: batch.fees,
         duration:
@@ -267,7 +267,7 @@ const UpcomingBatches = () => {
                 }}
               >
                 <BatchCard
-                  startDate={new Date(batch.startDate)}
+                  startDate={batch.startDate}
                   price={batch.price}
                   title={batch.title}
                   batchId={batch.batchCode}
