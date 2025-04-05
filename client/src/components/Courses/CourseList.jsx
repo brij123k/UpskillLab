@@ -1,13 +1,50 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import CourseCard from './CourseCard'; 
 import Course1 from '../../assets/course1.png';
 import Course2 from '../../assets/course2.png';
 import Course3 from '../../assets/course3.png';
 import { motion } from 'framer-motion';
 import {AllCourses} from "../../data";
-function CourseList() {
-  const courses = AllCourses.slice(0, 4);
+import { getDataHandler } from '../../config/services';
 
+function CourseList() {
+  const [courses, setCourses] = useState([]);
+  
+  const handelCourses = async () => {
+    const res = await getDataHandler('courseDisplay');
+    if (res && res.data) {
+      const newCourses = res.data
+        .slice(0, 4) // Take only first 4 courses
+        .map((course, index) => ({
+          id: index + 1,
+          courseId: course._id,
+          title: course.courseName,
+          categoryId: course.category,
+          image: course.courseImage,
+          remainingSheets: course.seatsAvailable,
+          originalPrice: course.originalPrice,
+          discountedPrice: course.discountedPrice,
+          duration: course.courseDuration,
+          studentsEnrolled: course.studentsEnrolled,
+        }));
+      setCourses(newCourses);
+    }
+  };
+  
+  useEffect(() => {
+    handelCourses();
+  },[]);
+
+  // const { data: coursesData } = useQuery({
+  //   queryKey: ["courses", queryParams],
+  //   queryFn: () => getDataHandler("courseDisplay", null, queryParams),
+  // });
+  // // const courses = coursesData?.data || [];
+  // const queryParams = {
+  //   limit: 4,
+  //   sortBy: "createdAt",
+  //   order: "desc",
+  // };
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
     <div className="mx-auto">

@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useInView } from 'framer-motion';
 import VideoModal from './Modal/VideoModal';
 import {useVideoModal} from './Modal/LandingVideoModal';
 import { NavLink } from 'react-router-dom';
+import { getDataHandler } from '../config/services';
 const TextCarousel = ({ slides, autoPlayVideo = false }) => {
   const {
     isVideoModalOpen,
@@ -332,29 +333,65 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
     
   );
 };
-
-const carouselSlides = [
-  {
-    heading: "Transform Your Career",
-    subheading: "Industry-Relevant Programs",
-    description: "Gain practical skills that employers are looking for in today's competitive job market.",
-    image: "images/carouselimage.png"
-  },
-  {
-    heading: "Learn From Experts",
-    subheading: "Real-World Experience",
-    description: "Our instructors are industry professionals who bring current best practices to your learning.",
-    image: "images/carouselimage.png"
-  },
-  {
-    heading: "Career Support",
-    subheading: "Job Placement Assistance",
-    description: "We provide comprehensive career services to help you land your dream role.",
-    image: "images/carouselimage.png"
-  }
-];
-
 const CarouselContainer = () => {
+  const [carouselSlides, setCarouselSlides] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const handleBanners = async () => {
+    try {
+      setIsLoading(true);
+      const res = await getDataHandler('landingPageCarousel');
+      
+      if (!res || !res.banners) {
+        throw new Error('Invalid API response structure');
+      }
+
+      const newBanners = res.banners.map((item, index) => ({
+        id: index + 1,
+        heading: item.title || 'Default Heading',
+        image: item.imageUrl || 'default-image.png',
+        description: item.categoryDescription || 'Default description',
+        subheading: item.subtitle || 'Default Subheading'
+      }));
+
+      setCarouselSlides(newBanners);
+      setError(null);
+    } catch (err) {
+      console.error("Failed to load banners:", err);
+      setError(err.message);
+      setCarouselSlides([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    handleBanners();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="w-full h-[600px] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF7426]"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full h-[600px] flex items-center justify-center text-red-500">
+        Error loading carousel: {error}
+        <button 
+          onClick={handleBanners}
+          className="ml-4 px-4 py-2 bg-[#FF7426] text-white rounded"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full">
       <TextCarousel slides={carouselSlides} autoPlayVideo={true} />
@@ -363,3 +400,25 @@ const CarouselContainer = () => {
 };
 
 export default CarouselContainer;
+
+
+// const carouselSlides = [
+//   {
+//     heading: "Transform Your Career",
+//     subheading: "Industry-Relevant Programs",
+//     description: "Gain practical skills that employers are looking for in today's competitive job market.",
+//     image: "images/carouselimage.png"
+//   },
+//   {
+//     heading: "Learn From Experts",
+//     subheading: "Real-World Experience",
+//     description: "Our instructors are industry professionals who bring current best practices to your learning.",
+//     image: "images/carouselimage.png"
+//   },
+//   {
+//     heading: "Career Support",
+//     subheading: "Job Placement Assistance",
+//     description: "We provide comprehensive career services to help you land your dream role.",
+//     image: "images/carouselimage.png"
+//   }
+// ];

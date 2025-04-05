@@ -2,8 +2,8 @@ import React from 'react';
 import CourseList from './CourseList';
 import { FiClock, FiUsers, FiArrowRight } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
-
 function CourseCards() {
+    
   return (
     <div className='bg-white relative overflow-hidden'>
       {/* Background decorative elements */}

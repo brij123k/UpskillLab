@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useState} from 'react'
 import ImageCarousel from '../../components/ImageCarousel'
 import { FiArrowRight } from 'react-icons/fi';
 import { useEffect, useRef } from 'react';
@@ -14,12 +14,25 @@ import ScrollableCategories from '../../components/Cards/Categories'
 import SuccessTestimonial from '../../components/testimonial/SuccessTestimonial '
 import StudentTestimonials from '../../components/testimonial/StudentsTestimonial'
 import AdmissionForm from '../../components/Forms/AdmissionForm'
+import { getDataHandler } from '../../config/services';
 import { Faqs } from '../../data';
 import { NavLink } from 'react-router-dom';
 function Home() {
   const controls = useAnimation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, margin: "-100px" });
+  const [banner, setBanner] = useState([]);
+//For primiun banner
+const handleBanners = async () => {
+
+  const res = await getDataHandler('premiumBanner');
+  setBanner(res.premiumLearningExperiences[0]);
+}
+  useEffect(() => {
+    handleBanners();
+  }, []);
+
+  console.log(banner);
   useEffect(() => {
     if (isInView) {
       controls.start("visible");
@@ -85,8 +98,8 @@ function Home() {
         transition={{ duration: 0.8 }}
       >
         <motion.img
-          src="/images/PremiumLearning.png"
-          alt="Premium Learning"
+          src={banner?.imageUrl}
+          alt={banner?.title}
           className='w-[200px] sm:w-[250px] md:w-[280px] lg:w-full max-w-[300px] 2xl:max-w-[350px] object-contain z-10'
           whileHover={{ 
             scale: 1.05,
@@ -121,14 +134,31 @@ function Home() {
       >
         {/* Main Heading + Features */}
         <div className='flex-1 max-w-[600px] 2xl:max-w-[700px]'>
-          <motion.h1 
-            className='text-3xl sm:text-4xl md:text-5xl xl:text-[3.25rem] 2xl:text-[3.75rem] font-bold leading-tight md:leading-snug'
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
-          >
-            Premium <span className='text-[#FF7426]'>Learning</span> Experience
-          </motion.h1>
+        <motion.h1 
+  className='text-3xl sm:text-4xl md:text-5xl xl:text-[3.25rem] 2xl:text-[3.75rem] font-bold leading-tight md:leading-snug'
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 0.4 }}
+>
+  {/* Safe rendering with fallback */}
+  {banner.title ? (
+    banner?.title.split(' ').map((word, index) => (
+      <React.Fragment key={index}>
+        <motion.span 
+          className={index === 1 ? 'text-[#FF7426]' : ''}
+          whileHover={index === 1 ? { scale: 1.05 } : {}}
+        >
+          {word}
+        </motion.span>
+        {index < banner.title.split(' ').length - 1 && ' '}
+      </React.Fragment>
+    ))
+  ) : (
+    <>
+      Premium <span className='text-[#FF7426]'>Learning</span> Experience
+    </>
+  )}
+</motion.h1>
 
           <div className='mt-8 sm:mt-10 md:mt-12 space-y-4 sm:space-y-5'>
             {/* Feature 1 */}

@@ -6,30 +6,33 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthProvider } from "./context/AuthContext";
 import AuthGuard from "./AuthGuard";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <Router>
-      <AuthProvider>
-
-        <ToastContainer
-          position="top-right"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="colored"
-        />
-        <Suspense fallback={<PageLoading />}>
-          <RenderRoutes data={routes} />
-
-        </Suspense>
-      </AuthProvider>
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <AuthProvider>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
+          <Suspense fallback={<PageLoading />}>
+            <RenderRoutes data={routes} />
+          </Suspense>
+        </AuthProvider>
+      </Router>
+    </QueryClientProvider>
   );
 };
 
@@ -62,7 +65,6 @@ function RenderRoutes({ data }) {
           return RouteElement;
         })}
       </Routes>
-
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 
 const CourseCard = ({ 
   id,
+  courseId,
   imageUrl, 
   title, 
   duration, 
@@ -23,18 +24,22 @@ const CourseCard = ({
       className="w-full max-w-xl bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col h-full cursor-pointer border m-auto border-gray-100 hover:border-[#FF7426]/50 transition-all duration-300 group relative"
     >
       {/* Remaining Sheets Label - Top Right Corner */}
-      {remainingSheets && (
-        <motion.div 
-          className="absolute top-0 right-0 bg-[#FF7426] text-white px-3 py-1 rounded-bl-lg z-10 flex items-center"
-          initial={{ opacity: 0, x: 10 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.4 }}
-        >
-          <span className="text-xs font-semibold whitespace-nowrap">
-            {remainingSheets < 10 ? `Only ${remainingSheets} left!` : `${remainingSheets} available`}
-          </span>
-        </motion.div>
-      )}
+      {typeof remainingSheets !== 'undefined' && remainingSheets !== null ? (
+  <motion.div 
+    className="absolute top-0 right-0 bg-[#FF7426] text-white px-3 py-1 rounded-bl-lg z-10 flex items-center"
+    initial={{ opacity: 0, x: 10 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ delay: 0.4 }}
+  >
+    <span className="text-xs font-semibold whitespace-nowrap">
+      {remainingSheets === 0 
+        ? 'No seats available' 
+        : remainingSheets < 10 
+          ? `Only ${remainingSheets} left!` 
+          : `${remainingSheets} available`}
+    </span>
+  </motion.div>
+) : null}
 
       {/* Image with hover zoom */}
       <motion.div 
@@ -78,7 +83,7 @@ const CourseCard = ({
             <motion.div whileHover={{ scale: 1.1 }}>
               <FiClock className="mr-1.5 text-[#4d2c5e]" />
             </motion.div>
-            <span>{duration}</span>
+            <span>{duration} Days</span>
           </div>
           <div className="flex items-center">
             <motion.div whileHover={{ scale: 1.1 }}>
@@ -105,7 +110,7 @@ const CourseCard = ({
             className="flex items-center text-[#4d2c5e] hover:text-[#FF7426] transition-colors"
             whileHover={{ x: 3 }}
           >
-            <NavLink to={`/courseDetails/${id}`}><span className="mr-1 font-medium">View more</span></NavLink>
+            <NavLink to={`/courseDetails/${courseId}`}><span className="mr-1 font-medium">View more</span></NavLink>
             <motion.div
               animate={{ x: [0, 3, 0] }}
               transition={{ 
@@ -120,15 +125,14 @@ const CourseCard = ({
         </motion.div>
       </div>
 
-      {/* Urgency indicator for low remaining sheets */}
-      {remainingSheets && remainingSheets < 5 && (
-        <motion.div 
-          className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF7426] to-[#ff0000]"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 0.5 }}
-        />
-      )}
+      {typeof remainingSheets === 'number' && remainingSheets < 5 ? (
+  <motion.div 
+    className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FF7426] to-[#ff0000]"
+    initial={{ scaleX: 0 }}
+    animate={{ scaleX: 1 }}
+    transition={{ duration: 0.5 }}
+  />
+) : null}
 
       {/* Floating accent elements */}
       <motion.div 

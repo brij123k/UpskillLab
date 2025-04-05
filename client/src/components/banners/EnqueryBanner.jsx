@@ -3,12 +3,27 @@ import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 import { FiClock, FiUsers, FiArrowRight, FiBookmark } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
+import { getDataHandler } from '../../config/services';
+import  { useState } from 'react';
 const EnqueryBanner = () => {
+  const [banner, setBanner] = useState([]);
   const controls = useAnimation();
   const [ref, inView] = useInView({
     threshold: 0.1,
     triggerOnce: false
   });
+
+
+  const handleBanners = async () => {
+  
+    const res = await getDataHandler('premiumBanner');
+    setBanner(res.banner3s[0]);
+  }
+    useEffect(() => {
+      handleBanners();
+    }, []);
+  
+
 
   useEffect(() => {
     if (inView) {
@@ -82,8 +97,8 @@ const EnqueryBanner = () => {
           className="w-full md:w-1/2 lg:w-2/5"
         >
           <motion.img
-            src="/images/bannerEnquery.png"
-            alt="Banner Visual"
+            src={banner?.imageUrl}
+            alt={banner?.title}
             className="w-full h-auto rounded-xl object-cover max-h-[400px]"
             initial={{ scale: 0.9 }}
             animate={{ 
@@ -113,22 +128,46 @@ const EnqueryBanner = () => {
             className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 text-center"
             variants={itemVariants}
           >
-            <motion.span 
-              className="text-[#FF7426] inline-block"
-              animate={{
-                scale: [1, 1.1, 1],
-                rotate: [0, 5, -5, 0]
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                repeatType: "loop",
-                ease: "easeInOut"
-              }}
-            >
-              W
-            </motion.span>
-            ant to stay informed about new courses or have any doubts?
+            {banner.title ? (
+    <>
+      <motion.span 
+        className="text-[#FF7426] inline-block"
+        animate={{
+          scale: [1, 1.1, 1],
+          rotate: [0, 5, -5, 0]
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          repeatType: "loop",
+          ease: "easeInOut"
+        }}
+      >
+        {banner?.title.charAt(0)}
+      </motion.span>
+      {banner?.title.slice(1)}
+    </>
+  ) : (
+    /* Fallback when headingText is undefined */
+    <>
+      <motion.span 
+        className="text-[#FF7426] inline-block"
+        animate={{
+          scale: [1, 1.1, 1],
+          rotate: [0, 5, -5, 0]
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          repeatType: "loop",
+          ease: "easeInOut"
+        }}
+      >
+        W
+      </motion.span>
+      ant to stay informed about new courses or have any doubts?
+    </>
+  )}
           </motion.h2>
           
           <motion.div 

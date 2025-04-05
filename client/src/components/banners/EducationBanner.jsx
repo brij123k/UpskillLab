@@ -1,14 +1,24 @@
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
-
+import { useEffect,useState } from "react";
+import { getDataHandler } from "../../config/services";
 const EducationBanner = () => {
+  const [banner, setBanner] = useState([]);
   // Animation controls
   const controls = useAnimation();
   const [ref, inView] = useInView({
     triggerOnce: false, // Allows re-triggering on scroll
     threshold: 0.3, // Triggers when 30% of the banner is visible
   });
+
+  const handleBanners = async () => {
+  
+    const res = await getDataHandler('banner4s');
+    setBanner(res.banner4s[0]);
+  }
+    useEffect(() => {
+      handleBanners();
+    }, []);
 
   // Animate when in/out of view
   useEffect(() => {
@@ -72,10 +82,29 @@ const EducationBanner = () => {
           className="w-full md:w-1/2 lg:w-3/5 space-y-6"
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900">
-            Training & <span className="text-[#FF7426]">Internship</span>
-            <br />
-            Programs
-          </h2>
+  {banner?.title ? (
+    <>
+      {banner.title.split(' ').map((word, index) => (
+        <React.Fragment key={index}>
+          {index === 1 ? ( // Check if it's the second word
+            <span className="text-[#FF7426]">{word}</span>
+          ) : (
+            word
+          )}
+          {' '} {/* Add space between words */}
+          {index === 0 && <br />} {/* Add line break after first word */}
+        </React.Fragment>
+      ))}
+    </>
+  ) : (
+    /* Fallback when banner or title is undefined */
+    <>
+      Training & <span className="text-[#FF7426]">Internship</span>
+      <br />
+      Programs
+    </>
+  )}
+</h2>
 
           <p className="text-lg text-gray-600">
             Learn the latest skills quickly with a personalised curriculum
@@ -109,8 +138,8 @@ const EducationBanner = () => {
           className="w-full md:w-1/2 lg:w-2/5"
         >
           <img
-            src="/images/Educationimage.png"
-            alt="Education Banner"
+            src={banner?.imageUrl}
+            alt={banner?.title}
             className="w-full h-auto rounded-xl object-cover max-h-[400px]"
           />
         </motion.div>
