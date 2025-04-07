@@ -113,9 +113,10 @@ const EnrollmentModal = ({ batch, onClose }) => {
       }).then((result) => {
         if (result && result.error) {
           toast.error(`Payment failed: ${result.error.message}`);
-        } else if (result) {
-          verifyPaymentOnServer();
-        }
+        } 
+        // else if (result) {
+        //   verifyPaymentOnServer();
+        // }
       }).catch((error) => {
         console.error('Checkout error:', error);
         toast.error('Failed to open payment page');
@@ -169,7 +170,7 @@ const EnrollmentModal = ({ batch, onClose }) => {
 
   return (
     <motion.div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-transparent bg-opacity-50 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}

@@ -598,105 +598,53 @@ const TeachingPlan = ({ course }) => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: false, amount: 0.1 });
     const [expandedWeek, setExpandedWeek] = useState(null);
-
+    const [isDownloading, setIsDownloading] = useState(false);
     const toggleWeek = (weekIndex) => {
         setExpandedWeek(expandedWeek === weekIndex ? null : weekIndex);
     };
-    // Your actual data structure
-    const weeks = course.weeks || [
-        {
-            week: "Week 1",
-            sessions: [
-                {
-                    title: "Session 1: Understanding HTML Fundamentals",
-                    topics: [
-                        "Introduction to HTML and its syntax",
-                        "Understanding HTML attributes",
-                        "Basic HTML document structure"
-                    ]
-                },
-                {
-                    title: "Session 2: HTML Elements",
-                    topics: [
-                        "Understanding the role of headings in HTML",
-                        "Utilizing div for structuring content",
-                        "Linking pages with anchor tags",
-                        "Creating and managing lists using HTML tags"
-                    ]
-                },
-                {
-                    title: "Session 3: Mastering Advanced HTML Techniques",
-                    topics: [
-                        "Harnessing the power of semantic HTML",
-                        "Enhancing accessibility with ARIA attributes",
-                        "Leveraging meta tags for SEO optimization",
-                        "Exploring self-closing tags and their usage"
-                    ]
-                }
-            ]
-        },
-        {
-            week: "Week 2",
-            sessions: [
-                {
-                    title: "Session 4: CSS Fundamentals",
-                    topics: [
-                        "Introduction to CSS and its syntax",
-                        "Understanding CSS colors and units",
-                        "Exploring CSS selectors",
-                        "Implementing the box model for layout"
-                    ]
-                },
-                {
-                    title: "Session 5: Styling Elements with CSS",
-                    topics: [
-                        "Manipulating width and height properties",
-                        "Styling borders for elements",
-                        "Utilizing padding for spacing within elements",
-                        "Managing margins to control spacing between elements"
-                    ]
-                },
-                {
-                    title: "Session 6: Advanced CSS Techniques",
-                    topics: [
-                        "Employing CSS positioning for layout control",
-                        "Using CSS flexbox for flexible layouts",
-                        "Harnessing CSS grid for complex layouts",
-                        "Implementing CSS transitions and animations"
-                    ]
-                }
-            ]
-        },
-        {
-            week: "Week 3",
-            sessions: [
-                {
-                    title: "Session 7: JavaScript Building Blocks",
-                    topics: [
-                        "Unveiling JavaScript: Introduction and Core Concepts",
-                        "Mastering Data Types: Variables, Operators, and Control Flow",
-                        "Conquering Functions: Defining, Calling, and Mastering Functionality"
-                    ]
-                },
-                {
-                    title: "Session 8: Advanced Structures and Manipulation",
-                    topics: [
-                        "Taming the Array: Working with Ordered Data Collections",
-                        "String Manipulation Essentials: Transforming and Handling Text",
-                        "Object-Oriented Foundations: Building Complex Data Structures"
-                    ]
-                },
-                {
-                    title: "Session 9: Working with Objects and Math",
-                    topics: [
-                        "Math Object Mastery",
-                        "Arrays of Objects: Organizing and Managing Complex Data Sets",
-                        "Date Object: Handling Time and Dates in Applications"
-                    ]
-                }
-            ]
+
+    const downloadBrochure = async () => {
+        setIsDownloading(true);
+        
+        try {
+          // Check if brochure exists and is a valid File/Blob
+          if (!course.brochure) {
+            toast.error("No brochure available for this course");
+            return;
+          }
+      
+          // Create a downloadable URL
+          const url = window.URL.createObjectURL(course.brochure);
+          
+          // Create a temporary anchor tag
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `UpSkillLab-${course.title}-Brochure.pdf`;
+          link.style.display = 'none'; // Hide the link
+          
+          // Trigger download
+          document.body.appendChild(link);
+          link.click();
+          
+          // Cleanup (revoke URL after a short delay)
+          setTimeout(() => {
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(link);
+          }, 100);
+          
+          toast.success('Brochure downloaded successfully!');
+        } catch (error) {
+          console.error('Download failed:', error);
+          toast.error('Failed to download brochure');
+        } finally {
+          setIsDownloading(false);
         }
-    ];
+      };
+
+
+      
+    // Your actual data structure
+    const weeks = course.weeks;
 
 
 
@@ -905,19 +853,37 @@ const TeachingPlan = ({ course }) => {
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.8 }}
-                    className="text-center mt-16"
+                    transition={{ delay: 0.2 }}
+                    className="text-center mt-16 flex justify-center items-center"
                 >
                     <motion.button
-                        whileHover={{
-                            scale: 1.05,
-                            boxShadow: "0 10px 25px rgba(255, 116, 38, 0.3)"
-                        }}
-                        whileTap={{ scale: 0.98 }}
-                        className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-[#4D2C5E] to-[#3A2250] text-white rounded-xl font-bold shadow-lg cursor-pointer"
+                      type="button"
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={downloadBrochure}
+                      disabled={isDownloading}
+                      className={`flex items-center gap-2 px-6 py-3 border-2 rounded-lg transition-all duration-200 ${
+                        isDownloading
+                          ? 'bg-gray-200 border-gray-300 text-gray-500 cursor-wait'
+                          : 'bg-white border-[#4D2C5E] text-[#4D2C5E] hover:bg-[#4D2C5E]/10 shadow-sm hover:shadow-md cursor-pointer'
+                      }`}
                     >
-                        <FiDownload className="mr-3 text-xl" />
-                        Download Full Plan (PDF)
+                      {isDownloading ? (
+                        <>
+                          <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-[#4D2C5E]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          Downloading...
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                          </svg>
+                          Download Brochure
+                        </>
+                      )}
                     </motion.button>
                 </motion.div>
             </div>
@@ -1052,7 +1018,7 @@ const CareerDevelopmentTrack = ({ course }) => {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={isInView ? { opacity: 1 } : {}}
-                    transition={{ staggerChildren: 0.15, delayChildren: 0.5 }}
+                    transition={{ staggerChildren: 0.5, delayChildren: 0.3 }}
                     className="grid grid-cols-1 md:grid-cols-2 gap-10"
                 >
                     {careerData.map((item, index) => (
@@ -1645,6 +1611,7 @@ const FAQSection = ({ course }) => {
           >
             Still have questions?
           </motion.p>
+          <NavLink to="/ContactUs">
           <motion.button
             whileHover={{ 
               scale: 1.05,
@@ -1662,6 +1629,7 @@ const FAQSection = ({ course }) => {
               className="absolute inset-0 bg-[#E65100] z-0"
             />
           </motion.button>
+          </NavLink>
         </motion.div>
       </div>
     </div>

@@ -5,9 +5,11 @@ import { FiCheck, FiCreditCard, FiUser, FiMail, FiPhone, FiLock } from 'react-ic
 import { registerBatch } from '../../config/services';
 
 const PurchaseModal = ({ course,batchCode, isOpen, onClose, onPurchase }) => {
+  console.log(course)
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [cashfreeLoaded, setCashfreeLoaded] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
   const [paymentData, setPaymentData] = useState({
     orderId: '',
     paymentSessionId: '',
@@ -118,9 +120,10 @@ const PurchaseModal = ({ course,batchCode, isOpen, onClose, onPurchase }) => {
       }).then((result) => {
         if (result && result.error) {
           toast.error(`Payment failed: ${result.error.message}`);
-        } else if (result) {
-          verifyPaymentOnServer();
-        }
+        } 
+        // else if (result) {
+        //   verifyPaymentOnServer();
+        // }
       }).catch((error) => {
         console.error('Checkout error:', error);
         toast.error('Failed to open payment page');
@@ -174,6 +177,50 @@ const PurchaseModal = ({ course,batchCode, isOpen, onClose, onPurchase }) => {
   };
 
   if (!isOpen) return null;
+
+
+
+
+  const downloadBrochure = async () => {
+    setIsDownloading(true);
+    
+    try {
+      // Check if brochure exists and is a valid File/Blob
+      if (!course.brochure) {
+        toast.error("No brochure available for this course");
+        return;
+      }
+  
+      // Create a downloadable URL
+      const url = window.URL.createObjectURL(course.brochure);
+      
+      // Create a temporary anchor tag
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `UpSkillLab-${course.title}-Brochure.pdf`;
+      link.style.display = 'none'; // Hide the link
+      
+      // Trigger download
+      document.body.appendChild(link);
+      link.click();
+      
+      // Cleanup (revoke URL after a short delay)
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+      }, 100);
+      
+      toast.success('Brochure downloaded successfully!');
+    } catch (error) {
+      console.error('Download failed:', error);
+      toast.error('Failed to download brochure');
+    } finally {
+      setIsDownloading(false);
+    }
+  };
+
+
+
 
   return (
     <motion.div 
@@ -322,6 +369,37 @@ const PurchaseModal = ({ course,batchCode, isOpen, onClose, onPurchase }) => {
                   <span>Total Payable:</span>
                   <span>{paymentData.discountedPrice}</span>
                 </div>
+                <div className="border-t-2 border-[#FF7426] pt-4 mt-4 flex justify-center">
+                <motion.button
+  type="button"
+  whileHover={{ scale: 1.03 }}
+  whileTap={{ scale: 0.98 }}
+  onClick={downloadBrochure}
+  disabled={isDownloading}
+  className={`flex items-center gap-2 px-6 py-3 border-2 rounded-lg transition-all duration-200 ${
+    isDownloading
+      ? 'bg-gray-200 border-gray-300 text-gray-500 cursor-wait'
+      : 'bg-white border-[#4D2C5E] text-[#4D2C5E] hover:bg-[#4D2C5E]/10 shadow-sm hover:shadow-md cursor-pointer'
+  }`}
+>
+  {isDownloading ? (
+    <>
+      <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-[#4D2C5E]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      Downloading...
+    </>
+  ) : (
+    <>
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+      </svg>
+      Download Brochure
+    </>
+  )}
+</motion.button>
+      </div>
               </div>
             </motion.div>
           )}

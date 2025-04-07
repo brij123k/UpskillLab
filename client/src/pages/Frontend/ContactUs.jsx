@@ -372,7 +372,7 @@ const ContactForm = () => {
 
       {/* Decorative elements */}
       <motion.div
-        className="absolute -bottom-8 -right-8 w-32 h-32 rounded-full bg-[#FF7426]/10"
+        className="absolute -bottom-8 right-8 w-32 h-32 rounded-full bg-[#FF7426]/10"
         animate={{
           scale: [1, 1.1, 1],
           transition: { repeat: Infinity, duration: 6 }
