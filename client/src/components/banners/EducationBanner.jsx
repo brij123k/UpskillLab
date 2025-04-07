@@ -2,6 +2,7 @@ import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useEffect,useState } from "react";
 import { getDataHandler } from "../../config/services";
+import React from 'react'; // Add this line
 const EducationBanner = () => {
   const [banner, setBanner] = useState([]);
   // Animation controls
@@ -12,7 +13,6 @@ const EducationBanner = () => {
   });
 
   const handleBanners = async () => {
-  
     const res = await getDataHandler('banner4s');
     setBanner(res.banner4s[0]);
   }

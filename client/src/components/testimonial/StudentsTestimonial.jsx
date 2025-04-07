@@ -108,22 +108,22 @@ const TestimonialCard = ({
           </motion.div>
 
           {/* Message */}
-          <motion.div 
-            className="mt-4 flex-grow"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            <motion.p 
-              className="text-sm text-gray-200 text-center px-2"
-              whileHover={{ 
-                color: "#ffffff",
-                transition: { duration: 0.2 }
-              }}
-            >
-              "{message}"
-            </motion.p>
-          </motion.div>
+<motion.div 
+  className="mt-4 flex-grow"
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ delay: 0.3 }}
+>
+  <motion.p 
+    className="text-sm text-gray-200 text-center px-2"
+    whileHover={{ 
+      color: "#ffffff",
+      transition: { duration: 0.2 }
+    }}
+  >
+    "{message.length > 50 ? `${message.substring(0, 50)}...` : message}"
+  </motion.p>
+</motion.div>
         </div>
       </div>
 
@@ -183,51 +183,6 @@ const StudentTestimonials = () => {
     sm: { breakpoint: { max: 768, min: 640 }, items: 1 },
     xs: { breakpoint: { max: 640, min: 0 }, items: 1 }
   };
-
-  // const testimonials = [
-  //   {
-  //     id: 1,
-  //     imageUrl: "./images/Rectangle 33.png",
-  //     name: "John Doe",
-  //     message: "I'm incredibly grateful for the opportunity to work with such an amazing team. The support and guidance I received were instrumental in my success.",
-  //     companyLogoUrl: "./images/company4.svg"
-  //   },
-  //   {
-  //     id: 2,
-  //     imageUrl: "./images/Rectangle 33.png",
-  //     name: "Jane Smith",
-  //     message: "This program transformed my career. The practical knowledge I gained helped me secure my dream job in just 3 months!",
-  //     companyLogoUrl: "./images/company5.svg"
-  //   },
-  //   {
-  //     id: 3,
-  //     imageUrl: "./images/Rectangle 33.png",
-  //     name: "Robert Johnson",
-  //     message: "The mentorship and hands-on projects gave me the confidence to excel in my field. Highly recommend to anyone looking to upskill.",
-  //     companyLogoUrl: "./images/company6.svg"
-  //   },
-  //   {
-  //     id: 4,
-  //     imageUrl: "./images/Rectangle 33.png",
-  //     name: "Sarah Williams",
-  //     message: "The curriculum was perfectly structured with real-world applications. I went from beginner to job-ready in record time.",
-  //     companyLogoUrl: "./images/company7.svg"
-  //   },
-  //   {
-  //     id: 5,
-  //     imageUrl: "./images/Rectangle 33.png",
-  //     name: "Michael Brown",
-  //     message: "Exceptional learning experience with industry-relevant projects that helped me build a strong portfolio.",
-  //     companyLogoUrl: "./images/company8.svg"
-  //   },
-  //   {
-  //     id: 6,
-  //     imageUrl: "./images/Rectangle 33.png",
-  //     name: "Emily Davis",
-  //     message: "The career support team was phenomenal. They helped me negotiate a 30% higher salary than I expected!",
-  //     companyLogoUrl: "./images/company9.svg"
-  //   }
-  // ];
 
   const ButtonGroup = ({ next, previous }) => {
     return (
