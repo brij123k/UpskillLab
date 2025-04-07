@@ -26,7 +26,6 @@ const SuccessStoriesCarousel = () => {
         try {
           setIsLoading(true);
           const res = await getDataHandler('successStroy');
-          console.log("Success Stories API response:", res.stories);
           if (!res || !res.stories) {
             throw new Error('Invalid API response structure');
           }

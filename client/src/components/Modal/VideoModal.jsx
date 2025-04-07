@@ -10,6 +10,8 @@ const VideoModal = ({
   autoPlay = true,
   showControls = true
 }) => {
+
+  console.log("VideoModal rendered",videoSrc);
   // Close modal when pressing Escape key
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -88,12 +90,15 @@ const VideoModal = ({
                 style={{ height: '240px' }}
               >
                 <iframe
-                  src={isOpen ? `${videoSrc}${autoPlay ? '&autoplay=1' : ''}` : ''}
-                  className="w-full h-full"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                ></iframe>
+  src={isOpen ? videoSrc : ''}
+  className="w-full h-full"
+  frameBorder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowFullScreen
+  title="YouTube video player"
+  loading="lazy"
+  referrerPolicy="strict-origin-when-cross-origin"
+></iframe>
               </motion.div>
 
               {/* Footer */}

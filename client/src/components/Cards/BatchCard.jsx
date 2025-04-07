@@ -5,9 +5,11 @@ const BatchCard = ({
   onEnroll,
   startDate,
   price,
+  originalPrice,
   title,
   batchId,
   courseId,
+  courseCode,
   batchCode,
   batchTime,
   duration,
@@ -132,7 +134,7 @@ const BatchCard = ({
         <div className="flex justify-between gap-3">
           <motion.button
             className="text-[#4D2C5E] text-sm font-medium px-4 py-2 rounded-md border-2 border-[#4D2C5E] hover:bg-[#4D2C5E] hover:text-white transition-colors flex-1"
-            onClick={() => navigate('/courseDetails', { state: { courseId,batchId,batchCode } })}
+            onClick={() => navigate('/courseDetails', { state: { courseId,courseCode,batchId,batchCode } })}
             whileHover={{
               scale: 1.02,
               boxShadow: "0 2px 8px -1px rgba(77, 44, 94, 0.3)",

@@ -1,18 +1,14 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { NavLink } from "react-router-dom";
+import { NavLink,useNavigate } from "react-router-dom";
 import TrainingBanner from "../../components/banners/TrainingBanner";
 import FeedbaackBanner from "../../components/banners/FeedbackBanner";
 import { FiFilter, FiX, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import EnrollmentModal from "../../components/Modal/EnrollmentModal";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-// import {
-//   categoryAPI,
-//   courseAPI,
-//   languageAPI,
-// } from "../../config/api-repository";
+import { getFilteredCourses } from "../../config/services";
 import {getDataHandler } from "../../config/services";
-
+import { useLocation } from "react-router-dom";
 const bannerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -352,7 +348,8 @@ const LevelDropdownFilter = ({
 const CourseList = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
-
+  const navigate = useNavigate();
+  const location = useLocation();
   const handleEnrollClick = (course) => {
     setSelectedCourse(course);
     setIsEnrollModalOpen(true);
@@ -360,7 +357,6 @@ const CourseList = () => {
 
   const handleEnrollSubmit = () => {
     // Handle enrollment logic here
-    console.log("Enrolling in:", selectedCourse);
     setIsEnrollModalOpen(false);
   };
 
@@ -392,7 +388,7 @@ const CourseList = () => {
   });
   const { data: coursesData } = useQuery({
     queryKey: ["courses", queryParams],
-    queryFn: () => getDataHandler("courseDisplay", null, queryParams),
+    queryFn: () => getFilteredCourses(queryParams),
   });
 
   // Transform filters to API params when filters change
@@ -434,7 +430,6 @@ const CourseList = () => {
   };
 
   const handleFilterDelete = (filterName, value) => {
-    console.log(filterName);
     setFilters((prev) => ({
       ...prev,
       [filterName]: prev[filterName].filter((item) => item.value !== value),
@@ -757,8 +752,12 @@ const CourseList = () => {
 
               {/* Action Buttons Section */}
               <div className="px-6 pb-6 pt-0 flex justify-between gap-3">
-                <NavLink
-                  to={`/CourseDetails/${course._id}`}
+                <button
+                   onClick={() => navigate('/courseDetails', { 
+  state: { 
+    courseCode: course.courseCode
+  } 
+})}
                   className="flex-1 text-center text-[#4D2C5E] font-medium hover:underline flex items-center justify-center py-2 border border-[#4D2C5E]/30 rounded-lg hover:bg-[#4D2C5E]/5 transition-colors cursor-pointer"
                 >
                   View Details
@@ -776,7 +775,7 @@ const CourseList = () => {
                       d="M9 5l7 7-7 7"
                     />
                   </motion.svg>
-                </NavLink>
+                </button>
 
                 <motion.button
                   whileHover={{

@@ -120,7 +120,7 @@ const EducationBanner = () => {
             >
               Learn More
             </motion.button>
-
+<a href="#AdmissionForm">
             <motion.button
               variants={buttonVariants}
               whileHover={{ scale: 1.05 }}
@@ -129,6 +129,7 @@ const EducationBanner = () => {
             >
               Book an Appointment
             </motion.button>
+            </a>
           </div>
         </motion.div>
 

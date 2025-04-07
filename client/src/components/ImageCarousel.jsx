@@ -3,229 +3,215 @@ import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { AnimatePresence } from 'framer-motion';
 import {getDataHandler} from '../config/services';
+import { NavLink } from 'react-router-dom';
+
 const HiringPartnersShowcase = () => {
     const [hiringPartners, setHiringPartners] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
+    // const [isModalOpen, setIsModalOpen] = useState(false);
 
+    // const [formData, setFormData] = useState({
+    //   companyName: '',
+    //   contactPerson: '',
+    //   email: '',
+    //   phone: '',
+    //   partnershipType: '',
+    //   message: ''
+    // });
 
-  // const [formData, setFormData] = useState({
-  //   companyName: '',
-  //   contactPerson: '',
-  //   email: '',
-  //   phone: '',
-  //   partnershipType: '',
-  //   message: ''
-  // });
+    const handleHiringPartnerss = async () => {
+        try {
+            setIsLoading(true);
+            const res = await getDataHandler('hiringPartners');
+            if (!res || !res.hiringPartners) {
+                throw new Error('Invalid API response structure');
+            }
 
-  const logos = [
-    'company1.svg', 
-    'company2.svg', 
-    'company3.svg', 
-    'company4.svg',
-    'company5.svg', 
-    'company6.svg', 
-    'company7.svg', 
-    'company8.svg',
-    'company9.svg', 
-    'company10.svg', 
-    'company11.svg', 
-    'company12.svg'
-  ];
+            const newhiringPartner = res.hiringPartners.map((item, index) => ({
+                // id: index + 1,
+                name: item.name || 'Default Heading',
+                logo: item.logo || 'Default logo'
+            }));
 
-  // const handleHiringPartnerss = async () => {
-  //         try {
-  //           setIsLoading(true);
-  //           const res = await getDataHandler('hiringPartners');
-  //           console.log("Success hiringPartners API response:", res.hiringPartners);
-  //           if (!res || !res.hiringPartners) {
-  //             throw new Error('Invalid API response structure');
-  //           }
-      
-  //           const newhiringPartner = res.hiringPartners.map((item, index) => ({
-  //             // id: index + 1,
-  //             name: item.name || 'Default Heading',
-  //             logo: item.logo || 'Default Story'
-  //           }));
-      
-  //           setHiringPartners(newhiringPartner);
-  //           setError(null);
-  //         } catch (err) {
-  //           console.error("Failed to load banners:", err);
-  //           setError(err.message);
-  //           setHiringPartners([]);
-  //         } finally {
-  //           setIsLoading(false);
-  //         }
-  //       };
-      
-  //       useEffect(() => {
-  //         handleHiringPartnerss();
-  //       }, []);
-      
-  //       if (isLoading) {
-  //         return (
-  //           <div className="w-full h-[600px] flex items-center justify-center">
-  //             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF7426]"></div>
-  //           </div>
-  //         );
-  //       }
-      
-  //       if (error) {
-  //         return (
-  //           <div className="w-full h-[600px] flex items-center justify-center text-red-500">
-  //             Error loading HiringPartners logo: {error}
-  //             <button 
-  //               onClick={handleHiringPartnerss}
-  //               className="ml-4 px-4 py-2 bg-[#FF7426] text-white rounded"
-  //             >
-  //               Retry
-  //             </button>
-  //           </div>
-  //         );
-  //       }
+            setHiringPartners(newhiringPartner);
+            setError(null);
+        } catch (err) {
+            console.error("Failed to load banners:", err);
+            setError(err.message);
+            setHiringPartners([]);
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
-  // Double the array for seamless looping
-  const doubledLogos = [...logos, ...logos];
+    useEffect(() => {
+        handleHiringPartnerss();
+    }, []);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+    if (isLoading) {
+        return (
+            <div className="w-full h-[600px] flex items-center justify-center">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF7426]"></div>
+            </div>
+        );
+    }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    // You would typically send this data to your API
-    // Then close the modal or show success message
-    setIsModalOpen(false);
-    // Reset form
-    setFormData({
-      companyName: '',
-      contactPerson: '',
-      email: '',
-      phone: '',
-      partnershipType: '',
-      message: ''
-    });
-  };
+    if (error) {
+        return (
+            <div className="w-full h-[600px] flex items-center justify-center text-red-500">
+                Error loading HiringPartners logo: {error}
+                <button 
+                    onClick={handleHiringPartnerss}
+                    className="ml-4 px-4 py-2 bg-[#FF7426] text-white rounded"
+                >
+                    Retry
+                </button>
+            </div>
+        );
+    }
 
-  return (
-    <div className="py-16 bg-white">
-      <div className="container mx-auto px-4">
-        {/* Title with color accent */}
-        <motion.h2 
-          className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          Our <span className="text-[#FF7426]">Hiring Partners</span>
-        </motion.h2>
+    // Double the array for seamless looping
+    const doubledLogos = [...hiringPartners, ...hiringPartners];
 
-        {/* Primary Marquee - Right to Left */}
-        <div className="py-2 mb-3 relative overflow-hidden">
-          <motion.div
-            className="flex items-center"
-            animate={{
-              x: ['0%', '-100%'],
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
-            whileHover={{ animationPlayState: 'paused' }}
-          >
-            {doubledLogos.map((logo, index) => (
-              <motion.div 
-                key={`marquee1-${index}`}
-                className="flex-shrink-0 mx-8"
-                whileHover={{
-                  scale: 1.2,
-                  transition: { duration: 0.3 }
-                }}
-              >
-                <img 
-                  src={`./images/${logo}`} 
-                  alt="Partner logo" 
-                  className="h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500"
-                />
-              </motion.div>
-            ))}
-          </motion.div>
-          {/* Gradient fade edges */}
-          <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
-          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
+    // const handleInputChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setFormData(prev => ({
+    //         ...prev,
+    //         [name]: value
+    //     }));
+    // };
+
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     // Handle form submission here
+    //     // You would typically send this data to your API
+    //     // Then close the modal or show success message
+    //     setIsModalOpen(false);
+    //     // Reset form
+    //     setFormData({
+    //         companyName: '',
+    //         contactPerson: '',
+    //         email: '',
+    //         phone: '',
+    //         partnershipType: '',
+    //         message: ''
+    //     });
+    // };
+
+    return (
+        <div className="py-16 bg-white">
+            <div className="container mx-auto px-4">
+                {/* Title with color accent */}
+                <motion.h2 
+                    className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                >
+                    Our <span className="text-[#FF7426]">Hiring Partners</span>
+                </motion.h2>
+
+                {/* Primary Marquee - Right to Left */}
+                <div className="py-2 mb-3 relative overflow-hidden">
+                    <motion.div
+                        className="flex items-center"
+                        animate={{
+                            x: ['0%', '-100%'],
+                        }}
+                        transition={{
+                            duration: 10,
+                            repeat: Infinity,
+                            ease: 'linear',
+                        }}
+                        whileHover={{ animationPlayState: 'paused' }}
+                    >
+                        {doubledLogos.map((partner, index) => (
+                            <motion.div 
+                                key={`marquee1-${index}`}
+                                className="flex-shrink-0 mx-8"
+                                whileHover={{
+                                    scale: 1.2,
+                                    transition: { duration: 0.3 }
+                                }}
+                            >
+                                <img 
+                                    src={partner.logo} 
+                                    alt={partner.name} 
+                                    className="h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500"
+                                />
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                    {/* Gradient fade edges */}
+                    <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
+                    <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
+                </div>
+
+                {/* Secondary Marquee - Left to Right (smaller logos) */}
+                <div className="py-6 relative overflow-hidden">
+                    <motion.div
+                        className="flex items-center"
+                        animate={{
+                            x: ['-100%', '0%'],
+                        }}
+                        transition={{
+                            duration: 15,
+                            repeat: Infinity,
+                            ease: 'linear',
+                        }}
+                        whileHover={{ animationPlayState: 'paused' }}
+                    >
+                        {doubledLogos.map((partner, index) => (
+                            <motion.div 
+                                key={`marquee2-${index}`}
+                                className="flex-shrink-0 mx-6"
+                                whileHover={{
+                                    scale: 1.3,
+                                    rotate: [0, -5, 5, 0],
+                                    transition: { duration: 0.5 }
+                                }}
+                            >
+                                <img 
+                                    src={partner.logo} 
+                                    alt={partner.name} 
+                                    className="h-12 object-contain opacity-90 hover:opacity-100 transition-all duration-300"
+                                />
+                            </motion.div>
+                        ))}
+                    </motion.div>
+                    {/* Gradient fade edges */}
+                    <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
+                    <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
+                </div>
+
+                {/* CTA with accent color */}
+                <motion.div 
+                    className="mt-16 text-center"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.8 }}
+                >
+                  <a href="#AdmissionForm">
+                    <motion.button
+                        // onClick={() => setIsModalOpen(true)}
+                        className="px-8 py-3 bg-[#4D2C5E] text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all cursor-pointer"  
+                        whileHover={{ 
+                            scale: 1.05,
+                            backgroundColor: '#5F3A73'
+                        }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        Become a Partner
+                    </motion.button>
+                    </a>
+                </motion.div>
+            </div>
+
+            {/* Modal for Become a Partner form */}
+            {/* Here is modal form */}
         </div>
-
-        {/* Secondary Marquee - Left to Right (smaller logos) */}
-        <div className="py-6 relative overflow-hidden">
-          <motion.div
-            className="flex items-center"
-            animate={{
-              x: ['-100%', '0%'],
-            }}
-            transition={{
-              duration: 15,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
-            whileHover={{ animationPlayState: 'paused' }}
-          >
-            {doubledLogos.map((logo, index) => (
-              <motion.div 
-                key={`marquee2-${index}`}
-                className="flex-shrink-0 mx-6"
-                whileHover={{
-                  scale: 1.3,
-                  rotate: [0, -5, 5, 0],
-                  transition: { duration: 0.5 }
-                }}
-              >
-                <img 
-                  src={`./images/${logo}`} 
-                  alt="Partner logo" 
-                  className="h-12 object-contain opacity-90 hover:opacity-100 transition-all duration-300"
-                />
-              </motion.div>
-            ))}
-          </motion.div>
-          {/* Gradient fade edges */}
-          <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
-          <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
-        </div>
-
-        {/* CTA with accent color */}
-        <motion.div 
-          className="mt-16 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.8 }}
-        >
-          <motion.button
-            // onClick={() => setIsModalOpen(true)}
-            className="px-8 py-3 bg-[#4D2C5E] text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all cursor-pointer"  
-            whileHover={{ 
-              scale: 1.05,
-              backgroundColor: '#5F3A73'
-            }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Become a Partner
-          </motion.button>
-        </motion.div>
-      </div>
-
-      {/* Modal for Become a Partner form */}
-      {/* Here is modal form */}
-    </div>
-  );
+    );
 };
 
 export default HiringPartnersShowcase;

@@ -38,6 +38,21 @@ const ApiConfig = {
 
   // Hiring Partner
   hiringPartners: `${url}/hiring-partners`,
+
+  // courseDetails
+  getCourseByCode: (code) => `${url}/course/code/${code}`,
+
+
+  // payments
+  batchRegistration: `${url}/registration/batch`,
+  cashfreeCheckout: `${url}/payment/cashfree/redirect`,
+
+  //blog
+  blogs: `${url}/blogs`, // Base endpoint for all blog operations
+  blogById: (id) => `${url}/blogs/${id}`, // For single blog operations
+
+  //youtube
+  youtube: `${url}/youtube-videos?all=1`, // Base endpoint for all youtube operations
 };
 
 export default ApiConfig;

@@ -5,6 +5,7 @@ import { NavLink,useNavigate } from 'react-router-dom';
 const CourseCard = ({ 
   id,
   courseId,
+  courseCode,
   imageUrl, 
   title, 
   duration, 
@@ -102,16 +103,16 @@ const CourseCard = ({
         >
           <div className="flex items-baseline">
             {originalPrice && (
-              <span className="text-gray-400 line-through mr-2 text-sm">${originalPrice}</span>
+              <span className="text-gray-400 line-through mr-2 text-sm">₹{originalPrice}</span>
             )}
-            <span className="text-lg font-bold text-[#FF7426]">${discountedPrice}</span>
+            <span className="text-lg font-bold text-[#FF7426]">₹{discountedPrice}</span>
           </div>
           <motion.div
             className="flex items-center text-[#4d2c5e] hover:text-[#FF7426] transition-colors"
             whileHover={{ x: 3 }}
           >
            <button 
-  onClick={() => navigate('/courseDetails', { state: { courseId } })}
+  onClick={() => navigate('/courseDetails', { state: { courseId,courseCode } })}
   className="flex items-center text-[#FF7426] hover:text-[#FF915E] transition-colors"
 >
   <span className="mr-1 font-medium">View more</span>

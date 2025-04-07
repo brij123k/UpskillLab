@@ -28,7 +28,6 @@ const CourseDetailsPage = () => {
 
   const handleEnrollSubmit = () => {
     // Handle enrollment logic here
-    console.log('Enrolling in:', selectedCourse);
     setIsEnrollModalOpen(false);
   };
 

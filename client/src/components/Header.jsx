@@ -17,7 +17,6 @@ function Header() {
    const { data: categoriesData, isLoading: isCategoriesLoading } = useQuery({
     queryKey: ["categories"],
     queryFn: async () => {
-      console.log("Fetching categories...");
       const categories = await getDataHandler("category", {
         limit: 5,
         featured: true,
@@ -40,6 +39,7 @@ function Header() {
           .filter((course) => course.category._id === category._id)
           .map((course) => ({
             id: course._id,
+            courseCode: course.courseCode,
             name: course.courseName,
             image: course.courseImage,
           })),
@@ -65,6 +65,7 @@ function Header() {
         title: course.courseName,
         imageUrl: course.courseImage,
         duration: course.courseDuration,
+        courseCode: course.courseCode,
       }));
     },
   });
@@ -218,7 +219,7 @@ function Header() {
                                 key={course.id}
                                 className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group"
                                 onClick={() => {
-                                  navigate('/courseDetails', { state: { courseId: course.id } });
+                                  navigate('/courseDetails', { state: { courseId: course.id,courseCode:course.courseCode } });
                                   setIsCoursesDropdownOpen(false);
                                 }}
                               >
@@ -241,7 +242,7 @@ function Header() {
                                 key={course.id}
                                 className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group"
                                 onClick={() => {
-                                  navigate('/courseDetails', { state: { courseId: course.id } });
+                                  navigate('/courseDetails', { state: { courseId: course.id,courseCode:course.courseCode } });
                                   setIsCoursesDropdownOpen(false);
                                 }}
                               >
@@ -491,16 +492,16 @@ function Header() {
 
                                   {/* Courses List (shown only for selected category) */}
                                   {isCategoryOpen && (
-                                    <div className="mt-2 ml-4 space-y-2">
+                                    <div className="mt-2 ml-4 space-y-2 overflow-hidden">
                                       {category.courses.map((course) => (
                                         <button
                                           key={course.id}
                                           onClick={() => {
-                                            navigate('/courseDetails', { state: { courseId: course.id } });
+                                            navigate('/courseDetails', { state: { courseId: course.id,courseCode:course.courseCode } });
                                             toggleDrawer();
                                             setIsCoursesDropdownOpen(false);
                                           }}
-                                          className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100"
+                                          className="block px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100 overflow-hidden"
                                         >
                                           <div className="flex items-center">
                                             <img
@@ -509,7 +510,7 @@ function Header() {
                                               className="w-8 h-8 object-cover rounded-md mr-2"
                                             />
                                             <div>
-                                              <p className="font-medium">
+                                              <p className="font-medium text-gray-800 group-hover:text-[#FF7426] truncate">
                                                 {course.name}
                                               </p>
                                               <p className="text-xs text-gray-500">

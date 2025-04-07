@@ -11,10 +11,11 @@ import {
   validateCourse,
   validateStudentType
 } from '../Validations';
-
+import { toast } from "react-toastify";
+import { postDataHandler } from '../../config/services';
 const AdmissionFormModal = ({ isOpen, onClose }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
-
+  const [loader, setLoader] = useState(false);
   // Optimized validation schema
   const validationSchema = Yup.object().shape({
     fullName: Yup.string()
@@ -54,6 +55,29 @@ const AdmissionFormModal = ({ isOpen, onClose }) => {
       })
   });
 
+   const demoSessionHandler = async (values) => {
+      try {
+        setLoader(true);
+        const { fullName, email, phone, course, studentType } = values;
+        let data = {
+          fullName: fullName,
+           email: email,
+          phoneNumber: phone,
+          course: course,
+          experience: studentType
+        }
+        const res = await postDataHandler('demoSession', data)
+        if (res) {
+          toast.success('Demo session booked successfully!');
+        }
+        
+      } catch (error) {
+        toast.error('Demo session booking Failed!');
+      } finally { 
+        setLoader(false);
+      }
+    }
+
   // Rest of your component remains the same...
   const formik = useFormik({
     initialValues: {
@@ -65,13 +89,9 @@ const AdmissionFormModal = ({ isOpen, onClose }) => {
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log('Form submitted:', values);
-      setSubmitSuccess(true);
-      setTimeout(() => {
+      demoSessionHandler(values)
         onClose();
-        setSubmitSuccess(false);
         formik.resetForm();
-      }, 2000);
     },
     validateOnBlur: true,
     validateOnChange: false
@@ -299,18 +319,18 @@ const StudentTypeRadio = React.memo(({ formik, handleRadioChange }) => (
     </label>
     <div className="grid grid-cols-2 gap-4">
       <StudentRadioOption
-        value="fresher"
+        value="Fresher"
         icon={<FiUser />}
         label="Fresher"
-        checked={formik.values.studentType === 'fresher'}
-        onChange={() => handleRadioChange('fresher')}
+        checked={formik.values.studentType === 'Fresher'}
+        onChange={() => handleRadioChange('Fresher')}
       />
       <StudentRadioOption
-        value="working"
+        value="Working Professional"
         icon={<FiBriefcase />}
         label="Working Professional"
-        checked={formik.values.studentType === 'working'}
-        onChange={() => handleRadioChange('working')}
+        checked={formik.values.studentType === 'Working Professional'}
+        onChange={() => handleRadioChange('Working Professional')}
       />
     </div>
     {formik.errors.studentType && (

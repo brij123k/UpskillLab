@@ -122,6 +122,7 @@ const CardsContainer = () => {
             {
               title: "Dedicated Mentorship",
               description: "Get dedicated mentorship on every step of learning...",
+              fullDescription: "For any  Data Science program,  dedicated mentorship is an invaluable resource that can help students navigate the complexities of the field and accelerate their learning.  At Meritshot, students receive personalized guidance and support at every step of their educational journey from their mentors. This includes help with coursework, project development, career planning, and more. Our mentors offer insights into the industry, provide networking opportunities, and help students stay motivated and focused. By working closely with a mentor, students  deepen their understanding of various concepts and gain the practical skills they need to succeed in the field.  Enrolling in any data science program can be a challenging and rewarding experience, but it can also be overwhelming at times. That's why having access to dedicated mentorship can make a significant difference in your learning journey.",
               icon: <FiUser />,
               image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
               modalData: {
@@ -133,6 +134,7 @@ const CardsContainer = () => {
             {
               title: "Personalized Evaluation",
               description: "Get personalized evaluation on every assignment...",
+              fullDescription: "Learners at Meritshot receive personalized evaluation from domain experts on their assignments and projects. By having your work evaluated by experts in the field, you can gain insights into how to improve your skills and enhance your understanding of the concepts being taught. Domain experts  provide you with feedback on your data analysis techniques, programming skills, and overall project organization. They  also help you identify areas where you need to improve and suggest resources to help you do so. Ultimately, personalized evaluation from the domain experts at Meritshot helps you in your quest to become a more proficient data scientist and prepare you for a successful career in the field.",
               icon: <FiAward />,
               image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
               modalData: {
@@ -144,16 +146,10 @@ const CardsContainer = () => {
               title: "360° Career Support",
               description:
                 "Our Data Science PG Program offers 100 percent Placement Assurance.",
+                fullDescription:"Our Data Science PG Program offers 100 percent Placement Assurance. This means that upon successfully completing the program, you may secure a job in this field. This assurance provides you with confidence and security as you embark on your journey in Data Science, knowing that your hardwork and dedication during the program will pay off with a Job Offer in your hand upon completion. Our Career Support Team works tireleslly to help learners get the right kind of according to their interests and prefernces.",
               icon: <FiBriefcase />,
               image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            },
-            {
-              title: "360° Career Support",
-              description:
-                "Our Data Science PG Program offers 100 percent Placement Assurance.",
-              icon: <FiBriefcase />,
-              image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            },
+            }
   ];
 
   return (
@@ -162,7 +158,7 @@ const CardsContainer = () => {
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ duration: 0.8 }}
-    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
   >
     {/* Always render all items but hide some on mobile */}
     {features.map((feature, index) => (

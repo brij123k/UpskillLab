@@ -31,8 +31,6 @@ const handleBanners = async () => {
   useEffect(() => {
     handleBanners();
   }, []);
-
-  console.log(banner);
   useEffect(() => {
     if (isInView) {
       controls.start("visible");

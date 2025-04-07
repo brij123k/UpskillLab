@@ -96,7 +96,7 @@ useEffect(() => {
           additionalTransfrom={0} // Prevents extra transform
           ssr={true}
         >
-        {categories.map((category, index) => (
+        {categories.slice(0, 6).map((category, index) => (
           <motion.div
             onClick={() => handleCategoryClick(category)}
             key={index}

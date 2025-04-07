@@ -40,13 +40,18 @@ const handleError = (error) => {
 };
 
 // Base request handler
-const makeRequest = async (method, endPoint, config) => {
+const makeRequest = async (method, endPointOrUrl, config) => {
+  // const isUrl = config?.isUrl || false; // Check if it's a direct URL
   try {
+    const finalUrl = config.isUrl
+      ? endPointOrUrl // direct URL like https://.../course/123
+      : ApiConfig[endPointOrUrl]; // use from config if key
     const response = await axios({
       method,
-      url: ApiConfig[endPoint],
+      url: finalUrl,
       ...config
     });
+
     return handleResponse(response);
   } catch (error) {
     return handleError(error);
@@ -99,10 +104,11 @@ export const deleteDataHandlerWithoutToken = async (endPoint, query) => {
   return makeRequest("DELETE", endPoint, { params: query });
 };
 
-export const getDataHandler = async (endPoint, query, data) => {
-  return makeRequest("GET", endPoint, { 
-    params: query, 
-    data 
+export const getDataHandler = async (endPointOrUrl, query = {}, data = {}, isUrl = false) => {
+  return makeRequest("GET", endPointOrUrl, {
+    params: query,
+    data,
+    isUrl
   });
 };
 
@@ -115,24 +121,50 @@ export const getDataHandlerWithToken = async (endPoint, query, data) => {
 };
 
 
-// export const getDataHandlerwithQuery = async (endPoint, query = {}, data) => {
-//   try {
-//     const response = await makeRequest("GET", endPoint, { 
-//       params: query,
-//       data 
-//     });
-    
-//     // Transform response for infinite query compatibility
-//     return {
-//       data: response.data,          // The actual data array
-//       count: response.totalCount || // Total count for pagination
-//              response.total || 
-//              response.data?.length || 
-//              0,
-//       ...response                  // Include all other response data
-//     };
-//   } catch (error) {
-//     console.error(`Error in getDataHandler (${endPoint}):`, error);
-//     throw error; // Re-throw for React Query to handle
-//   }
+export const getFilteredCourses = async (params) => {
+  return makeRequest("POST", "courseDisplay", {
+    data: {
+      skip: params.skip || 0,
+      limit: params.limit || 12,
+      categoryIds: params.categoryIds,
+      languageIds: params.languageIds,
+      courseLevels: params.courseLevels,
+      search: params.search,
+      sort: params.sort,
+    }
+  });
+};
+
+
+
+// function for payment 
+export const registerBatch = async (batchId, userData) => {
+  return makeRequest("POST", "batchRegistration", {
+    data: {
+      batchId,
+      ...userData
+    }
+  });
+};
+
+export const initiateCashfreePayment = async (orderId, sessionId) => {
+  return makeRequest("POST", "cashfreeCheckout", {
+    data: { orderId, sessionId }
+  });
+};
+
+
+export const getBlogs = async (params = {}) => {
+  return makeRequest("GET", "blogs", {
+    params: {
+      limit: params.limit || 10
+    }
+  });
+};
+
+// export const getBlogById = async (id) => {
+//   return makeRequest("GET", `blogById/${id}`, {
+//     isUrl: true, // This tells makeRequest to use the URL directly
+//     params: { id }
+//   });
 // };

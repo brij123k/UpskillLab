@@ -18,6 +18,7 @@ function CourseList() {
         .map((course, index) => ({
           id: index + 1,
           courseId: course._id,
+          courseCode: course.courseCode,
           title: course.courseName,
           categoryId: course.category,
           image: course.courseImage,

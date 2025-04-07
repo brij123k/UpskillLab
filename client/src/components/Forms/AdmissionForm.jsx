@@ -90,7 +90,6 @@ const AdmissionForm = () => {
     validationSchema,
     onSubmit: (values) => {
       demoSessionHandler(values)
-      console.log('Form submitted:', values);
     }
   });
 
@@ -302,9 +301,9 @@ const AdmissionForm = () => {
       <input
         type="radio"
         name="studentType"
-        value="Working"
+        value="Working Professional"
         onChange={formik.handleChange}
-        checked={formik.values.studentType === 'Working'}
+        checked={formik.values.studentType === 'Working Professional'}
         className="h-4 w-4 text-[#4D2C5E] focus:ring-[#FF7426] border-gray-300 rounded"
       />
       <span className="ml-2 text-gray-700">Working Professional</span>

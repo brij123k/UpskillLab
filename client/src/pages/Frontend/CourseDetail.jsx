@@ -5,26 +5,13 @@ import { FiDownload, FiChevronRight ,FiFilm, FiCode} from 'react-icons/fi';
 import { FiClock, FiMonitor, FiCalendar, FiBook } from 'react-icons/fi';
 import { FiUsers, FiAlertCircle, FiMessageSquare } from 'react-icons/fi';
 import { FiAward, FiBriefcase, FiUserCheck, FiTrendingUp } from 'react-icons/fi';
-import { FiCreditCard } from 'react-icons/fi';
+import PurchaseModal from '../../components/Modal/EnrollmentModal';
+import { FiFlag } from 'react-icons/fi';
 import { FiBarChart2 } from 'react-icons/fi';
+import ApiConfig from '../../config/apiConfig';
 // import RazorpayLogo from '../assets/razorpay-logo.svg'; // Replace with actual import
 const CourseHero = ({ course }) => {
-    const location = useLocation();
-    const courseId = location.state?.courseId;
-    const batchId = location.state?.batchId;
-    const batchCode = location.state?.batchCode;
-  
-    useEffect(() => {
-      if (!courseId) {
-        // Handle case where courseId isn't passed
-        console.error("No courseId found in navigation state");
-        // Optionally redirect back or to a fallback page
-      }else if(!batchId){
-        console.error("No courseId found in navigation state");
-      }
-
-    }, [courseId]);
-    console.log(courseId,batchId,batchCode)
+   
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -55,9 +42,9 @@ const CourseHero = ({ course }) => {
                                 initial={{ y: 50, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ duration: 0.8, ease: "backOut" }}
-                                className="text-5xl md:text-6xl font-bold text-[#4D2C5E] leading-tight"
+                                className="text-4xl md:text-6xl font-bold text-[#4D2C5E] leading-tight"
                             >
-                                {course.title}
+                                {course?.courseName}
                             </motion.h1>
                         </div>
 
@@ -68,7 +55,7 @@ const CourseHero = ({ course }) => {
                                 transition={{ duration: 0.6, delay: 0.3 }}
                                 className="text-xl text-gray-700"
                             >
-                                {course.shortDescription}
+                                {course?.shortDescription? "Master React, Node.js, and MongoDB to build scalable web applications." : course?.shortDescription}
                             </motion.p>
                         </div>
 
@@ -79,22 +66,38 @@ const CourseHero = ({ course }) => {
                             transition={{ staggerChildren: 0.1, delayChildren: 0.5 }}
                             className="flex flex-wrap gap-3 mt-6"
                         >
-                            {course.tags?.map((tag, index) => (
-                                <motion.span
-                                    key={index}
-                                    initial={{ y: 20, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    whileHover={{
-                                        scale: 1.1,
-                                        backgroundColor: '#4D2C5E',
-                                        color: 'white',
-                                        boxShadow: '0 4px 12px rgba(77, 44, 94, 0.3)'
-                                    }}
-                                    className="px-4 py-2 bg-white text-[#4D2C5E] rounded-full text-sm font-medium border border-[#4D2C5E]/20 shadow-sm cursor-default"
-                                >
-                                    {tag}
-                                </motion.span>
-                            ))}
+                            {course?.tags?.length > 0 ? (
+  course.tags.map((tag, index) => (
+    <motion.span
+      key={index}
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      whileHover={{
+        scale: 1.1,
+        backgroundColor: '#4D2C5E',
+        color: 'white',
+        boxShadow: '0 4px 12px rgba(77, 44, 94, 0.3)'
+      }}
+      className="px-4 py-2 bg-white text-[#4D2C5E] rounded-full text-sm font-medium border border-[#4D2C5E]/20 shadow-sm cursor-default"
+    >
+      {tag}
+    </motion.span>
+  ))
+) : (
+  <motion.span
+    initial={{ y: 20, opacity: 0 }}
+    animate={{ y: 0, opacity: 1 }}
+    whileHover={{
+      scale: 1.1,
+      backgroundColor: '#4D2C5E',
+      color: 'white',
+      boxShadow: '0 4px 12px rgba(77, 44, 94, 0.3)'
+    }}
+    className="px-4 py-2 bg-white text-[#4D2C5E] rounded-full text-sm font-medium border border-[#4D2C5E]/20 shadow-sm cursor-default"
+  >
+    No tags available
+  </motion.span>
+)}
                         </motion.div>
                     </div>
 
@@ -120,7 +123,7 @@ const CourseHero = ({ course }) => {
                             <div className="absolute inset-0 bg-gradient-to-br from-[#4D2C5E]/30 to-[#FF7426]/30 mix-blend-overlay pointer-events-none" />
                             <div className="absolute inset-0 border-4 border-white/20 rounded-3xl pointer-events-none" />
                             <iframe
-                                src={course.videoUrl}
+                                src={course.youtubeUrl}
                                 title="Course Preview"
                                 className="w-full h-full relative z-0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -168,28 +171,28 @@ const CourseKeyDetails = ({ course }) => {
         {
             icon: <FiClock />,
             label: "DURATION",
-            value: course.duration,
+            value: course.courseDuration?  `${course.courseDuration} months` :"6 months" ,
             accent: "#FF7426",
             bg: "#4D2C5E"
         },
         {
             icon: <FiMonitor />,
             label: "MODE",
-            value: course.mode,
+            value: course.courseMode? course.courseMode: "Online" ,
             accent: "#4D2C5E",
             bg: "#FF7426"
         },
         {
             icon: <FiBook />,
             label: "FORMAT",
-            value: course.format,
+            value: "Live + Recorded" ,
             accent: "#FF7426",
             bg: "#4D2C5E"
         },
         {
             icon: <FiCalendar />,
             label: "STARTING",
-            value: course.startDate,
+            value: course.batch?.startDate? course.batch?.startDate : "Coming Soon" ,
             accent: "#4D2C5E",
             bg: "#FF7426"
         },
@@ -326,7 +329,21 @@ const CourseKeyDetails = ({ course }) => {
     );
 };
 
-const ProgramInfoWithEnroll = ({ course }) => {
+const ProgramInfoWithEnroll = (props) => {
+    const [course, batchCode] = props.course;
+    const [selectedCourse, setSelectedCourse] = useState(null);
+      const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+      const handleEnrollClick = (course) => {
+        setSelectedCourse(course);
+        setIsEnrollModalOpen(true);
+      };
+
+    
+      const handleEnrollSubmit = () => {
+        // Handle enrollment logic here
+        setIsEnrollModalOpen(false);
+      };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -535,6 +552,7 @@ const ProgramInfoWithEnroll = ({ course }) => {
                                 </motion.div>
 
                                 <motion.button
+                                onClick={() => handleEnrollClick(course)}
                                     initial={{ scale: 0.9, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{ delay: 1.2 }}
@@ -558,19 +576,23 @@ const ProgramInfoWithEnroll = ({ course }) => {
                     </motion.div>
                 </div>
             </div>
-        </motion.div>
+       
+
+{selectedCourse && (
+    <PurchaseModal
+      course={selectedCourse}
+      batchCode={batchCode}
+      isOpen={isEnrollModalOpen}
+      onClose={() => setIsEnrollModalOpen(false)}
+      onEnroll={handleEnrollSubmit}
+    />
+  )}
+   </motion.div>
     );
 };
 
 
-const moduleAnimation = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.6 }
-    }
-};
+
 
 const TeachingPlan = ({ course }) => {
     const ref = useRef(null);
@@ -903,16 +925,6 @@ const TeachingPlan = ({ course }) => {
     );
 };
 
-
-const cardAnimation = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-        opacity: 1,
-        y: 0,
-        transition: { duration: 0.5 }
-    }
-};
-
 const CareerDevelopmentTrack = ({ course }) => {
     const ref = React.useRef(null);
     const isInView = useInView(ref, { once: true, amount: 0.2 });
@@ -921,56 +933,59 @@ const CareerDevelopmentTrack = ({ course }) => {
     const careerData = course.careerData || [
         {
             icon: <FiBriefcase className="text-4xl text-[#FF7426]" />,
-            title: "Job Opportunities",
+            title: "Pregrad Career Assist",
             items: [
-                "Full Stack Developer",
-                "Frontend Engineer",
-                "Backend Developer",
-                "DevOps Engineer",
-                "Technical Architect"
+                "Mentoring from industry experts",
+                "Career-specific resume tailoring",
+                "1:1 career guidance sessions"
             ]
         },
         {
             icon: <FiAward className="text-4xl text-[#4D2C5E]" />,
-            title: "Certifications",
+            title: "Personal Branding",
             items: [
-                "Full Stack Developer Certification",
-                "AWS Cloud Practitioner",
-                "React Professional Certificate",
-                "Node.js Certified Developer"
+                "Build and showcase your skills in public",
+                "Strategic LinkedIn profiling",
+                "GitHub portfolio development"
             ]
         },
         {
             icon: <FiUsers className="text-4xl text-[#FF7426]" />,
-            title: "Career Support",
+            title: "Community Sessions",
             items: [
-                "1:1 Career Mentoring",
-                "Resume Building",
-                "Interview Preparation",
-                "LinkedIn Profile Optimization"
+                "Strengthen communication skills",
+                "Improve presentation techniques",
+                "Group discussion practice"
             ]
         },
         {
             icon: <FiBarChart2 className="text-4xl text-[#4D2C5E]" />,
-            title: "Salary Growth",
+            title: "Interview Preparation",
             items: [
-                "Average 40-60% hike for graduates",
-                "Top performers reach ₹15-20 LPA",
-                "Global placement opportunities",
-                "Equity options at startups"
+                "Mock interview sessions",
+                "Group discussion simulations",
+                "Art of salary negotiation"
+            ]
+        },
+        {
+            icon: <FiBook className="text-4xl text-[#FF7426]" />,  // Using FiBook for Masterclasses
+            title: "Domain Workshops",
+            items: [
+                "Masterclasses from industry professionals",
+                "HR interview preparation sessions",
+                "Technical deep-dive workshops"
+            ]
+        },
+        {
+            icon: <FiFlag className="text-4xl text-[#4D2C5E]" />,  // Using FiFlag for Career Kick-start
+            title: "Career Kick-start",
+            items: [
+                "Internship application assistance",
+                "Freelance opportunity guidance",
+                "Final year placement support"
             ]
         }
     ];
-
-    const cardAnimation = {
-        hidden: { opacity: 0, y: 30 },
-        visible: {
-            opacity: 1,
-            y: 0,
-            transition: { duration: 0.5 }
-        }
-    };
-
     return (
         <section
             ref={ref}
@@ -1142,8 +1157,23 @@ const CareerDevelopmentTrack = ({ course }) => {
     );
 };
 
-const PricingSection = ({ course }) => {
+const PricingSection = (props) => {
+    const [course, batchCode] = props.course;
+    
+    const [selectedCourse, setSelectedCourse] = useState(null);
+      const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+      const handleEnrollClick = (course) => {
+        setSelectedCourse(course);
+        setIsEnrollModalOpen(true);
+      };
+
+      const handleEnrollSubmit = () => {
+        // Handle enrollment logic here
+        setIsEnrollModalOpen(false);
+      };
+
     return (
+        
         <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -1206,7 +1236,7 @@ const PricingSection = ({ course }) => {
                                     transition={{ delay: 0.4 }}
                                     className="text-5xl font-bold text-[#4D2C5E]"
                                 >
-                                    ₹{course.fee?.toLocaleString('en-IN') || '20,060'}
+                                    ₹{course.discountedPrice?.toLocaleString('en-IN') || '20,060'}
                                 </motion.span>
                                 <motion.span
                                     initial={{ opacity: 0 }}
@@ -1242,20 +1272,6 @@ const PricingSection = ({ course }) => {
                                     (Non-refundable after 7 days of enrollment)
                                 </p>
                             </motion.div>
-
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                whileInView={{ opacity: 1 }}
-                                transition={{ delay: 0.7 }}
-                                className="bg-white p-6 rounded-xl border border-[#4D2C5E]/20 shadow-md"
-                            >
-                                <h4 className="font-bold text-[#4D2C5E] mb-3">0% Cost EMI Options Available*</h4>
-                                <p className="text-gray-600">
-                                    EMI options for admission will not be available on discounted Fee or
-                                    admission through scholarship. Connect with counselor for details.
-                                </p>
-                            </motion.div>
-
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 whileInView={{ opacity: 1 }}
@@ -1368,20 +1384,16 @@ const PricingSection = ({ course }) => {
                                     <h4 className="text-sm font-medium text-gray-500 mb-4">Secure Payment</h4>
                                     
                                     <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
-                                        <div className="flex items-center gap-4">
+                                        <div className="flex items-center">
                                             <img 
-                                                src="https://razorpay.com/build/browser/static/logo-blue.5a32ca5e.svg" 
-                                                alt="Razorpay" 
-                                                className="h-6 opacity-80 hover:opacity-100 transition-opacity" 
-                                            />
-                                            <img 
-                                                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/Stripe_Logo%2C_revised_2016.svg/2560px-Stripe_Logo%2C_revised_2016.svg.png" 
-                                                alt="Stripe" 
-                                                className="h-6 opacity-80 hover:opacity-100 transition-opacity" 
+                                                src="images/Cashfree Payments.png" 
+                                                alt="Cashfree" 
+                                                className="w-25 opacity-100 hover:opacity-100 transition-opacity" 
                                             />
                                         </div>
                                         
                                         <motion.button
+                                         onClick={() => handleEnrollClick(course)}
                                             whileHover={{ 
                                                 scale: 1.05,
                                                 boxShadow: "0 10px 25px rgba(255, 116, 38, 0.4)"
@@ -1408,6 +1420,7 @@ const PricingSection = ({ course }) => {
                             transition={{ delay: 1.5 }}
                             className="mt-8"
                         >
+                            <NavLink to='/ContactUs'>
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
@@ -1416,16 +1429,29 @@ const PricingSection = ({ course }) => {
                                 <FiMessageSquare className="text-xl" />
                                 <span>Connect with counselor</span>
                             </motion.button>
+                            </NavLink>
                         </motion.div>
                     </motion.div>
                 </div>
             </div>
+
+
+            {selectedCourse && (
+        <PurchaseModal
+          course={selectedCourse}
+          batchCode={batchCode}
+          isOpen={isEnrollModalOpen}
+          onClose={() => setIsEnrollModalOpen(false)}
+          onEnroll={handleEnrollSubmit}
+        />
+      )}
         </motion.div>
     );
 };
 
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
-import { useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
+import { getDataHandler } from '../../config/services';
 
 const FAQSection = ({ course }) => {
     const [activeIndex, setActiveIndex] = useState(null);
@@ -1535,100 +1561,74 @@ const FAQSection = ({ course }) => {
         </motion.div>
 
         {/* FAQ Sections */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ staggerChildren: 0.1, delayChildren: 0.5 }}
-          className="space-y-10"
-        >
-          {faqs.map((section, sectionIndex) => (
+<motion.div
+  initial={{ opacity: 0 }}
+  whileInView={{ opacity: 1 }}
+  transition={{ staggerChildren: 0.1, delayChildren: 0.5 }}
+  className="space-y-10"
+>
+  {faqs.map((faq, index) => (
+    <motion.div
+      key={index}
+      initial={{ y: 20, opacity: 0 }}
+      whileInView={{ y: 0, opacity: 1 }}
+      transition={{ delay: index * 0.15 }}
+      className="bg-white rounded-xl shadow-lg overflow-hidden"
+    >
+      <div className="divide-y divide-[#4D2C5E]/10">
+        <div className="overflow-hidden">
+          <motion.button
+            onClick={() => toggleQuestion(index.toString())}
+            whileHover={{ backgroundColor: "#4D2C5E/5" }}
+            className="w-full flex justify-between items-center p-6 text-left transition-all"
+          >
+            <span className="font-medium text-lg text-[#4D2C5E]">
+              {faq.question}
+            </span>
             <motion.div
-              key={sectionIndex}
-              initial={{ y: 20, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
-              transition={{ delay: sectionIndex * 0.15 }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden"
+              animate={{ 
+                rotate: activeIndex === index.toString() ? 180 : 0,
+                color: activeIndex === index.toString() ? '#FF7426' : '#4D2C5E'
+              }}
+              transition={{ duration: 0.3 }}
             >
-              {/* Section Header */}
-              <motion.h3 
-                whileHover={{ x: 5 }}
-                className="text-xl font-bold text-[#4D2C5E] p-6 border-b border-[#4D2C5E]/10 flex items-center"
-              >
-                <motion.span
-                  className="w-3 h-3 bg-[#FF7426] rounded-full mr-3"
-                  animate={{
-                    scale: [1, 1.3, 1],
-                    opacity: [0.7, 1, 0.7]
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    delay: sectionIndex * 0.5
-                  }}
-                />
-                {section.category}
-              </motion.h3>
-
-              {/* Questions */}
-              <div className="divide-y divide-[#4D2C5E]/10">
-                {section.questions.map((faq, qIndex) => {
-                  const fullIndex = `${sectionIndex}-${qIndex}`;
-                  return (
-                    <div key={fullIndex} className="overflow-hidden">
-                      <motion.button
-                        onClick={() => toggleQuestion(fullIndex)}
-                        whileHover={{ backgroundColor: "#4D2C5E/5" }}
-                        className="w-full flex justify-between items-center p-6 text-left transition-all"
-                      >
-                        <span className="font-medium text-lg text-[#4D2C5E]">
-                          {faq.q}
-                        </span>
-                        <motion.div
-                          animate={{ 
-                            rotate: activeIndex === fullIndex ? 180 : 0,
-                            color: activeIndex === fullIndex ? '#FF7426' : '#4D2C5E'
-                          }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <FiChevronDown className="text-xl" />
-                        </motion.div>
-                      </motion.button>
-
-                      <AnimatePresence>
-                        {activeIndex === fullIndex && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ 
-                              height: 'auto', 
-                              opacity: 1,
-                              transition: {
-                                height: { duration: 0.3 },
-                                opacity: { duration: 0.2, delay: 0.1 }
-                              }
-                            }}
-                            exit={{ 
-                              height: 0, 
-                              opacity: 0,
-                              transition: {
-                                height: { duration: 0.3 },
-                                opacity: { duration: 0.1 }
-                              }
-                            }}
-                            className="overflow-hidden"
-                          >
-                            <div className="px-6 pb-6 text-gray-700">
-                              {faq.a}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                })}
-              </div>
+              <FiChevronDown className="text-xl" />
             </motion.div>
-          ))}
-        </motion.div>
+          </motion.button>
+
+          <AnimatePresence>
+            {activeIndex === index.toString() && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ 
+                  height: 'auto', 
+                  opacity: 1,
+                  transition: {
+                    height: { duration: 0.3 },
+                    opacity: { duration: 0.2, delay: 0.1 }
+                  }
+                }}
+                exit={{ 
+                  height: 0, 
+                  opacity: 0,
+                  transition: {
+                    height: { duration: 0.3 },
+                    opacity: { duration: 0.1 }
+                  }
+                }}
+                className="overflow-hidden"
+              >
+                <div className="px-6 pb-6 text-gray-700">
+                  {faq.answer}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </motion.div>
+  ))}
+</motion.div>
 
         {/* Additional Help CTA */}
         <motion.div
@@ -1669,96 +1669,48 @@ const FAQSection = ({ course }) => {
 };
 
 
-const course = {
-    title: "Advanced Full-Stack Development",
-    shortDescription: "Master React, Node.js, and MongoDB to build scalable web applications.",
-    videoUrl: "https://www.youtube.com/embed/example",
-    tags: ["Full-Stack", "Beginner-Friendly"],
-    duration: "6 Months",
-    mode: "Online",
-    format: "Live + Recorded",
-    startDate: "15 Oct 2023",
-    // New fields:
-    programDetails: "A 6-month intensive program with 10+ real-world projects, mentorship, and career support.",
-    targetAudience: [
-        "Aspiring full-stack developers",
-        "Computer science students seeking practical skills",
-        "Professionals transitioning to tech careers",
-        "Freelancers wanting to expand their service offerings"
-    ],
-    modules: [
-        {
-            week: "Week 1-2",
-            title: "Frontend Fundamentals",
-            topics: [
-                "HTML5 & CSS3",
-                "JavaScript ES6+",
-                "React Components",
-                "State & Props"
-            ]
-        },
-        {
-            week: "Week 3-4",
-            title: "Backend Development",
-            topics: [
-                "Node.js Runtime",
-                "Express Framework",
-                "JWT Authentication",
-                "Error Handling"
-            ]
-        },
-        // Add more modules...
-    ],
-    careerOutcomes: [
-        {
-            icon: <FiBriefcase className="text-3xl text-[#FF7426]" />,
-            title: "Job Roles",
-            items: [
-                "Full-Stack Developer",
-                "Frontend Engineer",
-                "Backend Developer",
-                "DevOps Engineer"
-            ]
-        },
-        // Add other outcomes...
-    ],
-    fee: 20060,
-    includes: [
-        "Live sessions with industry experts",
-        "Lifetime access to recordings",
-        "5 real-world projects",
-        "Certificate of completion",
-        "Career support for 6 months"
-    ],
-    faqs: [
-        {
-            category: "Technical Requirements",
-            questions: [
-                {
-                    q: "What software/tools do I need?",
-                    a: "VS Code, Node.js, and a modern browser. All other tools will be provided."
-                }
-            ]
-        }
-        // Add more FAQ categories as needed
-    ]
-};
-
 const CourseDetails = () => {
-    const location = useLocation()
-    console.log('====================================');
-    console.log(location);
-    console.log('====================================');
+      
+    const [course, setCourse] = useState(null);
+  const location = useLocation();
+  const courseId = location.state?.courseId;
+  const courseCode = location.state?.courseCode;
+  const batchId = location.state?.batchId;
+  const batchCode = location.state?.batchCode;
+  useEffect(() => {
+    if (!courseCode) {
+      // Handle case where courseId isn't passed
+      console.error("No course Code found in navigation state");
+      // Optionally redirect back or to a fallback page
+    }else{
+        const fetchCourse = async () => {     
+            // Get the endpoint URL by calling the ApiConfig function
+            const endpointUrl = ApiConfig.getCourseByCode(courseCode);
+            
+            const response = await getDataHandler(endpointUrl, null, null,true); // pass endpointUrl directly
+            
+            setCourse(response);
+          };
+        fetchCourse();
+    }
+}, [courseCode]);
+  console.log(courseId,courseCode,batchId,batchCode)
+if (!course) return <div>Loding</div>;
+
+
     return (
         <div>
             <CourseHero course={course} />
             <CourseKeyDetails course={course} />
-            <ProgramInfoWithEnroll course={course} />
+            <ProgramInfoWithEnroll course={[course,batchId]} />
             <TeachingPlan course={course} />
             <CareerDevelopmentTrack course={course} />
-            <PricingSection course={course} />
+            <PricingSection course={[course,batchId]} />
             <FAQSection course={course} />
             {/* Add other components here */}
+
+            
+
         </div>
     );
 };

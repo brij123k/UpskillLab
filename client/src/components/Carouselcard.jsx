@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, use } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import VideoModal from './Modal/VideoModal';
 import {useVideoModal} from './Modal/LandingVideoModal';
 import { NavLink } from 'react-router-dom';
 import { getDataHandler } from '../config/services';
 const TextCarousel = ({ slides, autoPlayVideo = false }) => {
+  const [demoVideoUrl, setDemoVideoUrl] = useState(null);
   const {
     isVideoModalOpen,
     videoSrc,
@@ -13,7 +14,27 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
     hasAutoPlayed
   } = useVideoModal();
   
-  const demoVideoUrl = "https://www.youtube.com/embed/YOUR_VIDEO_ID?autoplay=1&mute=1";
+  const getVideoSrc = async () => {
+    try {
+      const response = await getDataHandler('youtube');
+      console.log('API Response:', response);
+      
+      if (response?.videos?.length > 0) {
+        // Construct proper YouTube embed URL
+        const videoId = response.videos[0].videoId;
+        const embedUrl = `${videoId}?autoplay=1&mute=1&rel=0&enablejsapi=1`;
+        console.log('Embed URL:', embedUrl);
+        setDemoVideoUrl(embedUrl);
+      }
+    } catch (error) {
+      console.error('Error fetching video:', error);
+      setDemoVideoUrl(null);
+    }
+  };
+
+  useEffect(() => {
+    getVideoSrc();
+  }, []);
 
   // Auto-play video on component mount if enabled
   useEffect(() => {

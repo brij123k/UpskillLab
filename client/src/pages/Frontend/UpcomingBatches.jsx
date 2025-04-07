@@ -10,6 +10,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getDataHandler } from "../../config/services"; // Updated import
 
 const BatchDetailsModal = ({ batch, onClose }) => {
+  console.log("Batch Details:", batch);
   return (
     <Modal
       isOpen={true}
@@ -100,9 +101,11 @@ const UpcomingBatches = () => {
         id: batch.batchId,
         batchId: batch.batchId,
         courseId: batch.courseId,
+        courseCode: batch.course.courseCode,
         startDate: new Date(batch.startDate),
         title: batch.courseName,
         price: batch.fees,
+        originalPrice: batch.course.originalPrice,
         duration:
           batch.durationInDays > 30
             ? `${Math.floor(batch.durationInDays / 30)} month${
@@ -271,10 +274,12 @@ const UpcomingBatches = () => {
               >
                 <BatchCard
                   startDate={batch.startDate}
-                  price={batch.price}
+                  price={batch.originalPrice}
+                  originalPrice={batch.price}
                   title={batch.title}
                   batchCode={batch.batchCode}
                   courseId={batch.courseId}
+                  courseCode={batch.courseCode}
                   batchId={batch.batchId}
                   batchTime={batch.startTime}
                   duration={batch.duration}
