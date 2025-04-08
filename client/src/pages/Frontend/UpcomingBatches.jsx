@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import BatchCard from "../../components/Cards/BatchCard";
@@ -97,7 +96,6 @@ const UpcomingBatches = () => {
     queryFn: () => getDataHandler("upcomingBatches", { limit: 20 }),
     select: (data) =>
       data.map((batch) => ({
-        
         id: batch.batchId,
         batchId: batch.batchId,
         courseId: batch.courseId,
@@ -118,9 +116,17 @@ const UpcomingBatches = () => {
             : `${batch.durationInDays * 24} hour${
                 batch.durationInDays * 24 > 1 ? "s" : ""
               }`,
-        startTime: `${batch.startTime % 12 || 12}:00 ${
-          batch.startTime >= 12 ? "PM" : "AM"
-        }`,
+        startTime: batch.startTime
+          ? (() => {
+              return new Date(
+                `2000-01-01T${batch.startTime}:00.000`
+              ).toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              });
+            })()
+          : "",
         batchCode: batch.batchCode,
         mode: batch.classMode,
         remainingSeats: batch.remainingSeats,
