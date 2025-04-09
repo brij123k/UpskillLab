@@ -51,7 +51,7 @@ const EnrollmentModal = ({ batch, onClose }) => {
   // Form handlers
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
