@@ -1,16 +1,31 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import Card from './Cards';
-import Student from '../../assets/Students.jpg';
-import Course from '../../assets/Course.jpg';
-import Expert from '../../assets/Experts.jpg';
+import { getDataHandler } from '../../config/services';
+
 const StudentFeedBack = () => {
   const controls = useAnimation();
+  const [stats, setStats] = useState([]);
   const [ref, inView] = useInView({
     threshold: 0.1,
-    triggerOnce: false // Allows re-triggering when scrolling back
+    triggerOnce: false
   });
+
+  const handleFeedback = async () => {
+    try {
+      const res = await getDataHandler('stats');
+      if(res && res.stats) {
+        setStats(res.stats.slice(0, 3)); // Take first 3 stats
+      }
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+    }
+  };
+
+  useEffect(() => {
+    handleFeedback();
+  }, []);
 
   // Animation variants
   const container = {
@@ -96,70 +111,28 @@ const StudentFeedBack = () => {
         animate={controls}
         className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 w-full"
       >
-        {/* Card 1 */}
-        <motion.div variants={item} className="relative">
-          <motion.div 
-            className="absolute -inset-2 bg-[#FF7426] rounded-xl blur-md opacity-0 group-hover:opacity-50 transition-opacity duration-300"
-            animate={inView ? {
-              scale: [1, 1.05, 1],
-              transition: {
-                duration: 3,
-                repeat: Infinity,
-                repeatType: "loop"
-              }
-            } : { scale: 1 }}
-          />
-          <Card
-            imageSrc={Student}
-            title={18000}
-            subtitle="Happy Students"
-            animate={inView}
-          />
-        </motion.div>
-
-        {/* Card 2 */}
-        <motion.div variants={item} className="relative">
-          <motion.div 
-            className="absolute -inset-2 bg-[#FF7426] rounded-xl blur-md opacity-0 group-hover:opacity-50 transition-opacity duration-300"
-            animate={inView ? {
-              scale: [1, 1.05, 1],
-              transition: {
-                duration: 3,
-                repeat: Infinity,
-                repeatType: "loop",
-                delay: 0.5
-              }
-            } : { scale: 1 }}
-          />
-          <Card
-            imageSrc={Course}
-            title={18000}
-            subtitle="Popular Courses"
-            animate={inView}
-          />
-        </motion.div>
-
-        {/* Card 3 */}
-        <motion.div variants={item} className="relative">
-          <motion.div 
-            className="absolute -inset-2 bg-[#FF7426] rounded-xl blur-md opacity-0 group-hover:opacity-50 transition-opacity duration-300"
-            animate={inView ? {
-              scale: [1, 1.05, 1],
-              transition: {
-                duration: 3,
-                repeat: Infinity,
-                repeatType: "loop",
-                delay: 1
-              }
-            } : { scale: 1 }}
-          />
-          <Card
-            imageSrc={Expert}
-            title={18000}
-            subtitle="Expert Instructors"
-            animate={inView}
-          />
-        </motion.div>
+        {stats.map((stat, index) => (
+          <motion.div key={stat.id || index} variants={item} className="relative">
+            <motion.div 
+              className="absolute -inset-2 bg-[#FF7426] rounded-xl blur-md opacity-0 group-hover:opacity-50 transition-opacity duration-300"
+              animate={inView ? {
+                scale: [1, 1.05, 1],
+                transition: {
+                  duration: 3,
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  delay: index * 0.5
+                }
+              } : { scale: 1 }}
+            />
+            <Card
+              imageSrc={stat.imageUrl}
+              title={stat.count}
+              subtitle={stat.label}
+              animate={inView}
+            />
+          </motion.div>
+        ))}
       </motion.div>
 
       {/* Animated border */}

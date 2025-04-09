@@ -9,6 +9,8 @@ import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { getFilteredCourses } from "../../config/services";
 import {getDataHandler } from "../../config/services";
 import { useLocation } from "react-router-dom";
+import BatchEnrollmentModal from "../../components/Modal/BatchEnrollmentModal";
+import ApiConfig from "../../config/apiConfig";
 const bannerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -346,19 +348,38 @@ const LevelDropdownFilter = ({
 };
 
 const CourseList = () => {
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+  const [batch, setbatch] = useState(null);
+  const [enrollCourse, setEnrollCourse] = useState(null);
+  // const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const handleEnrollClick = (course) => {
-    setSelectedCourse(course);
-    setIsEnrollModalOpen(true);
+  const handleEnrollClick = async (course) => {
+    // setSelectedCourse(course);
+      const endpointUrl = ApiConfig.getCourseByCode(course.courseCode);
+      const response = await getDataHandler(endpointUrl, null, null,true);
+      console.log(response)
+      let custemDataSet={
+        id:response.batch._id,
+        batchCode:response.batch.batchCode,
+        batchId:response.batch._id,
+        courseCode:response.courseCode,
+        courseId:response._id,
+        originalPrice:response.originalPrice,
+        price:response.discountedPrice,
+        remainingSeats:response.batch.remainingSeats,
+        startDate:response.batch.startDate,
+        startTime:response.batch.startTime,
+        title:response.courseName,
+        totalSeats:response.totalSeats,
+      }
+    setEnrollCourse(custemDataSet)
+    // setIsEnrollModalOpen(true);
   };
 
-  const handleEnrollSubmit = () => {
-    // Handle enrollment logic here
-    setIsEnrollModalOpen(false);
-  };
+  // const handleEnrollSubmit = () => {
+  //   // Handle enrollment logic here
+  //   setIsEnrollModalOpen(false);
+  // };
 
   // Enhanced course data
   const [queryParams, setQueryParams] = useState({
@@ -448,6 +469,7 @@ const CourseList = () => {
   };
 
   const courses = coursesData?.data || [];
+  // console.log(coursesData)
   const totalCourses = coursesData?.count || 0;
 
   return (
@@ -519,7 +541,7 @@ const CourseList = () => {
                 <div className="absolute -top-5 -left-5 w-full h-full rounded-2xl bg-[#FF7426]/20 z-0"></div>
                 <motion.img
                   whileHover={{ scale: 1.03 }}
-                  src="https://images.unsplash.com/photo-1593642634524-b40b5baae6bb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
+                  src="/images/Course List Page.png"
                   alt="studentsEnrolled collaborating"
                   className="relative rounded-xl w-full h-auto object-cover shadow-2xl z-10 border-4 border-white"
                 />
@@ -753,7 +775,7 @@ const CourseList = () => {
               {/* Action Buttons Section */}
               <div className="px-6 pb-6 pt-0 flex justify-between gap-3">
                 <button
-                   onClick={() => navigate('/courseDetails', { 
+                   onClick={() => navigate(`/courseDetails/course/${course.courseCode}`, { 
   state: { 
     courseCode: course.courseCode
   } 
@@ -823,15 +845,12 @@ const CourseList = () => {
       {/* Keep your existing banners */}
       <TrainingBanner />
       <FeedbaackBanner />
-
-      {selectedCourse && (
-        <EnrollmentModal
-          course={selectedCourse}
-          isOpen={isEnrollModalOpen}
-          onClose={() => setIsEnrollModalOpen(false)}
-          onEnroll={handleEnrollSubmit}
-        />
-      )}
+      {enrollCourse && (
+          <BatchEnrollmentModal
+            batch={enrollCourse}
+            onClose={() => setEnrollCourse(null)}
+          />
+        )}
     </div>
   );
 };

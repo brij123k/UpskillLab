@@ -100,7 +100,7 @@ const EnqueryBanner = () => {
           <motion.img
             src={banner?.imageUrl}
             alt={banner?.title}
-            className="w-full h-auto rounded-xl object-cover max-h-[400px]"
+            className="w-full h-auto rounded-xl object-cover max-h-[400px] shadow-xl shadow-[#0000008a]"
             initial={{ scale: 0.9 }}
             animate={{ 
               scale: 1,

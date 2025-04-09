@@ -27,12 +27,15 @@ const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 export const routes = [
   { exact: true, path: "/", layout: GuestLayout, component: Home },
   { exact: true, path: "/Success-stories", layout: GuestLayout, component: Success},
-  { exact: true, path: "/upcoming-batches", layout: GuestLayout, component: upcomingBatches},
+  { exact: true, path: "/upcoming-batches/", layout: GuestLayout, component: upcomingBatches},
   { exact: true, path: "/Students-Blog", layout: GuestLayout, component: StudentsBlog},
   { exact: true, path: "/BlogDetail",layout:GuestLayout,component:BlogDetailPage},
   { exact: true, path: "/ContactUs", layout: GuestLayout, component: ContactUs},
   { exact: true, path: "/CourseList", layout: GuestLayout, component: CourseList},
-  { exact: true, path: "/CourseDetails/", layout: GuestLayout, component: CourseDetailsPage},
+  // { exact: true, path: "/CourseDetails/:id", layout: GuestLayout, component: CourseDetailsPage},
+  { exact: true, path: "/courseDetails/batch/:id", layout: GuestLayout, component: CourseDetailsPage},
+  {
+    exact: true, path: "/courseDetails/course/:id", layout: GuestLayout, component: CourseDetailsPage},
   { exact: true, path: "/Register", layout: Index, component: Register},
   { exact: true, path: "/Login", layout: Index, component: Login},
   { exact: true, path: "/ForgetPassword", layout: Index, component: ForgotPasswordPage},

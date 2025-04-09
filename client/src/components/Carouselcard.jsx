@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef, use } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 import VideoModal from './Modal/VideoModal';
-import {useVideoModal} from './Modal/LandingVideoModal';
+import { useVideoModal } from './Modal/LandingVideoModal';
 import { NavLink } from 'react-router-dom';
 import { getDataHandler } from '../config/services';
+
 const TextCarousel = ({ slides, autoPlayVideo = false }) => {
   const [demoVideoUrl, setDemoVideoUrl] = useState(null);
   const {
@@ -17,13 +18,9 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
   const getVideoSrc = async () => {
     try {
       const response = await getDataHandler('youtube');
-      console.log('API Response:', response);
-      
       if (response?.videos?.length > 0) {
-        // Construct proper YouTube embed URL
         const videoId = response.videos[0].videoId;
         const embedUrl = `${videoId}?autoplay=1&mute=1&rel=0&enablejsapi=1`;
-        console.log('Embed URL:', embedUrl);
         setDemoVideoUrl(embedUrl);
       }
     } catch (error) {
@@ -36,18 +33,17 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
     getVideoSrc();
   }, []);
 
-  // Auto-play video on component mount if enabled
   useEffect(() => {
-    if (autoPlayVideo && !hasAutoPlayed) {
+    if (autoPlayVideo && !hasAutoPlayed && demoVideoUrl) {
       openVideoModal(demoVideoUrl, true);
     }
-  }, [autoPlayVideo, hasAutoPlayed, openVideoModal]);
+  }, [autoPlayVideo, hasAutoPlayed, openVideoModal, demoVideoUrl]);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(null);
   const carouselRef = useRef(null);
   const isInView = useInView(carouselRef, { margin: "-100px" });
 
-  // Auto-advance every 8 seconds only when visible
   useEffect(() => {
     if (!isInView) return;
     
@@ -95,7 +91,6 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
     })
   };
 
-  // Viewport animations
   const viewportVariants = {
     hidden: { opacity: 0, y: 50 },
     visible: {
@@ -110,7 +105,6 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
     }
   };
 
-  // Text animation variants
   const textVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: (i) => ({
@@ -124,12 +118,11 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
     })
   };
 
-  // Floating animation for images
   const floatVariants = {
     float: {
-      y: [0, -10, 0],
+      y: [0, -15, 0],
       transition: {
-        duration: 5,
+        duration: 6,
         repeat: Infinity,
         ease: "easeInOut"
       }
@@ -139,25 +132,28 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
   return (
     <motion.div 
       ref={carouselRef}
-      className="relative w-full h-[600px] overflow-hidden bg-[#FDF8EE]"
+      className="relative w-full h-[600px] overflow-hidden bg-gradient-to-br from-[#FDF8EE] to-[#f9f2e6]"
       initial="hidden"
       animate={isInView ? "visible" : "exit"}
       variants={viewportVariants}
     >
-      {/* Subtle background pattern animation */}
+      {/* Enhanced background with subtle gradient animation */}
       <motion.div 
-        className="absolute inset-0 opacity-10"
+        className="absolute inset-0 opacity-20"
         animate={{
           backgroundPosition: ['0% 0%', '100% 100%'],
         }}
         transition={{
-          duration: 20,
+          duration: 30,
           repeat: Infinity,
           ease: "linear"
         }}
         style={{
-          backgroundImage: 'radial-gradient(#FF7426 1px, transparent 1px)',
-          backgroundSize: '40px 40px'
+          backgroundImage: `
+            radial-gradient(circle at 30% 50%, #FF7426 0%, transparent 20%),
+            radial-gradient(circle at 70% 30%, #4D2C5E 0%, transparent 20%)
+          `,
+          backgroundSize: '200% 200%'
         }}
       />
 
@@ -172,7 +168,7 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
           className="absolute 2xl:w-3/4 inset-0 flex flex-col md:flex-row 2xl:m-auto"
         >
           {/* Content - Left on desktop, bottom on mobile */}
-          <div className="w-full md:w-1/2 order-2 md:order-1 p-6 md:p-12 flex flex-col justify-center">
+          <div className="w-full md:w-1/2 order-2 md:order-1 p-6 md:p-12 flex flex-col justify-center relative z-10">
             <motion.h1
               custom={0}
               initial="hidden"
@@ -210,99 +206,67 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
             >
               {slides[currentIndex].description}
             </motion.p>
+            
             <div className='flex flex-col sm:flex-row gap-4 w-full'>
-  <a href='#AdmissionForm' className='w-full sm:w-auto'>
-    <motion.button
-      custom={2}
-      initial="hidden"
-      animate="visible"
-      variants={textVariants}
-      whileHover={{ 
-        scale: 1.05,
-        backgroundColor: "#4D2C5E",
-        color: "white",
-        transition: { 
-          duration: 0.3,
-          ease: "easeInOut" 
-        }
-      }}
-      whileTap={{ scale: 0.95 }}
-      className="bg-transparent border-2 border-[#4D2C5E] text-[#4D2C5E] px-6 py-3 rounded-lg transition-all flex items-center justify-center cursor-pointer w-full sm:w-fit shadow-md hover:shadow-lg"
-    >
-      <motion.span
-        whileHover={{ scale: 1.1 }}
-        transition={{ type: "spring", stiffness: 400, damping: 10 }}
-      >
-        <svg 
-          className="w-5 h-5 mr-2" 
-          fill="none" 
-          stroke="currentColor" 
-          viewBox="0 0 24 24"
-        >
-          <path 
-            strokeLinecap="round" 
-            strokeLinejoin="round" 
-            strokeWidth="2" 
-            d="
-              M3 8 a2 2 0 0 1 2-2 h14 a2 2 0 0 1 2 2 v10 a2 2 0 0 1-2 2 h-5 l-5 4 v-4 H5 a2 2 0 0 1-2-2 V8 z
-              M8 10 a1 1 0 1 0 0 0 a1 1 0 1 0 0 0
-              M12 10 a1 1 0 1 0 0 0 a1 1 0 1 0 0 0
-              M16 10 a1 1 0 1 0 0 0 a1 1 0 1 0 0 0
-            " 
-          />
-        </svg>
-      </motion.span>
-      Get In Touch
-    </motion.button>
-  </a>
-  
-  <motion.button
-    onClick={() => openVideoModal(demoVideoUrl)}
-    custom={2}
-    initial="hidden"
-    animate="visible"
-    variants={textVariants}
-    whileHover={{ 
-      scale: 1.05,
-      backgroundColor: "white",
-      color: "#4D2C5E",
-      borderColor: "#4D2C5E",
-      transition: { 
-        duration: 0.3,
-        ease: "easeInOut" 
-      }
-    }}
-    whileTap={{ scale: 0.95 }}
-    className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg border-2 border-[#4D2C5E] transition-all flex items-center justify-center cursor-pointer w-full sm:w-fit shadow-md hover:shadow-lg"
-  >
-    <motion.span
-      whileHover={{ scale: 1.2 }}
-      transition={{ type: "spring", stiffness: 400, damping: 10 }}
-    >
-      <svg 
-        className="w-5 h-5 mr-2" 
-        fill="none" 
-        stroke="currentColor" 
-        viewBox="0 0 24 24"
-      >
-        <path 
-          strokeLinecap="round" 
-          strokeLinejoin="round" 
-          strokeWidth="2" 
-          d="
-            M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87 v4.263 a1 1 0 001.555.832 l3.197-2.132 a1 1 0 000-1.664 z
-            M21 12 a9 9 0 11-18 0 9 9 0 0118 0 z
-          " 
-        />
-      </svg>
-    </motion.span>
-    Watch Demo
-  </motion.button>
-</div>
-</div>
+              <a href='#AdmissionForm' className='w-full sm:w-auto'>
+                <motion.button
+                  custom={2}
+                  initial="hidden"
+                  animate="visible"
+                  variants={textVariants}
+                  whileHover={{ 
+                    scale: 1.05,
+                    backgroundColor: "#4D2C5E",
+                    color: "white",
+                    transition: { duration: 0.3 }
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-transparent border-2 border-[#4D2C5E] text-[#4D2C5E] px-6 py-3 rounded-lg transition-all flex items-center justify-center cursor-pointer w-full sm:w-fit shadow-md hover:shadow-lg"
+                >
+                  Get In Touch
+                </motion.button>
+              </a>
+              
+              <motion.button
+                onClick={() => openVideoModal(demoVideoUrl)}
+                custom={2}
+                initial="hidden"
+                animate="visible"
+                variants={textVariants}
+                whileHover={{ 
+                  scale: 1.05,
+                  backgroundColor: "white",
+                  color: "#4D2C5E",
+                  borderColor: "#4D2C5E",
+                  transition: { duration: 0.3 }
+                }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg border-2 border-[#4D2C5E] transition-all flex items-center justify-center cursor-pointer w-full sm:w-fit shadow-md hover:shadow-lg"
+              >
+                Watch Demo
+              </motion.button>
+            </div>
+          </div>
 
           {/* Image - Right on desktop, top on mobile */}
-          <div className="w-full md:w-1/2 order-1 md:order-2 flex items-center justify-center p-4 md:p-8 2xl:p-12">
+          <div className="w-full md:w-1/2 order-1 md:order-2 flex items-center justify-center p-4 md:p-8 2xl:p-12 relative">
+            {/* Soft glow behind image */}
+            <motion.div 
+              className="absolute inset-0 opacity-30 blur-xl"
+              style={{
+                background: `radial-gradient(circle at center, #FF7426 0%, transparent 70%)`,
+              }}
+              animate={{
+                opacity: [0.2, 0.3, 0.2],
+                scale: [0.9, 1, 0.9]
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+            
             <motion.div
               variants={floatVariants}
               animate="float"
@@ -311,10 +275,14 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
               <motion.img
                 src={slides[currentIndex].image}
                 alt={slides[currentIndex].heading}
-                className="h-full w-auto object-contain mix-blend-multiply"
+                className="h-full sm:h-[90%] w-auto object-contain rounded-2xl sm:rounded-4xl shadow-xl shadow-[#0000002c]"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
+                style={{
+                  filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.1))',
+                  mixBlendMode: 'multiply'
+                }}
               />
             </motion.div>
           </div>
@@ -322,7 +290,7 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
       </AnimatePresence>
 
       {/* Navigation Dots */}
-      <div className="hidden absolute bottom-6 left-1/2 transform -translate-x-1/2 lg:flex gap-2">
+      <div className="hidden absolute bottom-6 left-1/2 transform -translate-x-1/2 lg:flex gap-2 z-10">
         {slides.map((_, index) => (
           <motion.button
             key={index}
@@ -339,7 +307,6 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
         ))}
       </div>
 
-      {/* Video Modal */}
       <VideoModal
         isOpen={isVideoModalOpen}
         onClose={closeVideoModal}
@@ -348,12 +315,10 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
         autoPlay={true}
         showControls={true}
       />
-      
     </motion.div>
-
-    
   );
 };
+
 const CarouselContainer = () => {
   const [carouselSlides, setCarouselSlides] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -421,25 +386,3 @@ const CarouselContainer = () => {
 };
 
 export default CarouselContainer;
-
-
-// const carouselSlides = [
-//   {
-//     heading: "Transform Your Career",
-//     subheading: "Industry-Relevant Programs",
-//     description: "Gain practical skills that employers are looking for in today's competitive job market.",
-//     image: "images/carouselimage.png"
-//   },
-//   {
-//     heading: "Learn From Experts",
-//     subheading: "Real-World Experience",
-//     description: "Our instructors are industry professionals who bring current best practices to your learning.",
-//     image: "images/carouselimage.png"
-//   },
-//   {
-//     heading: "Career Support",
-//     subheading: "Job Placement Assistance",
-//     description: "We provide comprehensive career services to help you land your dream role.",
-//     image: "images/carouselimage.png"
-//   }
-// ];

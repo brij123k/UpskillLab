@@ -219,7 +219,7 @@ function Header() {
                                 key={course.id}
                                 className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group"
                                 onClick={() => {
-                                  navigate('/courseDetails', { state: { courseId: course.id,courseCode:course.courseCode } });
+                                  navigate(`/courseDetails/course/${course.courseCode}`, { state: { courseId: course.id,courseCode:course.courseCode } });
                                   setIsCoursesDropdownOpen(false);
                                 }}
                               >
@@ -242,7 +242,7 @@ function Header() {
                                 key={course.id}
                                 className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group"
                                 onClick={() => {
-                                  navigate('/courseDetails', { state: { courseId: course.id,courseCode:course.courseCode } });
+                                  navigate(`/courseDetails/course/${course.courseCode}`, { state: { courseId: course.id,courseCode:course.courseCode } });
                                   setIsCoursesDropdownOpen(false);
                                 }}
                               >
@@ -497,7 +497,7 @@ function Header() {
                                         <button
                                           key={course.id}
                                           onClick={() => {
-                                            navigate('/courseDetails', { state: { courseId: course.id,courseCode:course.courseCode } });
+                                            navigate(`/courseDetails/course/${course.courseCode}`, { state: { courseId: course.id,courseCode:course.courseCode } });
                                             toggleDrawer();
                                             setIsCoursesDropdownOpen(false);
                                           }}

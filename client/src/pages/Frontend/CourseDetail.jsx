@@ -1,17 +1,17 @@
 import React, { useRef, useState,useEffect  } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { FiDownload, FiChevronRight ,FiFilm, FiCode} from 'react-icons/fi';
-
+import { useParams } from 'react-router-dom';
 import { FiClock, FiMonitor, FiCalendar, FiBook } from 'react-icons/fi';
 import { FiUsers, FiAlertCircle, FiMessageSquare } from 'react-icons/fi';
-import { FiAward, FiBriefcase, FiUserCheck, FiTrendingUp } from 'react-icons/fi';
+import { FiAward, FiBriefcase, FiCheck , FiTrendingUp } from 'react-icons/fi';
 import PurchaseModal from '../../components/Modal/EnrollmentModal';
 import { FiFlag } from 'react-icons/fi';
 import { FiBarChart2 } from 'react-icons/fi';
 import ApiConfig from '../../config/apiConfig';
 // import RazorpayLogo from '../assets/razorpay-logo.svg'; // Replace with actual import
 const CourseHero = ({ course }) => {
-   
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -44,7 +44,7 @@ const CourseHero = ({ course }) => {
                                 transition={{ duration: 0.8, ease: "backOut" }}
                                 className="text-4xl md:text-6xl font-bold text-[#4D2C5E] leading-tight"
                             >
-                                {course?.courseName}
+                                {course?.title}
                             </motion.h1>
                         </div>
 
@@ -55,7 +55,7 @@ const CourseHero = ({ course }) => {
                                 transition={{ duration: 0.6, delay: 0.3 }}
                                 className="text-xl text-gray-700"
                             >
-                                {course?.shortDescription? "Master React, Node.js, and MongoDB to build scalable web applications." : course?.shortDescription}
+                                {course?.shortDescription? course?.shortDescription : "Master React, Node.js, and MongoDB to build scalable web applications." }
                             </motion.p>
                         </div>
 
@@ -167,18 +167,50 @@ const CourseHero = ({ course }) => {
 
 
 const CourseKeyDetails = ({ course }) => {
+    const formatDuration = (days) => {
+        if (!days || isNaN(days)) return "6 months";
+        
+        const daysNum = parseInt(days);
+        
+        // Years (with half-year precision)
+        if (daysNum >= 180) { // 6 months = 0.5 year
+          const years = (daysNum / 365).toFixed(1);
+          return `${years % 1 === 0 ? Math.floor(years) : years} ${years == 1 ? 'year' : 'years'}`;
+        }
+        // Months (with half-month precision)
+        else if (daysNum >= 15) { // 2 weeks = ~0.5 month
+          const months = (daysNum / 30).toFixed(1);
+          return `${months % 1 === 0 ? Math.floor(months) : months} ${months == 1 ? 'month' : 'months'}`;
+        }
+        // Weeks (with half-week precision)
+        else if (daysNum >= 4) {
+          const weeks = (daysNum / 7).toFixed(1);
+          return `${weeks % 1 === 0 ? Math.floor(weeks) : weeks} ${weeks == 1 ? 'week' : 'weeks'}`;
+        }
+        else {
+          return `${daysNum} ${daysNum === 1 ? 'day' : 'days'}`;
+        }
+      };
+
     const details = [
         {
             icon: <FiClock />,
             label: "DURATION",
-            value: course.courseDuration?  `${course.courseDuration} months` :"6 months" ,
+            value: course.duration ? formatDuration(course.duration) : "6 months",
             accent: "#FF7426",
             bg: "#4D2C5E"
         },
         {
             icon: <FiMonitor />,
             label: "MODE",
-            value: course.courseMode? course.courseMode: "Online" ,
+            value: course.courseMode
+  ? course.courseMode === "LIVE_ONLINE"
+    ? "Live-Online"
+    : course.courseMode === "OFFLINE"
+      ? "Offline"
+      : "Online"
+  : "Online",
+
             accent: "#4D2C5E",
             bg: "#FF7426"
         },
@@ -192,7 +224,14 @@ const CourseKeyDetails = ({ course }) => {
         {
             icon: <FiCalendar />,
             label: "STARTING",
-            value: course.batch?.startDate? course.batch?.startDate : "Coming Soon" ,
+            value: course?.startDate
+  ? new Date(course.startDate).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : "Coming Soon",
+
             accent: "#4D2C5E",
             bg: "#FF7426"
         },
@@ -329,8 +368,9 @@ const CourseKeyDetails = ({ course }) => {
     );
 };
 
-const ProgramInfoWithEnroll = (props) => {
-    const [course, batchCode] = props.course;
+const ProgramInfoWithEnroll = ({ course }) => {
+    console.log(course)
+    const batchCode=course.batchId;
     const [selectedCourse, setSelectedCourse] = useState(null);
       const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
       const handleEnrollClick = (course) => {
@@ -583,7 +623,7 @@ const ProgramInfoWithEnroll = (props) => {
       course={selectedCourse}
       batchCode={batchCode}
       isOpen={isEnrollModalOpen}
-      onClose={() => setIsEnrollModalOpen(false)}
+      onClose={() => {setIsEnrollModalOpen(false); setSelectedCourse(null)}}
       onEnroll={handleEnrollSubmit}
     />
   )}
@@ -603,43 +643,22 @@ const TeachingPlan = ({ course }) => {
         setExpandedWeek(expandedWeek === weekIndex ? null : weekIndex);
     };
 
-    const downloadBrochure = async () => {
-        setIsDownloading(true);
-        
-        try {
-          // Check if brochure exists and is a valid File/Blob
-          if (!course.brochure) {
-            toast.error("No brochure available for this course");
-            return;
-          }
-      
-          // Create a downloadable URL
-          const url = window.URL.createObjectURL(course.brochure);
-          
-          // Create a temporary anchor tag
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `UpSkillLab-${course.title}-Brochure.pdf`;
-          link.style.display = 'none'; // Hide the link
-          
-          // Trigger download
-          document.body.appendChild(link);
-          link.click();
-          
-          // Cleanup (revoke URL after a short delay)
-          setTimeout(() => {
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(link);
-          }, 100);
-          
-          toast.success('Brochure downloaded successfully!');
-        } catch (error) {
-          console.error('Download failed:', error);
-          toast.error('Failed to download brochure');
-        } finally {
-          setIsDownloading(false);
+    const downloadBrochure = () => {
+        if (!course?.brochure) {
+          window.alert("No brochure available for this course");
+          return;
         }
+      
+        // Create a direct link and let browser handle it
+        const link = document.createElement("a");
+        link.href = course.brochure;
+        link.setAttribute("download", ""); // Hint browser to download
+        link.setAttribute("target", "_blank"); // Optional: opens in new tab
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       };
+      
 
 
       
@@ -955,7 +974,7 @@ const CareerDevelopmentTrack = ({ course }) => {
     return (
         <section
             ref={ref}
-            className="w-full py-24 relative overflow-hidden"
+            className="w-full py-10 relative overflow-hidden"
             style={{ background: 'linear-gradient(to bottom, #F9F9FF 0%, #FFFFFF 100%)' }}
         >
             {/* Floating background elements */}
@@ -1123,9 +1142,176 @@ const CareerDevelopmentTrack = ({ course }) => {
     );
 };
 
-const PricingSection = (props) => {
-    const [course, batchCode] = props.course;
-    
+
+// Add this component after the CareerDevelopmentTrack section in your CourseDetails.js
+const CertificateSection = ({ course }) => {
+    const [certificateImage, setCertificateImage] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const ref = useRef(null);
+    const isInView = useInView(ref, { once: true, amount: 0.2 });
+
+    useEffect(() => {
+        const fetchCertificate = async () => {
+            try {
+                setIsLoading(true);
+                setCertificateImage(course.certificateImage || "/images/SAMPLE CERTIFICATE.jpg");
+            } catch (error) {
+                console.error("Failed to load certificate:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchCertificate();
+    }, [course.id]);
+
+    return (
+        <section
+            ref={ref}
+            className="w-full py-10 relative overflow-hidden bg-gradient-to-b from-[#F9F9FF] to-white"
+        >
+            {/* Floating background elements */}
+            <motion.div 
+                animate={{
+                    y: [0, -40, 0],
+                    x: [0, 30, 0]
+                }}
+                transition={{
+                    duration: 18,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                className="absolute top-1/4 left-0 w-48 h-48 rounded-full bg-[#FF7426]/10 blur-xl"
+            />
+            <motion.div 
+                animate={{
+                    y: [0, 50, 0],
+                    x: [0, -20, 0]
+                }}
+                transition={{
+                    duration: 15,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 3
+                }}
+                className="absolute bottom-1/3 right-0 w-56 h-56 rounded-full bg-[#4D2C5E]/10 blur-xl"
+            />
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                {/* Animated header */}
+                <motion.div
+                    initial={{ opacity: 0, y: -30 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.6 }}
+                    className="text-center mb-16"
+                >
+                    <motion.h2
+                        className="text-4xl font-bold text-[#4D2C5E] mb-4 relative inline-block"
+                    >
+                        Your Achievement
+                        <motion.span
+                            initial={{ scaleX: 0 }}
+                            animate={isInView ? { scaleX: 1 } : {}}
+                            transition={{ delay: 0.3, duration: 0.8 }}
+                            className="absolute bottom-0 left-0 w-full h-1.5 bg-[#FF7426] rounded-full"
+                        />
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={isInView ? { opacity: 1 } : {}}
+                        transition={{ delay: 0.5 }}
+                        className="text-lg text-gray-600 max-w-2xl mx-auto"
+                    >
+                        Earn a recognized certificate upon successful completion
+                    </motion.p>
+                </motion.div>
+
+                {/* Certificate Preview */}
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={isInView ? { opacity: 1, y: 0 } : {}}
+                    transition={{ delay: 0.4 }}
+                    className="flex flex-col lg:flex-row gap-12 items-center"
+                >
+                    {/* Certificate Image */}
+                    <motion.div
+                        whileHover={{ scale: 1.02 }}
+                        className="lg:w-1/2 bg-white rounded-xl shadow-2xl overflow-hidden border-4 border-white cursor-pointer"
+                    >
+                        {isLoading ? (
+                            <div className="w-full aspect-[4/3] flex items-center justify-center bg-gray-100">
+                                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#FF7426]"></div>
+                            </div>
+                        ) : (
+                            <img
+                                src={certificateImage}
+                                alt="Sample Certificate"
+                                className="w-full h-auto object-contain"
+                            />
+                        )}
+                    </motion.div>
+
+                    {/* Certificate Details */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={isInView ? { opacity: 1, x: 0 } : {}}
+                        transition={{ delay: 0.6 }}
+                        className="lg:w-1/3 space-y-6"
+                    >
+                        <motion.h3
+                            className="text-2xl font-bold text-[#4D2C5E]"
+                        >
+                            Program Certificate
+                        </motion.h3>
+
+                        <motion.ul
+                            initial={{ opacity: 0 }}
+                            animate={isInView ? { opacity: 1 } : {}}
+                            transition={{ staggerChildren: 0.1, delayChildren: 0.7 }}
+                            className="space-y-4"
+                        >
+                            {[
+                                "Industry-recognized certification",
+                                "Digital and printable format",
+                                "Verification QR code",
+                                "Skills validation for employers",
+                                "Shareable on LinkedIn"
+                            ].map((item, index) => (
+                                <motion.li
+                                    key={index}
+                                    initial={{ x: 20, opacity: 0 }}
+                                    animate={isInView ? { x: 0, opacity: 1 } : {}}
+                                    transition={{ delay: 0.7 + index * 0.1 }}
+                                    className="flex items-start gap-3"
+                                >
+                                    <motion.div
+                                        animate={{
+                                            rotate: [0, 10, 0],
+                                            scale: [1, 1.1, 1]
+                                        }}
+                                        transition={{
+                                            duration: 6,
+                                            repeat: Infinity,
+                                            delay: index * 0.5
+                                        }}
+                                        className={`p-2 rounded-full ${index % 2 ? 'bg-[#FF7426]/10 text-[#FF7426]' : 'bg-[#4D2C5E]/10 text-[#4D2C5E]'}`}
+                                    >
+                                        <FiCheck className="text-xl" />
+                                    </motion.div>
+                                    <span className="text-gray-700">{item}</span>
+                                </motion.li>
+                            ))}
+                        </motion.ul>
+                    </motion.div>
+                </motion.div>
+            </div>
+        </section>
+    );
+};
+
+
+const PricingSection = ({ course }) => {
+    const batchCode=course.batchId;
     const [selectedCourse, setSelectedCourse] = useState(null);
       const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
       const handleEnrollClick = (course) => {
@@ -1144,7 +1330,7 @@ const PricingSection = (props) => {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.2 }}
-            className="w-full py-24 relative overflow-hidden"
+            className="w-full py-10 relative overflow-hidden"
         >
             {/* Floating background elements */}
             <motion.div 
@@ -1407,7 +1593,7 @@ const PricingSection = (props) => {
           course={selectedCourse}
           batchCode={batchCode}
           isOpen={isEnrollModalOpen}
-          onClose={() => setIsEnrollModalOpen(false)}
+          onClose={() => {setIsEnrollModalOpen(false); setSelectedCourse(null)}}
           onEnroll={handleEnrollSubmit}
         />
       )}
@@ -1469,7 +1655,7 @@ const FAQSection = ({ course }) => {
     };
 
     return (
-        <div className="w-full py-24 relative overflow-hidden bg-gradient-to-b from-white to-[#F9F9FF]">
+        <div className="w-full py-10 relative overflow-hidden bg-gradient-to-b from-white to-[#F9F9FF]">
       {/* Floating background elements */}
       <motion.div 
         animate={{
@@ -1637,43 +1823,134 @@ const FAQSection = ({ course }) => {
 };
 
 
-const CourseDetails = () => {
-      
-    const [course, setCourse] = useState(null);
+const CourseDetails = () => {     
+  const [course, setCourse] = useState(null);
+  const [directCourse,setDirectCourse]=useState(null)
+  const [directBatch,setDirectBatch]=useState(null)
   const location = useLocation();
   const courseId = location.state?.courseId;
   const courseCode = location.state?.courseCode;
   const batchId = location.state?.batchId;
   const batchCode = location.state?.batchCode;
+  const { id } = useParams();
+  const type = window.location.pathname.includes('/batch/') ? 'batch' : 'course';
+
   useEffect(() => {
-    if (!courseCode) {
-      // Handle case where courseId isn't passed
-      console.error("No course Code found in navigation state");
-      // Optionally redirect back or to a fallback page
-    }else{
-        const fetchCourse = async () => {     
-            // Get the endpoint URL by calling the ApiConfig function
-            const endpointUrl = ApiConfig.getCourseByCode(courseCode);
-            
-            const response = await getDataHandler(endpointUrl, null, null,true); // pass endpointUrl directly
-            
-            setCourse(response);
-          };
-        fetchCourse();
+    if (type === 'course') {
+        console.log('hi')
+        fetchCourse(id)
+    } else if (type === 'batch') {
+        fetchBtachCourse(id)
     }
-}, [courseCode]);
-  console.log(courseId,courseCode,batchId,batchCode)
-if (!course) return <div>Loding</div>;
+  }, [type, id]);
+
+  const fetchCourse = async (courseCode) => {     
+    // Get the endpoint URL by calling the ApiConfig function
+    const endpointUrl = ApiConfig.getCourseByCode(courseCode);
+    
+    const response = await getDataHandler(endpointUrl, null, null,true); // pass endpointUrl directly
+    console.log(response)
+    let custemDataSet={
+        id:response._id,
+        batchId:response.batch._id,
+        title:response.courseName,
+        imageUrl:response.courseImage,
+        batchCode:response.batch.batchCode,
+        shortDescription:response.shortDescription,
+        tags:response.tags,
+        youtubeUrl:response.youtubeUrl,
+        duration:response.courseDuration,
+        courseMode:response.courseMode,
+        startDate:response.batch.startDate,
+        programDetails:response.programDetails,
+        targetAudience:response.targetAudience,
+        weeks:response.weeks,
+        courseMode:response.courseMode,
+        brochure:response.brochure,
+        courseMode:response.courseMode,
+        courseMode:response.courseMode,
+        discountedPrice:response.discountedPrice,
+        originalPrice:response.originalPrice,
+        faqs:response.faqs
+    }
+    setCourse(custemDataSet);
+    console.log("By Course",response)
+  };
+  const fetchBtachCourse = async (id) => {     
+    // Get the endpoint URL by calling the ApiConfig function
+    const endpointUrl = ApiConfig.courseByBatchId(id);
+    const res = await getDataHandler(endpointUrl, null, null,true); // pass endpointUrl directly
+    const response = res.batch
+    const endpointUrl2 = ApiConfig.getCourseByCode(response.course.courseCode);
+    const res2 = await getDataHandler(endpointUrl2, null, null,true);
+    let custemDataSet={
+        id:response._id,
+        batchId:response._id,
+        title:res2.courseName,
+        batchCode:response.batchCode,
+        shortDescription:res2.shortDescription,
+        tags:res2.tags,
+        imageUrl:res2.courseImage,
+        youtubeUrl:res2.youtubeUrl,
+        duration:res2.courseDuration,
+        courseMode:res2.courseMode,
+        startDate:response.startDate,
+        programDetails:res2.programDetails,
+        targetAudience:res2.targetAudience,
+        weeks:res2.weeks,
+        courseMode:res2.courseMode,
+        brochure:res2.brochure,
+        courseMode:res2.courseMode,
+        discountedPrice:res2.discountedPrice,
+        originalPrice:res2.originalPrice,
+        faqs:res2.faqs
+    }
+    setCourse(custemDataSet);
+    console.log("By Batch",response)
+  };
+  if (!course) return (
+    <div className="flex items-center justify-center min-h-screen bg-[#FDF8EE]">
+      <motion.div
+        initial={{ rotate: 0, scale: 0.8 }}
+        animate={{ 
+          rotate: 360,
+          scale: [0.8, 1.2, 0.8],
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="w-24 h-24 rounded-full border-8 border-[#4D2C5E] border-t-[#FF7426]"
+      >
+        <motion.span
+          className="absolute inset-0 flex items-center justify-center text-[#4D2C5E] font-bold"
+          animate={{
+            opacity: [0.5, 1, 0.5],
+            scale: [0.9, 1.1, 0.9]
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            delay: 0.3
+          }}
+        >
+          Loading...
+        </motion.span>
+      </motion.div>
+    </div>
+  );
 
 
     return (
         <div>
             <CourseHero course={course} />
             <CourseKeyDetails course={course} />
-            <ProgramInfoWithEnroll course={[course,batchId]} />
+            <ProgramInfoWithEnroll course={course} />
             <TeachingPlan course={course} />
             <CareerDevelopmentTrack course={course} />
-            <PricingSection course={[course,batchId]} />
+            <CertificateSection course={course} />
+            <PricingSection course={course} />
             <FAQSection course={course} />
             {/* Add other components here */}
 

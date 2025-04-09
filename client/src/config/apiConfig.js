@@ -5,6 +5,7 @@ const ApiConfig = {
   // Auth
   login: `${url}/auth/login`,
   
+  stats : `${url}/stats`,
   // Categories
   category: `${url}/category`,
   categoryByCode: (code) => `${url}/category/code/${code}`,
@@ -23,7 +24,7 @@ const ApiConfig = {
   
   // Batches
   upcomingBatches: `${url}/batches/upcoming`,
-
+  courseByBatchId:(id)=>`${url}/batches/${id}`,
   // banners
   landingPageCarousel:`${url}/banners`,
   premiumBanner:`${url}/premium-learning-experiences`,

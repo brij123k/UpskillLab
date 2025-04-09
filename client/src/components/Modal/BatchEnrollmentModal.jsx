@@ -1,39 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { toast } from 'react-toastify';
-import { registerBatch } from '../../config/services';
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import { registerBatch } from "../../config/services";
 
 const EnrollmentModal = ({ batch, onClose }) => {
+  // State management
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [cashfreeLoaded, setCashfreeLoaded] = useState(false);
+  const [showPaymentLoader, setShowPaymentLoader] = useState(false);
+  const paymentContainerRef = useRef(null);
+  const cashfreeInstance = useRef(null);
+
   const [paymentData, setPaymentData] = useState({
-    orderId: '',
-    paymentSessionId: '',
+    orderId: "",
+    paymentSessionId: "",
     originalPrice: batch.originalPrice,
-    discountedPrice: batch.price
+    discountedPrice: batch.price,
   });
 
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
+    name: "",
+    email: "",
+    phone: "",
     batchId: batch.batchCode,
-    agreeTerms: false
+    agreeTerms: false,
   });
 
   // Load Cashfree SDK
   useEffect(() => {
-    const script = document.createElement('script');
-    script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
+    const script = document.createElement("script");
+    script.src = "https://sdk.cashfree.com/js/v3/cashfree.js";
     script.async = true;
     script.onload = () => {
       setCashfreeLoaded(true);
-      console.log('Cashfree SDK loaded');
+      cashfreeInstance.current = window.Cashfree({
+        mode: process.env.NODE_ENV === "production" ? "production" : "sandbox"
+      });
     };
     script.onerror = () => {
-      console.error('Failed to load Cashfree SDK');
-      toast.error('Payment system is currently unavailable');
+      toast.error("Payment system is currently unavailable");
     };
     document.body.appendChild(script);
 
@@ -42,370 +48,358 @@ const EnrollmentModal = ({ batch, onClose }) => {
     };
   }, []);
 
+  // Form handlers
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  const validateStep1 = () => {
-    if (!formData.name.trim()) {
-      toast.error('Please enter your name');
-      return false;
+  const validateStep = () => {
+    if (step === 1) {
+      if (!formData.name.trim()) {
+        toast.error("Please enter your name");
+        return false;
+      }
+      if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+        toast.error("Please enter a valid email");
+        return false;
+      }
+      if (!/^\d{10}$/.test(formData.phone)) {
+        toast.error("Please enter a 10-digit phone number");
+        return false;
+      }
     }
-    if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      toast.error('Please enter a valid email');
-      return false;
-    }
-    if (!/^\d{10}$/.test(formData.phone)) {
-      toast.error('Please enter a 10-digit phone number');
+    if (step === 2 && !formData.agreeTerms) {
+      toast.error("You must agree to the terms and conditions");
       return false;
     }
     return true;
   };
 
-  const initiatePayment = async () => {
+  // Payment initialization
+  const initializePayment = async () => {
     try {
       setLoading(true);
       const response = await registerBatch(batch.id, {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
-        amount: paymentData.discountedPrice
+        amount: paymentData.discountedPrice,
       });
-      
-      setPaymentData({
-        ...paymentData,
+
+      setPaymentData(prev => ({
+        ...prev,
         orderId: response.orderId,
-        paymentSessionId: response.paymentSessionId
-      });
-      
+        paymentSessionId: response.paymentSessionId,
+      }));
+
       return true;
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Payment initialization failed');
+      toast.error(error.response?.data?.message || "Payment initialization failed");
       return false;
     } finally {
       setLoading(false);
     }
   };
 
-  const openCashfreeCheckout = () => {
-    if (!cashfreeLoaded) {
-      toast.error('Payment system is loading, please try again');
+  // Cashfree UI initialization with reliable loader handling
+  const initializePaymentUI = useCallback(() => {
+    if (!cashfreeLoaded || !paymentContainerRef.current) {
+      toast.error("Payment system loading, please try again");
       return;
     }
 
-    if (!formData.agreeTerms) {
-      toast.error('You must agree to the terms and conditions');
-      return;
-    }
+    setShowPaymentLoader(true);
+    paymentContainerRef.current.innerHTML = '';
+
+    // Create a temporary container to detect when UI is loaded
+    const tempContainer = document.createElement('div');
+    tempContainer.style.position = 'absolute';
+    tempContainer.style.width = '1px';
+    tempContainer.style.height = '1px';
+    tempContainer.style.opacity = '0';
+    paymentContainerRef.current.appendChild(tempContainer);
+
+    const observer = new MutationObserver((mutations) => {
+      for (const mutation of mutations) {
+        if (mutation.addedNodes.length > 0) {
+          // Check if Cashfree elements are present
+          const cashfreeElements = paymentContainerRef.current.querySelectorAll('[class*="cashfree"]');
+          if (cashfreeElements.length > 0) {
+            setShowPaymentLoader(false);
+            observer.disconnect();
+            paymentContainerRef.current.removeChild(tempContainer);
+          }
+        }
+      }
+    });
+
+    observer.observe(tempContainer, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      characterData: true
+    });
+
+    // Fallback timeout in case observer doesn't trigger
+    const timeout = setTimeout(() => {
+      setShowPaymentLoader(false);
+      observer.disconnect();
+      if (paymentContainerRef.current.contains(tempContainer)) {
+        paymentContainerRef.current.removeChild(tempContainer);
+      }
+    }, 5000);
 
     try {
-      const cashfree = window.Cashfree({
-        mode: process.env.NODE_ENV === 'production' ? 'production' : 'sandbox'
-      });
-
-      cashfree.checkout({
+      cashfreeInstance.current.checkout({
         paymentSessionId: paymentData.paymentSessionId,
-        redirectTarget: "_self"
-      }).then((result) => {
-        if (result && result.error) {
-          toast.error(`Payment failed: ${result.error.message}`);
-        } 
-        // else if (result) {
-        //   verifyPaymentOnServer();
-        // }
-      }).catch((error) => {
-        console.error('Checkout error:', error);
-        toast.error('Failed to open payment page');
+        redirectTarget: paymentContainerRef.current,
+        appearance: {
+          width: "100%",
+          height: "100%",
+        },
+      }).catch(error => {
+        clearTimeout(timeout);
+        observer.disconnect();
+        setShowPaymentLoader(false);
+        toast.error("Failed to load payment UI");
+        console.error(error);
       });
     } catch (error) {
-      console.error('Cashfree error:', error);
-      toast.error('Payment system error');
+      clearTimeout(timeout);
+      observer.disconnect();
+      setShowPaymentLoader(false);
+      toast.error("Payment system error");
+      console.error(error);
+    }
+
+    return () => {
+      clearTimeout(timeout);
+      observer.disconnect();
+    };
+  }, [cashfreeLoaded, paymentData.paymentSessionId]);
+
+  // Step navigation
+  const handleNext = async () => {
+    if (!validateStep()) return;
+
+    if (step === 1) {
+      const success = await initializePayment();
+      if (success) setStep(2);
+    } else if (step === 2) {
+      setStep(3);
     }
   };
 
-  const verifyPaymentOnServer = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/verify-payment?order_id=${paymentData.orderId}`);
-      const data = await response.json();
-      
-      if (data.order_status === 'PAID') {
-        toast.success('Payment successful! Enrollment confirmed!');
-        onClose();
-      } else {
-        toast.error('Payment verification pending');
-      }
-    } catch (error) {
-      console.error('Verification error:', error);
-      toast.error('Payment verification failed');
-    } finally {
-      setLoading(false);
+  // Initialize payment UI when step 3 is reached
+  useEffect(() => {
+    if (step === 3) {
+      initializePaymentUI();
     }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    try {
-      if (step === 1) {
-        if (!validateStep1()) return;
-        setStep(2);
-      }
-      else if (step === 2) {
-        const paymentInitiated = await initiatePayment();
-        if (paymentInitiated) setStep(3);
-      }
-      else if (step === 3) {
-        openCashfreeCheckout();
-      }
-    } catch (error) {
-      console.error('Form error:', error);
-      toast.error('An error occurred');
-    }
-  };
+  }, [step, initializePaymentUI]);
 
   return (
-    <motion.div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-transparent bg-opacity-50 backdrop-blur-sm"
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <motion.div
-        className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-xl w-full max-w-md max-h-[90vh] flex flex-col shadow-xl overflow-hidden"
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
       >
-        <div className="sticky top-0 bg-white z-10 p-4 border-b flex justify-between items-center">
-          <h2 className="text-xl font-bold text-[#4D2C5E]">
-            Enroll in {batch.title}
-          </h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-[#FF7426]">
-            ✕
-          </button>
-        </div>
-
-        <div className="px-6 pt-6">
-          <div className="flex justify-between relative mb-8">
+        {/* Header with progress steps */}
+        <div className="sticky top-0 bg-[#4D2C5E] p-4 text-white z-10">
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-lg font-bold">Enroll in {batch.title}</h2>
+            <button onClick={onClose} className="text-white hover:text-[#FF7426]">
+              ✕
+            </button>
+          </div>
+          
+          <div className="flex items-center justify-between px-4">
             {[1, 2, 3].map((stepNum) => (
-              <div key={stepNum} className="flex flex-col items-center z-10">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center 
-                  ${step >= stepNum ? 'bg-[#4D2C5E] text-white' : 'bg-gray-200'}`}>
-                  {stepNum}
+              <React.Fragment key={stepNum}>
+                <div className="flex flex-col items-center">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
+                    ${step >= stepNum ? "bg-[#FF7426] text-white" : "bg-white/20 text-white/70"}`}>
+                    {stepNum}
+                  </div>
+                  <span className="text-xs mt-1 text-white/80">
+                    {["Details", "Review", "Pay"][stepNum - 1]}
+                  </span>
                 </div>
-                <span className={`text-xs mt-2 ${step >= stepNum ? 'text-[#4D2C5E]' : 'text-gray-500'}`}>
-                  {['Details', 'Payment', 'Confirm'][stepNum - 1]}
-                </span>
-              </div>
+                {stepNum < 3 && (
+                  <div className={`flex-1 h-1 mx-2 ${step > stepNum ? "bg-[#FF7426]" : "bg-white/20"}`} />
+                )}
+              </React.Fragment>
             ))}
-            <div className="absolute top-5 left-0 right-0 h-1 bg-gray-200">
-              <motion.div 
-                className="h-full bg-[#FF7426]"
-                animate={{ width: `${(step / 3) * 100}%` }}
-                transition={{ duration: 0.3 }}
-              />
-            </div>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 pt-0">
-          {/* Step 1: Personal Info */}
+        {/* Content Area */}
+        <div className="flex-1 overflow-y-auto p-6">
+          {/* Step 1: Personal Information */}
           {step === 1 && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ duration: 0.3 }}
-              className="space-y-4"
+              className="space-y-5"
             >
               <div>
-                <label className="block text-sm font-medium mb-1">Full Name*</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name*</label>
                 <input
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border rounded-md focus:ring-[#4D2C5E]"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
                   required
                 />
               </div>
-              
-              <div className="grid grid-cols-1 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Email*</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-md"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Phone*</label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border rounded-md"
-                    required
-                  />
-                </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email*</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Phone*</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
+                  required
+                />
               </div>
             </motion.div>
           )}
 
-          {/* Step 2: Payment Info */}
+          {/* Step 2: Order Review */}
           {step === 2 && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="space-y-6"
+              className="space-y-5"
             >
-              <div className="bg-[#FFF5EF] p-4 rounded-lg">
-                <div className="flex justify-between mb-1">
-                  <span>Program Fee:</span>
-                  <span>₹{paymentData.originalPrice}</span>
-                </div>
-                <div className="flex justify-between text-[#FF7426]">
-                  <span>Discount:</span>
-                  <span>-₹{paymentData.originalPrice - paymentData.discountedPrice}</span>
-                </div>
-                <div className="border-t border-[#FFD9C5] my-2"></div>
-                <div className="flex justify-between font-bold text-[#4D2C5E]">
-                  <span>Total Payable:</span>
-                  <span>₹{paymentData.discountedPrice}</span>
-                </div>
-              </div>
-            </motion.div>
-          )}
+              <div className="bg-gray-50 p-5 rounded-lg border border-gray-200">
+                <h3 className="font-bold text-lg mb-4 text-[#4D2C5E]">Order Summary</h3>
+                <div className="space-y-3 text-sm">
+                <div className="flex justify-between">
+                    <span className="text-gray-600">Order Id:</span>
+                    <span>{paymentData.orderId}</span>
+                  </div>
 
-          {/* Step 3: Confirmation & Payment */}
-          {step === 3 && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="space-y-6"
-            >
-              <div className="text-center">
-                <div className="w-16 h-16 bg-[#FF7426]/10 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <svg className="w-8 h-8 text-[#FF7426]" viewBox="0 0 24 24" fill="none">
-                    <path d="M5 13l4 4L19 7" stroke="currentColor" strokeWidth="2"/>
-                  </svg>
-                </div>
-                <h3 className="text-xl font-bold text-[#4D2C5E]">Ready for Payment</h3>
-                <p className="text-gray-600">You'll be redirected to secure payment page</p>
-              </div>
-
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h4 className="font-medium text-[#4D2C5E] mb-2">Order Summary</h4>
-                <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Program:</span>
-                    <span>{batch.title}</span>
+                    <span className="text-gray-600">Program:</span>
+                    <span className="font-medium">{batch.title}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Student:</span>
+                    <span className="text-gray-600">Name:</span>
                     <span>{formData.name}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-500">Email:</span>
+                    <span className="text-gray-600">Email:</span>
                     <span>{formData.email}</span>
                   </div>
-                  <div className="border-t border-gray-200 my-2"></div>
-                  <div className="flex justify-between font-semibold">
-                    <span>Amount to Pay:</span>
-                    <span>₹{paymentData.discountedPrice}</span>
+                  <div className="border-t border-gray-200 my-3"></div>
+                  <div className="flex justify-between text-base font-bold">
+                    <span>Total Amount:</span>
+                    <span className="text-[#FF7426]">₹{paymentData.discountedPrice}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="border border-gray-200 rounded-lg p-4">
-                <h4 className="font-medium text-[#4D2C5E] mb-3">Payment Method</h4>
-                <div className="flex items-center space-x-3 mb-2">
-                  <input 
-                    type="radio" 
-                    id="cashfree-checkout" 
-                    name="paymentMethod" 
-                    className="h-4 w-4 text-[#4D2C5E] focus:ring-[#4D2C5E]" 
-                    defaultChecked
-                  />
-                  <label htmlFor="cashfree-checkout" className="flex items-center">
-                    <img 
-                      src="https://cashfreelogo.cashfree.com/cashfreepayments/CF_Logo_Icon_Black.svg" 
-                      alt="Cashfree" 
-                      className="h-6 mr-2" 
-                    />
-                    <span>Cashfree Secure Payments</span>
-                  </label>
-                </div>
-                <p className="text-xs text-gray-500 mt-2">
-                  You'll be redirected to Cashfree's secure payment page to complete your transaction.
-                </p>
-              </div>
-
-              <label className="flex items-start mt-4">
+              <div className="flex items-start mt-4">
                 <input
                   type="checkbox"
                   name="agreeTerms"
                   checked={formData.agreeTerms}
                   onChange={handleChange}
-                  className="mt-1 h-4 w-4 text-[#4D2C5E]"
+                  className="mt-1 h-5 w-5 text-[#FF7426] rounded focus:ring-[#FF7426]"
                   required
                 />
-                <span className="ml-2 text-sm">
-                  I agree to the <a href="/terms" className="text-[#4D2C5E] underline">terms and conditions</a> and authorize the payment
-                </span>
-              </label>
-
-              <div className="bg-[#F8F9FA] p-3 rounded-lg flex items-start">
-                <svg className="h-5 w-5 text-[#4D2C5E] mt-0.5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-                <span className="text-xs text-gray-600">
-                  Your payment information is processed securely. We do not store your credit card details.
-                </span>
+                <label className="ml-3 text-sm text-gray-700">
+                  I agree to the <a href="/terms" className="text-[#FF7426] underline">terms and conditions</a>
+                </label>
               </div>
             </motion.div>
           )}
 
-          <div className="mt-8 flex justify-between">
-            {step > 1 ? (
+          {/* Step 3: Payment */}
+          {step === 3 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="h-full relative"
+            >
+              {/* Loader overlay */}
+              {showPaymentLoader && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-white z-10">
+                  <div className="animate-spin rounded-full h-14 w-14 border-t-4 border-b-4 border-[#FF7426]"></div>
+                  <p className="mt-4 text-gray-600">Loading secure payment gateway...</p>
+                </div>
+              )}
+
+              {/* Payment container */}
+              <div 
+                ref={paymentContainerRef}
+                className="w-full h-[400px]"
+              ></div>
+            </motion.div>
+          )}
+        </div>
+
+        {/* Footer buttons */}
+        <div className="sticky bottom-0 bg-white border-t p-4">
+          <div className="flex justify-between gap-3">
+            {step > 1 && step < 3 && (
               <button
                 type="button"
                 onClick={() => setStep(step - 1)}
-                className="px-6 py-2 border border-[#4D2C5E] text-[#4D2C5E] rounded-md hover:bg-[#4D2C5E]/10"
-                disabled={loading}
+                className="px-6 py-3 border border-gray-300 rounded-md text-gray-700 flex-1 hover:bg-gray-50 transition-colors"
               >
                 Back
               </button>
-            ) : (
-              <div></div>
             )}
             
-            <button
-              type="submit"
-              className="px-6 py-2 bg-[#FF7426] text-white rounded-md hover:bg-[#E65100] disabled:opacity-70"
-              disabled={loading}
-            >
-              {loading ? (
-                <span className="flex items-center justify-center">
-                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  {step === 3 ? 'Processing...' : 'Processing'}
-                </span>
-              ) : (
-                step === 3 ? 'Proceed to Payment' : 'Continue'
-              )}
-            </button>
+            {step < 3 && (
+              <button
+                type="button"
+                onClick={handleNext}
+                disabled={loading}
+                className={`px-6 py-3 rounded-md flex-1 flex items-center justify-center transition-colors ${
+                  loading ? 'bg-[#FF7426]/80' : 'bg-[#FF7426] hover:bg-[#E65100]'
+                } text-white`}
+              >
+                {loading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    {step === 1 ? "Processing..." : "Continue"}
+                  </>
+                ) : (
+                  step === 1 ? "Continue" : "Proceed to Payment"
+                )}
+              </button>
+            )}
           </div>
-        </form>
+        </div>
       </motion.div>
     </motion.div>
   );

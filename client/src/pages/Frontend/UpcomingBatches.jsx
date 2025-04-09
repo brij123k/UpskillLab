@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import BatchCard from "../../components/Cards/BatchCard";
@@ -9,84 +8,11 @@ import BatchEnrollmentModal from "../../components/Modal/BatchEnrollmentModal";
 import { useQuery } from "@tanstack/react-query";
 import { getDataHandler } from "../../config/services"; // Updated import
 
-const BatchDetailsModal = ({ batch, onClose }) => {
-  console.log("Batch Details:", batch);
-  return (
-    <Modal
-      isOpen={true}
-      onClose={onClose}
-      title={`Batch Details: ${batch.title}`}
-    >
-      <div className="space-y-6">
-        {/* Header Section */}
-        <div className="bg-[#4D2C5E] text-white p-4 rounded-lg">
-          <div className="flex justify-between mt-2">
-            <span>Batch ID: {batch.batchId}</span>
-            <span className="font-bold">₹{batch.price}</span>
-          </div>
-        </div>
-
-        {/* Key Information */}
-        <div className="grid grid-cols-2 gap-4">
-          <div className="bg-[#FFF5EF] p-3 rounded-lg">
-            <p className="text-sm text-gray-500">Start Date</p>
-            <p className="font-medium">{batch.startDate}</p>
-          </div>
-          <div className="bg-[#FFF5EF] p-3 rounded-lg">
-            <p className="text-sm text-gray-500">Schedule</p>
-            <p className="font-medium">{batch.batchTime}</p>
-          </div>
-          <div className="bg-[#FFF5EF] p-3 rounded-lg">
-            <p className="text-sm text-gray-500">Duration</p>
-            <p className="font-medium">{batch.duration}</p>
-          </div>
-          <div className="bg-[#FFF5EF] p-3 rounded-lg">
-            <p className="text-sm text-gray-500">Mode</p>
-            <p className="font-medium">{batch.mode}</p>
-          </div>
-        </div>
-
-        {/* Curriculum Section */}
-        <div>
-          <h4 className="text-lg font-semibold mb-3 text-[#4D2C5E]">
-            Curriculum Plan
-          </h4>
-          <div className="space-y-3">
-            {batch.curriculum?.map((item, index) => (
-              <div key={index} className="flex items-start">
-                <div className="w-6 h-6 bg-[#FF7426] rounded-full flex items-center justify-center text-white mr-3 mt-1">
-                  {index + 1}
-                </div>
-                <div>
-                  <p className="font-medium">{item.module}</p>
-                  <p className="text-sm text-gray-600">
-                    {item.duration} • {item.topics.join(", ")}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Additional Information */}
-        {batch.additionalInfo && (
-          <div>
-            <h4 className="text-lg font-semibold mb-2 text-[#4D2C5E]">
-              Additional Information
-            </h4>
-            <p className="text-gray-700">{batch.additionalInfo}</p>
-          </div>
-        )}
-      </div>
-    </Modal>
-  );
-};
-
 const UpcomingBatches = () => {
   const [selectedBatch, setSelectedBatch] = useState(null);
   const [enrollCourse, setEnrollCourse] = useState(null);
   const bannerImageUrl =
-    "https://images.pexels.com/photos/4144225/pexels-photo-4144225.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
+    "/images/Upcoming Batches Page.png";
 
   const {
     data: batches = [],
@@ -97,7 +23,6 @@ const UpcomingBatches = () => {
     queryFn: () => getDataHandler("upcomingBatches", { limit: 20 }),
     select: (data) =>
       data.map((batch) => ({
-        
         id: batch.batchId,
         batchId: batch.batchId,
         courseId: batch.courseId,
@@ -118,9 +43,17 @@ const UpcomingBatches = () => {
             : `${batch.durationInDays * 24} hour${
                 batch.durationInDays * 24 > 1 ? "s" : ""
               }`,
-        startTime: `${batch.startTime % 12 || 12}:00 ${
-          batch.startTime >= 12 ? "PM" : "AM"
-        }`,
+        startTime: batch.startTime
+          ? (() => {
+              return new Date(
+                `2000-01-01T${batch.startTime}:00.000`
+              ).toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "numeric",
+                hour12: true,
+              });
+            })()
+          : "",
         batchCode: batch.batchCode,
         mode: batch.classMode,
         remainingSeats: batch.remainingSeats,
@@ -261,6 +194,7 @@ const UpcomingBatches = () => {
         ) : (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {batches.map((batch, index) => (
+              console.log(batch),
               <motion.div
                 key={batch.id}
                 variants={itemVariants}
@@ -279,23 +213,17 @@ const UpcomingBatches = () => {
                   title={batch.title}
                   batchCode={batch.batchCode}
                   courseId={batch.courseId}
+                  remainingSeats={batch.remainingSeats}
                   courseCode={batch.courseCode}
                   batchId={batch.batchId}
                   batchTime={batch.startTime}
                   duration={batch.duration}
                   mode={batch.mode === "LIVE_ONLINE" ? "Online" : "Offline"}
-                  onViewDetails={() => setSelectedBatch(batch)}
                   onEnroll={() => setEnrollCourse(batch)}
                 />
               </motion.div>
             ))}
           </div>
-        )}
-        {selectedBatch && (
-          <BatchDetailsModal
-            batch={selectedBatch}
-            onClose={() => setSelectedBatch(null)}
-          />
         )}
         {enrollCourse && (
           <BatchEnrollmentModal

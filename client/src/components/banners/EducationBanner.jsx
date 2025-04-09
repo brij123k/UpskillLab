@@ -141,7 +141,7 @@ const EducationBanner = () => {
           <img
             src={banner?.imageUrl}
             alt={banner?.title}
-            className="w-full h-auto rounded-xl object-cover max-h-[400px]"
+            className="w-full h-auto rounded-xl object-cover max-h-[400px] shadow-xl shadow-[#0000008a]"
           />
         </motion.div>
       </div>

@@ -112,7 +112,7 @@ const CourseCard = ({
             whileHover={{ x: 3 }}
           >
            <button 
-  onClick={() => navigate('/courseDetails', { state: { courseId,courseCode } })}
+  onClick={() => navigate(`/courseDetails/course/${courseCode}`, { state: { courseId,courseCode } })}
   className="flex items-center text-[#FF7426] hover:text-[#FF915E] transition-colors"
 >
   <span className="mr-1 font-medium">View more</span>
