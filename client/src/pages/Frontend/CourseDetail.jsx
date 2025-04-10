@@ -1,10 +1,10 @@
-import React, { useRef, useState,useEffect  } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { FiDownload, FiHelpCircle  ,FiFilm, FiCode} from 'react-icons/fi';
+import { FiDownload, FiHelpCircle, FiFilm, FiCode } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { FiClock, FiMonitor, FiCalendar, FiBook } from 'react-icons/fi';
 import { FiUsers, FiAlertCircle, FiMessageSquare } from 'react-icons/fi';
-import { FiAward, FiBriefcase, FiCheck , FiTrendingUp } from 'react-icons/fi';
+import { FiAward, FiBriefcase, FiCheck, FiTrendingUp } from 'react-icons/fi';
 import PurchaseModal from '../../components/Modal/EnrollmentModal';
 import { FiFlag } from 'react-icons/fi';
 import { FiBarChart2 } from 'react-icons/fi';
@@ -55,7 +55,7 @@ const CourseHero = ({ course }) => {
                                 transition={{ duration: 0.6, delay: 0.3 }}
                                 className="text-xl text-gray-700"
                             >
-                                {course?.shortDescription? course?.shortDescription : "Master React, Node.js, and MongoDB to build scalable web applications." }
+                                {course?.shortDescription ? course?.shortDescription : "Master React, Node.js, and MongoDB to build scalable web applications."}
                             </motion.p>
                         </div>
 
@@ -67,37 +67,37 @@ const CourseHero = ({ course }) => {
                             className="flex flex-wrap gap-3 mt-6"
                         >
                             {course?.tags?.length > 0 ? (
-  course.tags.map((tag, index) => (
-    <motion.span
-      key={index}
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      whileHover={{
-        scale: 1.1,
-        backgroundColor: '#4D2C5E',
-        color: 'white',
-        boxShadow: '0 4px 12px rgba(77, 44, 94, 0.3)'
-      }}
-      className="px-4 py-2 bg-white text-[#4D2C5E] rounded-full text-sm font-medium border border-[#4D2C5E]/20 shadow-sm cursor-default"
-    >
-      {tag}
-    </motion.span>
-  ))
-) : (
-  <motion.span
-    initial={{ y: 20, opacity: 0 }}
-    animate={{ y: 0, opacity: 1 }}
-    whileHover={{
-      scale: 1.1,
-      backgroundColor: '#4D2C5E',
-      color: 'white',
-      boxShadow: '0 4px 12px rgba(77, 44, 94, 0.3)'
-    }}
-    className="px-4 py-2 bg-white text-[#4D2C5E] rounded-full text-sm font-medium border border-[#4D2C5E]/20 shadow-sm cursor-default"
-  >
-    No tags available
-  </motion.span>
-)}
+                                course.tags.map((tag, index) => (
+                                    <motion.span
+                                        key={index}
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        whileHover={{
+                                            scale: 1.1,
+                                            backgroundColor: '#4D2C5E',
+                                            color: 'white',
+                                            boxShadow: '0 4px 12px rgba(77, 44, 94, 0.3)'
+                                        }}
+                                        className="px-4 py-2 bg-white text-[#4D2C5E] rounded-full text-sm font-medium border border-[#4D2C5E]/20 shadow-sm cursor-default"
+                                    >
+                                        {tag}
+                                    </motion.span>
+                                ))
+                            ) : (
+                                <motion.span
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    whileHover={{
+                                        scale: 1.1,
+                                        backgroundColor: '#4D2C5E',
+                                        color: 'white',
+                                        boxShadow: '0 4px 12px rgba(77, 44, 94, 0.3)'
+                                    }}
+                                    className="px-4 py-2 bg-white text-[#4D2C5E] rounded-full text-sm font-medium border border-[#4D2C5E]/20 shadow-sm cursor-default"
+                                >
+                                    No tags available
+                                </motion.span>
+                            )}
                         </motion.div>
                     </div>
 
@@ -168,29 +168,29 @@ const CourseHero = ({ course }) => {
 
 const CourseKeyDetails = ({ course }) => {
     const formatDuration = (days) => {
-        if (!days || isNaN(days)) return "6 months";
-        
+        if (!days || isNaN(days)) return "Coming Soon";
+
         const daysNum = parseInt(days);
-        
+
         // Years (with half-year precision)
         if (daysNum >= 180) { // 6 months = 0.5 year
-          const years = (daysNum / 365).toFixed(1);
-          return `${years % 1 === 0 ? Math.floor(years) : years} ${years == 1 ? 'year' : 'years'}`;
+            const years = (daysNum / 365).toFixed(1);
+            return `${years % 1 === 0 ? Math.floor(years) : years} ${years == 1 ? 'year' : 'years'}`;
         }
         // Months (with half-month precision)
         else if (daysNum >= 15) { // 2 weeks = ~0.5 month
-          const months = (daysNum / 30).toFixed(1);
-          return `${months % 1 === 0 ? Math.floor(months) : months} ${months == 1 ? 'month' : 'months'}`;
+            const months = (daysNum / 30).toFixed(1);
+            return `${months % 1 === 0 ? Math.floor(months) : months} ${months == 1 ? 'month' : 'months'}`;
         }
         // Weeks (with half-week precision)
         else if (daysNum >= 4) {
-          const weeks = (daysNum / 7).toFixed(1);
-          return `${weeks % 1 === 0 ? Math.floor(weeks) : weeks} ${weeks == 1 ? 'week' : 'weeks'}`;
+            const weeks = (daysNum / 7).toFixed(1);
+            return `${weeks % 1 === 0 ? Math.floor(weeks) : weeks} ${weeks == 1 ? 'week' : 'weeks'}`;
         }
         else {
-          return `${daysNum} ${daysNum === 1 ? 'day' : 'days'}`;
+            return `${daysNum} ${daysNum === 1 ? 'day' : 'days'}`;
         }
-      };
+    };
 
     const details = [
         {
@@ -204,12 +204,12 @@ const CourseKeyDetails = ({ course }) => {
             icon: <FiMonitor />,
             label: "MODE",
             value: course.courseMode
-  ? course.courseMode === "LIVE_ONLINE"
-    ? "Live-Online"
-    : course.courseMode === "OFFLINE"
-      ? "Offline"
-      : "Online"
-  : "Online",
+                ? course.courseMode === "LIVE_ONLINE"
+                    ? "Live-Online"
+                    : course.courseMode === "OFFLINE"
+                        ? "Offline"
+                        : "Online"
+                : "Online",
 
             accent: "#4D2C5E",
             bg: "#FF7426"
@@ -217,7 +217,7 @@ const CourseKeyDetails = ({ course }) => {
         {
             icon: <FiBook />,
             label: "FORMAT",
-            value: "Live + Recorded" ,
+            value: "Live + Recorded",
             accent: "#FF7426",
             bg: "#4D2C5E"
         },
@@ -225,12 +225,12 @@ const CourseKeyDetails = ({ course }) => {
             icon: <FiCalendar />,
             label: "STARTING",
             value: course?.startDate
-  ? new Date(course.startDate).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
-  : "Coming Soon",
+                ? new Date(course.startDate).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                })
+                : "Coming Soon",
 
             accent: "#4D2C5E",
             bg: "#FF7426"
@@ -239,160 +239,160 @@ const CourseKeyDetails = ({ course }) => {
 
     return (
         <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="w-full py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-gradient-to-br from-[#FDF8EE] to-[#FFF5E6]"
-    >
-        {/* Floating background elements - enhanced with more color */}
-        <motion.div
-            animate={{
-                y: [0, -20, 0],
-                x: [0, 15, 0],
-                rotate: [0, 5, 0]
-            }}
-            transition={{
-                duration: 12,
-                repeat: Infinity,
-                ease: "easeInOut"
-            }}
-            className="absolute -top-20 -left-20 w-40 h-40 rounded-full bg-gradient-to-br from-[#FF7426]/20 to-[#FF9E26]/20 blur-xl"
-        />
-        <motion.div
-            animate={{
-                y: [0, 30, 0],
-                x: [0, -20, 0],
-                rotate: [0, -8, 0]
-            }}
-            transition={{
-                duration: 15,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 3
-            }}
-            className="absolute -bottom-20 -right-20 w-48 h-48 rounded-full bg-gradient-to-br from-[#4D2C5E]/20 to-[#8A3FFC]/20 blur-xl"
-        />
-    
-        <div className="max-w-7xl mx-auto relative z-10">
-            {/* Cards grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                {details.map((item, index) => (
-                    <motion.div
-                        key={index}
-                        initial={{ scale: 0.8, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{
-                            delay: index * 0.15,
-                            type: "spring",
-                            stiffness: 100,
-                            damping: 10
-                        }}
-                        whileHover={{
-                            y: -10,
-                            scale: 1.03
-                        }}
-                        className="relative group cursor-pointer"
-                    >
-                        {/* Enhanced card background with gradient */}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="w-full py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-gradient-to-br from-[#FDF8EE] to-[#FFF5E6]"
+        >
+            {/* Floating background elements - enhanced with more color */}
+            <motion.div
+                animate={{
+                    y: [0, -20, 0],
+                    x: [0, 15, 0],
+                    rotate: [0, 5, 0]
+                }}
+                transition={{
+                    duration: 12,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                className="absolute -top-20 -left-20 w-40 h-40 rounded-full bg-gradient-to-br from-[#FF7426]/20 to-[#FF9E26]/20 blur-xl"
+            />
+            <motion.div
+                animate={{
+                    y: [0, 30, 0],
+                    x: [0, -20, 0],
+                    rotate: [0, -8, 0]
+                }}
+                transition={{
+                    duration: 15,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 3
+                }}
+                className="absolute -bottom-20 -right-20 w-48 h-48 rounded-full bg-gradient-to-br from-[#4D2C5E]/20 to-[#8A3FFC]/20 blur-xl"
+            />
+
+            <div className="max-w-7xl mx-auto relative z-10">
+                {/* Cards grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {details.map((item, index) => (
                         <motion.div
-                            initial={{ rotate: 0 }}
-                            whileHover={{ rotate: 2 }}
-                            className="absolute inset-0 rounded-2xl bg-gradient-to-br opacity-20"
-                            style={{
-                                background: `linear-gradient(135deg, ${item.bg} 0%, ${item.accent} 100%)`,
-                                filter: 'blur(8px)'
+                            key={index}
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{
+                                delay: index * 0.15,
+                                type: "spring",
+                                stiffness: 100,
+                                damping: 10
                             }}
-                        />
-    
-                        {/* Main card with enhanced glow effect */}
-                        <motion.div
                             whileHover={{
-                                boxShadow: `0 20px 40px ${item.accent}40`
+                                y: -10,
+                                scale: 1.03
                             }}
-                            className="relative bg-white rounded-xl p-8 h-full border border-gray-100 overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
-                            style={{
-                                background: 'rgba(255, 255, 255, 0.9)',
-                                backdropFilter: 'blur(4px)'
-                            }}
+                            className="relative group cursor-pointer"
                         >
-                            {/* Animated icon with enhanced glow */}
+                            {/* Enhanced card background with gradient */}
                             <motion.div
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                transition={{ delay: index * 0.15 + 0.3 }}
-                                whileHover={{
-                                    rotate: 15,
-                                    scale: 1.1
-                                }}
-                                className="w-16 h-16 rounded-xl mb-6 flex items-center justify-center mx-auto shadow-lg"
+                                initial={{ rotate: 0 }}
+                                whileHover={{ rotate: 2 }}
+                                className="absolute inset-0 rounded-2xl bg-gradient-to-br opacity-20"
                                 style={{
-                                    background: `linear-gradient(135deg, ${item.accent}10 0%, ${item.accent}30 100%)`,
-                                    color: item.accent,
-                                    boxShadow: `0 0 20px ${item.accent}30`
-                                }}
-                            >
-                                <div className="text-2xl">
-                                    {item.icon}
-                                </div>
-                            </motion.div>
-    
-                            {/* Content */}
-                            <motion.h3
-                                initial={{ y: 10, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ delay: index * 0.15 + 0.4 }}
-                                className="text-sm font-semibold text-gray-500 uppercase tracking-wider text-center mb-2"
-                            >
-                                {item.label}
-                            </motion.h3>
-    
-                            <motion.p
-                                initial={{ y: 10, opacity: 0 }}
-                                animate={{ y: 0, opacity: 1 }}
-                                transition={{ delay: index * 0.15 + 0.5 }}
-                                className="text-2xl font-bold text-center"
-                                style={{ 
-                                    color: item.accent,
-                                    textShadow: `0 2px 10px ${item.accent}20`
-                                }}
-                            >
-                                {item.value}
-                            </motion.p>
-    
-                            {/* Enhanced animated underline */}
-                            <motion.div
-                                initial={{ width: 0 }}
-                                whileHover={{ width: "50%" }}
-                                transition={{ type: "spring", stiffness: 300 }}
-                                className="h-1.5 mt-4 mx-auto rounded-full"
-                                style={{ 
-                                    backgroundColor: item.accent,
-                                    boxShadow: `0 0 10px ${item.accent}`
+                                    background: `linear-gradient(135deg, ${item.bg} 0%, ${item.accent} 100%)`,
+                                    filter: 'blur(8px)'
                                 }}
                             />
+
+                            {/* Main card with enhanced glow effect */}
+                            <motion.div
+                                whileHover={{
+                                    boxShadow: `0 20px 40px ${item.accent}40`
+                                }}
+                                className="relative bg-white rounded-xl p-8 h-full border border-gray-100 overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+                                style={{
+                                    background: 'rgba(255, 255, 255, 0.9)',
+                                    backdropFilter: 'blur(4px)'
+                                }}
+                            >
+                                {/* Animated icon with enhanced glow */}
+                                <motion.div
+                                    initial={{ scale: 0 }}
+                                    animate={{ scale: 1 }}
+                                    transition={{ delay: index * 0.15 + 0.3 }}
+                                    whileHover={{
+                                        rotate: 15,
+                                        scale: 1.1
+                                    }}
+                                    className="w-16 h-16 rounded-xl mb-6 flex items-center justify-center mx-auto shadow-lg"
+                                    style={{
+                                        background: `linear-gradient(135deg, ${item.accent}10 0%, ${item.accent}30 100%)`,
+                                        color: item.accent,
+                                        boxShadow: `0 0 20px ${item.accent}30`
+                                    }}
+                                >
+                                    <div className="text-2xl">
+                                        {item.icon}
+                                    </div>
+                                </motion.div>
+
+                                {/* Content */}
+                                <motion.h3
+                                    initial={{ y: 10, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: index * 0.15 + 0.4 }}
+                                    className="text-sm font-semibold text-gray-500 uppercase tracking-wider text-center mb-2"
+                                >
+                                    {item.label}
+                                </motion.h3>
+
+                                <motion.p
+                                    initial={{ y: 10, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: index * 0.15 + 0.5 }}
+                                    className="text-2xl font-bold text-center"
+                                    style={{
+                                        color: item.accent,
+                                        textShadow: `0 2px 10px ${item.accent}20`
+                                    }}
+                                >
+                                    {item.value}
+                                </motion.p>
+
+                                {/* Enhanced animated underline */}
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    whileHover={{ width: "50%" }}
+                                    transition={{ type: "spring", stiffness: 300 }}
+                                    className="h-1.5 mt-4 mx-auto rounded-full"
+                                    style={{
+                                        backgroundColor: item.accent,
+                                        boxShadow: `0 0 10px ${item.accent}`
+                                    }}
+                                />
+                            </motion.div>
                         </motion.div>
-                    </motion.div>
-                ))}
+                    ))}
+                </div>
             </div>
-        </div>
-    </motion.div>
+        </motion.div>
     );
 };
 
 const ProgramInfoWithEnroll = ({ course }) => {
-    const batchCode=course.batchId;
+    const batchCode = course.batchId;
     const [selectedCourse, setSelectedCourse] = useState(null);
-      const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
-      const handleEnrollClick = (course) => {
+    const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+    const handleEnrollClick = (course) => {
         setSelectedCourse(course);
         setIsEnrollModalOpen(true);
-      };
+    };
 
-    
-      const handleEnrollSubmit = () => {
+
+    const handleEnrollSubmit = () => {
         // Handle enrollment logic here
         setIsEnrollModalOpen(false);
-      };
+    };
 
     return (
         <motion.div
@@ -602,42 +602,56 @@ const ProgramInfoWithEnroll = ({ course }) => {
                                 </motion.div>
 
                                 <motion.button
-                                onClick={() => handleEnrollClick(course)}
+                                    onClick={() => {
+                                        if (batchCode === "0") {
+                                            toast.error("No available batches for this course");
+                                        } else {
+                                            handleEnrollClick(course);
+                                        }
+                                    }}
                                     initial={{ scale: 0.9, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{ delay: 1.2 }}
-                                    whileHover={{
+                                    whileHover={batchCode !== "0" ? {
                                         scale: 1.05,
                                         boxShadow: "0 10px 25px rgba(255, 116, 38, 0.4)"
-                                    }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className="w-full bg-gradient-to-r from-[#FF7426] to-[#FF9E5E] text-white font-bold py-4 px-6 rounded-lg shadow-lg relative overflow-hidden group"
+                                    } : {}}
+                                    whileTap={batchCode !== "0" ? { scale: 0.98 } : {}}
+                                    className={`w-full text-white font-bold py-4 px-6 rounded-lg shadow-lg relative overflow-hidden group ${batchCode === "0"
+                                        ? "bg-gray-400 cursor-not-allowed"
+                                        : "bg-gradient-to-r from-[#FF7426] to-[#FF9E5E]"
+                                        }`}
+                                    disabled={batchCode === "0"}
                                 >
-                                    <span className="relative z-10">ENROLL NOW</span>
-                                    <motion.span
-                                        initial={{ x: '-100%' }}
-                                        whileHover={{ x: '0%' }}
-                                        transition={{ duration: 0.4 }}
-                                        className="absolute inset-0 bg-[#E65100] z-0"
-                                    />
+                                    <span className="relative z-10">
+                                        {batchCode === "0" ? "NO BATCHES AVAILABLE" : "ENROLL NOW"}
+                                    </span>
+                                    {batchCode !== "0" && (
+                                        <motion.span
+                                            initial={{ x: '-100%' }}
+                                            whileHover={{ x: '0%' }}
+                                            transition={{ duration: 0.4 }}
+                                            className="absolute inset-0 bg-[#E65100] z-0"
+                                        />
+                                    )}
                                 </motion.button>
                             </div>
                         </motion.div>
                     </motion.div>
                 </div>
             </div>
-       
 
-{selectedCourse && (
-    <PurchaseModal
-      course={selectedCourse}
-      batchCode={batchCode}
-      isOpen={isEnrollModalOpen}
-      onClose={() => {setIsEnrollModalOpen(false); setSelectedCourse(null)}}
-      onEnroll={handleEnrollSubmit}
-    />
-  )}
-   </motion.div>
+
+            {selectedCourse && (
+                <PurchaseModal
+                    course={selectedCourse}
+                    batchCode={batchCode}
+                    isOpen={isEnrollModalOpen}
+                    onClose={() => { setIsEnrollModalOpen(false); setSelectedCourse(null) }}
+                    onEnroll={handleEnrollSubmit}
+                />
+            )}
+        </motion.div>
     );
 };
 
@@ -655,10 +669,10 @@ const TeachingPlan = ({ course }) => {
 
     const downloadBrochure = () => {
         if (!course?.brochure) {
-          window.alert("No brochure available for this course");
-          return;
+            window.alert("No brochure available for this course");
+            return;
         }
-      
+
         // Create a direct link and let browser handle it
         const link = document.createElement("a");
         link.href = course.brochure;
@@ -667,7 +681,7 @@ const TeachingPlan = ({ course }) => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-      };
+    };
 
     // Your actual data structure
     const weeks = course.weeks;
@@ -884,33 +898,32 @@ const TeachingPlan = ({ course }) => {
                     className="text-center mt-12 flex justify-center items-center" // Reduced mt-16 to mt-12
                 >
                     <motion.button
-                      type="button"
-                      whileHover={{ scale: 1.02 }} // Reduced from 1.03
-                      whileTap={{ scale: 0.98 }}
-                      onClick={downloadBrochure}
-                      disabled={isDownloading}
-                      className={`flex items-center gap-2 px-5 py-2.5 border-2 rounded-lg transition-all duration-200 ${
-                        isDownloading
-                          ? 'bg-gray-200 border-gray-300 text-gray-500 cursor-wait'
-                          : 'bg-white border-[#4D2C5E] text-[#4D2C5E] hover:bg-[#4D2C5E]/10 shadow-sm hover:shadow-md cursor-pointer'
-                      }`}
+                        type="button"
+                        whileHover={{ scale: 1.02 }} // Reduced from 1.03
+                        whileTap={{ scale: 0.98 }}
+                        onClick={downloadBrochure}
+                        disabled={isDownloading}
+                        className={`flex items-center gap-2 px-5 py-2.5 border-2 rounded-lg transition-all duration-200 ${isDownloading
+                            ? 'bg-gray-200 border-gray-300 text-gray-500 cursor-wait'
+                            : 'bg-white border-[#4D2C5E] text-[#4D2C5E] hover:bg-[#4D2C5E]/10 shadow-sm hover:shadow-md cursor-pointer'
+                            }`}
                     >
-                      {isDownloading ? (
-                        <>
-                          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-[#4D2C5E]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                          </svg>
-                          Downloading...
-                        </>
-                      ) : (
-                        <>
-                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                          </svg>
-                          Download Brochure
-                        </>
-                      )}
+                        {isDownloading ? (
+                            <>
+                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-[#4D2C5E]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Downloading...
+                            </>
+                        ) : (
+                            <>
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                </svg>
+                                Download Brochure
+                            </>
+                        )}
                     </motion.button>
                 </motion.div>
             </div>
@@ -926,7 +939,7 @@ const CareerDevelopmentTrack = ({ course }) => {
     const careerData = course.careerData || [
         {
             icon: <FiBriefcase className="text-4xl text-[#FF7426]" />,
-            title: "Pregrad Career Assist",
+            title: "Upskilllab Career Assist",
             items: [
                 "Mentoring from industry experts",
                 "Career-specific resume tailoring",
@@ -986,7 +999,7 @@ const CareerDevelopmentTrack = ({ course }) => {
             style={{ background: 'linear-gradient(to bottom, #F9F9FF 0%, #FFFFFF 100%)' }}
         >
             {/* Floating background elements */}
-            <motion.div 
+            <motion.div
                 animate={{
                     y: [0, -40, 0],
                     x: [0, 30, 0]
@@ -998,7 +1011,7 @@ const CareerDevelopmentTrack = ({ course }) => {
                 }}
                 className="absolute top-1/4 left-0 w-48 h-48 rounded-full bg-[#FF7426]/10 blur-xl"
             />
-            <motion.div 
+            <motion.div
                 animate={{
                     y: [0, 50, 0],
                     x: [0, -20, 0]
@@ -1053,13 +1066,13 @@ const CareerDevelopmentTrack = ({ course }) => {
                             key={index}
                             initial={{ y: 50, opacity: 0, rotate: 1 }}
                             animate={isInView ? { y: 0, opacity: 1, rotate: 0 } : {}}
-                            transition={{ 
+                            transition={{
                                 type: "spring",
                                 stiffness: 100,
                                 damping: 10,
                                 delay: index * 0.15
                             }}
-                            whileHover={{ 
+                            whileHover={{
                                 y: -10,
                                 boxShadow: "0 15px 30px rgba(77, 44, 94, 0.15)"
                             }}
@@ -1072,7 +1085,7 @@ const CareerDevelopmentTrack = ({ course }) => {
                                 transition={{ delay: index * 0.15 + 0.3 }}
                                 className="absolute -inset-2 rounded-xl bg-gradient-to-br from-[#FF7426]/10 to-[#4D2C5E]/10 opacity-0 group-hover:opacity-100 blur-md transition-all duration-300"
                             />
-                            
+
                             {/* Main card */}
                             <motion.div
                                 className="relative bg-white rounded-xl p-8 h-full border border-[#4D2C5E]/10 transition-all duration-300 group-hover:border-transparent group-hover:bg-white/95 z-10 shadow-lg"
@@ -1083,7 +1096,7 @@ const CareerDevelopmentTrack = ({ course }) => {
                                         initial={{ scale: 0 }}
                                         animate={isInView ? { scale: 1 } : {}}
                                         transition={{ delay: index * 0.15 + 0.4 }}
-                                        whileHover={{ 
+                                        whileHover={{
                                             rotate: [0, 10, -5, 0],
                                             scale: [1, 1.1, 1.05, 1]
                                         }}
@@ -1107,7 +1120,7 @@ const CareerDevelopmentTrack = ({ course }) => {
                                         {item.title}
                                     </motion.h3>
 
-                                    <motion.ul 
+                                    <motion.ul
                                         initial={{ opacity: 0 }}
                                         animate={isInView ? { opacity: 1 } : {}}
                                         transition={{ staggerChildren: 0.1, delayChildren: index * 0.15 + 0.6 }}
@@ -1179,7 +1192,7 @@ const CertificateSection = ({ course }) => {
             className="w-full py-10 relative overflow-hidden bg-gradient-to-b from-[#F9F9FF] to-white"
         >
             {/* Floating background elements */}
-            <motion.div 
+            <motion.div
                 animate={{
                     y: [0, -40, 0],
                     x: [0, 30, 0]
@@ -1191,7 +1204,7 @@ const CertificateSection = ({ course }) => {
                 }}
                 className="absolute top-1/4 left-0 w-48 h-48 rounded-full bg-[#FF7426]/10 blur-xl"
             />
-            <motion.div 
+            <motion.div
                 animate={{
                     y: [0, 50, 0],
                     x: [0, -20, 0]
@@ -1319,21 +1332,21 @@ const CertificateSection = ({ course }) => {
 
 
 const PricingSection = ({ course }) => {
-    const batchCode=course.batchId;
+    const batchCode = course.batchId;
     const [selectedCourse, setSelectedCourse] = useState(null);
-      const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
-      const handleEnrollClick = (course) => {
+    const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+    const handleEnrollClick = (course) => {
         setSelectedCourse(course);
         setIsEnrollModalOpen(true);
-      };
+    };
 
-      const handleEnrollSubmit = () => {
+    const handleEnrollSubmit = () => {
         // Handle enrollment logic here
         setIsEnrollModalOpen(false);
-      };
+    };
 
     return (
-        
+
         <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -1341,7 +1354,7 @@ const PricingSection = ({ course }) => {
             className="w-full py-10 relative overflow-hidden"
         >
             {/* Floating background elements */}
-            <motion.div 
+            <motion.div
                 animate={{
                     y: [0, -40, 0],
                     x: [0, 30, 0]
@@ -1353,7 +1366,7 @@ const PricingSection = ({ course }) => {
                 }}
                 className="absolute top-1/4 left-0 w-48 h-48 rounded-full bg-[#FF7426]/10 blur-xl"
             />
-            <motion.div 
+            <motion.div
                 animate={{
                     y: [0, 50, 0],
                     x: [0, -20, 0]
@@ -1437,9 +1450,9 @@ const PricingSection = ({ course }) => {
                                 whileInView={{ opacity: 1 }}
                                 transition={{ delay: 0.8 }}
                             >
-                                <img 
-                                    src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" 
-                                    alt="Happy students" 
+                                <img
+                                    src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                                    alt="Happy students"
                                     className="rounded-xl shadow-lg w-full h-auto object-cover"
                                 />
                             </motion.div>
@@ -1464,7 +1477,7 @@ const PricingSection = ({ course }) => {
                                 transition={{ delay: 0.5 }}
                                 className="absolute inset-0 bg-gradient-to-br from-[#4D2C5E]/5 to-[#FF7426]/5 mix-blend-overlay"
                             />
-                            
+
                             <div className="relative z-10 p-8">
                                 <motion.h3
                                     initial={{ opacity: 0 }}
@@ -1517,12 +1530,12 @@ const PricingSection = ({ course }) => {
                                             className="flex items-start gap-4 p-3 rounded-lg hover:bg-[#4D2C5E]/5 transition-colors"
                                         >
                                             <motion.div
-                                                animate={{ 
+                                                animate={{
                                                     rotate: [0, 10, 0],
                                                     scale: [1, 1.1, 1]
                                                 }}
-                                                transition={{ 
-                                                    duration: 6, 
+                                                transition={{
+                                                    duration: 6,
                                                     repeat: Infinity,
                                                     delay: index * 0.5
                                                 }}
@@ -1542,32 +1555,46 @@ const PricingSection = ({ course }) => {
                                     className="mt-10 pt-8 border-t border-[#4D2C5E]/10"
                                 >
                                     <h4 className="text-sm font-medium text-gray-500 mb-4">Secure Payment</h4>
-                                    
+
                                     <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
                                         <div className="flex items-center">
-                                            <img 
-                                                src="images/Cashfree Payments.png" 
-                                                alt="Cashfree" 
-                                                className="w-25 opacity-100 hover:opacity-100 transition-opacity" 
+                                            <img
+                                                src="images/Cashfree Payments.png"
+                                                alt="Cashfree"
+                                                className="w-25 opacity-100 hover:opacity-100 transition-opacity"
                                             />
                                         </div>
-                                        
+
                                         <motion.button
-                                         onClick={() => handleEnrollClick(course)}
-                                            whileHover={{ 
+                                            onClick={() => {
+                                                if (batchCode === "0") {
+                                                    toast.error("No available batches for this course");
+                                                } else {
+                                                    handleEnrollClick(course);
+                                                }
+                                            }}
+                                            whileHover={batchCode !== "0" ? {
                                                 scale: 1.05,
                                                 boxShadow: "0 10px 25px rgba(255, 116, 38, 0.4)"
-                                            }}
-                                            whileTap={{ scale: 0.98 }}
-                                            className="w-full sm:w-auto bg-gradient-to-r from-[#FF7426] to-[#FF9E5E] text-white font-bold py-4 px-8 rounded-lg shadow-lg relative overflow-hidden group"
+                                            } : {}}
+                                            whileTap={batchCode !== "0" ? { scale: 0.98 } : {}}
+                                            className={`w-full sm:w-auto text-white font-bold py-4 px-8 rounded-lg shadow-lg relative overflow-hidden group ${batchCode === "0"
+                                                    ? "bg-gray-400 cursor-not-allowed"
+                                                    : "bg-gradient-to-r from-[#FF7426] to-[#FF9E5E]"
+                                                }`}
+                                            disabled={batchCode === "0"}
                                         >
-                                            <span className="relative z-10">ENROLL NOW</span>
-                                            <motion.span
-                                                initial={{ x: '-100%' }}
-                                                whileHover={{ x: '0%' }}
-                                                transition={{ duration: 0.4 }}
-                                                className="absolute inset-0 bg-[#E65100] z-0"
-                                            />
+                                            <span className="relative z-10">
+                                                {batchCode === "0" ? "NO BATCHES AVAILABLE" : "ENROLL NOW"}
+                                            </span>
+                                            {batchCode !== "0" && (
+                                                <motion.span
+                                                    initial={{ x: '-100%' }}
+                                                    whileHover={{ x: '0%' }}
+                                                    transition={{ duration: 0.4 }}
+                                                    className="absolute inset-0 bg-[#E65100] z-0"
+                                                />
+                                            )}
                                         </motion.button>
                                     </div>
                                 </motion.div>
@@ -1581,14 +1608,14 @@ const PricingSection = ({ course }) => {
                             className="mt-8"
                         >
                             <NavLink to='/ContactUs'>
-                            <motion.button
-                                whileHover={{ scale: 1.02 }}
-                                whileTap={{ scale: 0.98 }}
-                                className="flex items-center gap-3 px-6 py-4 bg-[#4D2C5E] text-white rounded-lg font-medium w-full justify-center shadow-md hover:shadow-lg transition-all"
-                            >
-                                <FiMessageSquare className="text-xl" />
-                                <span>Connect with counselor</span>
-                            </motion.button>
+                                <motion.button
+                                    whileHover={{ scale: 1.02 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    className="flex items-center gap-3 px-6 py-4 bg-[#4D2C5E] text-white rounded-lg font-medium w-full justify-center shadow-md hover:shadow-lg transition-all"
+                                >
+                                    <FiMessageSquare className="text-xl" />
+                                    <span>Connect with counselor</span>
+                                </motion.button>
                             </NavLink>
                         </motion.div>
                     </motion.div>
@@ -1597,14 +1624,14 @@ const PricingSection = ({ course }) => {
 
 
             {selectedCourse && (
-        <PurchaseModal
-          course={selectedCourse}
-          batchCode={batchCode}
-          isOpen={isEnrollModalOpen}
-          onClose={() => {setIsEnrollModalOpen(false); setSelectedCourse(null)}}
-          onEnroll={handleEnrollSubmit}
-        />
-      )}
+                <PurchaseModal
+                    course={selectedCourse}
+                    batchCode={batchCode}
+                    isOpen={isEnrollModalOpen}
+                    onClose={() => { setIsEnrollModalOpen(false); setSelectedCourse(null) }}
+                    onEnroll={handleEnrollSubmit}
+                />
+            )}
         </motion.div>
     );
 };
@@ -1672,7 +1699,7 @@ const FAQSection = ({ course }) => {
     return (
         <div className="w-full py-16 relative overflow-hidden bg-[#FDF8EE]">
             {/* Subtle floating elements */}
-            <motion.div 
+            <motion.div
                 animate={{
                     y: [0, -40, 0],
                     x: [0, 30, 0]
@@ -1684,7 +1711,7 @@ const FAQSection = ({ course }) => {
                 }}
                 className="absolute top-1/4 left-0 w-48 h-48 rounded-full bg-[#FF7426]/5 blur-xl"
             />
-            <motion.div 
+            <motion.div
                 animate={{
                     y: [0, 50, 0],
                     x: [0, -20, 0]
@@ -1748,10 +1775,10 @@ const FAQSection = ({ course }) => {
                                 <motion.div
                                     className={`absolute -inset-1 rounded-xl ${colors.bg} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
                                 />
-                                
+
                                 {/* White card */}
                                 <motion.div
-                                    whileHover={{ 
+                                    whileHover={{
                                         y: -3,
                                         boxShadow: `0 10px 30px ${colors.accent}20`
                                     }}
@@ -1769,13 +1796,13 @@ const FAQSection = ({ course }) => {
                                             >
                                                 <FiHelpCircle className={`text-xl ${colors.accent ? `text-[${colors.accent}]` : ''}`} />
                                             </motion.div>
-                                            
+
                                             <span className="font-semibold text-gray-800">
                                                 {faq.question}
                                             </span>
                                         </div>
                                         <motion.div
-                                            animate={{ 
+                                            animate={{
                                                 rotate: activeIndex === index.toString() ? 180 : 0,
                                                 color: activeIndex === index.toString() ? colors.accent : '#6B7280'
                                             }}
@@ -1789,16 +1816,16 @@ const FAQSection = ({ course }) => {
                                         {activeIndex === index.toString() && (
                                             <motion.div
                                                 initial={{ height: 0, opacity: 0 }}
-                                                animate={{ 
-                                                    height: 'auto', 
+                                                animate={{
+                                                    height: 'auto',
                                                     opacity: 1,
                                                     transition: {
                                                         height: { duration: 0.2 },
                                                         opacity: { duration: 0.1 }
                                                     }
                                                 }}
-                                                exit={{ 
-                                                    height: 0, 
+                                                exit={{
+                                                    height: 0,
                                                     opacity: 0,
                                                     transition: {
                                                         height: { duration: 0.2 },
@@ -1843,7 +1870,7 @@ const FAQSection = ({ course }) => {
                     </motion.p>
                     <NavLink to="/ContactUs">
                         <motion.button
-                            whileHover={{ 
+                            whileHover={{
                                 scale: 1.03,
                                 boxShadow: "0 10px 25px rgba(255, 116, 38, 0.3)"
                             }}
@@ -1867,208 +1894,208 @@ const FAQSection = ({ course }) => {
 };
 
 
-const CourseDetails = () => {     
-  const [course, setCourse] = useState(null);
-  const [directCourse,setDirectCourse]=useState(null)
-  const [directBatch,setDirectBatch]=useState(null)
-  const location = useLocation();
-  const courseId = location.state?.courseId;
-  const courseCode = location.state?.courseCode;
-  const batchId = location.state?.batchId;
-  const batchCode = location.state?.batchCode;
-  const { id } = useParams();
-  const type = window.location.pathname.includes('/batch/') ? 'batch' : 'course';
+const CourseDetails = () => {
+    const [course, setCourse] = useState(null);
+    const [directCourse, setDirectCourse] = useState(null)
+    const [directBatch, setDirectBatch] = useState(null)
+    const location = useLocation();
+    const courseId = location.state?.courseId;
+    const courseCode = location.state?.courseCode;
+    const batchId = location.state?.batchId;
+    const batchCode = location.state?.batchCode;
+    const { id } = useParams();
+    const type = window.location.pathname.includes('/batch/') ? 'batch' : 'course';
 
-  useEffect(() => {
-    if (type === 'course') {
-        fetchCourse(id)
-    } else if (type === 'batch') {
-        fetchBtachCourse(id)
-    }
-  }, [type, id]);
-
-  const fetchCourse = async (courseCode) => {     
-    // Get the endpoint URL by calling the ApiConfig function
-    const endpointUrl = ApiConfig.getCourseByCode(courseCode);
-    
-    const response = await getDataHandler(endpointUrl, null, null,true); // pass endpointUrl directly
-    let custemDataSet={
-        id:response._id,
-        batchId:response.batch._id,
-        title:response.courseName,
-        imageUrl:response.courseImage,
-        batchCode:response.batch.batchCode,
-        shortDescription:response.shortDescription,
-        tags:response.tags,
-        youtubeUrl:response.youtubeUrl,
-        duration:response.courseDuration,
-        startDate:response.batch.startDate,
-        programDetails:response.programDetails,
-        targetAudience:response.targetAudience,
-        weeks:response.weeks,
-        brochure:response.brochure,
-        courseMode:response.courseMode,
-        discountedPrice:response.discountedPrice,
-        originalPrice:response.originalPrice,
-        faqs:response.faqs
-    }
-    setCourse(custemDataSet);
-  };
-  const fetchBtachCourse = async (id) => {     
-    // Get the endpoint URL by calling the ApiConfig function
-    const endpointUrl = ApiConfig.courseByBatchId(id);
-    const res = await getDataHandler(endpointUrl, null, null,true); // pass endpointUrl directly
-    const response = res.batch
-    const endpointUrl2 = ApiConfig.getCourseByCode(response.course.courseCode);
-    const res2 = await getDataHandler(endpointUrl2, null, null,true);
-    let custemDataSet={
-        id:response._id,
-        batchId:response._id,
-        title:res2.courseName,
-        batchCode:response.batchCode,
-        shortDescription:res2.shortDescription,
-        tags:res2.tags,
-        imageUrl:res2.courseImage,
-        youtubeUrl:res2.youtubeUrl,
-        duration:res2.courseDuration,
-        startDate:response.startDate,
-        programDetails:res2.programDetails,
-        targetAudience:res2.targetAudience,
-        weeks:res2.weeks,
-        courseMode:res2.courseMode,
-        brochure:res2.brochure,
-        discountedPrice:res2.discountedPrice,
-        originalPrice:res2.originalPrice,
-        faqs:res2.faqs
-    }
-    setCourse(custemDataSet);
-  };
-
-
-   // Timeout component
-   const TimeoutMessage = ({ delay }) => {
-    const [showMessage, setShowMessage] = useState(false);
-  
     useEffect(() => {
-      const timer = setTimeout(() => {
-        setShowMessage(true);
-      }, delay);
-  
-      return () => clearTimeout(timer);
-    }, [delay]);
-  
-    if (!showMessage) return null;
-  
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="mt-6 p-4 bg-white rounded-lg shadow-md text-center"
-      >
-        <div className="text-[#FF7426] mb-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-10 w-10 mx-auto"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-            />
-          </svg>
-        </div>
-        <h3 className="text-xl font-bold text-[#4D2C5E] mb-1">
-          No Batch Found
-        </h3>
-        <p className="text-gray-600">
-          We couldn't find any available batches for this course.
-        </p>
-      </motion.div>
-    );
-  };
+        if (type === 'course') {
+            fetchCourse(id)
+        } else if (type === 'batch') {
+            fetchBtachCourse(id)
+        }
+    }, [type, id]);
 
-  
-  if (!course) {
-    return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#FDF8EE] p-4">
-        <motion.div
-          initial={{ rotate: 0, scale: 0.8 }}
-          animate={{ 
-            rotate: 360,
-            scale: [0.8, 1, 0.8],
-          }}
-          transition={{
-            duration: 1.5,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="relative w-20 h-20 mb-6"
-        >
-          {/* Outer ring */}
-          <motion.div
-            className="absolute inset-0 rounded-full border-4 border-[#4D2C5E]/20"
-            animate={{
-              borderWidth: [4, 8, 4],
-              borderColor: ["#4D2C5E/20", "#FF7426/50", "#4D2C5E/20"]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity
-            }}
-          />
-          
-          {/* Inner spinner */}
-          <motion.div
-            className="absolute inset-2 rounded-full border-t-4 border-r-4 border-transparent"
-            animate={{
-              rotate: [0, 360],
-            }}
-            transition={{
-              duration: 1,
-              repeat: Infinity,
-              ease: "linear"
-            }}
-          />
-          
-          {/* Center dot */}
-          <motion.div
-            className="absolute inset-6 rounded-full bg-[#4D2C5E]"
-            animate={{
-              scale: [1, 1.2, 1],
-              backgroundColor: ["#4D2C5E", "#FF7426", "#4D2C5E"]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity
-            }}
-          />
-        </motion.div>
-  
-        <motion.p
-          className="text-[#4D2C5E] text-lg font-medium text-center max-w-md"
-          animate={{
-            opacity: [0.6, 1, 0.6],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity
-          }}
-        >
-          Loading course details...
-        </motion.p>
-  
-        {/* Timeout message after 15 seconds */}
-        <TimeoutMessage delay={15000} />
-      </div>
-    );
-  }
-  
- 
+    const fetchCourse = async (courseCode) => {
+        // Get the endpoint URL by calling the ApiConfig function
+        const endpointUrl = ApiConfig.getCourseByCode(courseCode);
+
+        const response = await getDataHandler(endpointUrl, null, null, true); // pass endpointUrl directly
+        let custemDataSet = {
+            id: response._id,
+            batchId: response.batch?._id || "0",
+            title: response.courseName,
+            imageUrl: response.courseImage,
+            batchCode: response.batch?.batchCode || "0",
+            shortDescription: response.shortDescription,
+            tags: response.tags,
+            youtubeUrl: response.youtubeUrl,
+            duration: response.courseDuration,
+            startDate: response.batch?.startDate || "",
+            programDetails: response.programDetails,
+            targetAudience: response.targetAudience,
+            weeks: response.weeks,
+            brochure: response.brochure,
+            courseMode: response.courseMode,
+            discountedPrice: response.discountedPrice,
+            originalPrice: response.originalPrice,
+            faqs: response.faqs
+        }
+        setCourse(custemDataSet);
+    };
+    const fetchBtachCourse = async (id) => {
+        // Get the endpoint URL by calling the ApiConfig function
+        const endpointUrl = ApiConfig.courseByBatchId(id);
+        const res = await getDataHandler(endpointUrl, null, null, true); // pass endpointUrl directly
+        const response = res.batch
+        const endpointUrl2 = ApiConfig.getCourseByCode(response.course.courseCode);
+        const res2 = await getDataHandler(endpointUrl2, null, null, true);
+        let custemDataSet = {
+            id: response._id,
+            batchId: response._id,
+            title: res2.courseName,
+            batchCode: response.batchCode,
+            shortDescription: res2.shortDescription,
+            tags: res2.tags,
+            imageUrl: res2.courseImage,
+            youtubeUrl: res2.youtubeUrl,
+            duration: res2.courseDuration,
+            startDate: response.startDate,
+            programDetails: res2.programDetails,
+            targetAudience: res2.targetAudience,
+            weeks: res2.weeks,
+            courseMode: res2.courseMode,
+            brochure: res2.brochure,
+            discountedPrice: res2.discountedPrice,
+            originalPrice: res2.originalPrice,
+            faqs: res2.faqs
+        }
+        setCourse(custemDataSet);
+    };
+
+
+    // Timeout component
+    const TimeoutMessage = ({ delay }) => {
+        const [showMessage, setShowMessage] = useState(false);
+
+        useEffect(() => {
+            const timer = setTimeout(() => {
+                setShowMessage(true);
+            }, delay);
+
+            return () => clearTimeout(timer);
+        }, [delay]);
+
+        if (!showMessage) return null;
+
+        return (
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="mt-6 p-4 bg-white rounded-lg shadow-md text-center"
+            >
+                <div className="text-[#FF7426] mb-2">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-10 w-10 mx-auto"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                        />
+                    </svg>
+                </div>
+                <h3 className="text-xl font-bold text-[#4D2C5E] mb-1">
+                    No Batch Found
+                </h3>
+                <p className="text-gray-600">
+                    We couldn't find any available batches for this course.
+                </p>
+            </motion.div>
+        );
+    };
+
+
+    if (!course) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-[#FDF8EE] p-4">
+                <motion.div
+                    initial={{ rotate: 0, scale: 0.8 }}
+                    animate={{
+                        rotate: 360,
+                        scale: [0.8, 1, 0.8],
+                    }}
+                    transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                    className="relative w-20 h-20 mb-6"
+                >
+                    {/* Outer ring */}
+                    <motion.div
+                        className="absolute inset-0 rounded-full border-4 border-[#4D2C5E]/20"
+                        animate={{
+                            borderWidth: [4, 8, 4],
+                            borderColor: ["#4D2C5E/20", "#FF7426/50", "#4D2C5E/20"]
+                        }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity
+                        }}
+                    />
+
+                    {/* Inner spinner */}
+                    <motion.div
+                        className="absolute inset-2 rounded-full border-t-4 border-r-4 border-transparent"
+                        animate={{
+                            rotate: [0, 360],
+                        }}
+                        transition={{
+                            duration: 1,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                    />
+
+                    {/* Center dot */}
+                    <motion.div
+                        className="absolute inset-6 rounded-full bg-[#4D2C5E]"
+                        animate={{
+                            scale: [1, 1.2, 1],
+                            backgroundColor: ["#4D2C5E", "#FF7426", "#4D2C5E"]
+                        }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity
+                        }}
+                    />
+                </motion.div>
+
+                <motion.p
+                    className="text-[#4D2C5E] text-lg font-medium text-center max-w-md"
+                    animate={{
+                        opacity: [0.6, 1, 0.6],
+                    }}
+                    transition={{
+                        duration: 2,
+                        repeat: Infinity
+                    }}
+                >
+                    Loading course details...
+                </motion.p>
+
+                {/* Timeout message after 15 seconds */}
+                <TimeoutMessage delay={15000} />
+            </div>
+        );
+    }
+
+
 
 
     return (
@@ -2083,7 +2110,7 @@ const CourseDetails = () => {
             <FAQSection course={course} />
             {/* Add other components here */}
 
-            
+
 
         </div>
     );

@@ -97,6 +97,7 @@ useEffect(() => {
           ssr={true}
         >
         {categories.slice(0, 6).map((category, index) => (
+          console.log(category),
           <motion.div
             onClick={() => handleCategoryClick(category)}
             key={index}
@@ -115,7 +116,7 @@ useEffect(() => {
               <img 
                 src={category.image} 
                 alt={category.title}
-                className="w-10 h-10 object-cover"
+                className="w-full h-full object-cover"
                 onError={(e) => {
                   e.target.onerror = null; 
                   e.target.src = '/images/fallback.jpg';

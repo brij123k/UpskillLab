@@ -98,7 +98,7 @@ const StudentFeedBack = () => {
             animate={{
               ...floatingAnim,
               y: [0, -20, 0],
-              transition: { ...floatingAnim.transition, delay: 0.3 }
+              transition: { ...floatingAnim.transition, delay: 0.1 }
             }}
           />
         </>
@@ -142,7 +142,7 @@ const StudentFeedBack = () => {
         animate={inView ? {
           opacity: 0.3,
           scale: 1,
-          transition: { duration: 0.5, delay: 0.2 }
+          transition: { duration: 0.3, delay: 0.1 }
         } : {
           opacity: 0,
           scale: 0.95

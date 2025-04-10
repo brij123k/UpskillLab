@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { NavLink,useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import TrainingBanner from "../../components/banners/TrainingBanner";
 import FeedbaackBanner from "../../components/banners/FeedbackBanner";
 import { FiFilter, FiX, FiChevronDown, FiChevronUp } from "react-icons/fi";
 import EnrollmentModal from "../../components/Modal/EnrollmentModal";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { getFilteredCourses } from "../../config/services";
-import {getDataHandler } from "../../config/services";
+import { getDataHandler } from "../../config/services";
 import { useLocation } from "react-router-dom";
 import BatchEnrollmentModal from "../../components/Modal/BatchEnrollmentModal";
 import ApiConfig from "../../config/apiConfig";
@@ -114,11 +114,10 @@ const DropdownFilter = ({
     <div className="relative">
       <button
         onClick={() => toggleDropdown(title)}
-        className={`flex items-center justify-between px-3 py-2 text-sm rounded-lg border-2 ${
-          filters[title].length
-            ? getFilterColor(filters[title])
-            : "border-gray-200 hover:border-[#FF7426]/50"
-        } transition-colors min-w-[120px]`}
+        className={`flex items-center justify-between px-3 py-2 text-sm rounded-lg border-2 ${filters[title].length
+          ? getFilterColor(filters[title])
+          : "border-gray-200 hover:border-[#FF7426]/50"
+          } transition-colors min-w-[120px]`}
       >
         <span className="truncate">
           {filters[title]?.at(0)?.label || label}
@@ -166,11 +165,10 @@ const DropdownFilter = ({
                 <button
                   key={value}
                   onClick={() => handleFilterSelect(title, value, label)}
-                  className={`block w-full text-left cursor-pointer px-4 py-2 text-sm transition-colors ${
-                    filters[title].at(0)?.value === value
-                      ? getFilterColor(value) + " font-bold"
-                      : "text-gray-700 hover:bg-[#4D2C5E]/5"
-                  }`}
+                  className={`block w-full text-left cursor-pointer px-4 py-2 text-sm transition-colors ${filters[title].at(0)?.value === value
+                    ? getFilterColor(value) + " font-bold"
+                    : "text-gray-700 hover:bg-[#4D2C5E]/5"
+                    }`}
                 >
                   {label}
                 </button>
@@ -355,22 +353,22 @@ const CourseList = () => {
   const location = useLocation();
   const handleEnrollClick = async (course) => {
     // setSelectedCourse(course);
-      const endpointUrl = ApiConfig.getCourseByCode(course.courseCode);
-      const response = await getDataHandler(endpointUrl, null, null,true);
-      let custemDataSet={
-        id:response.batch._id,
-        batchCode:response.batch.batchCode,
-        batchId:response.batch._id,
-        courseCode:response.courseCode,
-        courseId:response._id,
-        originalPrice:response.originalPrice,
-        price:response.discountedPrice,
-        remainingSeats:response.batch.remainingSeats,
-        startDate:response.batch.startDate,
-        startTime:response.batch.startTime,
-        title:response.courseName,
-        totalSeats:response.totalSeats,
-      }
+    const endpointUrl = ApiConfig.getCourseByCode(course.courseCode);
+    const response = await getDataHandler(endpointUrl, null, null, true);
+    let custemDataSet = {
+      id: response.batch._id,
+      batchCode: response.batch.batchCode,
+      batchId: response.batch._id,
+      courseCode: response.courseCode,
+      courseId: response._id,
+      originalPrice: response.originalPrice,
+      price: response.discountedPrice,
+      remainingSeats: response.batch.remainingSeats,
+      startDate: response.batch.startDate,
+      startTime: response.batch.startTime,
+      title: response.courseName,
+      totalSeats: response.totalSeats,
+    }
     setEnrollCourse(custemDataSet)
     // setIsEnrollModalOpen(true);
   };
@@ -384,8 +382,8 @@ const CourseList = () => {
   const [queryParams, setQueryParams] = useState({
     skip: 0,
     limit: 25,
-    categoryIds: location.state?.category 
-      ? [location.state.category.categoryId] 
+    categoryIds: location.state?.category
+      ? [location.state.category.categoryId]
       : [],
     languageIds: [],
     courseLevels: [],
@@ -395,11 +393,11 @@ const CourseList = () => {
 
   // State for filters
   const [filters, setFilters] = useState({
-    category: location.state?.category 
-      ? [{ 
-          value: location.state.category.categoryId, 
-          label: location.state.category.title 
-        }] 
+    category: location.state?.category
+      ? [{
+        value: location.state.category.categoryId,
+        label: location.state.category.title
+      }]
       : [],
     level: [],
     instructor: [],
@@ -428,7 +426,7 @@ const CourseList = () => {
         ...prev,
         category: [{ value: categoryId, label: title }]
       }));
-      
+
       setQueryParams(prev => ({
         ...prev,
         categoryIds: [categoryId]
@@ -593,11 +591,7 @@ const CourseList = () => {
             whileHover={{ scale: 1.05 }}
             className="hidden sm:flex items-center space-x-2"
           >
-            {(filters.category.length ||
-              filters.level.length ||
-              filters.instructor.length ||
-              filters.language.length ||
-              filters.priceRange.length) && (
+            {Object.values(filters).some(filterArray => filterArray.length > 0) && (
               <button
                 onClick={resetFilters}
                 className="text-sm text-[#FF7426] hover:underline flex items-center"
@@ -638,36 +632,29 @@ const CourseList = () => {
         </motion.div>
 
         {/* Active Filters */}
-        {(filters.category.length ||
-          filters.level.length ||
-          filters.instructor.length ||
-          filters.language.length ||
-          filters.priceRange.length) && (
+        {Object.values(filters).some(filterArray => filterArray.length > 0) && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="flex flex-wrap gap-2 mb-6"
           >
             {Object.entries(filters).map(([key, arrayValue]) =>
-              // Map through each filter category and its values
-              arrayValue.map(({ value, label }, index) => {
-                return (
-                  <motion.span
-                    key={`${key}-${index}`}
-                    initial={{ scale: 0.8 }}
-                    animate={{ scale: 1 }}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#4D2C5E]/10 text-[#4D2C5E]"
+              arrayValue.map(({ value, label }, index) => (
+                <motion.span
+                  key={`${key}-${index}`}
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[#4D2C5E]/10 text-[#4D2C5E]"
+                >
+                  {label}
+                  <button
+                    onClick={() => handleFilterDelete(key, value)}
+                    className="ml-1.5 inline-flex text-gray-400 hover:text-gray-500"
                   >
-                    {label}
-                    <button
-                      onClick={() => handleFilterDelete(key, value)}
-                      className="ml-1.5 inline-flex text-gray-400 hover:text-gray-500"
-                    >
-                      <FiX className="h-3 w-3" />
-                    </button>
-                  </motion.span>
-                );
-              })
+                    <FiX className="h-3 w-3" />
+                  </button>
+                </motion.span>
+              ))
             )}
           </motion.div>
         )}
@@ -721,11 +708,31 @@ const CourseList = () => {
                   whileHover={{ scale: 1.1 }}
                   className="absolute bottom-4 right-4 bg-white/90 text-[#FF7426] text-xs font-bold px-2 py-1 rounded"
                 >
-                  {course.courseDuration < 1
-                    ? `${course.courseDuration * 24} hours`
-                    : course.courseDuration < 30
-                    ? `${course.courseDuration} days`
-                    : `${Math.floor(course.courseDuration / 30)} months`}
+                  {(() => {
+                    const days = course.courseDuration;
+
+                    // Less than 1 day = show in hours
+                    if (days < 1) return `${Math.round(days * 24)} hours`;
+
+                    // 1-6 days = show in days
+                    if (days <= 6) return `${Math.round(days)} days`;
+
+                    // 7-27 days = show in weeks
+                    if (days <= 27) {
+                      const weeks = (days / 7).toFixed(1);
+                      return `${weeks.endsWith('.0') ? weeks.split('.')[0] : weeks} week${weeks !== '1' ? 's' : ''}`;
+                    }
+
+                    // 28-364 days = show in months
+                    if (days <= 364) {
+                      const months = (days / 30.44).toFixed(1); // Average month length
+                      return `${months.endsWith('.0') ? months.split('.')[0] : months} month${months !== '1' ? 's' : ''}`;
+                    }
+
+                    // 365+ days = show in years
+                    const years = (days / 365).toFixed(1);
+                    return `${years.endsWith('.0') ? years.split('.')[0] : years} year${years !== '1' ? 's' : ''}`;
+                  })()}
                 </motion.div>
               </div>
 
@@ -734,13 +741,12 @@ const CourseList = () => {
                 <div className="flex justify-between items-center mb-3">
                   <motion.span
                     whileHover={{ scale: 1.05 }}
-                    className={`text-xs px-2 py-1 rounded-full ${
-                      course.courseLevel.code === "BEGINNER"
-                        ? "bg-blue-100 text-blue-800"
-                        : course.courseLevel.code === "INTERMEDIATE"
+                    className={`text-xs px-2 py-1 rounded-full ${course.courseLevel.code === "BEGINNER"
+                      ? "bg-blue-100 text-blue-800"
+                      : course.courseLevel.code === "INTERMEDIATE"
                         ? "bg-purple-100 text-purple-800"
                         : "bg-[#FF7426]/20 text-[#FF7426]"
-                    }`}
+                      }`}
                   >
                     {course.courseLevel.name}
                   </motion.span>
@@ -761,24 +767,25 @@ const CourseList = () => {
                   {course.category.categoryName}
                 </p>
 
-                <div className="flex items-center justify-between mb-4">
-                  <div className="text-sm text-gray-500">
-                    {course.studentsEnrolled}+ studentsEnrolled
+                <div className="flex items-center justify-end gap-1 mb-4">
+                  <div className="text-sm font-bold line-through text-[#4D2C5E]">
+                    ₹{course.originalPrice}
                   </div>
-                  <div className="text-sm font-bold text-[#4D2C5E]">
+                  <div className="text-md font-bold text-[#4D2C5E]">
                     ₹{course.discountedPrice}
                   </div>
+
                 </div>
               </div>
 
               {/* Action Buttons Section */}
               <div className="px-6 pb-6 pt-0 flex justify-between gap-3">
                 <button
-                   onClick={() => navigate(`/courseDetails/course/${course.courseCode}`, { 
-  state: { 
-    courseCode: course.courseCode
-  } 
-})}
+                  onClick={() => navigate(`/courseDetails/course/${course.courseCode}`, {
+                    state: {
+                      courseCode: course.courseCode
+                    }
+                  })}
                   className="flex-1 text-center text-[#4D2C5E] font-medium hover:underline flex items-center justify-center py-2 border border-[#4D2C5E]/30 rounded-lg hover:bg-[#4D2C5E]/5 transition-colors cursor-pointer"
                 >
                   View Details
@@ -845,11 +852,11 @@ const CourseList = () => {
       <TrainingBanner />
       <FeedbaackBanner />
       {enrollCourse && (
-          <BatchEnrollmentModal
-            batch={enrollCourse}
-            onClose={() => setEnrollCourse(null)}
-          />
-        )}
+        <BatchEnrollmentModal
+          batch={enrollCourse}
+          onClose={() => setEnrollCourse(null)}
+        />
+      )}
     </div>
   );
 };

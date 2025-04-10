@@ -12,6 +12,7 @@ function CourseList() {
   
   const handelCourses = async () => {
     const res = await getDataHandler('courseDisplay');
+    console.log(res)
     if (res && res.data) {
       const newCourses = res.data
         .slice(0, 4) // Take only first 4 courses
@@ -22,6 +23,7 @@ function CourseList() {
           title: course.courseName,
           categoryId: course.category,
           image: course.courseImage,
+          courseLevel: course.courseLevel.name,
           remainingSheets: course.seatsAvailable,
           originalPrice: course.originalPrice,
           discountedPrice: course.discountedPrice,
