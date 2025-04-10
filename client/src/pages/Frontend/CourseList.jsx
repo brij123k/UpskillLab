@@ -357,7 +357,6 @@ const CourseList = () => {
     // setSelectedCourse(course);
       const endpointUrl = ApiConfig.getCourseByCode(course.courseCode);
       const response = await getDataHandler(endpointUrl, null, null,true);
-      console.log(response)
       let custemDataSet={
         id:response.batch._id,
         batchCode:response.batch.batchCode,
@@ -469,7 +468,7 @@ const CourseList = () => {
   };
 
   const courses = coursesData?.data || [];
-  // console.log(coursesData)
+
   const totalCourses = coursesData?.count || 0;
 
   return (

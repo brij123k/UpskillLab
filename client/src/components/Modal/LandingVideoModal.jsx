@@ -12,7 +12,6 @@ export const useVideoModal = () => {
   const openVideoModal = (src, isAutoPlay = false) => {
     // If this is autoplay and we've already autoplayed, return
     if (isAutoPlay && hasAutoPlayed) return;
-    console.log("VideoModal opened",src);
     setVideoSrc(src);
     setIsVideoModalOpen(true);
     

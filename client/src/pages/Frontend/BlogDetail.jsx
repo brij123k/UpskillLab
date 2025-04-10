@@ -29,7 +29,6 @@ const BlogDetailPage = () => {
         const response = await getDataHandler(endpointUrl, null, null,true); // pass endpointUrl directly
         if (response.blog) {
           setBlog(response.blog);
-          console.log('Blog data:', response.blog);
         } else {
           throw new Error(response.message || 'Failed to fetch blog');
         }
@@ -246,7 +245,6 @@ const BlogDetailPage = () => {
       );
       
       // Optional: Track share event
-      console.log(`Shared to ${social}`);
     };
 
     return (

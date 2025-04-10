@@ -34,7 +34,7 @@ const StudentFeedBack = () => {
       opacity: 1,
       transition: {
         staggerChildren: 0.2,
-        delayChildren: 0.3
+        delayChildren: 0.2
       }
     },
     exit: {
@@ -98,7 +98,7 @@ const StudentFeedBack = () => {
             animate={{
               ...floatingAnim,
               y: [0, -20, 0],
-              transition: { ...floatingAnim.transition, delay: 1 }
+              transition: { ...floatingAnim.transition, delay: 0.3 }
             }}
           />
         </>
@@ -118,10 +118,10 @@ const StudentFeedBack = () => {
               animate={inView ? {
                 scale: [1, 1.05, 1],
                 transition: {
-                  duration: 3,
+                  duration: 1,
                   repeat: Infinity,
                   repeatType: "loop",
-                  delay: index * 0.5
+                  delay: index * 0.1
                 }
               } : { scale: 1 }}
             />
@@ -142,7 +142,7 @@ const StudentFeedBack = () => {
         animate={inView ? {
           opacity: 0.3,
           scale: 1,
-          transition: { duration: 1, delay: 0.5 }
+          transition: { duration: 0.5, delay: 0.2 }
         } : {
           opacity: 0,
           scale: 0.95

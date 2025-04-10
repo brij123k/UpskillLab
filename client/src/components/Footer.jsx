@@ -8,7 +8,7 @@ function Footer() {
                     {/* Logo and Description */}
                     <div className="lg:w-[30%] xl:w-[25%] 2xl:w-[20%]">
                         <img 
-                            src='images/Logo.png' 
+                            src='/images/Logo.png' 
                             alt="Company Logo"
                             className="w-40 sm:w-48 md:w-52 lg:w-56 xl:w-60"
                         />

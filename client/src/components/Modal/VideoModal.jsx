@@ -11,7 +11,6 @@ const VideoModal = ({
   showControls = true
 }) => {
 
-  console.log("VideoModal rendered",videoSrc);
   // Close modal when pressing Escape key
   useEffect(() => {
     const handleKeyDown = (e) => {

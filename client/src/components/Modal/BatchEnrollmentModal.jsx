@@ -203,39 +203,39 @@ const EnrollmentModal = ({ batch, onClose }) => {
 
   return (
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/30 backdrop-blur-sm"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
       <motion.div
-        className="bg-white rounded-xl w-full max-w-md max-h-[90vh] flex flex-col shadow-xl overflow-hidden"
+        className="bg-white rounded-xl w-full max-w-md max-h-[90vh] flex flex-col shadow-xl overflow-hidden mx-2"
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
       >
         {/* Header with progress steps */}
-        <div className="sticky top-0 bg-[#4D2C5E] p-4 text-white z-10">
-          <div className="flex justify-between items-center mb-3">
-            <h2 className="text-lg font-bold">Enroll in {batch.title}</h2>
-            <button onClick={onClose} className="text-white hover:text-[#FF7426]">
+        <div className="sticky top-0 bg-[#4D2C5E] p-3 sm:p-4 text-white z-10">
+          <div className="flex justify-between items-center mb-2 sm:mb-3">
+            <h2 className="text-base sm:text-lg font-bold truncate max-w-[70%]">Enroll in {batch.title}</h2>
+            <button onClick={onClose} className="text-white hover:text-[#FF7426] text-lg">
               ✕
             </button>
           </div>
           
-          <div className="flex items-center justify-between px-4">
+          <div className="flex items-center justify-between px-2 sm:px-4">
             {[1, 2, 3].map((stepNum) => (
               <React.Fragment key={stepNum}>
                 <div className="flex flex-col items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium
+                  <div className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-medium
                     ${step >= stepNum ? "bg-[#FF7426] text-white" : "bg-white/20 text-white/70"}`}>
                     {stepNum}
                   </div>
-                  <span className="text-xs mt-1 text-white/80">
+                  <span className="text-[10px] sm:text-xs mt-1 text-white/80 whitespace-nowrap">
                     {["Details", "Review", "Pay"][stepNum - 1]}
                   </span>
                 </div>
                 {stepNum < 3 && (
-                  <div className={`flex-1 h-1 mx-2 ${step > stepNum ? "bg-[#FF7426]" : "bg-white/20"}`} />
+                  <div className={`flex-1 h-1 mx-1 sm:mx-2 ${step > stepNum ? "bg-[#FF7426]" : "bg-white/20"}`} />
                 )}
               </React.Fragment>
             ))}
@@ -243,13 +243,13 @@ const EnrollmentModal = ({ batch, onClose }) => {
         </div>
 
         {/* Content Area */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6">
           {/* Step 1: Personal Information */}
           {step === 1 && (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="space-y-5"
+              className="space-y-3 sm:space-y-4"
             >
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Full Name*</label>
@@ -257,7 +257,7 @@ const EnrollmentModal = ({ batch, onClose }) => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
                   required
                 />
               </div>
@@ -269,7 +269,7 @@ const EnrollmentModal = ({ batch, onClose }) => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
                   required
                 />
               </div>
@@ -281,7 +281,7 @@ const EnrollmentModal = ({ batch, onClose }) => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
                   required
                 />
               </div>
@@ -293,46 +293,54 @@ const EnrollmentModal = ({ batch, onClose }) => {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="space-y-5"
+              className="space-y-3 sm:space-y-4"
             >
-              <div className="bg-gray-50 p-5 rounded-lg border border-gray-200">
-                <h3 className="font-bold text-lg mb-4 text-[#4D2C5E]">Order Summary</h3>
-                <div className="space-y-3 text-sm">
-                <div className="flex justify-between">
+              <div className="bg-gray-50 p-3 sm:p-4 rounded-lg border border-gray-200">
+                <h3 className="font-bold text-base sm:text-lg mb-3 text-[#4D2C5E]">Order Summary</h3>
+                <div className="space-y-2 text-xs sm:text-sm">
+                  <div className="flex justify-between">
                     <span className="text-gray-600">Order Id:</span>
-                    <span>{paymentData.orderId}</span>
+                    <span className="truncate max-w-[50%]">{paymentData.orderId}</span>
                   </div>
 
                   <div className="flex justify-between">
                     <span className="text-gray-600">Program:</span>
-                    <span className="font-medium">{batch.title}</span>
+                    <span className="font-medium truncate max-w-[50%]">{batch.title}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Name:</span>
-                    <span>{formData.name}</span>
+                    <span className="truncate max-w-[50%]">{formData.name}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Email:</span>
-                    <span>{formData.email}</span>
+                    <span className="truncate max-w-[50%]">{formData.email}</span>
                   </div>
-                  <div className="border-t border-gray-200 my-3"></div>
-                  <div className="flex justify-between text-base font-bold">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Original Price:</span>
+                    <span>₹{paymentData.originalPrice}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Discount:</span>
+                    <span>₹{paymentData.originalPrice-paymentData.discountedPrice}</span>
+                  </div>
+                  <div className="border-t border-gray-200 my-2"></div>
+                  <div className="flex justify-between text-sm sm:text-base font-bold">
                     <span>Total Amount:</span>
                     <span className="text-[#FF7426]">₹{paymentData.discountedPrice}</span>
                   </div>
                 </div>
               </div>
 
-              <div className="flex items-start mt-4">
+              <div className="flex items-start mt-3">
                 <input
                   type="checkbox"
                   name="agreeTerms"
                   checked={formData.agreeTerms}
                   onChange={handleChange}
-                  className="mt-1 h-5 w-5 text-[#FF7426] rounded focus:ring-[#FF7426]"
+                  className="mt-0.5 h-4 w-4 sm:h-5 sm:w-5 text-[#FF7426] rounded focus:ring-[#FF7426]"
                   required
                 />
-                <label className="ml-3 text-sm text-gray-700">
+                <label className="ml-2 text-xs sm:text-sm text-gray-700">
                   I agree to the <a href="/terms" className="text-[#FF7426] underline">terms and conditions</a>
                 </label>
               </div>
@@ -349,28 +357,28 @@ const EnrollmentModal = ({ batch, onClose }) => {
               {/* Loader overlay */}
               {showPaymentLoader && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center bg-white z-10">
-                  <div className="animate-spin rounded-full h-14 w-14 border-t-4 border-b-4 border-[#FF7426]"></div>
-                  <p className="mt-4 text-gray-600">Loading secure payment gateway...</p>
+                  <div className="animate-spin rounded-full h-10 w-10 sm:h-14 sm:w-14 border-t-4 border-b-4 border-[#FF7426]"></div>
+                  <p className="mt-3 text-sm sm:text-base text-gray-600 text-center px-2">Loading secure payment gateway...</p>
                 </div>
               )}
 
               {/* Payment container */}
               <div 
                 ref={paymentContainerRef}
-                className="w-full h-[400px]"
+                className="w-full h-[300px] sm:h-[400px]"
               ></div>
             </motion.div>
           )}
         </div>
 
         {/* Footer buttons */}
-        <div className="sticky bottom-0 bg-white border-t p-4">
-          <div className="flex justify-between gap-3">
+        <div className="sticky bottom-0 bg-white border-t p-3 sm:p-4">
+          <div className="flex justify-between gap-2 sm:gap-3">
             {step > 1 && step < 3 && (
               <button
                 type="button"
                 onClick={() => setStep(step - 1)}
-                className="px-6 py-3 border border-gray-300 rounded-md text-gray-700 flex-1 hover:bg-gray-50 transition-colors"
+                className="px-4 py-2 sm:px-6 sm:py-3 border border-gray-300 rounded-md text-xs sm:text-sm text-gray-700 flex-1 hover:bg-gray-50 transition-colors"
               >
                 Back
               </button>
@@ -381,13 +389,13 @@ const EnrollmentModal = ({ batch, onClose }) => {
                 type="button"
                 onClick={handleNext}
                 disabled={loading}
-                className={`px-6 py-3 rounded-md flex-1 flex items-center justify-center transition-colors ${
+                className={`px-4 py-2 sm:px-6 sm:py-3 rounded-md flex-1 flex items-center justify-center transition-colors text-xs sm:text-sm ${
                   loading ? 'bg-[#FF7426]/80' : 'bg-[#FF7426] hover:bg-[#E65100]'
                 } text-white`}
               >
                 {loading ? (
                   <>
-                    <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-white" viewBox="0 0 24 24">
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 sm:h-5 sm:w-5 text-white" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>

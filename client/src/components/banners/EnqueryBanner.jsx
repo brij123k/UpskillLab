@@ -17,7 +17,6 @@ const EnqueryBanner = () => {
   const handleBanners = async () => {
   
     const res = await getDataHandler('banner3');
-    console.log(res)
     setBanner(res.banner3s[0]);
   }
     useEffect(() => {

@@ -102,7 +102,7 @@ const handleBanners = async () => {
           whileHover={{ 
             scale: 1.05,
             rotate: [0, -5, 5, 0],
-            transition: { duration: 1.5 }
+            transition: { duration:.3 }
           }}
         />
         {/* Floating background elements */}

@@ -1,6 +1,6 @@
 import React, { useRef, useState,useEffect  } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { FiDownload, FiChevronRight ,FiFilm, FiCode} from 'react-icons/fi';
+import { FiDownload, FiHelpCircle  ,FiFilm, FiCode} from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { FiClock, FiMonitor, FiCalendar, FiBook } from 'react-icons/fi';
 import { FiUsers, FiAlertCircle, FiMessageSquare } from 'react-icons/fi';
@@ -239,137 +239,147 @@ const CourseKeyDetails = ({ course }) => {
 
     return (
         <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="w-full py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-[#FDF8EE]"
-        >
-            {/* Floating background elements */}
-            <motion.div
-                animate={{
-                    y: [0, -20, 0],
-                    x: [0, 15, 0],
-                    rotate: [0, 5, 0]
-                }}
-                transition={{
-                    duration: 12,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                }}
-                className="absolute -top-20 -left-20 w-40 h-40 rounded-full bg-[#FF7426]/10 blur-xl"
-            />
-            <motion.div
-                animate={{
-                    y: [0, 30, 0],
-                    x: [0, -20, 0],
-                    rotate: [0, -8, 0]
-                }}
-                transition={{
-                    duration: 15,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 3
-                }}
-                className="absolute -bottom-20 -right-20 w-48 h-48 rounded-full bg-[#4D2C5E]/10 blur-xl"
-            />
-
-            <div className="max-w-7xl mx-auto relative z-10">
-
-                {/* Cards grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    {details.map((item, index) => (
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-full py-16 px-4 sm:px-6 lg:px-8 relative overflow-hidden bg-gradient-to-br from-[#FDF8EE] to-[#FFF5E6]"
+    >
+        {/* Floating background elements - enhanced with more color */}
+        <motion.div
+            animate={{
+                y: [0, -20, 0],
+                x: [0, 15, 0],
+                rotate: [0, 5, 0]
+            }}
+            transition={{
+                duration: 12,
+                repeat: Infinity,
+                ease: "easeInOut"
+            }}
+            className="absolute -top-20 -left-20 w-40 h-40 rounded-full bg-gradient-to-br from-[#FF7426]/20 to-[#FF9E26]/20 blur-xl"
+        />
+        <motion.div
+            animate={{
+                y: [0, 30, 0],
+                x: [0, -20, 0],
+                rotate: [0, -8, 0]
+            }}
+            transition={{
+                duration: 15,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 3
+            }}
+            className="absolute -bottom-20 -right-20 w-48 h-48 rounded-full bg-gradient-to-br from-[#4D2C5E]/20 to-[#8A3FFC]/20 blur-xl"
+        />
+    
+        <div className="max-w-7xl mx-auto relative z-10">
+            {/* Cards grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                {details.map((item, index) => (
+                    <motion.div
+                        key={index}
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{
+                            delay: index * 0.15,
+                            type: "spring",
+                            stiffness: 100,
+                            damping: 10
+                        }}
+                        whileHover={{
+                            y: -10,
+                            scale: 1.03
+                        }}
+                        className="relative group cursor-pointer"
+                    >
+                        {/* Enhanced card background with gradient */}
                         <motion.div
-                            key={index}
-                            initial={{ scale: 0.8, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{
-                                delay: index * 0.15,
-                                type: "spring",
-                                stiffness: 100,
-                                damping: 10
+                            initial={{ rotate: 0 }}
+                            whileHover={{ rotate: 2 }}
+                            className="absolute inset-0 rounded-2xl bg-gradient-to-br opacity-20"
+                            style={{
+                                background: `linear-gradient(135deg, ${item.bg} 0%, ${item.accent} 100%)`,
+                                filter: 'blur(8px)'
                             }}
+                        />
+    
+                        {/* Main card with enhanced glow effect */}
+                        <motion.div
                             whileHover={{
-                                y: -10,
-                                scale: 1.03
+                                boxShadow: `0 20px 40px ${item.accent}40`
                             }}
-                            className="relative group cursor-pointer"
+                            className="relative bg-white rounded-xl p-8 h-full border border-gray-100 overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+                            style={{
+                                background: 'rgba(255, 255, 255, 0.9)',
+                                backdropFilter: 'blur(4px)'
+                            }}
                         >
-                            {/* Card background */}
+                            {/* Animated icon with enhanced glow */}
                             <motion.div
-                                initial={{ rotate: 0 }}
-                                whileHover={{ rotate: 2 }}
-                                className="absolute inset-0 rounded-2xl"
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ delay: index * 0.15 + 0.3 }}
+                                whileHover={{
+                                    rotate: 15,
+                                    scale: 1.1
+                                }}
+                                className="w-16 h-16 rounded-xl mb-6 flex items-center justify-center mx-auto shadow-lg"
                                 style={{
-                                    backgroundColor: item.bg,
-                                    opacity: 0.1
+                                    background: `linear-gradient(135deg, ${item.accent}10 0%, ${item.accent}30 100%)`,
+                                    color: item.accent,
+                                    boxShadow: `0 0 20px ${item.accent}30`
+                                }}
+                            >
+                                <div className="text-2xl">
+                                    {item.icon}
+                                </div>
+                            </motion.div>
+    
+                            {/* Content */}
+                            <motion.h3
+                                initial={{ y: 10, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: index * 0.15 + 0.4 }}
+                                className="text-sm font-semibold text-gray-500 uppercase tracking-wider text-center mb-2"
+                            >
+                                {item.label}
+                            </motion.h3>
+    
+                            <motion.p
+                                initial={{ y: 10, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: index * 0.15 + 0.5 }}
+                                className="text-2xl font-bold text-center"
+                                style={{ 
+                                    color: item.accent,
+                                    textShadow: `0 2px 10px ${item.accent}20`
+                                }}
+                            >
+                                {item.value}
+                            </motion.p>
+    
+                            {/* Enhanced animated underline */}
+                            <motion.div
+                                initial={{ width: 0 }}
+                                whileHover={{ width: "50%" }}
+                                transition={{ type: "spring", stiffness: 300 }}
+                                className="h-1.5 mt-4 mx-auto rounded-full"
+                                style={{ 
+                                    backgroundColor: item.accent,
+                                    boxShadow: `0 0 10px ${item.accent}`
                                 }}
                             />
-
-                            {/* Main card */}
-                            <motion.div
-                                whileHover={{
-                                    boxShadow: `0 20px 40px ${item.accent}20`
-                                }}
-                                className="relative bg-white rounded-xl p-8 h-full border border-gray-100 overflow-hidden"
-                            >
-                                {/* Animated icon */}
-                                <motion.div
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    transition={{ delay: index * 0.15 + 0.3 }}
-                                    whileHover={{
-                                        rotate: 15,
-                                        scale: 1.1
-                                    }}
-                                    className="w-16 h-16 rounded-xl mb-6 flex items-center justify-center mx-auto"
-                                    style={{
-                                        backgroundColor: `${item.accent}10`,
-                                        color: item.accent
-                                    }}
-                                >
-                                    <div className="text-2xl">
-                                        {item.icon}
-                                    </div>
-                                </motion.div>
-
-                                {/* Content */}
-                                <motion.h3
-                                    initial={{ y: 10, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: index * 0.15 + 0.4 }}
-                                    className="text-sm font-semibold text-gray-500 uppercase tracking-wider text-center mb-2"
-                                >
-                                    {item.label}
-                                </motion.h3>
-
-                                <motion.p
-                                    initial={{ y: 10, opacity: 0 }}
-                                    animate={{ y: 0, opacity: 1 }}
-                                    transition={{ delay: index * 0.15 + 0.5 }}
-                                    className="text-2xl font-bold text-center"
-                                    style={{ color: item.accent }}
-                                >
-                                    {item.value}
-                                </motion.p>
-
-                                {/* Animated underline */}
-                                <motion.div
-                                    initial={{ width: 0 }}
-                                    whileHover={{ width: "50%" }}
-                                    className="h-1 mt-4 mx-auto"
-                                    style={{ backgroundColor: item.accent }}
-                                />
-                            </motion.div>
                         </motion.div>
-                    ))}
-                </div>
+                    </motion.div>
+                ))}
             </div>
-        </motion.div>
+        </div>
+    </motion.div>
     );
 };
 
 const ProgramInfoWithEnroll = ({ course }) => {
-    console.log(course)
     const batchCode=course.batchId;
     const [selectedCourse, setSelectedCourse] = useState(null);
       const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
@@ -658,14 +668,9 @@ const TeachingPlan = ({ course }) => {
         link.click();
         document.body.removeChild(link);
       };
-      
 
-
-      
     // Your actual data structure
     const weeks = course.weeks;
-
-
 
     return (
         <div ref={ref} className="w-full py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -676,7 +681,7 @@ const TeachingPlan = ({ course }) => {
                     x: [0, 30, 0]
                 }}
                 transition={{
-                    duration: 18,
+                    duration: 4,
                     repeat: Infinity,
                     ease: "easeInOut"
                 }}
@@ -688,10 +693,10 @@ const TeachingPlan = ({ course }) => {
                     x: [0, -20, 0]
                 }}
                 transition={{
-                    duration: 15,
+                    duration: 3,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: 3
+                    delay: 0.1 // Reduced from 0.2
                 }}
                 className="absolute bottom-1/3 right-0 w-56 h-56 rounded-full bg-[#4D2C5E]/10 blur-xl"
             />
@@ -701,8 +706,8 @@ const TeachingPlan = ({ course }) => {
                 <motion.div
                     initial={{ opacity: 0, y: -30 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6 }}
-                    className="text-center mb-16"
+                    transition={{ duration: 0.15 }} // Reduced from 0.2
+                    className="text-center mb-12" // Reduced mb-16 to mb-12
                 >
                     <motion.h2
                         className="text-4xl font-bold text-[#4D2C5E] mb-4 relative inline-block"
@@ -711,14 +716,14 @@ const TeachingPlan = ({ course }) => {
                         <motion.span
                             initial={{ scaleX: 0 }}
                             animate={isInView ? { scaleX: 1 } : {}}
-                            transition={{ delay: 0.3, duration: 0.8 }}
+                            transition={{ delay: 0.1, duration: 0.3 }} // Reduced delays
                             className="absolute bottom-0 left-0 w-full h-1 bg-[#FF7426] rounded-full"
                         />
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0 }}
                         animate={isInView ? { opacity: 1 } : {}}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.15 }} // Reduced from 0.3
                         className="text-lg text-gray-600 max-w-2xl mx-auto"
                     >
                         Comprehensive roadmap for your learning journey
@@ -726,36 +731,37 @@ const TeachingPlan = ({ course }) => {
                 </motion.div>
 
                 {/* Accordion-style weeks */}
-                <div className="space-y-6">
+                <div className="space-y-4"> {/* Reduced space-y-6 to space-y-4 */}
                     {weeks.map((week, index) => (
                         <div key={index} className="overflow-hidden">
                             {/* Week Header - Clickable */}
                             <motion.div
-                                className="flex justify-between items-center p-6 bg-white rounded-xl shadow-lg border border-[#4D2C5E]/10 cursor-pointer group"
+                                className="flex justify-between items-center p-5 bg-white rounded-xl shadow-lg border border-[#4D2C5E]/10 cursor-pointer group" // Reduced p-6 to p-5
                                 onClick={() => toggleWeek(index)}
                                 whileHover={{
-                                    y: -3,
-                                    boxShadow: "0 10px 25px rgba(77, 44, 94, 0.1)"
+                                    y: -2, // Reduced from -3
+                                    boxShadow: "0 8px 20px rgba(77, 44, 94, 0.1)" // Reduced shadow
                                 }}
-                                initial={{ y: 30, opacity: 0 }}
+                                initial={{ y: 20, opacity: 0 }} // Reduced y from 30
                                 animate={isInView ? {
                                     y: 0,
                                     opacity: 1,
                                     transition: {
-                                        delay: index * 0.15,
+                                        delay: index * 0.2, // Reduced from 0.5
                                         type: "spring",
-                                        stiffness: 100
+                                        stiffness: 150, // Increased stiffness
+                                        damping: 10
                                     }
                                 } : {}}
                             >
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-3"> {/* Reduced gap-4 to gap-3 */}
                                     <motion.span
-                                        whileHover={{ scale: 1.1 }}
-                                        className="px-5 py-2 bg-[#4D2C5E] text-white rounded-full font-bold shadow-md"
+                                        whileHover={{ scale: 1.05 }} // Reduced from 1.1
+                                        className="px-4 py-1.5 bg-[#4D2C5E] text-white rounded-full font-bold shadow-md" // Reduced padding
                                     >
                                         {week.week}
                                     </motion.span>
-                                    <h3 className="text-xl font-bold text-[#4D2C5E]">
+                                    <h3 className="text-lg font-bold text-[#4D2C5E]"> {/* Reduced text-xl to text-lg */}
                                         {week.sessions.length} {week.sessions.length > 1 ? "Sessions" : "Session"}
                                     </h3>
                                 </div>
@@ -764,12 +770,12 @@ const TeachingPlan = ({ course }) => {
                                         rotate: expandedWeek === index ? 180 : 0,
                                         color: expandedWeek === index ? '#FF7426' : '#4D2C5E'
                                     }}
-                                    transition={{ duration: 0.3 }}
+                                    transition={{ duration: 0.2 }} // Reduced from 0.3
                                     className="text-[#4D2C5E] group-hover:text-[#FF7426]"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        className="h-6 w-6"
+                                        className="h-5 w-5" // Reduced from h-6 w-6
                                         viewBox="0 0 20 20"
                                         fill="currentColor"
                                     >
@@ -787,74 +793,76 @@ const TeachingPlan = ({ course }) => {
                                             height: "auto",
                                             opacity: 1,
                                             transition: {
-                                                height: { duration: 0.4 },
-                                                opacity: { duration: 0.3, delay: 0.1 }
+                                                height: { duration: 0.15 }, // Reduced from 0.2
+                                                opacity: { duration: 0.1 } // Removed delay
                                             }
                                         }}
                                         exit={{
                                             height: 0,
                                             opacity: 0,
                                             transition: {
-                                                height: { duration: 0.3 },
-                                                opacity: { duration: 0.2 }
+                                                height: { duration: 0.15 }, // Reduced from 0.2
+                                                opacity: { duration: 0.1 }
                                             }
                                         }}
                                         className="bg-white rounded-b-xl shadow-lg border-x border-b border-[#4D2C5E]/10"
                                     >
-                                        <div className="p-6 space-y-8">
+                                        <div className="p-5 space-y-6"> {/* Reduced p-6 to p-5 */}
                                             {week.sessions.map((session, sIndex) => (
                                                 <motion.div
                                                     key={sIndex}
-                                                    className="border-b border-[#4D2C5E]/10 pb-8 last:border-0 last:pb-0"
+                                                    className="border-b border-[#4D2C5E]/10 pb-6 last:border-0 last:pb-0" // Reduced pb-8 to pb-6
                                                     initial={{ opacity: 0 }}
                                                     animate={{ opacity: 1 }}
-                                                    transition={{ delay: sIndex * 0.1 + 0.2 }}
+                                                    transition={{ delay: sIndex * 0.05 + 0.1 }} // Reduced delays
                                                 >
-                                                    <h4 className="text-xl font-semibold text-[#4D2C5E] mb-4 flex items-center">
+                                                    <h4 className="text-lg font-semibold text-[#4D2C5E] mb-3 flex items-center"> {/* Reduced text-xl to text-lg */}
                                                         <motion.span
-                                                            className="w-4 h-4 bg-[#FF7426] rounded-full mr-3"
+                                                            className="w-3 h-3 bg-[#FF7426] rounded-full mr-2" // Reduced size
                                                             animate={{
-                                                                scale: [1, 1.2, 1],
+                                                                scale: [1, 1.1, 1], // Reduced scale
                                                                 opacity: [0.7, 1, 0.7]
                                                             }}
                                                             transition={{
-                                                                duration: 2,
+                                                                duration: 1.5, // Reduced from 2
                                                                 repeat: Infinity,
-                                                                delay: sIndex * 0.3
+                                                                delay: sIndex * 0.15 // Reduced from 0.3
                                                             }}
                                                         />
                                                         {session.title}
                                                     </h4>
-                                                    <ul className="space-y-3 pl-7">
+                                                    <ul className="space-y-2 pl-5"> {/* Reduced space-y-3 to space-y-2 */}
                                                         {session.topics.map((topic, tIndex) => (
                                                             <motion.li
                                                                 key={tIndex}
                                                                 className="flex items-start"
-                                                                initial={{ opacity: 0, x: -20 }}
+                                                                initial={{ opacity: 0, x: -10 }} // Reduced x from -20
                                                                 animate={{
                                                                     opacity: 1,
                                                                     x: 0,
                                                                     transition: {
-                                                                        delay: tIndex * 0.05 + sIndex * 0.1,
+                                                                        delay: tIndex * 0.01 + sIndex * 0.05, // Reduced delays
                                                                         type: "spring",
-                                                                        stiffness: 100
+                                                                        stiffness: 150 // Increased stiffness
                                                                     }
                                                                 }}
-                                                                whileHover={{ x: 5 }}
+                                                                whileHover={{ x: 3 }} // Reduced from 5
                                                             >
                                                                 <motion.span
-                                                                    className="w-2 h-2 bg-[#FF7426] rounded-full mt-2 mr-3 flex-shrink-0"
+                                                                    className="w-1.5 h-1.5 bg-[#FF7426] rounded-full mt-2 mr-2 flex-shrink-0" // Reduced size
                                                                     animate={{
-                                                                        scale: [1, 1.3, 1],
+                                                                        scale: [1, 1.1, 1], // Reduced scale
                                                                         backgroundColor: ['#FF7426', '#4D2C5E', '#FF7426']
                                                                     }}
                                                                     transition={{
-                                                                        duration: 4,
+                                                                        duration: 3, // Reduced from 4
                                                                         repeat: Infinity,
-                                                                        delay: tIndex * 0.2
+                                                                        delay: tIndex * 0.1 // Reduced from 0.2
                                                                     }}
                                                                 />
-                                                                <span className="text-gray-700">{topic}</span>
+                                                                <span className="text-gray-700 text-sm"> {/* Added text-sm */}
+                                                                    {topic}
+                                                                </span>
                                                             </motion.li>
                                                         ))}
                                                     </ul>
@@ -870,18 +878,18 @@ const TeachingPlan = ({ course }) => {
 
                 {/* Download Button */}
                 <motion.div
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 20 }} // Reduced y from 30
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.2 }}
-                    className="text-center mt-16 flex justify-center items-center"
+                    transition={{ delay: 0.1 }} // Reduced from 0.2
+                    className="text-center mt-12 flex justify-center items-center" // Reduced mt-16 to mt-12
                 >
                     <motion.button
                       type="button"
-                      whileHover={{ scale: 1.03 }}
+                      whileHover={{ scale: 1.02 }} // Reduced from 1.03
                       whileTap={{ scale: 0.98 }}
                       onClick={downloadBrochure}
                       disabled={isDownloading}
-                      className={`flex items-center gap-2 px-6 py-3 border-2 rounded-lg transition-all duration-200 ${
+                      className={`flex items-center gap-2 px-5 py-2.5 border-2 rounded-lg transition-all duration-200 ${
                         isDownloading
                           ? 'bg-gray-200 border-gray-300 text-gray-500 cursor-wait'
                           : 'bg-white border-[#4D2C5E] text-[#4D2C5E] hover:bg-[#4D2C5E]/10 shadow-sm hover:shadow-md cursor-pointer'
@@ -889,7 +897,7 @@ const TeachingPlan = ({ course }) => {
                     >
                       {isDownloading ? (
                         <>
-                          <svg className="animate-spin -ml-1 mr-2 h-5 w-5 text-[#4D2C5E]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-[#4D2C5E]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                           </svg>
@@ -897,7 +905,7 @@ const TeachingPlan = ({ course }) => {
                         </>
                       ) : (
                         <>
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                           </svg>
                           Download Brochure
@@ -1654,171 +1662,207 @@ const FAQSection = ({ course }) => {
         setActiveIndex(activeIndex === index ? null : index);
     };
 
+    // Color variations for different categories
+    const categoryColors = {
+        "Admissions": { accent: "#FF7426", bg: "bg-[#FF7426]/5" },
+        "Curriculum": { accent: "#4D2C5E", bg: "bg-[#4D2C5E]/5" },
+        "Payments": { accent: "#2C8E5E", bg: "bg-[#2C8E5E]/5" }
+    };
+
     return (
-        <div className="w-full py-10 relative overflow-hidden bg-gradient-to-b from-white to-[#F9F9FF]">
-      {/* Floating background elements */}
-      <motion.div 
-        animate={{
-          y: [0, -40, 0],
-          x: [0, 30, 0]
-        }}
-        transition={{
-          duration: 18,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        className="absolute top-1/4 left-0 w-48 h-48 rounded-full bg-[#FF7426]/10 blur-xl"
-      />
-      <motion.div 
-        animate={{
-          y: [0, 50, 0],
-          x: [0, -20, 0]
-        }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 3
-        }}
-        className="absolute bottom-1/3 right-0 w-56 h-56 rounded-full bg-[#4D2C5E]/10 blur-xl"
-      />
-
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Animated header */}
-        <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <motion.h2
-            className="text-4xl font-bold text-[#4D2C5E] mb-4 relative inline-block"
-          >
-            Frequently Asked Questions
-            <motion.span
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-              className="absolute bottom-0 left-0 w-full h-1.5 bg-[#FF7426] rounded-full"
+        <div className="w-full py-16 relative overflow-hidden bg-[#FDF8EE]">
+            {/* Subtle floating elements */}
+            <motion.div 
+                animate={{
+                    y: [0, -40, 0],
+                    x: [0, 30, 0]
+                }}
+                transition={{
+                    duration: 15,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }}
+                className="absolute top-1/4 left-0 w-48 h-48 rounded-full bg-[#FF7426]/5 blur-xl"
             />
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.5 }}
-            className="text-lg text-gray-600"
-          >
-            Find answers to common questions about our program
-          </motion.p>
-        </motion.div>
-
-        {/* FAQ Sections */}
-<motion.div
-  initial={{ opacity: 0 }}
-  whileInView={{ opacity: 1 }}
-  transition={{ staggerChildren: 0.1, delayChildren: 0.5 }}
-  className="space-y-10"
->
-  {faqs.map((faq, index) => (
-    <motion.div
-      key={index}
-      initial={{ y: 20, opacity: 0 }}
-      whileInView={{ y: 0, opacity: 1 }}
-      transition={{ delay: index * 0.15 }}
-      className="bg-white rounded-xl shadow-lg overflow-hidden"
-    >
-      <div className="divide-y divide-[#4D2C5E]/10">
-        <div className="overflow-hidden">
-          <motion.button
-            onClick={() => toggleQuestion(index.toString())}
-            whileHover={{ backgroundColor: "#4D2C5E/5" }}
-            className="w-full flex justify-between items-center p-6 text-left transition-all"
-          >
-            <span className="font-medium text-lg text-[#4D2C5E]">
-              {faq.question}
-            </span>
-            <motion.div
-              animate={{ 
-                rotate: activeIndex === index.toString() ? 180 : 0,
-                color: activeIndex === index.toString() ? '#FF7426' : '#4D2C5E'
-              }}
-              transition={{ duration: 0.3 }}
-            >
-              <FiChevronDown className="text-xl" />
-            </motion.div>
-          </motion.button>
-
-          <AnimatePresence>
-            {activeIndex === index.toString() && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ 
-                  height: 'auto', 
-                  opacity: 1,
-                  transition: {
-                    height: { duration: 0.3 },
-                    opacity: { duration: 0.2, delay: 0.1 }
-                  }
+            <motion.div 
+                animate={{
+                    y: [0, 50, 0],
+                    x: [0, -20, 0]
                 }}
-                exit={{ 
-                  height: 0, 
-                  opacity: 0,
-                  transition: {
-                    height: { duration: 0.3 },
-                    opacity: { duration: 0.1 }
-                  }
+                transition={{
+                    duration: 12,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 2
                 }}
-                className="overflow-hidden"
-              >
-                <div className="px-6 pb-6 text-gray-700">
-                  {faq.answer}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                className="absolute bottom-1/3 right-0 w-56 h-56 rounded-full bg-[#4D2C5E]/5 blur-xl"
+            />
+
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                {/* Header with animated underline */}
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="text-center mb-12"
+                >
+                    <motion.h2
+                        className="text-3xl font-bold text-[#4D2C5E] mb-4 relative inline-block"
+                    >
+                        Frequently Asked Questions
+                        <motion.span
+                            initial={{ scaleX: 0 }}
+                            whileInView={{ scaleX: 1 }}
+                            transition={{ delay: 0.2, duration: 0.6 }}
+                            className="absolute bottom-0 left-0 w-full h-1 bg-[#FF7426] rounded-full"
+                        />
+                    </motion.h2>
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ delay: 0.3 }}
+                        className="text-lg text-gray-600"
+                    >
+                        Find answers to common questions about our program
+                    </motion.p>
+                </motion.div>
+
+                {/* FAQ Cards */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    transition={{ staggerChildren: 0.1 }}
+                    className="grid gap-6"
+                >
+                    {faqs.map((faq, index) => {
+                        const colors = categoryColors[faq.category] || categoryColors["Admissions"];
+                        return (
+                            <motion.div
+                                key={index}
+                                initial={{ y: 20, opacity: 0 }}
+                                whileInView={{ y: 0, opacity: 1 }}
+                                transition={{ delay: index * 0.1 }}
+                                className="relative group"
+                            >
+                                {/* Colored decoration */}
+                                <motion.div
+                                    className={`absolute -inset-1 rounded-xl ${colors.bg} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+                                />
+                                
+                                {/* White card */}
+                                <motion.div
+                                    whileHover={{ 
+                                        y: -3,
+                                        boxShadow: `0 10px 30px ${colors.accent}20`
+                                    }}
+                                    className="relative bg-white rounded-xl p-6 border border-gray-100 shadow-sm overflow-hidden"
+                                >
+                                    <button
+                                        onClick={() => toggleQuestion(index.toString())}
+                                        className="w-full flex justify-between items-center text-left gap-4"
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            {/* Colored icon circle */}
+                                            <motion.div
+                                                className={`w-12 h-12 rounded-lg flex items-center justify-center ${colors.bg}`}
+                                                whileHover={{ rotate: 10 }}
+                                            >
+                                                <FiHelpCircle className={`text-xl ${colors.accent ? `text-[${colors.accent}]` : ''}`} />
+                                            </motion.div>
+                                            
+                                            <span className="font-semibold text-gray-800">
+                                                {faq.question}
+                                            </span>
+                                        </div>
+                                        <motion.div
+                                            animate={{ 
+                                                rotate: activeIndex === index.toString() ? 180 : 0,
+                                                color: activeIndex === index.toString() ? colors.accent : '#6B7280'
+                                            }}
+                                            transition={{ duration: 0.2 }}
+                                        >
+                                            <FiChevronDown className="text-xl" />
+                                        </motion.div>
+                                    </button>
+
+                                    <AnimatePresence>
+                                        {activeIndex === index.toString() && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ 
+                                                    height: 'auto', 
+                                                    opacity: 1,
+                                                    transition: {
+                                                        height: { duration: 0.2 },
+                                                        opacity: { duration: 0.1 }
+                                                    }
+                                                }}
+                                                exit={{ 
+                                                    height: 0, 
+                                                    opacity: 0,
+                                                    transition: {
+                                                        height: { duration: 0.2 },
+                                                        opacity: { duration: 0.1 }
+                                                    }
+                                                }}
+                                                className="overflow-hidden"
+                                            >
+                                                <div className="pt-4 pl-16 text-gray-600">
+                                                    {faq.answer}
+                                                </div>
+                                                {/* Animated underline */}
+                                                <motion.div
+                                                    initial={{ width: 0 }}
+                                                    animate={{ width: "100%" }}
+                                                    transition={{ delay: 0.1 }}
+                                                    className="h-0.5 mt-4 bg-gradient-to-r from-transparent via-gray-200 to-transparent"
+                                                />
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </motion.div>
+                            </motion.div>
+                        );
+                    })}
+                </motion.div>
+
+                {/* CTA Section */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="mt-16 text-center"
+                >
+                    <motion.p
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        transition={{ delay: 0.5 }}
+                        className="text-gray-600 mb-6"
+                    >
+                        Still have questions?
+                    </motion.p>
+                    <NavLink to="/ContactUs">
+                        <motion.button
+                            whileHover={{ 
+                                scale: 1.03,
+                                boxShadow: "0 10px 25px rgba(255, 116, 38, 0.3)"
+                            }}
+                            whileTap={{ scale: 0.98 }}
+                            className="inline-flex items-center px-8 py-3.5 bg-white border-2 border-[#FF7426] text-[#FF7426] font-bold rounded-xl text-lg shadow-sm hover:shadow-md transition-all"
+                        >
+                            <FiMessageSquare className="mr-3" />
+                            Contact Support
+                            {/* Hover effect */}
+                            <motion.span
+                                initial={{ scaleX: 0 }}
+                                whileHover={{ scaleX: 1 }}
+                                className="absolute bottom-0 left-0 w-full h-0.5 bg-[#FF7426] rounded-full"
+                            />
+                        </motion.button>
+                    </NavLink>
+                </motion.div>
+            </div>
         </div>
-      </div>
-    </motion.div>
-  ))}
-</motion.div>
-
-        {/* Additional Help CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
-          className="mt-16 text-center"
-        >
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ delay: 0.9 }}
-            className="text-gray-600 mb-6 text-lg"
-          >
-            Still have questions?
-          </motion.p>
-          <NavLink to="/ContactUs">
-          <motion.button
-            whileHover={{ 
-              scale: 1.05,
-              boxShadow: "0 10px 25px rgba(255, 116, 38, 0.3)"
-            }}
-            whileTap={{ scale: 0.98 }}
-            className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-[#FF7426] to-[#FF9E5E] text-white font-bold rounded-xl text-lg shadow-lg relative overflow-hidden group"
-          >
-            <FiMessageSquare className="mr-3 text-xl" />
-            <span className="relative z-10">Contact Support</span>
-            <motion.span
-              initial={{ x: '-100%' }}
-              whileHover={{ x: '0%' }}
-              transition={{ duration: 0.4 }}
-              className="absolute inset-0 bg-[#E65100] z-0"
-            />
-          </motion.button>
-          </NavLink>
-        </motion.div>
-      </div>
-    </div>
     );
 };
 
@@ -1837,7 +1881,6 @@ const CourseDetails = () => {
 
   useEffect(() => {
     if (type === 'course') {
-        console.log('hi')
         fetchCourse(id)
     } else if (type === 'batch') {
         fetchBtachCourse(id)
@@ -1849,7 +1892,6 @@ const CourseDetails = () => {
     const endpointUrl = ApiConfig.getCourseByCode(courseCode);
     
     const response = await getDataHandler(endpointUrl, null, null,true); // pass endpointUrl directly
-    console.log(response)
     let custemDataSet={
         id:response._id,
         batchId:response.batch._id,
@@ -1871,7 +1913,6 @@ const CourseDetails = () => {
         faqs:response.faqs
     }
     setCourse(custemDataSet);
-    console.log("By Course",response)
   };
   const fetchBtachCourse = async (id) => {     
     // Get the endpoint URL by calling the ApiConfig function
@@ -1901,7 +1942,6 @@ const CourseDetails = () => {
         faqs:res2.faqs
     }
     setCourse(custemDataSet);
-    console.log("By Batch",response)
   };
   if (!course) return (
     <div className="flex items-center justify-center min-h-screen bg-[#FDF8EE]">

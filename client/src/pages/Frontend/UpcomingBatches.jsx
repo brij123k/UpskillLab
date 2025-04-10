@@ -194,7 +194,6 @@ const UpcomingBatches = () => {
         ) : (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {batches.map((batch, index) => (
-              console.log(batch),
               <motion.div
                 key={batch.id}
                 variants={itemVariants}
