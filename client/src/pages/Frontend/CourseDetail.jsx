@@ -647,7 +647,7 @@ const ProgramInfoWithEnroll = ({ course }) => {
 const TeachingPlan = ({ course }) => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: false, amount: 0.1 });
-    const [expandedWeek, setExpandedWeek] = useState(null);
+    const [expandedWeek, setExpandedWeek] = useState(0);
     const [isDownloading, setIsDownloading] = useState(false);
     const toggleWeek = (weekIndex) => {
         setExpandedWeek(expandedWeek === weekIndex ? null : weekIndex);
@@ -1943,38 +1943,132 @@ const CourseDetails = () => {
     }
     setCourse(custemDataSet);
   };
-  if (!course) return (
-    <div className="flex items-center justify-center min-h-screen bg-[#FDF8EE]">
+
+
+   // Timeout component
+   const TimeoutMessage = ({ delay }) => {
+    const [showMessage, setShowMessage] = useState(false);
+  
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setShowMessage(true);
+      }, delay);
+  
+      return () => clearTimeout(timer);
+    }, [delay]);
+  
+    if (!showMessage) return null;
+  
+    return (
       <motion.div
-        initial={{ rotate: 0, scale: 0.8 }}
-        animate={{ 
-          rotate: 360,
-          scale: [0.8, 1.2, 0.8],
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        className="w-24 h-24 rounded-full border-8 border-[#4D2C5E] border-t-[#FF7426]"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="mt-6 p-4 bg-white rounded-lg shadow-md text-center"
       >
-        <motion.span
-          className="absolute inset-0 flex items-center justify-center text-[#4D2C5E] font-bold"
-          animate={{
-            opacity: [0.5, 1, 0.5],
-            scale: [0.9, 1.1, 0.9]
+        <div className="text-[#FF7426] mb-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-10 w-10 mx-auto"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
+          </svg>
+        </div>
+        <h3 className="text-xl font-bold text-[#4D2C5E] mb-1">
+          No Batch Found
+        </h3>
+        <p className="text-gray-600">
+          We couldn't find any available batches for this course.
+        </p>
+      </motion.div>
+    );
+  };
+
+  
+  if (!course) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#FDF8EE] p-4">
+        <motion.div
+          initial={{ rotate: 0, scale: 0.8 }}
+          animate={{ 
+            rotate: 360,
+            scale: [0.8, 1, 0.8],
           }}
           transition={{
             duration: 1.5,
             repeat: Infinity,
-            delay: 0.3
+            ease: "easeInOut"
+          }}
+          className="relative w-20 h-20 mb-6"
+        >
+          {/* Outer ring */}
+          <motion.div
+            className="absolute inset-0 rounded-full border-4 border-[#4D2C5E]/20"
+            animate={{
+              borderWidth: [4, 8, 4],
+              borderColor: ["#4D2C5E/20", "#FF7426/50", "#4D2C5E/20"]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity
+            }}
+          />
+          
+          {/* Inner spinner */}
+          <motion.div
+            className="absolute inset-2 rounded-full border-t-4 border-r-4 border-transparent"
+            animate={{
+              rotate: [0, 360],
+            }}
+            transition={{
+              duration: 1,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          />
+          
+          {/* Center dot */}
+          <motion.div
+            className="absolute inset-6 rounded-full bg-[#4D2C5E]"
+            animate={{
+              scale: [1, 1.2, 1],
+              backgroundColor: ["#4D2C5E", "#FF7426", "#4D2C5E"]
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity
+            }}
+          />
+        </motion.div>
+  
+        <motion.p
+          className="text-[#4D2C5E] text-lg font-medium text-center max-w-md"
+          animate={{
+            opacity: [0.6, 1, 0.6],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity
           }}
         >
-          Loading...
-        </motion.span>
-      </motion.div>
-    </div>
-  );
+          Loading course details...
+        </motion.p>
+  
+        {/* Timeout message after 15 seconds */}
+        <TimeoutMessage delay={15000} />
+      </div>
+    );
+  }
+  
+ 
 
 
     return (
