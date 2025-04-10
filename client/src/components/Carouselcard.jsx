@@ -275,7 +275,7 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
               <motion.img
                 src={slides[currentIndex].image}
                 alt={slides[currentIndex].heading}
-                className="h-full sm:h-[90%] w-auto object-contain rounded-2xl sm:rounded-4xl"
+                className="h-full sm:h-[90%] w-full object-cover overflow-hidden rounded-2xl sm:rounded-4xl"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.5 }}

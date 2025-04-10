@@ -101,6 +101,7 @@ const FAQ = ({ faqs }) => {
     return (
         <motion.section 
             className="relative overflow-hidden bg-gradient-to-b from-[#F9F5FF] to-[#FFF5F0] py-16 px-4 sm:px-6 lg:py-24 lg:px-8"
+            id='faq'
             initial="hidden"
             animate="visible"
             variants={containerVariants}
