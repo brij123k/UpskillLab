@@ -90,6 +90,7 @@ const AdmissionForm = () => {
     validationSchema,
     onSubmit: (values) => {
       demoSessionHandler(values)
+      formik.resetForm();
     }
   });
 
