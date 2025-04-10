@@ -161,7 +161,13 @@ const EnrollmentModal = ({ batch, onClose }) => {
           width: "100%",
           height: "100%",
         },
-      }).catch(error => {
+      }).then(() => {
+        // Payment successful
+        toast.success("Payment successful! Our Team will Contact You");
+        setTimeout(() => {
+          onClose();
+        }, 100)})
+        .catch(error => {
         clearTimeout(timeout);
         observer.disconnect();
         setShowPaymentLoader(false);
@@ -341,7 +347,7 @@ const EnrollmentModal = ({ batch, onClose }) => {
                   required
                 />
                 <label className="ml-2 text-xs sm:text-sm text-gray-700">
-                  I agree to the <a href="/terms" className="text-[#FF7426] underline">terms and conditions</a>
+                  I agree to the <a href="/TermsOfService" className="text-[#FF7426] underline">terms and conditions</a>
                 </label>
               </div>
             </motion.div>

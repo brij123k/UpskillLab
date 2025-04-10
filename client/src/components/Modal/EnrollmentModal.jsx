@@ -164,7 +164,13 @@ const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase }) => {
           width: "100%",
           height: "100%",
         },
-      }).catch(error => {
+      }).then(() => {
+              // Payment successful
+              toast.success("Payment successful! Our Team will Contact You");
+              setTimeout(() => {
+                onClose();
+              }, 100)})
+              .catch(error => {
         clearTimeout(timeout);
         observer.disconnect();
         setShowPaymentLoader(false);
@@ -371,7 +377,7 @@ const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase }) => {
                 required
               />
               <label className="ml-2 text-xs sm:text-sm text-[#4D2C5E] flex-1">
-                I agree to the <a href="/terms" className="text-[#FF7426] underline">terms and conditions</a>
+                I agree to the <a href="/TermsOfService" className="text-[#FF7426] underline">terms and conditions</a>
               </label>
             </div>
 
