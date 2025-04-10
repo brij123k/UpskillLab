@@ -115,7 +115,7 @@ useEffect(() => {
               <img 
                 src={category.image} 
                 alt={category.title}
-                className="w-full h-full object-cover"
+                className="w-10 h-10 object-cover"
                 onError={(e) => {
                   e.target.onerror = null; 
                   e.target.src = '/images/fallback.jpg';
