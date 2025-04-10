@@ -6,7 +6,7 @@ const CourseCard = ({
   id,
   courseId,
   courseCode,
-  imageUrl, 
+  image, 
   title, 
   duration, 
   studentsEnrolled, 
@@ -48,7 +48,7 @@ const CourseCard = ({
         whileHover={{ scale: 1.02 }}
       >
         <motion.img
-          src={imageUrl}
+          src={image}
           alt={title}
           className="w-full h-full object-cover"
           initial={{ scale: 1.1 }}
