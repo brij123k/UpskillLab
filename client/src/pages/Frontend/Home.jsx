@@ -98,7 +98,7 @@ const handleBanners = async () => {
         <motion.img
           src={banner?.imageUrl}
           alt={banner?.title}
-          className='w-full h-auto object-cover max-h-[400px] z-10 rounded-2xl sm:rounded-4xl shadow-xl shadow-[#0000008a]'
+          className='w-full object-contain max-h-[400px] z-10 rounded-2xl sm:rounded-4xl'
           whileHover={{ 
             scale: 1.05,
             rotate: [0, -5, 5, 0],

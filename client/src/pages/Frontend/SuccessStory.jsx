@@ -188,7 +188,7 @@ const SuccessStory = () => {
           <div className="absolute -top-4 -left-4 w-full h-full rounded-2xl bg-[#FF7426]/20 z-0"></div>
           <motion.img 
             whileHover={{ scale: 1.03 }}
-            src="/images/Success Story Pag.png"
+            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80"
             alt="Successful students celebrating"
             className="relative rounded-xl w-full h-auto object-cover shadow-2xl z-10 border-4 border-white"
           />

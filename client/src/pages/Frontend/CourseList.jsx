@@ -538,7 +538,7 @@ const CourseList = () => {
                 <div className="absolute -top-5 -left-5 w-full h-full rounded-2xl bg-[#FF7426]/20 z-0"></div>
                 <motion.img
                   whileHover={{ scale: 1.03 }}
-                  src="/images/Course List Page.png"
+                  src="https://images.unsplash.com/photo-1593642634524-b40b5baae6bb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80"
                   alt="studentsEnrolled collaborating"
                   className="relative rounded-xl w-full h-auto object-cover shadow-2xl z-10 border-4 border-white"
                 />

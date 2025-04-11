@@ -12,7 +12,7 @@ const UpcomingBatches = () => {
   const [selectedBatch, setSelectedBatch] = useState(null);
   const [enrollCourse, setEnrollCourse] = useState(null);
   const bannerImageUrl =
-    "/images/Upcoming Batches Page.png";
+    "https://images.pexels.com/photos/4144225/pexels-photo-4144225.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
 
   const {
     data: batches = [],
