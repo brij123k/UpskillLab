@@ -330,12 +330,12 @@ function Header() {
             >
               ENROLL NOW
             </motion.button>
-            <NavLink to="/Register">
+            <NavLink to="/Login">
               <motion.button
                 whileHover={{ y: -2 }}
                 className="bg-[#FF7426] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#E65100] transition-all shadow-sm hover:shadow-md whitespace-nowrap cursor-pointer"
               >
-                SIGN UP
+                Login
               </motion.button>
             </NavLink>
           </div>
@@ -350,9 +350,9 @@ function Header() {
             >
               ENROLL
             </button>
-            <NavLink to="/Register">
+            <NavLink to="/Login">
               <button className="bg-[#FF7426] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-[#E65100] transition-colors whitespace-nowrap">
-                SIGN UP
+                Login
               </button>
             </NavLink>
           </div>
@@ -585,9 +585,9 @@ function Header() {
                   >
                     ENROLL NOW
                   </button>
-                  <NavLink to="/Register">
+                  <NavLink to="/Login">
                     <button className="w-full bg-[#FF7426] text-white px-6 py-3 rounded-full text-base font-medium hover:bg-[#E65100] transition-colors shadow-sm">
-                      SIGN UP
+                     Login
                     </button>
                   </NavLink>
                 </div>

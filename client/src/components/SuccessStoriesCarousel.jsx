@@ -187,7 +187,7 @@ const SuccessStoriesCarousel = () => {
             <div className="w-full sm:w-3/5 p-4 sm:p-6 2xl:p-8 flex flex-col">
               <div className="mb-3 sm:mb-4 2xl:mb-6">
                 <div className="text-2xl sm:text-3xl md:text-4xl 2xl:text-5xl font-bold text-[#FF7426]">
-                  {student.salaryIncrease}
+                  {student.salaryIncrease}X
                 </div>
                 <p className="text-gray-600 text-xs sm:text-sm 2xl:text-base">Salary increase in {student.duration}</p>
               </div>

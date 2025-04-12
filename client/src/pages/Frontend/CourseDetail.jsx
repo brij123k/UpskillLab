@@ -974,7 +974,7 @@ const CareerDevelopmentTrack = ({ course }) => {
             ]
         },
         {
-            icon: <FiBook className="text-4xl text-[#FF7426]" />,  // Using FiBook for Masterclasses
+            icon: <FiBook className="text-4xl text-[#FF7426]" />,
             title: "Domain Workshops",
             items: [
                 "Masterclasses from industry professionals",
@@ -983,7 +983,7 @@ const CareerDevelopmentTrack = ({ course }) => {
             ]
         },
         {
-            icon: <FiFlag className="text-4xl text-[#4D2C5E]" />,  // Using FiFlag for Career Kick-start
+            icon: <FiFlag className="text-4xl text-[#4D2C5E]" />,
             title: "Career Kick-start",
             items: [
                 "Internship application assistance",
@@ -992,45 +992,19 @@ const CareerDevelopmentTrack = ({ course }) => {
             ]
         }
     ];
+
     return (
         <section
             ref={ref}
             className="w-full py-10 relative overflow-hidden"
             style={{ background: 'linear-gradient(to bottom, #F9F9FF 0%, #FFFFFF 100%)' }}
         >
-            {/* Floating background elements */}
-            <motion.div
-                animate={{
-                    y: [0, -40, 0],
-                    x: [0, 30, 0]
-                }}
-                transition={{
-                    duration: 18,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                }}
-                className="absolute top-1/4 left-0 w-48 h-48 rounded-full bg-[#FF7426]/10 blur-xl"
-            />
-            <motion.div
-                animate={{
-                    y: [0, 50, 0],
-                    x: [0, -20, 0]
-                }}
-                transition={{
-                    duration: 15,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 3
-                }}
-                className="absolute bottom-1/3 right-0 w-56 h-56 rounded-full bg-[#4D2C5E]/10 blur-xl"
-            />
-
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Animated header */}
                 <motion.div
                     initial={{ opacity: 0, y: -30 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6 }}
+                    transition={{ duration: 0.3 }} // Reduced from 0.6
                     className="text-center mb-20"
                 >
                     <motion.h2
@@ -1040,14 +1014,14 @@ const CareerDevelopmentTrack = ({ course }) => {
                         <motion.span
                             initial={{ scaleX: 0 }}
                             animate={isInView ? { scaleX: 1 } : {}}
-                            transition={{ delay: 0.3, duration: 0.8 }}
+                            transition={{ delay: 0.15, duration: 0.4 }} // Reduced from 0.3, 0.8
                             className="absolute bottom-0 left-0 w-full h-1.5 bg-[#FF7426] rounded-full"
                         />
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0 }}
                         animate={isInView ? { opacity: 1 } : {}}
-                        transition={{ delay: 0.5 }}
+                        transition={{ delay: 0.25 }} // Reduced from 0.5
                         className="text-lg text-gray-600 max-w-2xl mx-auto"
                     >
                         Comprehensive career support to launch your tech career
@@ -1058,7 +1032,7 @@ const CareerDevelopmentTrack = ({ course }) => {
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={isInView ? { opacity: 1 } : {}}
-                    transition={{ staggerChildren: 0.5, delayChildren: 0.3 }}
+                    transition={{ staggerChildren: 0.25, delayChildren: 0.15 }} // Reduced from 0.5, 0.3
                     className="grid grid-cols-1 md:grid-cols-2 gap-10"
                 >
                     {careerData.map((item, index) => (
@@ -1070,7 +1044,7 @@ const CareerDevelopmentTrack = ({ course }) => {
                                 type: "spring",
                                 stiffness: 100,
                                 damping: 10,
-                                delay: index * 0.15
+                                delay: index * 0.075 // Reduced from 0.15
                             }}
                             whileHover={{
                                 y: -10,
@@ -1082,20 +1056,20 @@ const CareerDevelopmentTrack = ({ course }) => {
                             <motion.div
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={isInView ? { scale: 1, opacity: 1 } : {}}
-                                transition={{ delay: index * 0.15 + 0.3 }}
-                                className="absolute -inset-2 rounded-xl bg-gradient-to-br from-[#FF7426]/10 to-[#4D2C5E]/10 opacity-0 group-hover:opacity-100 blur-md transition-all duration-300"
+                                transition={{ delay: index * 0.075 + 0.15 }} // Reduced from 0.15 + 0.3
+                                className="absolute -inset-2 rounded-xl bg-gradient-to-br from-[#FF7426]/10 to-[#4D2C5E]/10 opacity-0 group-hover:opacity-100 blur-md transition-all duration-150" // Reduced from 300
                             />
 
                             {/* Main card */}
                             <motion.div
-                                className="relative bg-white rounded-xl p-8 h-full border border-[#4D2C5E]/10 transition-all duration-300 group-hover:border-transparent group-hover:bg-white/95 z-10 shadow-lg"
+                                className="relative bg-white rounded-xl p-8 h-full border border-[#4D2C5E]/10 transition-all duration-150 group-hover:border-transparent group-hover:bg-white/95 z-10 shadow-lg" // Reduced from 300
                             >
                                 <div className="flex flex-col items-center text-center h-full">
                                     {/* Animated icon */}
                                     <motion.div
                                         initial={{ scale: 0 }}
                                         animate={isInView ? { scale: 1 } : {}}
-                                        transition={{ delay: index * 0.15 + 0.4 }}
+                                        transition={{ delay: index * 0.075 + 0.2 }} // Reduced from 0.15 + 0.4
                                         whileHover={{
                                             rotate: [0, 10, -5, 0],
                                             scale: [1, 1.1, 1.05, 1]
@@ -1114,7 +1088,7 @@ const CareerDevelopmentTrack = ({ course }) => {
                                     <motion.h3
                                         initial={{ y: 10, opacity: 0 }}
                                         animate={isInView ? { y: 0, opacity: 1 } : {}}
-                                        transition={{ delay: index * 0.15 + 0.5 }}
+                                        transition={{ delay: index * 0.075 + 0.25 }} // Reduced from 0.15 + 0.5
                                         className="text-2xl font-bold text-[#4D2C5E] mb-6"
                                     >
                                         {item.title}
@@ -1123,7 +1097,7 @@ const CareerDevelopmentTrack = ({ course }) => {
                                     <motion.ul
                                         initial={{ opacity: 0 }}
                                         animate={isInView ? { opacity: 1 } : {}}
-                                        transition={{ staggerChildren: 0.1, delayChildren: index * 0.15 + 0.6 }}
+                                        transition={{ staggerChildren: 0.05, delayChildren: index * 0.075 + 0.3 }} // Reduced from 0.1, 0.15 + 0.6
                                         className="space-y-4 flex-1 w-full px-4"
                                     >
                                         {item.items.map((point, i) => (
@@ -1131,22 +1105,13 @@ const CareerDevelopmentTrack = ({ course }) => {
                                                 key={i}
                                                 initial={{ x: -20, opacity: 0 }}
                                                 animate={isInView ? { x: 0, opacity: 1 } : {}}
-                                                transition={{ delay: index * 0.15 + 0.6 + i * 0.1 }}
+                                                transition={{ delay: index * 0.075 + 0.3 + i * 0.05 }} // Reduced from 0.15 + 0.6 + i * 0.1
                                                 whileHover={{ x: 5 }}
                                                 className="text-gray-700 flex items-start text-left"
                                             >
                                                 <motion.span
                                                     className="w-3 h-3 rounded-full mt-1.5 mr-3 flex-shrink-0"
                                                     style={{ backgroundColor: index % 2 ? '#4D2C5E' : '#FF7426' }}
-                                                    animate={{
-                                                        scale: [1, 1.3, 1],
-                                                        opacity: [0.7, 1, 0.7]
-                                                    }}
-                                                    transition={{
-                                                        duration: 3,
-                                                        repeat: Infinity,
-                                                        delay: i * 0.3
-                                                    }}
                                                 />
                                                 <span>{point}</span>
                                             </motion.li>
@@ -1159,9 +1124,9 @@ const CareerDevelopmentTrack = ({ course }) => {
                 </motion.div>
             </div>
         </section>
-
     );
 };
+
 
 
 // Add this component after the CareerDevelopmentTrack section in your CourseDetails.js
@@ -1331,10 +1296,12 @@ const CertificateSection = ({ course }) => {
 };
 
 
+
 const PricingSection = ({ course }) => {
     const batchCode = course.batchId;
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+
     const handleEnrollClick = (course) => {
         setSelectedCourse(course);
         setIsEnrollModalOpen(true);
@@ -1346,47 +1313,19 @@ const PricingSection = ({ course }) => {
     };
 
     return (
-
         <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.2 }}
             className="w-full py-10 relative overflow-hidden"
         >
-            {/* Floating background elements */}
-            <motion.div
-                animate={{
-                    y: [0, -40, 0],
-                    x: [0, 30, 0]
-                }}
-                transition={{
-                    duration: 18,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                }}
-                className="absolute top-1/4 left-0 w-48 h-48 rounded-full bg-[#FF7426]/10 blur-xl"
-            />
-            <motion.div
-                animate={{
-                    y: [0, 50, 0],
-                    x: [0, -20, 0]
-                }}
-                transition={{
-                    duration: 15,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 3
-                }}
-                className="absolute bottom-1/3 right-0 w-56 h-56 rounded-full bg-[#4D2C5E]/10 blur-xl"
-            />
-
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="flex flex-col lg:flex-row gap-12 items-center">
                     {/* Left Side - Pricing Info */}
                     <motion.div
                         initial={{ x: -50, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.7 }}
+                        transition={{ duration: 0.35 }} // Reduced from 0.7
                         className="lg:w-1/2"
                     >
                         <motion.h2
@@ -1396,7 +1335,7 @@ const PricingSection = ({ course }) => {
                             <motion.span
                                 initial={{ scaleX: 0 }}
                                 whileInView={{ scaleX: 1 }}
-                                transition={{ delay: 0.3, duration: 0.8 }}
+                                transition={{ delay: 0.15, duration: 0.4 }} // Reduced from 0.3, 0.8
                                 className="absolute bottom-0 left-0 w-full h-1.5 bg-[#FF7426] rounded-full"
                             />
                         </motion.h2>
@@ -1406,7 +1345,7 @@ const PricingSection = ({ course }) => {
                                 <motion.span
                                     initial={{ scale: 0.8, opacity: 0 }}
                                     whileInView={{ scale: 1, opacity: 1 }}
-                                    transition={{ delay: 0.4 }}
+                                    transition={{ delay: 0.2 }} // Reduced from 0.4
                                     className="text-5xl font-bold text-[#4D2C5E]"
                                 >
                                     ₹{course.discountedPrice?.toLocaleString('en-IN') || '20,060'}
@@ -1414,7 +1353,7 @@ const PricingSection = ({ course }) => {
                                 <motion.span
                                     initial={{ opacity: 0 }}
                                     whileInView={{ opacity: 1 }}
-                                    transition={{ delay: 0.5 }}
+                                    transition={{ delay: 0.25 }} // Reduced from 0.5
                                     className="text-gray-500"
                                 >
                                     Including tax
@@ -1424,23 +1363,14 @@ const PricingSection = ({ course }) => {
                             <motion.div
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.6 }}
+                                transition={{ delay: 0.3 }} // Reduced from 0.6
                                 className="flex items-start gap-3 p-4 bg-white rounded-xl border border-[#4D2C5E]/10 shadow-sm"
                             >
-                                <motion.div
-                                    animate={{
-                                        rotate: [0, 10, -5, 0],
-                                        scale: [1, 1.1, 1.05, 1]
-                                    }}
-                                    transition={{
-                                        duration: 6,
-                                        repeat: Infinity,
-                                        delay: 1
-                                    }}
+                                <div
                                     className="p-2 bg-[#FF7426]/10 rounded-full text-[#FF7426] flex-shrink-0"
                                 >
                                     <FiAlertCircle className="text-xl" />
-                                </motion.div>
+                                </div>
                                 <p className="text-gray-600">
                                     (Non-refundable after 7 days of enrollment)
                                 </p>
@@ -1448,7 +1378,7 @@ const PricingSection = ({ course }) => {
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 whileInView={{ opacity: 1 }}
-                                transition={{ delay: 0.8 }}
+                                transition={{ delay: 0.4 }} // Reduced from 0.8
                             >
                                 <img
                                     src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
@@ -1463,7 +1393,7 @@ const PricingSection = ({ course }) => {
                     <motion.div
                         initial={{ x: 50, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.7, delay: 0.3 }}
+                        transition={{ duration: 0.35, delay: 0.15 }} // Reduced from 0.7, 0.3
                         className="lg:w-1/2"
                     >
                         <motion.div
@@ -1474,7 +1404,7 @@ const PricingSection = ({ course }) => {
                             <motion.div
                                 initial={{ opacity: 0 }}
                                 whileInView={{ opacity: 1 }}
-                                transition={{ delay: 0.5 }}
+                                transition={{ delay: 0.25 }} // Reduced from 0.5
                                 className="absolute inset-0 bg-gradient-to-br from-[#4D2C5E]/5 to-[#FF7426]/5 mix-blend-overlay"
                             />
 
@@ -1482,7 +1412,7 @@ const PricingSection = ({ course }) => {
                                 <motion.h3
                                     initial={{ opacity: 0 }}
                                     whileInView={{ opacity: 1 }}
-                                    transition={{ delay: 0.6 }}
+                                    transition={{ delay: 0.3 }} // Reduced from 0.6
                                     className="text-2xl font-bold text-[#4D2C5E] mb-8"
                                 >
                                     What's Included
@@ -1491,7 +1421,7 @@ const PricingSection = ({ course }) => {
                                 <motion.ul
                                     initial={{ opacity: 0 }}
                                     whileInView={{ opacity: 1 }}
-                                    transition={{ staggerChildren: 0.1, delayChildren: 0.7 }}
+                                    transition={{ staggerChildren: 0.05, delayChildren: 0.35 }} // Reduced from 0.1, 0.7
                                     className="space-y-6"
                                 >
                                     {[
@@ -1525,24 +1455,15 @@ const PricingSection = ({ course }) => {
                                             key={index}
                                             initial={{ x: 20, opacity: 0 }}
                                             whileInView={{ x: 0, opacity: 1 }}
-                                            transition={{ delay: 0.7 + index * 0.1 }}
+                                            transition={{ delay: 0.35 + index * 0.05 }} // Reduced from 0.7 + index * 0.1
                                             whileHover={{ x: 5 }}
                                             className="flex items-start gap-4 p-3 rounded-lg hover:bg-[#4D2C5E]/5 transition-colors"
                                         >
-                                            <motion.div
-                                                animate={{
-                                                    rotate: [0, 10, 0],
-                                                    scale: [1, 1.1, 1]
-                                                }}
-                                                transition={{
-                                                    duration: 6,
-                                                    repeat: Infinity,
-                                                    delay: index * 0.5
-                                                }}
+                                            <div
                                                 className={`p-3 rounded-full ${index % 2 ? 'bg-[#FF7426]/10 text-[#FF7426]' : 'bg-[#4D2C5E]/10 text-[#4D2C5E]'}`}
                                             >
                                                 {item.icon}
-                                            </motion.div>
+                                            </div>
                                             <span className="text-gray-700">{item.text}</span>
                                         </motion.li>
                                     ))}
@@ -1551,7 +1472,7 @@ const PricingSection = ({ course }) => {
                                 <motion.div
                                     initial={{ opacity: 0 }}
                                     whileInView={{ opacity: 1 }}
-                                    transition={{ delay: 1.2 }}
+                                    transition={{ delay: 0.6 }} // Reduced from 1.2
                                     className="mt-10 pt-8 border-t border-[#4D2C5E]/10"
                                 >
                                     <h4 className="text-sm font-medium text-gray-500 mb-4">Secure Payment</h4>
@@ -1559,7 +1480,7 @@ const PricingSection = ({ course }) => {
                                     <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
                                         <div className="flex items-center">
                                             <img
-                                                src="images/Cashfree Payments.png"
+                                                src="/images/Cashfree Payments.png"
                                                 alt="Cashfree"
                                                 className="w-25 opacity-100 hover:opacity-100 transition-opacity"
                                             />
@@ -1591,7 +1512,7 @@ const PricingSection = ({ course }) => {
                                                 <motion.span
                                                     initial={{ x: '-100%' }}
                                                     whileHover={{ x: '0%' }}
-                                                    transition={{ duration: 0.4 }}
+                                                    transition={{ duration: 0.2 }} // Reduced from 0.4
                                                     className="absolute inset-0 bg-[#E65100] z-0"
                                                 />
                                             )}
@@ -1604,7 +1525,7 @@ const PricingSection = ({ course }) => {
                         <motion.div
                             initial={{ opacity: 0 }}
                             whileInView={{ opacity: 1 }}
-                            transition={{ delay: 1.5 }}
+                            transition={{ delay: 0.75 }} // Reduced from 1.5
                             className="mt-8"
                         >
                             <NavLink to='/ContactUs'>
@@ -1621,7 +1542,6 @@ const PricingSection = ({ course }) => {
                     </motion.div>
                 </div>
             </div>
-
 
             {selectedCourse && (
                 <PurchaseModal

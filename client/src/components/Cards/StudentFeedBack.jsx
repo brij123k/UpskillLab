@@ -9,7 +9,7 @@ const StudentFeedBack = () => {
   const [stats, setStats] = useState([]);
   const [ref, inView] = useInView({
     threshold: 0.1,
-    triggerOnce: false
+    triggerOnce: true // Changed to true to trigger only once
   });
 
   const handleFeedback = async () => {
@@ -33,15 +33,8 @@ const StudentFeedBack = () => {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.2
-      }
-    },
-    exit: {
-      opacity: 0,
-      transition: {
         staggerChildren: 0.1,
-        staggerDirection: -1
+        delayChildren: 0.1
       }
     }
   };
@@ -54,14 +47,8 @@ const StudentFeedBack = () => {
       transition: {
         type: "spring",
         stiffness: 100,
-        damping: 10
-      }
-    },
-    exit: {
-      opacity: 0,
-      y: 50,
-      transition: {
-        duration: 0.3
+        damping: 10,
+        duration: 0.4
       }
     }
   };
@@ -69,9 +56,7 @@ const StudentFeedBack = () => {
   const floatingAnim = {
     y: [0, -15, 0],
     transition: {
-      duration: 6,
-      repeat: Infinity,
-      repeatType: "reverse",
+      duration: 3,
       ease: "easeInOut"
     }
   };
@@ -79,8 +64,6 @@ const StudentFeedBack = () => {
   useEffect(() => {
     if (inView) {
       controls.start("show");
-    } else {
-      controls.start("exit");
     }
   }, [inView, controls]);
 
@@ -91,14 +74,16 @@ const StudentFeedBack = () => {
         <>
           <motion.div 
             className="absolute top-10 left-10 w-20 h-20 rounded-full bg-[#FF7426] opacity-10 blur-xl"
+            initial={{ y: 0 }}
             animate={floatingAnim}
           />
           <motion.div 
             className="absolute bottom-20 right-16 w-16 h-16 rounded-full bg-[#FF7426] opacity-15 blur-lg"
+            initial={{ y: 0 }}
             animate={{
               ...floatingAnim,
               y: [0, -20, 0],
-              transition: { ...floatingAnim.transition, delay: 0.1 }
+              transition: { ...floatingAnim.transition, delay: 0.05 }
             }}
           />
         </>
@@ -114,14 +99,13 @@ const StudentFeedBack = () => {
         {stats.map((stat, index) => (
           <motion.div key={stat.id || index} variants={item} className="relative">
             <motion.div 
-              className="absolute -inset-2 bg-[#FF7426] rounded-xl blur-md opacity-0 group-hover:opacity-50 transition-opacity duration-300"
+              className="absolute -inset-2 bg-[#FF7426] rounded-xl blur-md opacity-0 group-hover:opacity-50 transition-opacity duration-150"
+              initial={{ scale: 1 }}
               animate={inView ? {
                 scale: [1, 1.05, 1],
                 transition: {
-                  duration: 1,
-                  repeat: Infinity,
-                  repeatType: "loop",
-                  delay: index * 0.1
+                  duration: 0.5,
+                  delay: index * 0.05
                 }
               } : { scale: 1 }}
             />
@@ -142,7 +126,7 @@ const StudentFeedBack = () => {
         animate={inView ? {
           opacity: 0.3,
           scale: 1,
-          transition: { duration: 0.3, delay: 0.1 }
+          transition: { duration: 0.15, delay: 0.05 }
         } : {
           opacity: 0,
           scale: 0.95

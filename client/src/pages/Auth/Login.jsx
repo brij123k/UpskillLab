@@ -234,22 +234,6 @@ const LoginPage = () => {
                             />
                         </motion.button>
 
-                        {/* Sign Up Link */}
-                        <motion.div 
-                            className="text-center text-sm sm:text-base mt-3"
-                            variants={item}
-                        >
-                            <span className="text-gray-600">Don't have an Account? </span>
-                            <NavLink to="/Register">
-                                <motion.span
-                                    className="text-[#FF7426] font-medium hover:underline cursor-pointer"
-                                    whileHover={{ scale: 1.05 }}
-                                >
-                                    Signup Here
-                                </motion.span>
-                            </NavLink>
-                        </motion.div>
-
                         {/* Divider */}
                         <motion.div 
                             className="relative my-3 sm:my-4"
@@ -287,7 +271,7 @@ const LoginPage = () => {
                             </motion.button>
                         </motion.div>
                         
-                        <motion.div variants={item}>
+                        {/* <motion.div variants={item}>
                             <motion.button
                                 type="button"
                                 className="flex items-center justify-center w-full py-2 bg-[#3575dc] text-white rounded-lg mb-2 hover:bg-[#3575dc]/90 transition-colors cursor-pointer"
@@ -321,7 +305,7 @@ const LoginPage = () => {
                                 />
                                 <span className="text-xs sm:text-sm">Login With Apple</span>
                             </motion.button>
-                        </motion.div>
+                        </motion.div> */}
 
                         {/* Terms */}
                         <motion.p
@@ -330,7 +314,7 @@ const LoginPage = () => {
                         >
                             By continuing, you agree to the{' '}
                             <motion.a 
-                                href="#" 
+                                href="/TermsOfService" 
                                 className="text-[#FF7426] hover:underline"
                                 whileHover={{ scale: 1.05 }}
                             >
@@ -338,7 +322,7 @@ const LoginPage = () => {
                             </motion.a>{' '}
                             and{' '}
                             <motion.a 
-                                href="#" 
+                                href="/PrivacyPolicy" 
                                 className="text-[#FF7426] hover:underline"
                                 whileHover={{ scale: 1.05 }}
                             >
