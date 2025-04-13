@@ -337,7 +337,7 @@ const CarouselContainer = () => {
         id: index + 1,
         heading: item.title || 'Default Heading',
         image: item.imageUrl || 'default-image.png',
-        description: item.categoryDescription || 'Default description',
+        description: item.description || 'Default description',
         subheading: item.subtitle || 'Default Subheading'
       }));
 
