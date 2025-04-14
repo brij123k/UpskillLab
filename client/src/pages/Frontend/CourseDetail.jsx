@@ -3,7 +3,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { FiDownload, FiHelpCircle, FiFilm, FiCode } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { FiClock, FiMonitor, FiCalendar, FiBook } from 'react-icons/fi';
-import { FiUsers, FiAlertCircle, FiMessageSquare } from 'react-icons/fi';
+import { FiUsers, FiAlertCircle, FiMessageSquare ,FiCompass,FiDollarSign} from 'react-icons/fi';
 import { FiAward, FiBriefcase, FiCheck, FiTrendingUp } from 'react-icons/fi';
 import PurchaseModal from '../../components/Modal/EnrollmentModal';
 import { FiFlag } from 'react-icons/fi';
@@ -1257,11 +1257,9 @@ const CertificateSection = ({ course }) => {
                             className="space-y-4"
                         >
                             {[
-                                "Industry-recognized certification",
-                                "Digital and printable format",
-                                "Verification QR code",
-                                "Skills validation for employers",
-                                "Shareable on LinkedIn"
+                                "Industry-standard technology skills",
+                                "Project execution under differentiated instruction",
+                                "Practical application of tools used across sectors",
                             ].map((item, index) => (
                                 <motion.li
                                     key={index}
@@ -1296,265 +1294,187 @@ const CertificateSection = ({ course }) => {
 };
 
 
-
 const PricingSection = ({ course }) => {
-    const batchCode = course.batchId;
-    const [selectedCourse, setSelectedCourse] = useState(null);
-    const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+  const batchCode = course.batchId;
+  const [selectedCourse, setSelectedCourse] = useState(null);
+  const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
 
-    const handleEnrollClick = (course) => {
-        setSelectedCourse(course);
-        setIsEnrollModalOpen(true);
-    };
+  const handleEnrollClick = (course) => {
+    setSelectedCourse(course);
+    setIsEnrollModalOpen(true);
+  };
 
-    const handleEnrollSubmit = () => {
-        // Handle enrollment logic here
-        setIsEnrollModalOpen(false);
-    };
+  const handleEnrollSubmit = () => {
+    setIsEnrollModalOpen(false);
+  };
 
-    return (
-        <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, amount: 0.2 }}
-            className="w-full py-10 relative overflow-hidden"
-        >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div className="flex flex-col lg:flex-row gap-12 items-center">
-                    {/* Left Side - Pricing Info */}
-                    <motion.div
-                        initial={{ x: -50, opacity: 0 }}
-                        whileInView={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.35 }} // Reduced from 0.7
-                        className="lg:w-1/2"
-                    >
-                        <motion.h2
-                            className="text-4xl font-bold text-[#4D2C5E] mb-8 relative inline-block"
-                        >
-                            Program Investment
-                            <motion.span
-                                initial={{ scaleX: 0 }}
-                                whileInView={{ scaleX: 1 }}
-                                transition={{ delay: 0.15, duration: 0.4 }} // Reduced from 0.3, 0.8
-                                className="absolute bottom-0 left-0 w-full h-1.5 bg-[#FF7426] rounded-full"
-                            />
-                        </motion.h2>
-
-                        <div className="space-y-8">
-                            <div className="flex items-baseline gap-4">
-                                <motion.span
-                                    initial={{ scale: 0.8, opacity: 0 }}
-                                    whileInView={{ scale: 1, opacity: 1 }}
-                                    transition={{ delay: 0.2 }} // Reduced from 0.4
-                                    className="text-5xl font-bold text-[#4D2C5E]"
-                                >
-                                    ₹{course.discountedPrice?.toLocaleString('en-IN') || '20,060'}
-                                </motion.span>
-                                <motion.span
-                                    initial={{ opacity: 0 }}
-                                    whileInView={{ opacity: 1 }}
-                                    transition={{ delay: 0.25 }} // Reduced from 0.5
-                                    className="text-gray-500"
-                                >
-                                    Including tax
-                                </motion.span>
-                            </div>
-
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.3 }} // Reduced from 0.6
-                                className="flex items-start gap-3 p-4 bg-white rounded-xl border border-[#4D2C5E]/10 shadow-sm"
-                            >
-                                <div
-                                    className="p-2 bg-[#FF7426]/10 rounded-full text-[#FF7426] flex-shrink-0"
-                                >
-                                    <FiAlertCircle className="text-xl" />
-                                </div>
-                                <p className="text-gray-600">
-                                    (Non-refundable after 7 days of enrollment)
-                                </p>
-                            </motion.div>
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                whileInView={{ opacity: 1 }}
-                                transition={{ delay: 0.4 }} // Reduced from 0.8
-                            >
-                                <img
-                                    src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                                    alt="Happy students"
-                                    className="rounded-xl shadow-lg w-full h-auto object-cover"
-                                />
-                            </motion.div>
-                        </div>
-                    </motion.div>
-
-                    {/* Right Side - Payment Features */}
-                    <motion.div
-                        initial={{ x: 50, opacity: 0 }}
-                        whileInView={{ x: 0, opacity: 1 }}
-                        transition={{ duration: 0.35, delay: 0.15 }} // Reduced from 0.7, 0.3
-                        className="lg:w-1/2"
-                    >
-                        <motion.div
-                            whileHover={{ y: -5 }}
-                            className="relative bg-white rounded-xl shadow-2xl border border-[#4D2C5E]/10 overflow-hidden"
-                        >
-                            {/* Decorative gradient overlay */}
-                            <motion.div
-                                initial={{ opacity: 0 }}
-                                whileInView={{ opacity: 1 }}
-                                transition={{ delay: 0.25 }} // Reduced from 0.5
-                                className="absolute inset-0 bg-gradient-to-br from-[#4D2C5E]/5 to-[#FF7426]/5 mix-blend-overlay"
-                            />
-
-                            <div className="relative z-10 p-8">
-                                <motion.h3
-                                    initial={{ opacity: 0 }}
-                                    whileInView={{ opacity: 1 }}
-                                    transition={{ delay: 0.3 }} // Reduced from 0.6
-                                    className="text-2xl font-bold text-[#4D2C5E] mb-8"
-                                >
-                                    What's Included
-                                </motion.h3>
-
-                                <motion.ul
-                                    initial={{ opacity: 0 }}
-                                    whileInView={{ opacity: 1 }}
-                                    transition={{ staggerChildren: 0.05, delayChildren: 0.35 }} // Reduced from 0.1, 0.7
-                                    className="space-y-6"
-                                >
-                                    {[
-                                        {
-                                            icon: <FiMonitor />,
-                                            text: "Live Learning delivered by Industry veterans",
-                                            color: "#FF7426"
-                                        },
-                                        {
-                                            icon: <FiFilm />,
-                                            text: "Session recordings & backup",
-                                            color: "#4D2C5E"
-                                        },
-                                        {
-                                            icon: <FiCode />,
-                                            text: "Hands-on projects & challenges",
-                                            color: "#FF7426"
-                                        },
-                                        {
-                                            icon: <FiAward />,
-                                            text: "Global Certifications",
-                                            color: "#4D2C5E"
-                                        },
-                                        {
-                                            icon: <FiBriefcase />,
-                                            text: "Access to Career Assist cell*",
-                                            color: "#FF7426"
-                                        }
-                                    ].map((item, index) => (
-                                        <motion.li
-                                            key={index}
-                                            initial={{ x: 20, opacity: 0 }}
-                                            whileInView={{ x: 0, opacity: 1 }}
-                                            transition={{ delay: 0.35 + index * 0.05 }} // Reduced from 0.7 + index * 0.1
-                                            whileHover={{ x: 5 }}
-                                            className="flex items-start gap-4 p-3 rounded-lg hover:bg-[#4D2C5E]/5 transition-colors"
-                                        >
-                                            <div
-                                                className={`p-3 rounded-full ${index % 2 ? 'bg-[#FF7426]/10 text-[#FF7426]' : 'bg-[#4D2C5E]/10 text-[#4D2C5E]'}`}
-                                            >
-                                                {item.icon}
-                                            </div>
-                                            <span className="text-gray-700">{item.text}</span>
-                                        </motion.li>
-                                    ))}
-                                </motion.ul>
-
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    whileInView={{ opacity: 1 }}
-                                    transition={{ delay: 0.6 }} // Reduced from 1.2
-                                    className="mt-10 pt-8 border-t border-[#4D2C5E]/10"
-                                >
-                                    <h4 className="text-sm font-medium text-gray-500 mb-4">Secure Payment</h4>
-
-                                    <div className="flex flex-col sm:flex-row justify-between items-center gap-6">
-                                        <div className="flex items-center">
-                                            <img
-                                                src="/images/Cashfree Payments.png"
-                                                alt="Cashfree"
-                                                className="w-25 opacity-100 hover:opacity-100 transition-opacity"
-                                            />
-                                        </div>
-
-                                        <motion.button
-                                            onClick={() => {
-                                                if (batchCode === "0") {
-                                                    toast.error("No available batches for this course");
-                                                } else {
-                                                    handleEnrollClick(course);
-                                                }
-                                            }}
-                                            whileHover={batchCode !== "0" ? {
-                                                scale: 1.05,
-                                                boxShadow: "0 10px 25px rgba(255, 116, 38, 0.4)"
-                                            } : {}}
-                                            whileTap={batchCode !== "0" ? { scale: 0.98 } : {}}
-                                            className={`w-full sm:w-auto text-white font-bold py-4 px-8 rounded-lg shadow-lg relative overflow-hidden group ${batchCode === "0"
-                                                    ? "bg-gray-400 cursor-not-allowed"
-                                                    : "bg-gradient-to-r from-[#FF7426] to-[#FF9E5E]"
-                                                }`}
-                                            disabled={batchCode === "0"}
-                                        >
-                                            <span className="relative z-10">
-                                                {batchCode === "0" ? "NO BATCHES AVAILABLE" : "ENROLL NOW"}
-                                            </span>
-                                            {batchCode !== "0" && (
-                                                <motion.span
-                                                    initial={{ x: '-100%' }}
-                                                    whileHover={{ x: '0%' }}
-                                                    transition={{ duration: 0.2 }} // Reduced from 0.4
-                                                    className="absolute inset-0 bg-[#E65100] z-0"
-                                                />
-                                            )}
-                                        </motion.button>
-                                    </div>
-                                </motion.div>
-                            </div>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            whileInView={{ opacity: 1 }}
-                            transition={{ delay: 0.75 }} // Reduced from 1.5
-                            className="mt-8"
-                        >
-                            <NavLink to='/ContactUs'>
-                                <motion.button
-                                    whileHover={{ scale: 1.02 }}
-                                    whileTap={{ scale: 0.98 }}
-                                    className="flex items-center gap-3 px-6 py-4 bg-[#4D2C5E] text-white rounded-lg font-medium w-full justify-center shadow-md hover:shadow-lg transition-all"
-                                >
-                                    <FiMessageSquare className="text-xl" />
-                                    <span>Connect with counselor</span>
-                                </motion.button>
-                            </NavLink>
-                        </motion.div>
-                    </motion.div>
-                </div>
+  return (
+    <motion.section
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, amount: 0.2 }}
+      className="w-full py-12 md:py-16 bg-gradient-to-b from-gray-50 to-white"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+          {/* Left Side - Pricing Info */}
+          <motion.div
+            initial={{ x: -30, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-6"
+          >
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold text-[#4D2C5E] mb-4">
+                Program Investment
+              </h2>
+              <div className="w-20 h-1 bg-orange-500 rounded-full" />
             </div>
 
-            {selectedCourse && (
-                <PurchaseModal
-                    course={selectedCourse}
-                    batchCode={batchCode}
-                    isOpen={isEnrollModalOpen}
-                    onClose={() => { setIsEnrollModalOpen(false); setSelectedCourse(null) }}
-                    onEnroll={handleEnrollSubmit}
-                />
-            )}
-        </motion.div>
-    );
+            <div className="flex flex-col sm:flex-row sm:items-baseline gap-4">
+              <motion.span
+                initial={{ scale: 0.9, opacity: 0 }}
+                whileInView={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="text-4xl md:text-5xl font-bold text-[#4D2C5E]"
+              >
+                ₹{course.discountedPrice?.toLocaleString('en-IN') || '20,060'}
+              </motion.span>
+              <span className="text-gray-500 text-sm">Including tax</span>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="flex items-start gap-3 p-4 bg-white rounded-lg shadow-sm border border-gray-100"
+            >
+              <FiAlertCircle className="text-xl text-orange-500 flex-shrink-0" />
+              <p className="text-gray-600 text-sm">
+                Non-refundable after 7 days of enrollment
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="hidden lg:block"
+            >
+              <img
+                src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                alt="Happy students"
+                className="rounded-lg shadow-md w-full h-64 object-cover"
+              />
+            </motion.div>
+          </motion.div>
+
+          {/* Right Side - Payment Features */}
+          <motion.div
+            initial={{ x: 30, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-6"
+          >
+            <div className="bg-white rounded-lg shadow-md p-6 relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-purple-50 opacity-50" />
+              
+              <div className="relative space-y-6">
+                <h3 className="text-2xl font-semibold text-[#4D2C5E]">
+                  Affordable & Flexible
+                </h3>
+
+                <div className="space-y-4">
+                  <p className="text-gray-600 text-sm">
+                    Your investment in future skills includes:
+                  </p>
+                  
+                  <ul className="space-y-3">
+                    {[
+                      { text: "Certification upon completion", icon: FiAward },
+                      { text: "Dedicated mentor support", icon: FiBriefcase },
+                      { text: "Capstone project reviews", icon: FiAward },
+                      { text: "24/7 access to learning coaches", icon: FiBriefcase },
+                    ].map((item, index) => (
+                      <motion.li
+                        key={index}
+                        initial={{ x: 10, opacity: 0 }}
+                        whileInView={{ x: 0, opacity: 1 }}
+                        transition={{ delay: 0.2 + index * 0.1 }}
+                        className="flex items-center gap-3 text-gray-700 text-sm"
+                      >
+                        <item.icon className="text-orange-500 text-lg flex-shrink-0" />
+                        {item.text}
+                      </motion.li>
+                    ))}
+                  </ul>
+
+                  <div className="pt-4">
+  <p className="text-sm font-medium text-gray-700 mb-2">
+    Special Offers:
+  </p>
+  <ul className="space-y-3">
+    {[
+      { text: "Employee upskilling programs", icon: FiUsers },
+      { text: "Career transition bundles", icon: FiCompass },
+      { text: "Flexible EMI options", icon: FiDollarSign },
+    ].map((item, index) => (
+      <motion.li
+        key={index}
+        initial={{ x: 10, opacity: 0 }}
+        whileInView={{ x: 0, opacity: 1 }}
+        transition={{ delay: 0.4 + index * 0.1 }}
+        className="flex items-center gap-3 text-gray-700 text-sm"
+      >
+        <item.icon className="text-orange-500 text-lg flex-shrink-0" />
+        {item.text}
+      </motion.li>
+    ))}
+  </ul>
+</div>
+                </div>
+
+                <div className="pt-6 border-t border-gray-100">
+                  <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <img
+                      src="/images/Cashfree Payments.png"
+                      alt="Cashfree"
+                      className="h-10 opacity-80"
+                    />
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => handleEnrollClick(course)}
+                      className="w-full sm:w-auto bg-orange-500 text-white font-medium py-3 px-6 rounded-lg hover:bg-orange-600 transition-colors"
+                    >
+                      Enroll Now
+                    </motion.button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+          </motion.div>
+        </div>
+      </div>
+
+      {selectedCourse && (
+        <PurchaseModal
+          course={selectedCourse}
+          batchCode={batchCode}
+          isOpen={isEnrollModalOpen}
+          onClose={() => {
+            setIsEnrollModalOpen(false);
+            setSelectedCourse(null);
+          }}
+          onEnroll={handleEnrollSubmit}
+        />
+      )}
+    </motion.section>
+  );
 };
+
 
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { NavLink, useLocation } from 'react-router-dom';

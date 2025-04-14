@@ -171,70 +171,199 @@ const EducationBanner = () => {
 
       {/* Modal */}
       {isModalOpen && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-[#fdf8ee77]" // Solid background
-          variants={backdropVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          onClick={() => setIsModalOpen(false)}
-        >
-          <motion.div
-            className="bg-[#FDF8EE] rounded-2xl p-12 max-w-3xl w-full mx-4 relative shadow-2xl" // Larger size, increased padding
-            variants={modalVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close Button */}
-            <button
-              className="absolute top-6 right-6 text-gray-600 hover:text-gray-900 transition-colors"
-              onClick={() => setIsModalOpen(false)}
-            >
-              <svg
-                className="w-8 h-8" // Slightly larger icon
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-            {/* Modal Content */}
-            <h3 className="text-3xl font-bold text-gray-900 mb-6"> {/* Increased font size */}
-              Discover Our Training Programs
-            </h3>
-            <p className="text-lg text-gray-600 mb-8"> {/* Increased font size and margin */}
-              Our personalized training and internship programs are designed to
-              equip you with cutting-edge skills tailored to your career goals.
-              Whether you're a beginner or a professional, we offer hands-on
-              projects, expert mentorship, and flexible learning paths to ensure
-              your success.
-            </p>
-            <div className="space-y-6">
-              <div>
-                <h4 className="font-semibold text-xl text-[#4D2C5E] mb-4"> {/* Increased font size */}
-                  What You'll Get:
-                </h4>
-                <ul className="list-disc list-inside text-lg text-gray-600 space-y-2"> {/* Increased font size */}
-                  <li>Customized curriculum</li>
-                  <li>Real-world project experience</li>
-                  <li>1:1 mentorship sessions</li>
-                  <li>Certification upon completion</li>
-                </ul>
-              </div>
-            </div>
-            {/* Decorative Element */}
-            <div className="absolute -top-4 -left-4 w-16 h-16 rounded-full bg-[#FF7426] opacity-20 blur-md" /> {/* Slightly larger */}
-          </motion.div>
-        </motion.div>
+       <motion.div
+       className="fixed inset-0 z-50 flex items-center justify-center bg-[#fdf8ee77]" // Solid background
+       variants={backdropVariants}
+       initial="hidden"
+       animate="visible"
+       exit="exit"
+       onClick={() => setIsModalOpen(false)}
+     >
+       <motion.div
+         className="
+           bg-[#FDF8EE] 
+           rounded-2xl 
+           w-full 
+           max-w-[90%] 
+           sm:max-w-2xl 
+           md:max-w-3xl 
+           mx-4 
+           relative 
+           shadow-2xl 
+           max-h-[90vh] 
+           flex 
+           flex-col
+         " // Responsive width and max height
+         variants={modalVariants}
+         initial="hidden"
+         animate="visible"
+         exit="exit"
+         onClick={(e) => e.stopPropagation()}
+       >
+         {/* Close Button */}
+         <button
+           className="
+             absolute 
+             top-4 
+             right-4 
+             sm:top-6 
+             sm:right-6 
+             text-gray-600 
+             hover:text-gray-900 
+             transition-colors
+           "
+           onClick={() => setIsModalOpen(false)}
+         >
+           <svg
+             className="w-6 h-6 sm:w-8 sm:h-8" // Responsive icon size
+             fill="none"
+             stroke="currentColor"
+             viewBox="0 0 24 24"
+             xmlns="http://www.w3.org/2000/svg"
+           >
+             <path
+               strokeLinecap="round"
+               strokeLinejoin="round"
+               strokeWidth="2"
+               d="M6 18L18 6M6 6l12 12"
+             />
+           </svg>
+         </button>
+     
+         {/* Scrollable Content */}
+         <div
+           className="
+             p-6 
+             sm:p-8 
+             md:p-12 
+             overflow-y-auto 
+             max-h-[80vh] 
+             flex-1
+           " // Responsive padding and scrollable
+         >
+           <h3
+             className="
+               text-2xl 
+               sm:text-3xl 
+               font-bold 
+               text-gray-900 
+               mb-4 
+               sm:mb-6
+             " // Responsive font and margin
+           >
+             Discover Our Training Programs
+           </h3>
+           <p
+             className="
+               text-base 
+               sm:text-md
+               lg:text-lg 
+               text-gray-600 
+               mb-6 
+               sm:mb-8
+             " // Responsive font and margin
+           >
+             Jumpstart your career with UpskillLab’s Training & Internship Program – a
+             hands-on, project-based learning initiative.
+           </p>
+           <div className="space-y-6">
+             <div>
+               <h4
+                 className="
+                   font-semibold 
+                   text-lg 
+                   sm:text-xl 
+                   text-[#4D2C5E] 
+                   mb-3 
+                   sm:mb-4
+                 " // Responsive font and margin
+               >
+                 You’ll gain:
+               </h4>
+               <ul
+                 className="
+                   list-disc 
+                   list-inside 
+                   text-base 
+                   sm:text-md
+                   lg:text-lg 
+                   text-gray-600 
+                   space-y-2
+                 " // Responsive font
+               >
+                 <li>Practical exposure to AI, Data Science, Cloud Computing, and more</li>
+                 <li>Real-world projects designed to reflect actual industry challenges</li>
+                 <li>Verified skills and credentials recognized by employers</li>
+               </ul>
+             </div>
+     
+             <div>
+               <h4
+                 className="
+                   font-semibold 
+                   text-lg 
+                   sm:text-xl 
+                   text-[#4D2C5E] 
+                   mb-3 
+                   sm:mb-4
+                 " // Responsive font and margin
+               >
+                 This program is ideal for:
+               </h4>
+               <ul
+                 className="
+                   list-disc 
+                   list-inside 
+                   text-base 
+                   sm:text-md
+                   lg:text-lg 
+                   text-gray-600 
+                   space-y-2
+                 " // Responsive font
+               >
+                 <li>Students preparing for job roles</li>
+                 <li>Professionals looking to reskill or switch careers</li>
+               </ul>
+             </div>
+     
+             <div>
+               <p
+                 className="
+                   font-semibold 
+                   text-sm 
+                   sm:text-md 
+                   text-[#4D2C5E] 
+                   mb-3 
+                   sm:mb-4
+                 " // Responsive font and margin
+               >
+                 We bridge the gap between academic knowledge and workforce readiness
+                 through our skill-reskill-upskill model.
+               </p>
+             </div>
+           </div>
+         </div>
+     
+         {/* Decorative Element */}
+         <div
+           className="
+             absolute 
+             -top-3 
+             -left-3 
+             w-12 
+             h-12 
+             sm:-top-4 
+             sm:-left-4 
+             sm:w-16 
+             sm:h-16 
+             rounded-full 
+             bg-[#FF7426] 
+             opacity-20 
+             blur-md
+           " // Responsive size and position
+         />
+       </motion.div>
+     </motion.div>
       )}
     </>
   );

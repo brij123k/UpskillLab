@@ -254,7 +254,7 @@ const handleBanners = async () => {
             </div>
             <EducationBanner />
             <div className='py-4'>
-                <ScrollableCategories />
+            <ScrollableCategories />
             </div>
             <div className='py-4'>
                 <SuccessTestimonial />

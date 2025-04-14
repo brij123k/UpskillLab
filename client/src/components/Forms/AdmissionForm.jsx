@@ -95,7 +95,7 @@ const AdmissionForm = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8" id='AdmissionForm'>
+    <div className="bg-gray-50 py-12 px-4 sm:px-6 lg:px-8" id='AdmissionForm'>
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -114,75 +114,79 @@ const AdmissionForm = () => {
 
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Info Section */}
-          <motion.div 
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="w-full lg:w-1/2"
-          >
-            <div className="bg-gradient-to-br from-[#4D2C5E] to-[#2A1A3A] p-8 rounded-xl text-white h-full">
-              <h2 className="text-2xl font-bold mb-6">Why Choose Us?</h2>
-              
-              <div className="space-y-6">
-                <div className="flex items-start">
-                  <div className="bg-[#FF7426] p-2 rounded-full mr-4 mt-1">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Expert Instructors</h3>
-                    <p className="text-gray-300 mt-1">Learn from industry professionals with real-world experience</p>
-                  </div>
-                </div>
+          <motion.div
+  initial={{ opacity: 0, x: 20 }}
+  animate={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.6, delay: 0.4 }}
+  className="w-full lg:w-1/2"
+>
+  <div className="bg-gradient-to-br from-[#4D2C5E] to-[#2A1A3A] p-6 sm:p-8 rounded-xl text-white h-full">
+    <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Welcome to UpskillLab!</h2>
+    <p className="text-sm sm:text-md font-bold mb-4 sm:mb-6" >You're about to embark on a transformational journey. Here’s what makes our programs stand out.</p>
+    <div className="space-y-6">
+      <div className="flex items-start">
+        <div className="bg-[#FF7426] p-2 rounded-full mr-4 mt-1">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <h3 className="font-semibold text-base sm:text-lg">Personalized Instruction</h3>
+          <p className="text-gray-300 mt-1 text-sm sm:text-base">
+            Tailored to your pace and goals
+          </p>
+        </div>
+      </div>
 
-                <div className="flex items-start">
-                  <div className="bg-[#FF7426] p-2 rounded-full mr-4 mt-1">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Hands-on Projects</h3>
-                    <p className="text-gray-300 mt-1">Build portfolio-worthy projects that demonstrate your skills</p>
-                  </div>
-                </div>
+      <div className="flex items-start">
+        <div className="bg-[#FF7426] p-2 rounded-full mr-4 mt-1">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <h3 className="font-semibold text-base sm:text-lg">Interactive Learning</h3>
+          <p className="text-gray-300 mt-1 text-sm sm:text-base">
+            Using Python, SQL, Tableau, and more
+          </p>
+        </div>
+      </div>
 
-                <div className="flex items-start">
-                  <div className="bg-[#FF7426] p-2 rounded-full mr-4 mt-1">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Career Support</h3>
-                    <p className="text-gray-300 mt-1">Get resume reviews, interview prep, and job search assistance</p>
-                  </div>
-                </div>
+      <div className="flex items-start">
+        <div className="bg-[#FF7426] p-2 rounded-full mr-4 mt-1">
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <div>
+          <h3 className="font-semibold text-base sm:text-lg">Job-Ready Certification</h3>
+          <p className="text-gray-300 mt-1 text-sm sm:text-base">
+            A step-by-step path to becoming a certified professional
+          </p>
+        </div>
+      </div>
 
-                <div className="flex items-start">
-                  <div className="bg-[#FF7426] p-2 rounded-full mr-4 mt-1">
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-lg">Flexible Learning</h3>
-                    <p className="text-gray-300 mt-1">Study at your own pace with our online platform</p>
-                  </div>
-                </div>
-              </div>
+      <div>
+        <p className="text-gray-300 text-sm sm:text-base">
+          Whether your goal is to become a Data Analyst, build AI solutions, or grow your tech
+          expertise — we’re here to support every step.
+        </p>
+      </div>
+    </div>
 
-              <div className="mt-10 pt-6 border-t border-[#5A3A6B]">
-                <h3 className="font-bold text-lg mb-3">Have questions?</h3>
-                <p className="text-gray-300 mb-4">Contact our admissions team for more information</p>
-                <NavLink to="/ContactUs" ><button className="bg-[#FF7426] hover:bg-[#E5671D] text-white font-medium py-2 px-6 rounded-lg transition-all duration-300 cursor-pointer">
-                  Contact Us
-                </button>
-                </NavLink>
-              </div>
-            </div>
-          </motion.div>
+    <div className="mt-8 sm:mt-10 pt-4 sm:pt-6 border-t border-[#5A3A6B]">
+      <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-3">Have questions?</h3>
+      <p className="text-gray-300 mb-3 sm:mb-4 text-sm sm:text-base">
+        Contact our admissions team for more information
+      </p>
+      <NavLink to="/ContactUs">
+        <button className="bg-[#FF7426] hover:bg-[#E5671D] text-white font-medium py-2 px-4 sm:px-6 rounded-lg transition-all duration-300 cursor-pointer">
+          Contact Us
+        </button>
+      </NavLink>
+    </div>
+  </div>
+</motion.div>
 
 
           {/* Form Section */}

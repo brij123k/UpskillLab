@@ -1,176 +1,71 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { FiUser, FiAward, FiBriefcase, FiArrowRight } from "react-icons/fi"
 import MentorshipCard from './Mentorship';
-const OrangeCard = ({ title, description, image }) => {
-const [isHovered, setIsHovered] = useState(false);
-
-  return (
-    <motion.div
-      className="relative w-full h-full bg-white rounded-2xl overflow-hidden shadow-lg border border-gray-100"
-      initial={false}
-      whileHover="hover"
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      variants={{
-        hover: { y: -8 }
-      }}
-      transition={{ type: 'spring', stiffness: 300 }}
-    >
-      {/* Floating Orange Tag */}
-      <motion.div 
-        className="absolute top-4 right-4 z-10"
-        variants={{
-          hover: { rotate: 5, scale: 1.1 }
-        }}
-      >
-        <div className="px-3 py-1 bg-[#FF7426] text-white text-xs font-bold rounded-full shadow-md">
-          FEATURED
-        </div>
-      </motion.div>
-
-      {/* Image Container with Shine Effect */}
-      <div className="relative h-48 overflow-hidden">
-        <motion.img
-          src={image}
-          alt={title}
-          className="w-full h-full object-cover"
-          variants={{
-            hover: { scale: 1.1 }
-          }}
-          transition={{ duration: 0.5 }}
-        />
-        <motion.div 
-          className="absolute inset-0 bg-[#FF7426] opacity-0 mix-blend-overlay"
-          animate={{ opacity: isHovered ? 0.2 : 0 }}
-          transition={{ duration: 0.3 }}
-        />
-        <motion.div 
-          className="absolute inset-0 bg-gradient-to-t from-white/10 to-transparent"
-          animate={{ opacity: isHovered ? 1 : 0.5 }}
-          transition={{ duration: 0.3 }}
-        />
-      </div>
-
-      {/* Content Area */}
-      <div className="p-6">
-        <motion.div
-          className="w-12 h-1.5 bg-[#FF7426] mb-3 rounded-full"
-          variants={{
-            hover: { width: 24 }
-          }}
-          transition={{ duration: 0.3 }}
-        />
-        
-        <h3 className="text-xl font-bold text-gray-800 mb-2">{title}</h3>
-        <p className="text-gray-600 mb-6">{description}</p>
-
-        {/* Animated Button */}
-        <motion.div
-          className="overflow-hidden"
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ 
-            height: isHovered ? 'auto' : 0,
-            opacity: isHovered ? 1 : 0
-          }}
-          transition={{ type: 'spring', stiffness: 300 }}
-        >
-          <motion.button 
-            className="w-full py-3 px-6 bg-[#FF7426] hover:bg-[#e6691d] text-white font-medium rounded-lg flex items-center justify-center gap-2"
-            whileTap={{ scale: 0.95 }}
-          >
-            Learn More
-            <motion.svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              animate={{
-                x: isHovered ? [0, 4, 0] : 0
-              }}
-              transition={{
-                repeat: Infinity,
-                repeatType: 'loop',
-                duration: 1.5,
-                ease: 'easeInOut'
-              }}
-            >
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </motion.svg>
-          </motion.button>
-        </motion.div>
-      </div>
-
-      {/* Hover Border Effect */}
-      <motion.div 
-        className="absolute inset-0 border-2 border-[#FF7426] rounded-2xl pointer-events-none"
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ 
-          opacity: isHovered ? 0.3 : 0,
-          scale: isHovered ? 1 : 0.95
-        }}
-        transition={{ duration: 0.3 }}
-      />
-    </motion.div>
-  );
-};
+import { FiCode, FiBook, FiStar } from 'react-icons/fi'; // Added relevant icons
 
 const CardsContainer = () => {
   const features = [
-            {
-              title: "Dedicated Mentorship",
-              description: "Get dedicated mentorship on every step of learning...",
-              fullDescription: "For any  Data Science program,  dedicated mentorship is an invaluable resource that can help students navigate the complexities of the field and accelerate their learning.  At Meritshot, students receive personalized guidance and support at every step of their educational journey from their mentors. This includes help with coursework, project development, career planning, and more. Our mentors offer insights into the industry, provide networking opportunities, and help students stay motivated and focused. By working closely with a mentor, students  deepen their understanding of various concepts and gain the practical skills they need to succeed in the field.  Enrolling in any data science program can be a challenging and rewarding experience, but it can also be overwhelming at times. That's why having access to dedicated mentorship can make a significant difference in your learning journey.",
-              icon: <FiUser />,
-              image: "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-              modalData: {
-                details: "Includes weekly 1:1 sessions, progress tracking, and Q&A support.",
-                pricing: "$99/month",
-                // Add more fields
-              }
-            },
-            {
-              title: "Personalized Evaluation",
-              description: "Get personalized evaluation on every assignment...",
-              fullDescription: "Learners at Meritshot receive personalized evaluation from domain experts on their assignments and projects. By having your work evaluated by experts in the field, you can gain insights into how to improve your skills and enhance your understanding of the concepts being taught. Domain experts  provide you with feedback on your data analysis techniques, programming skills, and overall project organization. They  also help you identify areas where you need to improve and suggest resources to help you do so. Ultimately, personalized evaluation from the domain experts at Meritshot helps you in your quest to become a more proficient data scientist and prepare you for a successful career in the field.",
-              icon: <FiAward />,
-              image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-              modalData: {
-                details: "Expert feedback on projects, code reviews, and career guidance.",
-                pricing: "Included in program",
-              }
-            },
-            {
-              title: "360° Career Support",
-              description:
-                "Our Data Science PG Program offers 100 percent Placement Assurance.",
-                fullDescription:"Our Data Science PG Program offers 100 percent Placement Assurance. This means that upon successfully completing the program, you may secure a job in this field. This assurance provides you with confidence and security as you embark on your journey in Data Science, knowing that your hardwork and dedication during the program will pay off with a Job Offer in your hand upon completion. Our Career Support Team works tireleslly to help learners get the right kind of according to their interests and prefernces.",
-              icon: <FiBriefcase />,
-              image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            }
+    {
+      title: 'Future-Ready Skills Start Here!',
+      description:
+        'Welcome to UpskillLab, your one-stop destination to...',
+      fullDescription:
+        'Welcome to UpskillLab, your one-stop destination to prepare for the future. We offer cutting-edge training, reskilling, and upskilling in the most in-demand domains such as Artificial Intelligence (AI), Data Science, Python, Excel, and beyond. Whether you’re a student aiming to upskill for free, a working professional exploring blended learning models, or an ambitious individual looking to fast-track your career, we’ve got a curated path for you. Join us and take charge of your career with expert-led programs, real-world projects, and industry recognition.',
+      image:
+        'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
+      icon: <FiCode />, // Icon for tech skills (AI, Data Science, Python)
+      modalData: {
+        details:
+          'Includes expert-led programs, real-world projects, and industry-recognized certifications.',
+        pricing: 'Free for students, subscriptions from $49/month',
+      },
+    },
+    {
+      title: 'Redefine Learning. Reimagine Careers.',
+      description:
+        'UpskillLab blends personalized, community-driven learning with....',
+      fullDescription:
+        'At UpskillLab, we believe in transformative education. Our approach blends personalized, community-driven learning, immersive and interactive content curated by domain experts, and differentiated instruction models that cater to diverse learning needs. Each course is designed with the perfect balance of academic theory and industry relevance, ensuring you’re not just learning — you’re becoming job-ready.',
+      image:
+        'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
+      icon: <FiBook />, // Icon for learning and education
+      modalData: {
+        details:
+          'Personalized learning paths, interactive content, and job-ready skills training.',
+        pricing: 'Included in premium plans',
+      },
+    },
+    {
+      title: 'Where Passion Meets Profession',
+      description:
+        'Turn your passion into a profession with focused...',
+      fullDescription:
+        'Turn your passion into a profession with UpskillLab. Explore focused learning paths in Python Programming, Excel for Business, Data Visualization with Power BI, and Foundational to Advanced Data Science. Join our digital academy today and step into a future where your skills unlock the door to limitless professional opportunities.',
+      image:
+        'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
+      icon: <FiStar />, // Icon for passion and achievement
+      modalData: {
+        details:
+          'Focused courses in Python, Excel, Power BI, and Data Science with industry recognition.',
+        pricing: 'From $29/month',
+      },
+    },
   ];
 
   return (
     <div className="max-w-7xl mx-auto mt-10">
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.8 }}
-    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-  >
-    {/* Always render all items but hide some on mobile */}
-    {features.map((feature, index) => (
-      <div 
-        key={index}
-        className={`${index >= 3 ? 'hidden md:block' : ''}`}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
       >
-        <MentorshipCard {...feature} />
-      </div>
-    ))}
-  </motion.div>
-</div>
+        {features.map((feature, index) => (
+          <div key={index} className={`${index >= 3 ? 'hidden md:block' : ''}`}>
+            <MentorshipCard {...feature} />
+          </div>
+        ))}
+      </motion.div>
+    </div>
   );
 };
 
