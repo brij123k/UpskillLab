@@ -932,201 +932,125 @@ const TeachingPlan = ({ course }) => {
 };
 
 const CareerDevelopmentTrack = ({ course }) => {
-    const ref = React.useRef(null);
-    const isInView = useInView(ref, { once: true, amount: 0.2 });
-
-    // Matching Pregrad's data structure
     const careerData = course.careerData || [
-        {
-            icon: <FiBriefcase className="text-4xl text-[#FF7426]" />,
-            title: "Upskilllab Career Assist",
-            items: [
-                "Mentoring from industry experts",
-                "Career-specific resume tailoring",
-                "1:1 career guidance sessions"
-            ]
-        },
-        {
-            icon: <FiAward className="text-4xl text-[#4D2C5E]" />,
-            title: "Personal Branding",
-            items: [
-                "Build and showcase your skills in public",
-                "Strategic LinkedIn profiling",
-                "GitHub portfolio development"
-            ]
-        },
-        {
-            icon: <FiUsers className="text-4xl text-[#FF7426]" />,
-            title: "Community Sessions",
-            items: [
-                "Strengthen communication skills",
-                "Improve presentation techniques",
-                "Group discussion practice"
-            ]
-        },
-        {
-            icon: <FiBarChart2 className="text-4xl text-[#4D2C5E]" />,
-            title: "Interview Preparation",
-            items: [
-                "Mock interview sessions",
-                "Group discussion simulations",
-                "Art of salary negotiation"
-            ]
-        },
-        {
-            icon: <FiBook className="text-4xl text-[#FF7426]" />,
-            title: "Domain Workshops",
-            items: [
-                "Masterclasses from industry professionals",
-                "HR interview preparation sessions",
-                "Technical deep-dive workshops"
-            ]
-        },
-        {
-            icon: <FiFlag className="text-4xl text-[#4D2C5E]" />,
-            title: "Career Kick-start",
-            items: [
-                "Internship application assistance",
-                "Freelance opportunity guidance",
-                "Final year placement support"
-            ]
-        }
+      {
+        icon: <FiBriefcase className="text-4xl text-[#FF7426]" />,
+        title: "Upskilllab Career Assist",
+        items: [
+          "Mentoring from industry experts",
+          "Career-specific resume tailoring",
+          "1:1 career guidance sessions",
+        ],
+      },
+      {
+        icon: <FiAward className="text-4xl text-[#4D2C5E]" />,
+        title: "Personal Branding",
+        items: [
+          "Build and showcase your skills in public",
+          "Strategic LinkedIn profiling",
+          "GitHub portfolio development",
+        ],
+      },
+      {
+        icon: <FiUsers className="text-4xl text-[#FF7426]" />,
+        title: "Community Sessions",
+        items: [
+          "Strengthen communication skills",
+          "Improve presentation techniques",
+          "Group discussion practice",
+        ],
+      },
+      {
+        icon: <FiBarChart2 className="text-4xl text-[#4D2C5E]" />,
+        title: "Interview Preparation",
+        items: [
+          "Mock interview sessions",
+          "Group discussion simulations",
+          "Art of salary negotiation",
+        ],
+      },
+      {
+        icon: <FiBook className="text-4xl text-[#FF7426]" />,
+        title: "Domain Workshops",
+        items: [
+          "Masterclasses from industry professionals",
+          "HR interview preparation sessions",
+          "Technical deep-dive workshops",
+        ],
+      },
+      {
+        icon: <FiFlag className="text-4xl text-[#4D2C5E]" />,
+        title: "Career Kick-start",
+        items: [
+          "Internship application assistance",
+          "Freelance opportunity guidance",
+          "Final year placement support",
+        ],
+      },
     ];
-
+  
     return (
-        <section
-            ref={ref}
-            className="w-full py-10 relative overflow-hidden"
-            style={{ background: 'linear-gradient(to bottom, #F9F9FF 0%, #FFFFFF 100%)' }}
-        >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                {/* Animated header */}
-                <motion.div
-                    initial={{ opacity: 0, y: -30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.3 }} // Reduced from 0.6
-                    className="text-center mb-20"
-                >
-                    <motion.h2
-                        className="text-4xl font-bold text-[#4D2C5E] mb-4 relative inline-block"
+      <section
+        className="w-full py-10 relative overflow-hidden"
+        style={{ background: 'linear-gradient(to bottom, #F9F9FF 0%, #FFFFFF 100%)' }}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl font-bold text-[#4D2C5E] mb-4 relative inline-block">
+              Career Development Track
+              <span className="absolute bottom-0 left-0 w-full h-1.5 bg-[#FF7426] rounded-full" />
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Comprehensive career support to launch your tech career
+            </p>
+          </div>
+  
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {careerData.map((item, index) => (
+              <div key={index} className="relative group">
+                <div className="absolute -inset-2 rounded-xl bg-gradient-to-br from-[#FF7426]/10 to-[#4D2C5E]/10 opacity-0 group-hover:opacity-100 blur-md transition-all duration-150" />
+  
+                <div className="relative bg-white rounded-xl p-8 h-full border border-[#4D2C5E]/10 transition-all duration-150 group-hover:border-transparent group-hover:bg-white/95 z-10 shadow-lg">
+                  <div className="flex flex-col items-center text-center h-full">
+                    <div
+                      className="w-20 h-20 rounded-full mb-6 flex items-center justify-center"
+                      style={{
+                        backgroundColor: `${index % 2 ? '#4D2C5E' : '#FF7426'}10`,
+                        color: index % 2 ? '#4D2C5E' : '#FF7426',
+                      }}
                     >
-                        Career Development Track
-                        <motion.span
-                            initial={{ scaleX: 0 }}
-                            animate={isInView ? { scaleX: 1 } : {}}
-                            transition={{ delay: 0.15, duration: 0.4 }} // Reduced from 0.3, 0.8
-                            className="absolute bottom-0 left-0 w-full h-1.5 bg-[#FF7426] rounded-full"
-                        />
-                    </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={isInView ? { opacity: 1 } : {}}
-                        transition={{ delay: 0.25 }} // Reduced from 0.5
-                        className="text-lg text-gray-600 max-w-2xl mx-auto"
-                    >
-                        Comprehensive career support to launch your tech career
-                    </motion.p>
-                </motion.div>
-
-                {/* Career cards grid */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={isInView ? { opacity: 1 } : {}}
-                    transition={{ staggerChildren: 0.25, delayChildren: 0.15 }} // Reduced from 0.5, 0.3
-                    className="grid grid-cols-1 md:grid-cols-2 gap-10"
-                >
-                    {careerData.map((item, index) => (
-                        <motion.div
-                            key={index}
-                            initial={{ y: 50, opacity: 0, rotate: 1 }}
-                            animate={isInView ? { y: 0, opacity: 1, rotate: 0 } : {}}
-                            transition={{
-                                type: "spring",
-                                stiffness: 100,
-                                damping: 10,
-                                delay: index * 0.075 // Reduced from 0.15
-                            }}
-                            whileHover={{
-                                y: -10,
-                                boxShadow: "0 15px 30px rgba(77, 44, 94, 0.15)"
-                            }}
-                            className="relative group"
+                      <div className="text-4xl">{item.icon}</div>
+                    </div>
+  
+                    <h3 className="text-2xl font-bold text-[#4D2C5E] mb-6">
+                      {item.title}
+                    </h3>
+  
+                    <ul className="space-y-4 flex-1 w-full px-4">
+                      {item.items.map((point, i) => (
+                        <li
+                          key={i}
+                          className="text-gray-700 flex items-start text-left"
                         >
-                            {/* Floating card background */}
-                            <motion.div
-                                initial={{ scale: 0.9, opacity: 0 }}
-                                animate={isInView ? { scale: 1, opacity: 1 } : {}}
-                                transition={{ delay: index * 0.075 + 0.15 }} // Reduced from 0.15 + 0.3
-                                className="absolute -inset-2 rounded-xl bg-gradient-to-br from-[#FF7426]/10 to-[#4D2C5E]/10 opacity-0 group-hover:opacity-100 blur-md transition-all duration-150" // Reduced from 300
-                            />
-
-                            {/* Main card */}
-                            <motion.div
-                                className="relative bg-white rounded-xl p-8 h-full border border-[#4D2C5E]/10 transition-all duration-150 group-hover:border-transparent group-hover:bg-white/95 z-10 shadow-lg" // Reduced from 300
-                            >
-                                <div className="flex flex-col items-center text-center h-full">
-                                    {/* Animated icon */}
-                                    <motion.div
-                                        initial={{ scale: 0 }}
-                                        animate={isInView ? { scale: 1 } : {}}
-                                        transition={{ delay: index * 0.075 + 0.2 }} // Reduced from 0.15 + 0.4
-                                        whileHover={{
-                                            rotate: [0, 10, -5, 0],
-                                            scale: [1, 1.1, 1.05, 1]
-                                        }}
-                                        className="w-20 h-20 rounded-full mb-6 flex items-center justify-center"
-                                        style={{
-                                            backgroundColor: `${index % 2 ? '#4D2C5E' : '#FF7426'}10`,
-                                            color: index % 2 ? '#4D2C5E' : '#FF7426'
-                                        }}
-                                    >
-                                        <div className="text-4xl">
-                                            {item.icon}
-                                        </div>
-                                    </motion.div>
-
-                                    <motion.h3
-                                        initial={{ y: 10, opacity: 0 }}
-                                        animate={isInView ? { y: 0, opacity: 1 } : {}}
-                                        transition={{ delay: index * 0.075 + 0.25 }} // Reduced from 0.15 + 0.5
-                                        className="text-2xl font-bold text-[#4D2C5E] mb-6"
-                                    >
-                                        {item.title}
-                                    </motion.h3>
-
-                                    <motion.ul
-                                        initial={{ opacity: 0 }}
-                                        animate={isInView ? { opacity: 1 } : {}}
-                                        transition={{ staggerChildren: 0.05, delayChildren: index * 0.075 + 0.3 }} // Reduced from 0.1, 0.15 + 0.6
-                                        className="space-y-4 flex-1 w-full px-4"
-                                    >
-                                        {item.items.map((point, i) => (
-                                            <motion.li
-                                                key={i}
-                                                initial={{ x: -20, opacity: 0 }}
-                                                animate={isInView ? { x: 0, opacity: 1 } : {}}
-                                                transition={{ delay: index * 0.075 + 0.3 + i * 0.05 }} // Reduced from 0.15 + 0.6 + i * 0.1
-                                                whileHover={{ x: 5 }}
-                                                className="text-gray-700 flex items-start text-left"
-                                            >
-                                                <motion.span
-                                                    className="w-3 h-3 rounded-full mt-1.5 mr-3 flex-shrink-0"
-                                                    style={{ backgroundColor: index % 2 ? '#4D2C5E' : '#FF7426' }}
-                                                />
-                                                <span>{point}</span>
-                                            </motion.li>
-                                        ))}
-                                    </motion.ul>
-                                </div>
-                            </motion.div>
-                        </motion.div>
-                    ))}
-                </motion.div>
-            </div>
-        </section>
+                          <span
+                            className="w-3 h-3 rounded-full mt-1.5 mr-3 flex-shrink-0"
+                            style={{
+                              backgroundColor: index % 2 ? '#4D2C5E' : '#FF7426',
+                            }}
+                          />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     );
-};
-
+  };
 
 
 // Add this component after the CareerDevelopmentTrack section in your CourseDetails.js
