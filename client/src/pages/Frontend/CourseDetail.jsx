@@ -672,6 +672,7 @@ const TeachingPlan = ({ course }) => {
             window.alert("No brochure available for this course");
             return;
         }
+        
 
         // Create a direct link and let browser handle it
         const link = document.createElement("a");

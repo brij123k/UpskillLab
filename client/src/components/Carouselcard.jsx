@@ -333,7 +333,9 @@ const CarouselContainer = () => {
         throw new Error('Invalid API response structure');
       }
 
-      const newBanners = res.banners.map((item, index) => ({
+      const newBanners = res.banners
+      .filter(item => item.active) // Filter only active items
+      .map((item, index) => ({
         id: index + 1,
         heading: item.title || 'Default Heading',
         image: item.imageUrl || 'default-image.png',
