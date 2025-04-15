@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback,useEffect } from 'react';
 import { FiArrowRight, FiCheck, FiUser, FiMail, FiPhone, FiBookOpen, FiBriefcase } from 'react-icons/fi';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -12,10 +12,30 @@ import {
   validateStudentType
 } from '../Validations';
 import { toast } from "react-toastify";
-import { postDataHandler } from '../../config/services';
+import { postDataHandler, getDataHandler } from '../../config/services';
 const AdmissionFormModal = ({ isOpen, onClose }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [loader, setLoader] = useState(false);
+
+  const [courses, setCourses] = useState([]);
+    const handelCourses = async () => {
+      const res = await getDataHandler('courseDisplay');
+      if (res && res.data) {
+        const newCourses = res.data
+          .map((course, index) => ({
+            id: index + 1,
+            courseId: course._id,
+            courseCode: course.courseCode,
+            title: course.courseName,
+          }));
+        setCourses(newCourses);
+      }
+    };
+  
+    useEffect(() => {
+      handelCourses();
+    }, []);
+
   // Optimized validation schema
   const validationSchema = Yup.object().shape({
     fullName: Yup.string()
@@ -125,6 +145,7 @@ const AdmissionFormModal = ({ isOpen, onClose }) => {
             handleInputChange={handleInputChange}
             handleRadioChange={handleRadioChange}
             handleSelectChange={handleSelectChange}
+            courses={courses}
           />
         )}
       </AnimatePresence>
@@ -156,7 +177,7 @@ const SuccessMessage = () => (
 );
 
 // Form Content Component
-const FormContent = ({ formik, handleInputChange, handleRadioChange, handleSelectChange }) => (
+const FormContent = ({ formik, handleInputChange, handleRadioChange, handleSelectChange,courses   }) => (
   <motion.div
     key="form"
     initial={{ opacity: 0 }}
@@ -210,6 +231,7 @@ const FormContent = ({ formik, handleInputChange, handleRadioChange, handleSelec
       <CourseSelect 
         formik={formik}
         handleSelectChange={handleSelectChange}
+        courses={courses}
       />
 
       <StudentTypeRadio 
@@ -263,7 +285,7 @@ const FormInput = React.memo(({ icon, label, id, name, type, placeholder, formik
 ));
 
 // Course Select Component
-const CourseSelect = React.memo(({ formik, handleSelectChange }) => (
+const CourseSelect = React.memo(({ formik, handleSelectChange, courses }) => (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
@@ -288,10 +310,11 @@ const CourseSelect = React.memo(({ formik, handleSelectChange }) => (
         } focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent appearance-none bg-white`}
       >
         <option value="">Select a course</option>
-        <option value="web-development">Web Development</option>
-        <option value="data-science">Data Science</option>
-        <option value="ux-design">UX/UI Design</option>
-        <option value="digital-marketing">Digital Marketing</option>
+        {courses.map((course) => (
+          <option key={course.courseId} value={course.courseId}>
+            {course.title}
+          </option>
+        ))}
       </select>
     </div>
     {formik.errors.course && formik.touched.course && (

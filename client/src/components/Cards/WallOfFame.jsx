@@ -14,7 +14,9 @@ const WallOfFame = () => {
                   throw new Error('Invalid API response structure');
                 }
           
-                const newStory = res.stories.map((item, index) => ({
+                const newStory = res.stories
+                .filter(item=>item.wallOfFame===true)
+                .map((item, index) => ({
                   id: index + 1,
                   name: item.name || 'Unknown Name',
                   position: item.jobTitle || 'N/A',

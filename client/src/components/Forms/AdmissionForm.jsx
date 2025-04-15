@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect  } from 'react';
 import { FiArrowRight } from 'react-icons/fi';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -11,40 +11,59 @@ import {
   validateCourse,
   validateStudentType
 } from '../Validations';
-import { postDataHandler } from '../../config/services';
+import { postDataHandler, getDataHandler } from '../../config/services';
 import { toast } from "react-toastify";
 
 const AdmissionForm = () => {
   const [loader, setLoader] = useState(false);
+  const [courses, setCourses] = useState([]);
+  const handelCourses = async () => {
+    const res = await getDataHandler('courseDisplay');
+    if (res && res.data) {
+      const newCourses = res.data
+        .map((course, index) => ({
+          id: index + 1,
+          courseId: course._id,
+          courseCode: course.courseCode,
+          title: course.courseName,
+        }));
+      setCourses(newCourses);
+    }
+  };
+
+  useEffect(() => {
+    handelCourses();
+  }, []);
+
   // Form validation schema using external validators
   const validationSchema = Yup.object().shape({
     fullName: Yup.string()
       .required('Required')
-      .test('fullname-validation', function(value) {
+      .test('fullname-validation', function (value) {
         const error = validateFullName(value);
         return error ? this.createError({ message: error }) : true;
       }),
     email: Yup.string()
       .required('Required')
-      .test('email-validation', function(value) {
+      .test('email-validation', function (value) {
         const error = validateEmail(value);
         return error ? this.createError({ message: error }) : true;
       }),
     phone: Yup.string()
       .required('Required')
-      .test('phone-validation', function(value) {
+      .test('phone-validation', function (value) {
         const error = validatePhone(value);
         return error ? this.createError({ message: error }) : true;
       }),
     course: Yup.string()
       .required('Required')
-      .test('course-validation', function(value) {
+      .test('course-validation', function (value) {
         const error = validateCourse(value);
         return error ? this.createError({ message: error }) : true;
       }),
     studentType: Yup.string()
       .required('Please select a student type')
-      .test('student-type-validation', function(value) {
+      .test('student-type-validation', function (value) {
         const error = validateStudentType(value);
         return error ? this.createError({ message: error }) : true;
       })
@@ -56,7 +75,7 @@ const AdmissionForm = () => {
       const { fullName, email, phone, course, studentType } = values;
       let data = {
         fullName: fullName,
-         email: email,
+        email: email,
         phoneNumber: phone,
         course: course,
         experience: studentType
@@ -65,14 +84,14 @@ const AdmissionForm = () => {
       if (res) {
         toast.success('Demo session booked successfully!');
       }
-      
+
     } catch (error) {
       toast.error('Demo session booking Failed!');
-    } finally { 
+    } finally {
       setLoader(false);
     }
 
-   
+
 
 
 
@@ -99,7 +118,7 @@ const AdmissionForm = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -115,82 +134,82 @@ const AdmissionForm = () => {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Info Section */}
           <motion.div
-  initial={{ opacity: 0, x: 20 }}
-  animate={{ opacity: 1, x: 0 }}
-  transition={{ duration: 0.6, delay: 0.4 }}
-  className="w-full lg:w-1/2"
->
-  <div className="bg-gradient-to-br from-[#4D2C5E] to-[#2A1A3A] p-6 sm:p-8 rounded-xl text-white h-full">
-    <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Welcome to UpskillLab!</h2>
-    <p className="text-sm sm:text-md font-bold mb-4 sm:mb-6" >You're about to embark on a transformational journey. Here’s what makes our programs stand out.</p>
-    <div className="space-y-6">
-      <div className="flex items-start">
-        <div className="bg-[#FF7426] p-2 rounded-full mr-4 mt-1">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-        <div>
-          <h3 className="font-semibold text-base sm:text-lg">Personalized Instruction</h3>
-          <p className="text-gray-300 mt-1 text-sm sm:text-base">
-            Tailored to your pace and goals
-          </p>
-        </div>
-      </div>
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="w-full lg:w-1/2"
+          >
+            <div className="bg-gradient-to-br from-[#4D2C5E] to-[#2A1A3A] p-6 sm:p-8 rounded-xl text-white h-full">
+              <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Welcome to UpskillLab!</h2>
+              <p className="text-sm sm:text-md font-bold mb-4 sm:mb-6" >You're about to embark on a transformational journey. Here’s what makes our programs stand out.</p>
+              <div className="space-y-6">
+                <div className="flex items-start">
+                  <div className="bg-[#FF7426] p-2 rounded-full mr-4 mt-1">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-base sm:text-lg">Personalized Instruction</h3>
+                    <p className="text-gray-300 mt-1 text-sm sm:text-base">
+                      Tailored to your pace and goals
+                    </p>
+                  </div>
+                </div>
 
-      <div className="flex items-start">
-        <div className="bg-[#FF7426] p-2 rounded-full mr-4 mt-1">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-        <div>
-          <h3 className="font-semibold text-base sm:text-lg">Interactive Learning</h3>
-          <p className="text-gray-300 mt-1 text-sm sm:text-base">
-            Using Python, SQL, Tableau, and more
-          </p>
-        </div>
-      </div>
+                <div className="flex items-start">
+                  <div className="bg-[#FF7426] p-2 rounded-full mr-4 mt-1">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-base sm:text-lg">Interactive Learning</h3>
+                    <p className="text-gray-300 mt-1 text-sm sm:text-base">
+                      Using Python, SQL, Tableau, and more
+                    </p>
+                  </div>
+                </div>
 
-      <div className="flex items-start">
-        <div className="bg-[#FF7426] p-2 rounded-full mr-4 mt-1">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg>
-        </div>
-        <div>
-          <h3 className="font-semibold text-base sm:text-lg">Job-Ready Certification</h3>
-          <p className="text-gray-300 mt-1 text-sm sm:text-base">
-            A step-by-step path to becoming a certified professional
-          </p>
-        </div>
-      </div>
+                <div className="flex items-start">
+                  <div className="bg-[#FF7426] p-2 rounded-full mr-4 mt-1">
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-base sm:text-lg">Job-Ready Certification</h3>
+                    <p className="text-gray-300 mt-1 text-sm sm:text-base">
+                      A step-by-step path to becoming a certified professional
+                    </p>
+                  </div>
+                </div>
 
-      <div>
-        <p className="text-gray-300 text-sm sm:text-base">
-          Whether your goal is to become a Data Analyst, build AI solutions, or grow your tech
-          expertise — we’re here to support every step.
-        </p>
-      </div>
-    </div>
+                <div>
+                  <p className="text-gray-300 text-sm sm:text-base">
+                    Whether your goal is to become a Data Analyst, build AI solutions, or grow your tech
+                    expertise — we’re here to support every step.
+                  </p>
+                </div>
+              </div>
 
-    <div className="mt-8 sm:mt-10 pt-4 sm:pt-6 border-t border-[#5A3A6B]">
-      <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-3">Have questions?</h3>
-      <p className="text-gray-300 mb-3 sm:mb-4 text-sm sm:text-base">
-        Contact our admissions team for more information
-      </p>
-      <NavLink to="/ContactUs">
-        <button className="bg-[#FF7426] hover:bg-[#E5671D] text-white font-medium py-2 px-4 sm:px-6 rounded-lg transition-all duration-300 cursor-pointer">
-          Contact Us
-        </button>
-      </NavLink>
-    </div>
-  </div>
-</motion.div>
+              <div className="mt-8 sm:mt-10 pt-4 sm:pt-6 border-t border-[#5A3A6B]">
+                <h3 className="font-bold text-base sm:text-lg mb-2 sm:mb-3">Have questions?</h3>
+                <p className="text-gray-300 mb-3 sm:mb-4 text-sm sm:text-base">
+                  Contact our admissions team for more information
+                </p>
+                <NavLink to="/ContactUs">
+                  <button className="bg-[#FF7426] hover:bg-[#E5671D] text-white font-medium py-2 px-4 sm:px-6 rounded-lg transition-all duration-300 cursor-pointer">
+                    Contact Us
+                  </button>
+                </NavLink>
+              </div>
+            </div>
+          </motion.div>
 
 
           {/* Form Section */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -199,7 +218,7 @@ const AdmissionForm = () => {
           >
             <div className="bg-white p-8 rounded-xl shadow-md border border-gray-100">
               <h2 className="text-2xl font-bold text-[#4D2C5E] mb-6">Application Form</h2>
-              
+
               <form onSubmit={formik.handleSubmit} className="space-y-5">
                 {/* Full Name */}
                 <div>
@@ -275,10 +294,11 @@ const AdmissionForm = () => {
                     className={`w-full px-4 py-3 rounded-lg border ${formik.errors.course && formik.touched.course ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent`}
                   >
                     <option value="">Select a course</option>
-                    <option value="web-development">Web Development</option>
-                    <option value="data-science">Data Science</option>
-                    <option value="ux-design">UX/UI Design</option>
-                    <option value="digital-marketing">Digital Marketing</option>
+                    {courses.map((course) => (
+                      <option key={course.courseId} value={course.courseId}>
+                        {course.title}
+                      </option>
+                    ))}
                   </select>
                   {formik.errors.course && formik.touched.course && (
                     <div className="text-red-500 text-sm mt-1">{formik.errors.course}</div>
@@ -287,37 +307,37 @@ const AdmissionForm = () => {
 
                 {/* Student Type Checkboxes */}
                 <div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    I am a: <span className="text-[#FF7426]">*</span>
-  </label>
-  <div className="space-y-2">
-    <label className="flex items-center">
-      <input
-        type="radio"
-        name="studentType"
-        value="Fresher"
-        onChange={formik.handleChange}
-        checked={formik.values.studentType === 'Fresher'}
-        className="h-4 w-4 text-[#4D2C5E] focus:ring-[#FF7426] border-gray-300 rounded"
-      />
-      <span className="ml-2 text-gray-700">Fresher</span>
-    </label>
-    <label className="flex items-center">
-      <input
-        type="radio"
-        name="studentType"
-        value="Working Professional"
-        onChange={formik.handleChange}
-        checked={formik.values.studentType === 'Working Professional'}
-        className="h-4 w-4 text-[#4D2C5E] focus:ring-[#FF7426] border-gray-300 rounded"
-      />
-      <span className="ml-2 text-gray-700">Working Professional</span>
-    </label>
-  </div>
-  {formik.errors.studentType && (
-    <div className="text-red-500 text-sm mt-1">{formik.errors.studentType}</div>
-  )}
-</div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    I am a: <span className="text-[#FF7426]">*</span>
+                  </label>
+                  <div className="space-y-2">
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="studentType"
+                        value="Fresher"
+                        onChange={formik.handleChange}
+                        checked={formik.values.studentType === 'Fresher'}
+                        className="h-4 w-4 text-[#4D2C5E] focus:ring-[#FF7426] border-gray-300 rounded"
+                      />
+                      <span className="ml-2 text-gray-700">Fresher</span>
+                    </label>
+                    <label className="flex items-center">
+                      <input
+                        type="radio"
+                        name="studentType"
+                        value="Working Professional"
+                        onChange={formik.handleChange}
+                        checked={formik.values.studentType === 'Working Professional'}
+                        className="h-4 w-4 text-[#4D2C5E] focus:ring-[#FF7426] border-gray-300 rounded"
+                      />
+                      <span className="ml-2 text-gray-700">Working Professional</span>
+                    </label>
+                  </div>
+                  {formik.errors.studentType && (
+                    <div className="text-red-500 text-sm mt-1">{formik.errors.studentType}</div>
+                  )}
+                </div>
 
                 {/* Submit Button */}
                 <motion.button
@@ -332,7 +352,7 @@ const AdmissionForm = () => {
             </div>
           </motion.div>
 
-          
+
         </div>
       </div>
     </div>

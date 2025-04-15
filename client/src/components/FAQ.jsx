@@ -8,6 +8,33 @@ const FAQ = ({ faqs }) => {
         setOpenIndex(openIndex === index ? null : index);
     };
 
+    const formatAnswerHTML = (htmlString) => {
+        // Parse the HTML string into a document
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlString, 'text/html');
+        
+        // Apply styles to all h2 elements
+        const h2Elements = doc.querySelectorAll('h2');
+        h2Elements.forEach(h2 => {
+          h2.style.fontSize = '1.5rem';
+          h2.style.fontWeight = 'bold';
+          h2.style.margin = '1rem 0 0.5rem 0';
+          h2.style.color = '#4D2C5E';
+        });
+        
+        // Apply styles to all p elements
+        const pElements = doc.querySelectorAll('p');
+        pElements.forEach(p => {
+          p.style.fontSize = '1rem';
+          p.style.lineHeight = '1.6';
+          p.style.marginBottom = '1rem';
+          p.style.color = '#555';
+        });
+        
+        // Return the modified HTML
+        return doc.body.innerHTML;
+      };
+
     // Animation variants
     const containerVariants = {
         hidden: { opacity: 0 },
@@ -217,9 +244,14 @@ const FAQ = ({ faqs }) => {
                                             exit="exit"
                                             layout
                                         >
-                                            <div className="px-6 pb-6 pt-0">
-                                                <p className="text-gray-600">{faq.answer}</p>
-                                            </div>
+                                        <div className="px-6 pb-6 pt-0">
+  <div
+  className=""
+  dangerouslySetInnerHTML={{ __html: formatAnswerHTML(faq.answer) }}
+/>
+</div>
+
+
                                         </motion.div>
                                     )}
                                 </AnimatePresence>

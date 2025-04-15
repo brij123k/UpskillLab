@@ -11,6 +11,7 @@ import { getDataHandler } from "../../config/services";
 import { useLocation } from "react-router-dom";
 import BatchEnrollmentModal from "../../components/Modal/BatchEnrollmentModal";
 import ApiConfig from "../../config/apiConfig";
+import { toast } from "react-toastify";
 const bannerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -353,8 +354,11 @@ const CourseList = () => {
   const location = useLocation();
   const handleEnrollClick = async (course) => {
     // setSelectedCourse(course);
+    const today = new Date();
+   today.setHours(0, 0, 0, 0);
     const endpointUrl = ApiConfig.getCourseByCode(course.courseCode);
     const response = await getDataHandler(endpointUrl, null, null, true);
+    if (response.batch && new Date(response.batch.startDate) >= today) {
     let custemDataSet = {
       id: response.batch._id,
       batchCode: response.batch.batchCode,
@@ -370,6 +374,10 @@ const CourseList = () => {
       totalSeats: response.totalSeats,
     }
     setEnrollCourse(custemDataSet)
+  }
+  else{
+    toast.error("No available batches for this course")
+  }
     // setIsEnrollModalOpen(true);
   };
 
@@ -670,7 +678,10 @@ const CourseList = () => {
 
         {/* Courses Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses.map((course, index) => (
+          {courses
+          .filter(course => course.active === true)
+          .map((course, index) => (
+          
             <motion.div
               key={course._id}
               initial={{ opacity: 0, y: 20 }}

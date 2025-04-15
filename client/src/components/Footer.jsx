@@ -16,7 +16,7 @@ function Footer() {
               className="w-40 sm:w-48 md:w-52 lg:w-56 xl:w-60 mx-auto lg:mx-0"
             />
             <p className="text-[#606060] text-sm sm:text-base mt-4 sm:mt-6 mb-6 sm:mb-8 lg:mb-0 text-center lg:text-left">
-              Upskillab is the premier online platform for upskilling, offering industry-leading courses taught by expert instructors.
+              Empowering Students to reach there potential goal for next level challenge
             </p>
           </div>
 
@@ -27,10 +27,10 @@ function Footer() {
             <div className="text-center sm:text-left">
               <h3 className="text-[#00052E] text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Company</h3>
               <ul className="space-y-2 sm:space-y-3">
-                <li><NavLink to="#" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Home</NavLink></li>
+                <li><NavLink to="/" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Home</NavLink></li>
                 <li><NavLink to="/CourseList" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Popular Course</NavLink></li>
                 <li><NavLink to="/upcoming-batches/" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Latest Batches</NavLink></li>
-                <li><NavLink to="/BlogDetail" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Blog</NavLink></li>
+                <li><NavLink to="/Students-Blog" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Blog</NavLink></li>
               </ul>
             </div>
 

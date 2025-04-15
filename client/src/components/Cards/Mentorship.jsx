@@ -187,41 +187,6 @@ const MentorshipCard = ({ image, title,icon, description,modalData,fullDescripti
   
       </motion.div>
     )}
-
-    {/* Animated close indicator */}
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 1.2 }}
-      className="text-center mt-6"
-    >
-      <motion.div
-        animate={{
-          y: [0, -5, 0],
-        }}
-        transition={{
-          repeat: Infinity,
-          duration: 2,
-          ease: "easeInOut"
-        }}
-        className="inline-block"
-      >
-        <svg
-          className="w-6 h-6 text-[#4D2C5E]"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 14l-7 7m0 0l-7-7m7 7V3"
-          />
-        </svg>
-      </motion.div>
-      <p className="text-xs text-gray-400 mt-1">Scroll for more details</p>
-    </motion.div>
   </motion.div>
 </Modal>
     </>

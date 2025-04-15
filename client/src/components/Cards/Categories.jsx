@@ -97,7 +97,6 @@ useEffect(() => {
           ssr={true}
         >
         {categories.slice(0, 6).map((category, index) => (
-          console.log(category),
           <motion.div
             onClick={() => handleCategoryClick(category)}
             key={index}

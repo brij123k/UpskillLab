@@ -283,24 +283,24 @@ export const Btches = [
 
 export const Faqs = [
     {
-        question: "Can I download course materials for offline use?",
-        answer: "Yes, you can download course materials for offline use. Most platforms provide a download option for videos, PDFs, and other resources, but this depends on the course provider's settings. Check the course page for a download button or contact support if you don't see the option."
+        question: "Whats Upskillab Want to give you?",
+        answer: "At Counsel Hub - Upskillab, we are committed to empowering individuals through a unique blend of upskilling courses and well-being counselling. Our mission is to bridge the gap between career growth and personal well-being by offering cutting-edge online learning programs catering to professional development and mental health."
     },
     {
-        question: "How do I access my course after purchase?",
-        answer: "After purchasing a course, you can access it through your account dashboard. Log in to the platform, go to 'My Courses' or a similar section, and you'll find all your enrolled courses listed there."
+        question: "Why choose us for your education?",
+        answer: "\" We believe that true success comes from advancing your skills and nurturing your mental and emotional resilience. With a focus on holistic growth, our experts guide you through the challenges of today’s fast-paced world, ensuring that you are equipped with the tools to thrive both personally and professionally.\" Join us at Upskillab, where your success and wellbeing are our priority."
     },
     {
-        question: "Is there a refund policy?",
-        answer: "Yes, most platforms offer a refund policy, typically within 30 days of purchase, if you haven't completed a significant portion of the course. Check the platform's refund policy for specific details."
+      "question": "Only at Upskillab?",
+      "answer": "<h2>Mental Wellbeing Sessions<\/h2>\n    <p>The monthly sessions help manage stress, build resilience and maintain a healthy balance between personal and professional life, ensuring you achieve success while prospering holistically.<\/p>\n\n    <h2>Connect+<\/h2>\n    <p>Post-course career support for a full year after the course completion, ensuring continuous guidance and networking opportunities.<\/p>\n\n    <h2>24\/7 Access to Learning Coaches<\/h2>\n    <p>Unlike others, we provide round-the-clock access to expert mentors for doubt clarification, guidance, and continuous support throughout your learning journey.<\/p>\n\n    <h2>Industry-Sponsored Projects and Hackathons<\/h2>\n    <p>Collaborations with renowned companies to sponsor real-world projects and hackathons, enabling you to gain hands-on experience and industry exposure.<\/p>\n\n    <h2>Post-Course Certification Upgrade<\/h2>\n    <p>Free or discounted access to certification upgrades or new module enrollments, ensuring your skills remain relevant and up-to-date in a rapidly changing industry.<\/p>"
+  },
+    {
+        question: "Will i get a Certificate from Upskilllab after the course completion?",
+        answer: "Yes, Every candidate Who completes the program receives the course Certification. The students also receive Certificates from there capston projects."
     },
     {
-        question: "How do I access my course after purchase?",
-        answer: "After purchasing a course, you can access it through your account dashboard. Log in to the platform, go to 'My Courses' or a similar section, and you'll find all your enrolled courses listed there."
-    },
-    {
-        question: "Is there a refund policy?",
-        answer: "Yes, most platforms offer a refund policy, typically within 30 days of purchase, if you haven't completed a significant portion of the course. Check the platform's refund policy for specific details."
+        question: "How to get placements and job assistance?",
+        answer: "<h2>Placements and Assistance: </h2> <p>Enroll in our job Assistance Courses, inclusive of resume building, mock interviews, job referrals, and job opportunities for eligible candidates.</p>"
     },
 ];
 

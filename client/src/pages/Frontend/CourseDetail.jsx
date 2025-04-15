@@ -3,7 +3,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { FiDownload, FiHelpCircle, FiFilm, FiCode } from 'react-icons/fi';
 import { useParams } from 'react-router-dom';
 import { FiClock, FiMonitor, FiCalendar, FiBook } from 'react-icons/fi';
-import { FiUsers, FiAlertCircle, FiMessageSquare ,FiCompass,FiDollarSign} from 'react-icons/fi';
+import { FiUsers, FiAlertCircle, FiMessageSquare, FiCompass, FiDollarSign } from 'react-icons/fi';
 import { FiAward, FiBriefcase, FiCheck, FiTrendingUp } from 'react-icons/fi';
 import PurchaseModal from '../../components/Modal/EnrollmentModal';
 import { FiFlag } from 'react-icons/fi';
@@ -192,6 +192,27 @@ const CourseKeyDetails = ({ course }) => {
         }
     };
 
+    const getBatchStatus = (startDate) => {
+        if (!startDate) return "Coming Soon";
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const batchDate = new Date(startDate);
+        const oneWeekFromNow = new Date();
+        oneWeekFromNow.setDate(today.getDate() + 7);
+      
+        if (batchDate < today) {
+          return "Batch Started • Next Batch Coming Soon";
+        }
+        if (batchDate.toDateString() === today.toDateString()) {
+          return "Starting Today!";
+        }
+        if (batchDate <= oneWeekFromNow) {
+          return `Starting on (${batchDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})`;
+        }
+        return `Starts ${batchDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+      };
+
     const details = [
         {
             icon: <FiClock />,
@@ -222,19 +243,12 @@ const CourseKeyDetails = ({ course }) => {
             bg: "#4D2C5E"
         },
         {
-            icon: <FiCalendar />,
-            label: "STARTING",
-            value: course?.startDate
-                ? new Date(course.startDate).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                })
-                : "Coming Soon",
-
-            accent: "#4D2C5E",
-            bg: "#FF7426"
-        },
+  icon: <FiCalendar />,
+  label: "BATCH STATUS",
+  value: getBatchStatus(course?.startDate),
+  accent: "#4D2C5E",
+  bg: "#FF7426"
+}
     ];
 
     return (
@@ -381,6 +395,7 @@ const CourseKeyDetails = ({ course }) => {
 
 const ProgramInfoWithEnroll = ({ course }) => {
     const batchCode = course.batchId;
+    const startDate = course.startDate;
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
     const handleEnrollClick = (course) => {
@@ -606,27 +621,54 @@ const ProgramInfoWithEnroll = ({ course }) => {
                                         if (batchCode === "0") {
                                             toast.error("No available batches for this course");
                                         } else {
-                                            handleEnrollClick(course);
+                                            // Get today's date (normalized to start of day)
+                                            const today = new Date();
+                                            today.setHours(0, 0, 0, 0);
+
+                                            // Get batch start date (ensure it's a valid Date object)
+                                            const batchStartDate = new Date(startDate || 0);
+
+                                            if (batchStartDate >= today) {
+                                                handleEnrollClick(course);
+                                            } else {
+                                                toast.error("This batch has already started");
+                                            }
                                         }
                                     }}
                                     initial={{ scale: 0.9, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{ delay: 1.2 }}
-                                    whileHover={batchCode !== "0" ? {
-                                        scale: 1.05,
-                                        boxShadow: "0 10px 25px rgba(255, 116, 38, 0.4)"
-                                    } : {}}
-                                    whileTap={batchCode !== "0" ? { scale: 0.98 } : {}}
-                                    className={`w-full text-white font-bold py-4 px-6 rounded-lg shadow-lg relative overflow-hidden group ${batchCode === "0"
-                                        ? "bg-gray-400 cursor-not-allowed"
-                                        : "bg-gradient-to-r from-[#FF7426] to-[#FF9E5E]"
+                                    whileHover={
+                                        batchCode !== "0" && new Date(startDate || 0) >= new Date(new Date().setHours(0, 0, 0, 0))
+                                            ? {
+                                                scale: 1.05,
+                                                boxShadow: "0 10px 25px rgba(255, 116, 38, 0.4)"
+                                            }
+                                            : {}
+                                    }
+                                    whileTap={
+                                        batchCode !== "0" && new Date(startDate || 0) >= new Date(new Date().setHours(0, 0, 0, 0))
+                                            ? { scale: 0.98 }
+                                            : {}
+                                    }
+                                    className={`w-full text-white font-bold py-4 px-6 rounded-lg shadow-lg relative overflow-hidden group ${batchCode === "0" || (startDate && new Date(startDate) < new Date(new Date().setHours(0, 0, 0, 0)))
+                                            ? "bg-gray-400 cursor-not-allowed"
+                                            : "bg-gradient-to-r from-[#FF7426] to-[#FF9E5E]"
                                         }`}
-                                    disabled={batchCode === "0"}
+                                    disabled={
+                                        batchCode === "0" ||
+                                        (startDate && new Date(startDate) < new Date(new Date().setHours(0, 0, 0, 0)))
+  }
                                 >
                                     <span className="relative z-10">
-                                        {batchCode === "0" ? "NO BATCHES AVAILABLE" : "ENROLL NOW"}
+                                        {batchCode === "0"
+                                            ? "NO BATCHES AVAILABLE"
+                                            : (startDate && new Date(startDate) < new Date(new Date().setHours(0, 0, 0, 0)))
+                                                ? "BATCH STARTED"
+                                                : "ENROLL NOW"
+                                        }
                                     </span>
-                                    {batchCode !== "0" && (
+                                    {batchCode !== "0" && new Date(startDate || 0) >= new Date(new Date().setHours(0, 0, 0, 0)) && (
                                         <motion.span
                                             initial={{ x: '-100%' }}
                                             whileHover={{ x: '0%' }}
@@ -672,7 +714,7 @@ const TeachingPlan = ({ course }) => {
             window.alert("No brochure available for this course");
             return;
         }
-        
+
 
         // Create a direct link and let browser handle it
         const link = document.createElement("a");
@@ -934,124 +976,124 @@ const TeachingPlan = ({ course }) => {
 
 const CareerDevelopmentTrack = ({ course }) => {
     const careerData = course.careerData || [
-      {
-        icon: <FiBriefcase className="text-4xl text-[#FF7426]" />,
-        title: "Upskilllab Career Assist",
-        items: [
-          "Mentoring from industry experts",
-          "Career-specific resume tailoring",
-          "1:1 career guidance sessions",
-        ],
-      },
-      {
-        icon: <FiAward className="text-4xl text-[#4D2C5E]" />,
-        title: "Personal Branding",
-        items: [
-          "Build and showcase your skills in public",
-          "Strategic LinkedIn profiling",
-          "GitHub portfolio development",
-        ],
-      },
-      {
-        icon: <FiUsers className="text-4xl text-[#FF7426]" />,
-        title: "Community Sessions",
-        items: [
-          "Strengthen communication skills",
-          "Improve presentation techniques",
-          "Group discussion practice",
-        ],
-      },
-      {
-        icon: <FiBarChart2 className="text-4xl text-[#4D2C5E]" />,
-        title: "Interview Preparation",
-        items: [
-          "Mock interview sessions",
-          "Group discussion simulations",
-          "Art of salary negotiation",
-        ],
-      },
-      {
-        icon: <FiBook className="text-4xl text-[#FF7426]" />,
-        title: "Domain Workshops",
-        items: [
-          "Masterclasses from industry professionals",
-          "HR interview preparation sessions",
-          "Technical deep-dive workshops",
-        ],
-      },
-      {
-        icon: <FiFlag className="text-4xl text-[#4D2C5E]" />,
-        title: "Career Kick-start",
-        items: [
-          "Internship application assistance",
-          "Freelance opportunity guidance",
-          "Final year placement support",
-        ],
-      },
+        {
+            icon: <FiBriefcase className="text-4xl text-[#FF7426]" />,
+            title: "Upskilllab Career Assist",
+            items: [
+                "Mentoring from industry experts",
+                "Career-specific resume tailoring",
+                "1:1 career guidance sessions",
+            ],
+        },
+        {
+            icon: <FiAward className="text-4xl text-[#4D2C5E]" />,
+            title: "Personal Branding",
+            items: [
+                "Build and showcase your skills in public",
+                "Strategic LinkedIn profiling",
+                "GitHub portfolio development",
+            ],
+        },
+        {
+            icon: <FiUsers className="text-4xl text-[#FF7426]" />,
+            title: "Community Sessions",
+            items: [
+                "Strengthen communication skills",
+                "Improve presentation techniques",
+                "Group discussion practice",
+            ],
+        },
+        {
+            icon: <FiBarChart2 className="text-4xl text-[#4D2C5E]" />,
+            title: "Interview Preparation",
+            items: [
+                "Mock interview sessions",
+                "Group discussion simulations",
+                "Art of salary negotiation",
+            ],
+        },
+        {
+            icon: <FiBook className="text-4xl text-[#FF7426]" />,
+            title: "Domain Workshops",
+            items: [
+                "Masterclasses from industry professionals",
+                "HR interview preparation sessions",
+                "Technical deep-dive workshops",
+            ],
+        },
+        {
+            icon: <FiFlag className="text-4xl text-[#4D2C5E]" />,
+            title: "Career Kick-start",
+            items: [
+                "Internship application assistance",
+                "Freelance opportunity guidance",
+                "Final year placement support",
+            ],
+        },
     ];
-  
+
     return (
-      <section
-        className="w-full py-10 relative overflow-hidden"
-        style={{ background: 'linear-gradient(to bottom, #F9F9FF 0%, #FFFFFF 100%)' }}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl font-bold text-[#4D2C5E] mb-4 relative inline-block">
-              Career Development Track
-              <span className="absolute bottom-0 left-0 w-full h-1.5 bg-[#FF7426] rounded-full" />
-            </h2>
-            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Comprehensive career support to launch your tech career
-            </p>
-          </div>
-  
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-            {careerData.map((item, index) => (
-              <div key={index} className="relative group">
-                <div className="absolute -inset-2 rounded-xl bg-gradient-to-br from-[#FF7426]/10 to-[#4D2C5E]/10 opacity-0 group-hover:opacity-100 blur-md transition-all duration-150" />
-  
-                <div className="relative bg-white rounded-xl p-8 h-full border border-[#4D2C5E]/10 transition-all duration-150 group-hover:border-transparent group-hover:bg-white/95 z-10 shadow-lg">
-                  <div className="flex flex-col items-center text-center h-full">
-                    <div
-                      className="w-20 h-20 rounded-full mb-6 flex items-center justify-center"
-                      style={{
-                        backgroundColor: `${index % 2 ? '#4D2C5E' : '#FF7426'}10`,
-                        color: index % 2 ? '#4D2C5E' : '#FF7426',
-                      }}
-                    >
-                      <div className="text-4xl">{item.icon}</div>
-                    </div>
-  
-                    <h3 className="text-2xl font-bold text-[#4D2C5E] mb-6">
-                      {item.title}
-                    </h3>
-  
-                    <ul className="space-y-4 flex-1 w-full px-4">
-                      {item.items.map((point, i) => (
-                        <li
-                          key={i}
-                          className="text-gray-700 flex items-start text-left"
-                        >
-                          <span
-                            className="w-3 h-3 rounded-full mt-1.5 mr-3 flex-shrink-0"
-                            style={{
-                              backgroundColor: index % 2 ? '#4D2C5E' : '#FF7426',
-                            }}
-                          />
-                          <span>{point}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+        <section
+            className="w-full py-10 relative overflow-hidden"
+            style={{ background: 'linear-gradient(to bottom, #F9F9FF 0%, #FFFFFF 100%)' }}
+        >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div className="text-center mb-20">
+                    <h2 className="text-4xl font-bold text-[#4D2C5E] mb-4 relative inline-block">
+                        Career Development Track
+                        <span className="absolute bottom-0 left-0 w-full h-1.5 bg-[#FF7426] rounded-full" />
+                    </h2>
+                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                        Comprehensive career support to launch your tech career
+                    </p>
                 </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                    {careerData.map((item, index) => (
+                        <div key={index} className="relative group">
+                            <div className="absolute -inset-2 rounded-xl bg-gradient-to-br from-[#FF7426]/10 to-[#4D2C5E]/10 opacity-0 group-hover:opacity-100 blur-md transition-all duration-150" />
+
+                            <div className="relative bg-white rounded-xl p-8 h-full border border-[#4D2C5E]/10 transition-all duration-150 group-hover:border-transparent group-hover:bg-white/95 z-10 shadow-lg">
+                                <div className="flex flex-col items-center text-center h-full">
+                                    <div
+                                        className="w-20 h-20 rounded-full mb-6 flex items-center justify-center"
+                                        style={{
+                                            backgroundColor: `${index % 2 ? '#4D2C5E' : '#FF7426'}10`,
+                                            color: index % 2 ? '#4D2C5E' : '#FF7426',
+                                        }}
+                                    >
+                                        <div className="text-4xl">{item.icon}</div>
+                                    </div>
+
+                                    <h3 className="text-2xl font-bold text-[#4D2C5E] mb-6">
+                                        {item.title}
+                                    </h3>
+
+                                    <ul className="space-y-4 flex-1 w-full px-4">
+                                        {item.items.map((point, i) => (
+                                            <li
+                                                key={i}
+                                                className="text-gray-700 flex items-start text-left"
+                                            >
+                                                <span
+                                                    className="w-3 h-3 rounded-full mt-1.5 mr-3 flex-shrink-0"
+                                                    style={{
+                                                        backgroundColor: index % 2 ? '#4D2C5E' : '#FF7426',
+                                                    }}
+                                                />
+                                                <span>{point}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </section>
     );
-  };
+};
 
 
 // Add this component after the CareerDevelopmentTrack section in your CourseDetails.js
@@ -1220,184 +1262,238 @@ const CertificateSection = ({ course }) => {
 
 
 const PricingSection = ({ course }) => {
-  const batchCode = course.batchId;
-  const [selectedCourse, setSelectedCourse] = useState(null);
-  const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+    const batchCode = course.batchId;
+    const startDate = course.startDate;
+    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
 
-  const handleEnrollClick = (course) => {
-    setSelectedCourse(course);
-    setIsEnrollModalOpen(true);
-  };
+    const handleEnrollClick = (course) => {
+        setSelectedCourse(course);
+        setIsEnrollModalOpen(true);
+    };
 
-  const handleEnrollSubmit = () => {
-    setIsEnrollModalOpen(false);
-  };
+    const handleEnrollSubmit = () => {
+        setIsEnrollModalOpen(false);
+    };
 
-  return (
-    <motion.section
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, amount: 0.2 }}
-      className="w-full py-12 md:py-16 bg-gradient-to-b from-gray-50 to-white"
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Left Side - Pricing Info */}
-          <motion.div
-            initial={{ x: -30, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-6"
-          >
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold text-[#4D2C5E] mb-4">
-                Program Investment
-              </h2>
-              <div className="w-20 h-1 bg-orange-500 rounded-full" />
-            </div>
-
-            <div className="flex flex-col sm:flex-row sm:items-baseline gap-4">
-              <motion.span
-                initial={{ scale: 0.9, opacity: 0 }}
-                whileInView={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.2 }}
-                className="text-4xl md:text-5xl font-bold text-[#4D2C5E]"
-              >
-                ₹{course.discountedPrice?.toLocaleString('en-IN') || '20,060'}
-              </motion.span>
-              <span className="text-gray-500 text-sm">Including tax</span>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="flex items-start gap-3 p-4 bg-white rounded-lg shadow-sm border border-gray-100"
-            >
-              <FiAlertCircle className="text-xl text-orange-500 flex-shrink-0" />
-              <p className="text-gray-600 text-sm">
-                Non-refundable after 7 days of enrollment
-              </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-              className="hidden lg:block"
-            >
-              <img
-                src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
-                alt="Happy students"
-                className="rounded-lg shadow-md w-full h-64 object-cover"
-              />
-            </motion.div>
-          </motion.div>
-
-          {/* Right Side - Payment Features */}
-          <motion.div
-            initial={{ x: 30, opacity: 0 }}
-            whileInView={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="space-y-6"
-          >
-            <div className="bg-white rounded-lg shadow-md p-6 relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-purple-50 opacity-50" />
-              
-              <div className="relative space-y-6">
-                <h3 className="text-2xl font-semibold text-[#4D2C5E]">
-                  Affordable & Flexible
-                </h3>
-
-                <div className="space-y-4">
-                  <p className="text-gray-600 text-sm">
-                    Your investment in future skills includes:
-                  </p>
-                  
-                  <ul className="space-y-3">
-                    {[
-                      { text: "Certification upon completion", icon: FiAward },
-                      { text: "Dedicated mentor support", icon: FiBriefcase },
-                      { text: "Capstone project reviews", icon: FiAward },
-                      { text: "24/7 access to learning coaches", icon: FiBriefcase },
-                    ].map((item, index) => (
-                      <motion.li
-                        key={index}
-                        initial={{ x: 10, opacity: 0 }}
+    return (
+        <motion.section
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            className="w-full py-12 md:py-16 bg-gradient-to-b from-gray-50 to-white"
+        >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
+                    {/* Left Side - Pricing Info */}
+                    <motion.div
+                        initial={{ x: -30, opacity: 0 }}
                         whileInView={{ x: 0, opacity: 1 }}
-                        transition={{ delay: 0.2 + index * 0.1 }}
-                        className="flex items-center gap-3 text-gray-700 text-sm"
-                      >
-                        <item.icon className="text-orange-500 text-lg flex-shrink-0" />
-                        {item.text}
-                      </motion.li>
-                    ))}
-                  </ul>
-
-                  <div className="pt-4">
-  <p className="text-sm font-medium text-gray-700 mb-2">
-    Special Offers:
-  </p>
-  <ul className="space-y-3">
-    {[
-      { text: "Employee upskilling programs", icon: FiUsers },
-      { text: "Career transition bundles", icon: FiCompass },
-      { text: "Flexible EMI options", icon: FiDollarSign },
-    ].map((item, index) => (
-      <motion.li
-        key={index}
-        initial={{ x: 10, opacity: 0 }}
-        whileInView={{ x: 0, opacity: 1 }}
-        transition={{ delay: 0.4 + index * 0.1 }}
-        className="flex items-center gap-3 text-gray-700 text-sm"
-      >
-        <item.icon className="text-orange-500 text-lg flex-shrink-0" />
-        {item.text}
-      </motion.li>
-    ))}
-  </ul>
-</div>
-                </div>
-
-                <div className="pt-6 border-t border-gray-100">
-                  <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <img
-                      src="/images/Cashfree Payments.png"
-                      alt="Cashfree"
-                      className="h-10 opacity-80"
-                    />
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => handleEnrollClick(course)}
-                      className="w-full sm:w-auto bg-orange-500 text-white font-medium py-3 px-6 rounded-lg hover:bg-orange-600 transition-colors"
+                        transition={{ duration: 0.5 }}
+                        className="space-y-6"
                     >
-                      Enroll Now
-                    </motion.button>
-                  </div>
+                        <div>
+                            <h2 className="text-3xl md:text-4xl font-bold text-[#4D2C5E] mb-4">
+                                Program Investment
+                            </h2>
+                            <div className="w-20 h-1 bg-orange-500 rounded-full" />
+                        </div>
+
+                        <div className="flex flex-col sm:flex-row sm:items-baseline gap-4">
+                            <motion.span
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                whileInView={{ scale: 1, opacity: 1 }}
+                                transition={{ delay: 0.2 }}
+                                className="text-4xl md:text-5xl font-bold text-[#4D2C5E]"
+                            >
+                                ₹{course.discountedPrice?.toLocaleString('en-IN') || '20,060'}
+                            </motion.span>
+                            <span className="text-gray-500 text-sm">Including tax</span>
+                        </div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="flex items-start gap-3 p-4 bg-white rounded-lg shadow-sm border border-gray-100"
+                        >
+                            <FiAlertCircle className="text-xl text-orange-500 flex-shrink-0" />
+                            <p className="text-gray-600 text-sm">
+                                Non-refundable after 7 days of enrollment
+                            </p>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            transition={{ delay: 0.4 }}
+                            className="hidden lg:block"
+                        >
+                            <img
+                                src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+                                alt="Happy students"
+                                className="rounded-lg shadow-md w-full h-64 object-cover"
+                            />
+                        </motion.div>
+                    </motion.div>
+
+                    {/* Right Side - Payment Features */}
+                    <motion.div
+                        initial={{ x: 30, opacity: 0 }}
+                        whileInView={{ x: 0, opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                        className="space-y-6"
+                    >
+                        <div className="bg-white rounded-lg shadow-md p-6 relative overflow-hidden">
+                            <div className="absolute inset-0 bg-gradient-to-br from-orange-50 to-purple-50 opacity-50" />
+
+                            <div className="relative space-y-6">
+                                <h3 className="text-2xl font-semibold text-[#4D2C5E]">
+                                    Affordable & Flexible
+                                </h3>
+
+                                <div className="space-y-4">
+                                    <p className="text-gray-600 text-sm">
+                                        Your investment in future skills includes:
+                                    </p>
+
+                                    <ul className="space-y-3">
+                                        {[
+                                            { text: "Certification upon completion", icon: FiAward },
+                                            { text: "Dedicated mentor support", icon: FiBriefcase },
+                                            { text: "Capstone project reviews", icon: FiAward },
+                                            { text: "24/7 access to learning coaches", icon: FiBriefcase },
+                                        ].map((item, index) => (
+                                            <motion.li
+                                                key={index}
+                                                initial={{ x: 10, opacity: 0 }}
+                                                whileInView={{ x: 0, opacity: 1 }}
+                                                transition={{ delay: 0.2 + index * 0.1 }}
+                                                className="flex items-center gap-3 text-gray-700 text-sm"
+                                            >
+                                                <item.icon className="text-orange-500 text-lg flex-shrink-0" />
+                                                {item.text}
+                                            </motion.li>
+                                        ))}
+                                    </ul>
+
+                                    <div className="pt-4">
+                                        <p className="text-sm font-medium text-gray-700 mb-2">
+                                            Special Offers:
+                                        </p>
+                                        <ul className="space-y-3">
+                                            {[
+                                                { text: "Employee upskilling programs", icon: FiUsers },
+                                                { text: "Career transition bundles", icon: FiCompass },
+                                                { text: "Flexible EMI options", icon: FiDollarSign },
+                                            ].map((item, index) => (
+                                                <motion.li
+                                                    key={index}
+                                                    initial={{ x: 10, opacity: 0 }}
+                                                    whileInView={{ x: 0, opacity: 1 }}
+                                                    transition={{ delay: 0.4 + index * 0.1 }}
+                                                    className="flex items-center gap-3 text-gray-700 text-sm"
+                                                >
+                                                    <item.icon className="text-orange-500 text-lg flex-shrink-0" />
+                                                    {item.text}
+                                                </motion.li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div className="pt-6 border-t border-gray-100">
+                                    <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+                                        <img
+                                            src="/images/Cashfree Payments.png"
+                                            alt="Cashfree"
+                                            className="h-10 opacity-80"
+                                        />
+                                        <motion.button
+                                    onClick={() => {
+                                        if (batchCode === "0") {
+                                            toast.error("No available batches for this course");
+                                        } else {
+                                            // Get today's date (normalized to start of day)
+                                            const today = new Date();
+                                            today.setHours(0, 0, 0, 0);
+
+                                            // Get batch start date (ensure it's a valid Date object)
+                                            const batchStartDate = new Date(startDate || 0);
+
+                                            if (batchStartDate >= today) {
+                                                handleEnrollClick(course);
+                                            } else {
+                                                toast.error("This batch has already started");
+                                            }
+                                        }
+                                    }}
+                                    initial={{ scale: 0.9, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    transition={{ delay: 1.2 }}
+                                    whileHover={
+                                        batchCode !== "0" && new Date(startDate || 0) >= new Date(new Date().setHours(0, 0, 0, 0))
+                                            ? {
+                                                scale: 1.05,
+                                                boxShadow: "0 10px 25px rgba(255, 116, 38, 0.4)"
+                                            }
+                                            : {}
+                                    }
+                                    whileTap={
+                                        batchCode !== "0" && new Date(startDate || 0) >= new Date(new Date().setHours(0, 0, 0, 0))
+                                            ? { scale: 0.98 }
+                                            : {}
+                                    }
+                                    className={`w-full text-white font-bold py-4 px-6 rounded-lg shadow-lg relative overflow-hidden group ${batchCode === "0" || (startDate && new Date(startDate) < new Date(new Date().setHours(0, 0, 0, 0)))
+                                            ? "bg-gray-400 cursor-not-allowed"
+                                            : "bg-gradient-to-r from-[#FF7426] to-[#FF9E5E]"
+                                        }`}
+                                    disabled={
+                                        batchCode === "0" ||
+                                        (startDate && new Date(startDate) < new Date(new Date().setHours(0, 0, 0, 0)))
+  }
+                                >
+                                    <span className="relative z-10">
+                                        {batchCode === "0"
+                                            ? "NO BATCHES AVAILABLE"
+                                            : (startDate && new Date(startDate) < new Date(new Date().setHours(0, 0, 0, 0)))
+                                                ? "BATCH STARTED"
+                                                : "ENROLL NOW"
+                                        }
+                                    </span>
+                                    {batchCode !== "0" && new Date(startDate || 0) >= new Date(new Date().setHours(0, 0, 0, 0)) && (
+                                        <motion.span
+                                            initial={{ x: '-100%' }}
+                                            whileHover={{ x: '0%' }}
+                                            transition={{ duration: 0.4 }}
+                                            className="absolute inset-0 bg-[#E65100] z-0"
+                                        />
+                                    )}
+                                </motion.button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </motion.div>
                 </div>
-              </div>
             </div>
 
-
-          </motion.div>
-        </div>
-      </div>
-
-      {selectedCourse && (
-        <PurchaseModal
-          course={selectedCourse}
-          batchCode={batchCode}
-          isOpen={isEnrollModalOpen}
-          onClose={() => {
-            setIsEnrollModalOpen(false);
-            setSelectedCourse(null);
-          }}
-          onEnroll={handleEnrollSubmit}
-        />
-      )}
-    </motion.section>
-  );
+            {selectedCourse && (
+                <PurchaseModal
+                    course={selectedCourse}
+                    batchCode={batchCode}
+                    isOpen={isEnrollModalOpen}
+                    onClose={() => {
+                        setIsEnrollModalOpen(false);
+                        setSelectedCourse(null);
+                    }}
+                    onEnroll={handleEnrollSubmit}
+                />
+            )}
+        </motion.section>
+    );
 };
 
 

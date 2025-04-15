@@ -193,7 +193,13 @@ const UpcomingBatches = () => {
           </div>
         ) : (
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {batches.map((batch, index) => (
+            {batches
+            .filter(batch => {
+              // If batch has no active property, show it (true)
+              // If batch has active property, only show if active === true
+              return typeof batch.active === 'undefined' ? true : batch.active === true
+            })
+            .map((batch, index) => (
               <motion.div
                 key={batch.id}
                 variants={itemVariants}

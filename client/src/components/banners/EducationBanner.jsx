@@ -130,9 +130,8 @@ const EducationBanner = () => {
               )}
             </h2>
             <p className="text-lg text-gray-600">
-              Learn the latest skills quickly with a personalised curriculum
-              created to meet your needs.
-            </p>
+  {banner.descriptions ? banner.descriptions : "Learn the latest skills quickly with a personalized curriculum created to meet your needs."}
+</p>
             <div className="flex flex-col gap-4">
               <motion.button
                 variants={buttonVariants}
