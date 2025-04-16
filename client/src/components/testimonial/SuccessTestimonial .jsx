@@ -20,7 +20,7 @@ const SuccessTestimonial = () => {
           name: testimonial.name,
           email: testimonial.email || 'Not provided',
           role: 'Student',
-          image: `/images/Ellipse ${119 + index * 2}.png`,
+          image: testimonial.testimonialImageUrl ||`/images/default-profile.png`,
           quote: testimonial.description,
           facebook: testimonial.socialMediaLinks?.find(link => link.platform.toLowerCase() === 'facebook')?.url,
           twitter: testimonial.socialMediaLinks?.find(link => link.platform.toLowerCase() === 'twitter')?.url,
