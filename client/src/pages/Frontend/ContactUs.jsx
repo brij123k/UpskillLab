@@ -395,18 +395,18 @@ const ContactPage = () => {
       icon: <FaMapMarkerAlt />,
       title: "Our Location",
       info: "UpSkillLab Headquarters",
-      description: "123 Tech Park, Innovation Road, Bengaluru, Karnataka 560001, India"
+      description: "H-187, Lohia Rd, H Block, Sector 63, Noida, Uttar Pradesh 201301"
     },
     {
       icon: <FaPhone />,
       title: "Phone Number",
-      info: "+91 98765 43210",
+      info: "+91-9958958123",
       description: "Monday to Friday, 9am to 6pm IST"
     },
     {
       icon: <FaEnvelope />,
       title: "Email Address",
-      info: "contact@upskilllab.com",
+      info: "info@upskillab.com",
       description: "We'll respond within 24 hours"
     }
   ];

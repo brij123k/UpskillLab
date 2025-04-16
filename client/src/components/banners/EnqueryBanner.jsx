@@ -5,8 +5,10 @@ import { FiClock, FiUsers, FiArrowRight, FiBookmark } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 import { getDataHandler } from '../../config/services';
 import  { useState } from 'react';
+import AdmissionFormModal from "../Modal/BasicEnrollNowModal";
 const EnqueryBanner = () => {
   const [banner, setBanner] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const controls = useAnimation();
   const [ref, inView] = useInView({
     threshold: 0.1,
@@ -175,8 +177,8 @@ const EnqueryBanner = () => {
             className="flex flex-col sm:flex-row gap-4 pt-4"
             variants={itemVariants}
           >
-            <NavLink to="/Contactus">
             <motion.button
+            onClick={() => setIsModalOpen(true)}
               whileHover={{ 
                 scale: 1.05,
                 boxShadow: "0 10px 25px -5px rgba(255, 116, 38, 0.4)"
@@ -210,10 +212,13 @@ const EnqueryBanner = () => {
                 <FiArrowRight />
               </motion.div>
             </motion.button>
-            </NavLink>
           </motion.div>
         </motion.div>
       </div>
+      <AdmissionFormModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </motion.div>
   );
 };

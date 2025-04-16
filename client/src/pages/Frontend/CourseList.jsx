@@ -12,6 +12,7 @@ import { useLocation } from "react-router-dom";
 import BatchEnrollmentModal from "../../components/Modal/BatchEnrollmentModal";
 import ApiConfig from "../../config/apiConfig";
 import { toast } from "react-toastify";
+import AdmissionFormModal from "../../components/Modal/BasicEnrollNowModal";
 const bannerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -348,6 +349,7 @@ const LevelDropdownFilter = ({
 
 const CourseList = () => {
   const [batch, setbatch] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [enrollCourse, setEnrollCourse] = useState(null);
   // const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
   const navigate = useNavigate();
@@ -376,7 +378,7 @@ const CourseList = () => {
     setEnrollCourse(custemDataSet)
   }
   else{
-    toast.error("No available batches for this course")
+     setIsModalOpen(true)
   }
     // setIsEnrollModalOpen(true);
   };
@@ -868,6 +870,11 @@ const CourseList = () => {
           onClose={() => setEnrollCourse(null)}
         />
       )}
+
+<AdmissionFormModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
     </div>
   );
 };

@@ -159,7 +159,7 @@ const TrainingBanner = () => {
                   whileTap={{ scale: 0.95 }}
                   className="px-5 py-2.5 border-2 border-[#FF7426] text-[#FF7426] rounded-lg font-medium"
                 >
-                  Enrol Now
+                  Enroll Now
                 </motion.button>
               </motion.div>
             </motion.div>
