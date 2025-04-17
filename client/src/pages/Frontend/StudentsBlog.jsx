@@ -48,7 +48,7 @@ const BlogCard = ({
   });
  const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`/BlogDetail`,{ state: { id } });
+    navigate(`/BlogDetail/${id}`,{ state: { id } });
   }
   // Estimate read time (assuming 200 words per minute)
   const wordCount = content.split(/\s+/).length;

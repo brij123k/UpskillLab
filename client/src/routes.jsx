@@ -29,7 +29,7 @@ export const routes = [
   { exact: true, path: "/Success-stories", layout: GuestLayout, component: Success},
   { exact: true, path: "/upcoming-batches/", layout: GuestLayout, component: upcomingBatches},
   { exact: true, path: "/Students-Blog", layout: GuestLayout, component: StudentsBlog},
-  { exact: true, path: "/BlogDetail",layout:GuestLayout,component:BlogDetailPage},
+  { exact: true, path: "/BlogDetail/:id",layout:GuestLayout,component:BlogDetailPage},
   { exact: true, path: "/ContactUs", layout: GuestLayout, component: ContactUs},
   { exact: true, path: "/CourseList", layout: GuestLayout, component: CourseList},
   // { exact: true, path: "/CourseDetails/:id", layout: GuestLayout, component: CourseDetailsPage},
