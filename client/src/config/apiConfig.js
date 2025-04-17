@@ -1,4 +1,4 @@
-const url = "https://shark-app-ixo3s.ondigitalocean.app";
+const url = "https://api.upskillab.com";
 
 const ApiConfig = {
   url,
