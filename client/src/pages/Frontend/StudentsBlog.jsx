@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useMemo  } from 'react';
 import { motion } from 'framer-motion';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -10,6 +10,28 @@ import { getBlogs } from '../../config/services';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 // Blog Card Component
+
+const TruncatedHTML = ({ html, maxLength = 150 }) => {
+  const truncated = useMemo(() => {
+    if (html.length <= maxLength) return html;
+    
+    // Create temporary element to parse HTML
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+    
+    // Get text content and truncate
+    const text = temp.textContent || temp.innerText || '';
+    return `${text.substring(0, maxLength)}...`;
+  }, [html, maxLength]);
+
+  return (
+    <p 
+      className="text-sm text-gray-600 mb-4 flex-grow line-clamp-3"
+      dangerouslySetInnerHTML={{ __html: truncated }}
+    />
+  );
+};
+
 const BlogCard = ({
   id,
   title,
@@ -65,11 +87,7 @@ const BlogCard = ({
         <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2">{title}</h3>
 
         {/* Excerpt */}
-        <p className="text-sm text-gray-600 mb-4 flex-grow line-clamp-3">
-          {content.length > 150 
-            ? `${content.substring(0, 150)}...` 
-            : content}
-        </p>
+        <TruncatedHTML html={content} maxLength={150} />
 
         {/* Meta Info */}
         <div className="flex items-center justify-between text-xs text-gray-500 border-t border-gray-100 pt-3">
