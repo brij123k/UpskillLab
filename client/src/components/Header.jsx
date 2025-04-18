@@ -100,7 +100,7 @@ function Header() {
           <motion.div whileHover={{ scale: 1.05 }} className="flex-shrink-0">
             <img
               src="/images/Logo.png"
-              alt="Meritshot Logo"
+              alt="UpskillLab Logo"
               className="h-8 sm:h-10 lg:h-12 2xl:h-14 transition-all duration-200"
             />
           </motion.div>
