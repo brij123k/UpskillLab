@@ -311,7 +311,7 @@ const CourseSelect = React.memo(({ formik, handleSelectChange, courses }) => (
       >
         <option value="">Select a course</option>
         {courses.map((course) => (
-          <option key={course.courseId} value={course.courseId}>
+          <option key={course.title} value={course.title}>
             {course.title}
           </option>
         ))}

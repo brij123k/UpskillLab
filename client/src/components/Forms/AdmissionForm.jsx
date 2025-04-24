@@ -295,7 +295,7 @@ const AdmissionForm = () => {
                   >
                     <option value="">Select a course</option>
                     {courses.map((course) => (
-                      <option key={course.courseId} value={course.courseId}>
+                      <option key={course.title} value={course.title}>
                         {course.title}
                       </option>
                     ))}

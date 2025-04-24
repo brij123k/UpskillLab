@@ -1,13 +1,10 @@
 import { lazy } from "react";
 import GuestLayout from "./layout/GuestLayout";
 import TeacherPanelLayout from "./layout/TeacherPanelLayout";
-
 import StudentPanelLayout from "./layout/StudentPanelLayout";
 import { exact } from "prop-types";
-// import AccountLayout from "./layouts/GuestLayout/AccountLayout";
-// import Privacy from "./layouts/PrivacyLayout/Privacy";
 
-// Replace lazyImport function with direct lazy imports
+
 const Index = ({ children }) => {
   return (<>{children}</>)
 }
@@ -27,6 +24,7 @@ const NotFoundPage = lazy(() => import("./pages/NotFound"));
 const CourseDetailsPage = lazy(() => import("./pages/Frontend/CourseDetail"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+
 
 
 
