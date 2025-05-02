@@ -703,10 +703,11 @@ const ProgramInfoWithEnroll = ({ course }) => {
 const TeachingPlan = ({ course }) => {
     const ref = useRef(null);
     const isInView = useInView(ref, { once: false, amount: 0.1 });
-    const [expandedWeek, setExpandedWeek] = useState(0);
+    const [expandedSession, setExpandedSession] = useState(null);
     const [isDownloading, setIsDownloading] = useState(false);
-    const toggleWeek = (weekIndex) => {
-        setExpandedWeek(expandedWeek === weekIndex ? null : weekIndex);
+
+    const toggleSession = (sessionIndex) => {
+        setExpandedSession(expandedSession === sessionIndex ? null : sessionIndex);
     };
 
     const downloadBrochure = () => {
@@ -715,19 +716,17 @@ const TeachingPlan = ({ course }) => {
             return;
         }
 
-
-        // Create a direct link and let browser handle it
         const link = document.createElement("a");
         link.href = course.brochure;
-        link.setAttribute("download", ""); // Hint browser to download
-        link.setAttribute("target", "_blank"); // Optional: opens in new tab
+        link.setAttribute("download", "");
+        link.setAttribute("target", "_blank");
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     };
 
-    // Your actual data structure
-    const weeks = course.weeks;
+    // Flatten all sessions from all weeks into a single array
+    const allSessions = course.weeks.flatMap(week => week.sessions);
 
     return (
         <div ref={ref} className="w-full py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
@@ -753,7 +752,7 @@ const TeachingPlan = ({ course }) => {
                     duration: 3,
                     repeat: Infinity,
                     ease: "easeInOut",
-                    delay: 0.1 // Reduced from 0.2
+                    delay: 0.1
                 }}
                 className="absolute bottom-1/3 right-0 w-56 h-56 rounded-full bg-[#4D2C5E]/10 blur-xl"
             />
@@ -763,76 +762,76 @@ const TeachingPlan = ({ course }) => {
                 <motion.div
                     initial={{ opacity: 0, y: -30 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.15 }} // Reduced from 0.2
-                    className="text-center mb-12" // Reduced mb-16 to mb-12
+                    transition={{ duration: 0.15 }}
+                    className="text-center mb-12"
                 >
                     <motion.h2
                         className="text-4xl font-bold text-[#4D2C5E] mb-4 relative inline-block"
                     >
-                        Teaching Plan
+                        Course Sessions
                         <motion.span
                             initial={{ scaleX: 0 }}
                             animate={isInView ? { scaleX: 1 } : {}}
-                            transition={{ delay: 0.1, duration: 0.3 }} // Reduced delays
+                            transition={{ delay: 0.1, duration: 0.3 }}
                             className="absolute bottom-0 left-0 w-full h-1 bg-[#FF7426] rounded-full"
                         />
                     </motion.h2>
                     <motion.p
                         initial={{ opacity: 0 }}
                         animate={isInView ? { opacity: 1 } : {}}
-                        transition={{ delay: 0.15 }} // Reduced from 0.3
+                        transition={{ delay: 0.15 }}
                         className="text-lg text-gray-600 max-w-2xl mx-auto"
                     >
-                        Comprehensive roadmap for your learning journey
+                        Detailed breakdown of all learning sessions
                     </motion.p>
                 </motion.div>
 
-                {/* Accordion-style weeks */}
-                <div className="space-y-4"> {/* Reduced space-y-6 to space-y-4 */}
-                    {weeks.map((week, index) => (
+                {/* Sessions list */}
+                <div className="space-y-4">
+                    {allSessions.map((session, index) => (
                         <div key={index} className="overflow-hidden">
-                            {/* Week Header - Clickable */}
+                            {/* Session Header - Clickable */}
                             <motion.div
-                                className="flex justify-between items-center p-5 bg-white rounded-xl shadow-lg border border-[#4D2C5E]/10 cursor-pointer group" // Reduced p-6 to p-5
-                                onClick={() => toggleWeek(index)}
+                                className="flex justify-between items-center p-5 bg-white rounded-xl shadow-lg border border-[#4D2C5E]/10 cursor-pointer group"
+                                onClick={() => toggleSession(index)}
                                 whileHover={{
-                                    y: -2, // Reduced from -3
-                                    boxShadow: "0 8px 20px rgba(77, 44, 94, 0.1)" // Reduced shadow
+                                    y: -2,
+                                    boxShadow: "0 8px 20px rgba(77, 44, 94, 0.1)"
                                 }}
-                                initial={{ y: 20, opacity: 0 }} // Reduced y from 30
+                                initial={{ y: 20, opacity: 0 }}
                                 animate={isInView ? {
                                     y: 0,
                                     opacity: 1,
                                     transition: {
-                                        delay: index * 0.2, // Reduced from 0.5
+                                        delay: index * 0.1,
                                         type: "spring",
-                                        stiffness: 150, // Increased stiffness
+                                        stiffness: 150,
                                         damping: 10
                                     }
                                 } : {}}
                             >
-                                <div className="flex items-center gap-3"> {/* Reduced gap-4 to gap-3 */}
+                                <div className="flex items-center gap-3">
                                     <motion.span
-                                        whileHover={{ scale: 1.05 }} // Reduced from 1.1
-                                        className="px-4 py-1.5 bg-[#4D2C5E] text-white rounded-full font-bold shadow-md" // Reduced padding
+                                        whileHover={{ scale: 1.05 }}
+                                        className="px-4 py-1.5 bg-[#4D2C5E] text-white rounded-full font-bold shadow-md"
                                     >
-                                        {week.week}
+                                        Session {index + 1}
                                     </motion.span>
-                                    <h3 className="text-lg font-bold text-[#4D2C5E]"> {/* Reduced text-xl to text-lg */}
-                                        {week.sessions.length} {week.sessions.length > 1 ? "Sessions" : "Session"}
+                                    <h3 className="text-lg font-bold text-[#4D2C5E]">
+                                    {session.title.split(':').slice(1).join(':').trim()}
                                     </h3>
                                 </div>
                                 <motion.div
                                     animate={{
-                                        rotate: expandedWeek === index ? 180 : 0,
-                                        color: expandedWeek === index ? '#FF7426' : '#4D2C5E'
+                                        rotate: expandedSession === index ? 180 : 0,
+                                        color: expandedSession === index ? '#FF7426' : '#4D2C5E'
                                     }}
-                                    transition={{ duration: 0.2 }} // Reduced from 0.3
+                                    transition={{ duration: 0.2 }}
                                     className="text-[#4D2C5E] group-hover:text-[#FF7426]"
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        className="h-5 w-5" // Reduced from h-6 w-6
+                                        className="h-5 w-5"
                                         viewBox="0 0 20 20"
                                         fill="currentColor"
                                     >
@@ -841,90 +840,70 @@ const TeachingPlan = ({ course }) => {
                                 </motion.div>
                             </motion.div>
 
-                            {/* Week Content - Animated */}
+                            {/* Session Content - Animated */}
                             <AnimatePresence>
-                                {expandedWeek === index && (
+                                {expandedSession === index && (
                                     <motion.div
                                         initial={{ height: 0, opacity: 0 }}
                                         animate={{
                                             height: "auto",
                                             opacity: 1,
                                             transition: {
-                                                height: { duration: 0.15 }, // Reduced from 0.2
-                                                opacity: { duration: 0.1 } // Removed delay
+                                                height: { duration: 0.15 },
+                                                opacity: { duration: 0.1 }
                                             }
                                         }}
                                         exit={{
                                             height: 0,
                                             opacity: 0,
                                             transition: {
-                                                height: { duration: 0.15 }, // Reduced from 0.2
+                                                height: { duration: 0.15 },
                                                 opacity: { duration: 0.1 }
                                             }
                                         }}
                                         className="bg-white rounded-b-xl shadow-lg border-x border-b border-[#4D2C5E]/10"
                                     >
-                                        <div className="p-5 space-y-6"> {/* Reduced p-6 to p-5 */}
-                                            {week.sessions.map((session, sIndex) => (
-                                                <motion.div
-                                                    key={sIndex}
-                                                    className="border-b border-[#4D2C5E]/10 pb-6 last:border-0 last:pb-0" // Reduced pb-8 to pb-6
-                                                    initial={{ opacity: 0 }}
-                                                    animate={{ opacity: 1 }}
-                                                    transition={{ delay: sIndex * 0.05 + 0.1 }} // Reduced delays
-                                                >
-                                                    <h4 className="text-lg font-semibold text-[#4D2C5E] mb-3 flex items-center"> {/* Reduced text-xl to text-lg */}
-                                                        <motion.span
-                                                            className="w-3 h-3 bg-[#FF7426] rounded-full mr-2" // Reduced size
+                                        <div className="p-5">
+                                            <div>
+                                                <h5 className="text-md font-medium text-[#4D2C5E] mb-3">
+                                                    Topics Covered:
+                                                </h5>
+                                                <ul className="space-y-2 pl-5">
+                                                    {session.topics.map((topic, tIndex) => (
+                                                        <motion.li
+                                                            key={tIndex}
+                                                            className="flex items-start"
+                                                            initial={{ opacity: 0, x: -10 }}
                                                             animate={{
-                                                                scale: [1, 1.1, 1], // Reduced scale
-                                                                opacity: [0.7, 1, 0.7]
+                                                                opacity: 1,
+                                                                x: 0,
+                                                                transition: {
+                                                                    delay: tIndex * 0.05,
+                                                                    type: "spring",
+                                                                    stiffness: 150
+                                                                }
                                                             }}
-                                                            transition={{
-                                                                duration: 1.5, // Reduced from 2
-                                                                repeat: Infinity,
-                                                                delay: sIndex * 0.15 // Reduced from 0.3
-                                                            }}
-                                                        />
-                                                        {session.title}
-                                                    </h4>
-                                                    <ul className="space-y-2 pl-5"> {/* Reduced space-y-3 to space-y-2 */}
-                                                        {session.topics.map((topic, tIndex) => (
-                                                            <motion.li
-                                                                key={tIndex}
-                                                                className="flex items-start"
-                                                                initial={{ opacity: 0, x: -10 }} // Reduced x from -20
+                                                            whileHover={{ x: 3 }}
+                                                        >
+                                                            <motion.span
+                                                                className="w-1.5 h-1.5 bg-[#FF7426] rounded-full mt-2 mr-2 flex-shrink-0"
                                                                 animate={{
-                                                                    opacity: 1,
-                                                                    x: 0,
-                                                                    transition: {
-                                                                        delay: tIndex * 0.01 + sIndex * 0.05, // Reduced delays
-                                                                        type: "spring",
-                                                                        stiffness: 150 // Increased stiffness
-                                                                    }
+                                                                    scale: [1, 1.1, 1],
+                                                                    backgroundColor: ['#FF7426', '#4D2C5E', '#FF7426']
                                                                 }}
-                                                                whileHover={{ x: 3 }} // Reduced from 5
-                                                            >
-                                                                <motion.span
-                                                                    className="w-1.5 h-1.5 bg-[#FF7426] rounded-full mt-2 mr-2 flex-shrink-0" // Reduced size
-                                                                    animate={{
-                                                                        scale: [1, 1.1, 1], // Reduced scale
-                                                                        backgroundColor: ['#FF7426', '#4D2C5E', '#FF7426']
-                                                                    }}
-                                                                    transition={{
-                                                                        duration: 3, // Reduced from 4
-                                                                        repeat: Infinity,
-                                                                        delay: tIndex * 0.1 // Reduced from 0.2
-                                                                    }}
-                                                                />
-                                                                <span className="text-gray-700 text-sm"> {/* Added text-sm */}
-                                                                    {topic}
-                                                                </span>
-                                                            </motion.li>
-                                                        ))}
-                                                    </ul>
-                                                </motion.div>
-                                            ))}
+                                                                transition={{
+                                                                    duration: 3,
+                                                                    repeat: Infinity,
+                                                                    delay: tIndex * 0.1
+                                                                }}
+                                                            />
+                                                            <span className="text-gray-700">
+                                                                {topic}
+                                                            </span>
+                                                        </motion.li>
+                                                    ))}
+                                                </ul>
+                                            </div>
                                         </div>
                                     </motion.div>
                                 )}
@@ -935,14 +914,14 @@ const TeachingPlan = ({ course }) => {
 
                 {/* Download Button */}
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }} // Reduced y from 30
+                    initial={{ opacity: 0, y: 20 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ delay: 0.1 }} // Reduced from 0.2
-                    className="text-center mt-12 flex justify-center items-center" // Reduced mt-16 to mt-12
+                    transition={{ delay: 0.1 }}
+                    className="text-center mt-12 flex justify-center items-center"
                 >
                     <motion.button
                         type="button"
-                        whileHover={{ scale: 1.02 }} // Reduced from 1.03
+                        whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                         onClick={downloadBrochure}
                         disabled={isDownloading}
