@@ -957,7 +957,7 @@ const CareerDevelopmentTrack = ({ course }) => {
     const careerData = course.careerData || [
         {
             icon: <FiBriefcase className="text-4xl text-[#FF7426]" />,
-            title: "Upskilllab Career Assist",
+            title: "Upskillab Career Assist",
             items: [
                 "Mentoring from industry experts",
                 "Career-specific resume tailoring",
@@ -1020,7 +1020,7 @@ const CareerDevelopmentTrack = ({ course }) => {
                 <div className="text-center mb-20">
                     <h2 className="text-4xl font-bold text-[#4D2C5E] mb-4 relative inline-block">
                         Career Development Track
-                        <span className="absolute bottom-0 left-0 w-full h-1.5 bg-[#FF7426] rounded-full" />
+                        <span className="absolute bottom-0 left-0 w-full h-1.5 bg-[#FF7426] rounded-full -z-10" />
                     </h2>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                         Comprehensive career support to launch your tech career
@@ -1279,16 +1279,27 @@ const PricingSection = ({ course }) => {
                         </div>
 
                         <div className="flex flex-col sm:flex-row sm:items-baseline gap-4">
-                            <motion.span
-                                initial={{ scale: 0.9, opacity: 0 }}
-                                whileInView={{ scale: 1, opacity: 1 }}
-                                transition={{ delay: 0.2 }}
-                                className="text-4xl md:text-5xl font-bold text-[#4D2C5E]"
-                            >
-                                ₹{course.discountedPrice?.toLocaleString('en-IN') || '20,060'}
-                            </motion.span>
-                            <span className="text-gray-500 text-sm">Including tax</span>
-                        </div>
+  <div className="flex items-baseline gap-2">
+    {/* Original price with strikethrough */}
+    {course.originalPrice && course.discountedPrice && (
+      <span className="text-gray-500 line-through text-lg">
+        ₹{course.originalPrice.toLocaleString('en-IN')}
+      </span>
+    )}
+    
+    {/* Discounted price */}
+    <motion.span
+      initial={{ scale: 0.9, opacity: 0 }}
+      whileInView={{ scale: 1, opacity: 1 }}
+      transition={{ delay: 0.2 }}
+      className="text-4xl md:text-5xl font-bold text-[#4D2C5E]"
+    >
+      ₹{course.discountedPrice?.toLocaleString('en-IN') || '20,060'}
+    </motion.span>
+  </div>
+  
+  <span className="text-gray-500 text-sm">Including tax</span>
+</div>
 
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
@@ -1581,7 +1592,7 @@ const FAQSection = ({ course }) => {
                             initial={{ scaleX: 0 }}
                             whileInView={{ scaleX: 1 }}
                             transition={{ delay: 0.2, duration: 0.6 }}
-                            className="absolute bottom-0 left-0 w-full h-1 bg-[#FF7426] rounded-full"
+                            className="absolute bottom-0 -z-10 left-0 w-full h-1 bg-[#FF7426] rounded-full"
                         />
                     </motion.h2>
                     <motion.p
