@@ -1759,11 +1759,13 @@ const CourseDetails = () => {
         const endpointUrl = ApiConfig.getCourseByCode(courseCode);
 
         const response = await getDataHandler(endpointUrl, null, null, true); // pass endpointUrl directly
+        console.log(response)
         let custemDataSet = {
             id: response._id,
             batchId: response.batch?._id || "0",
             title: response.courseName,
             imageUrl: response.courseImage,
+            certificateImage:response.certificate,
             batchCode: response.batch?.batchCode || "0",
             shortDescription: response.shortDescription,
             tags: response.tags,
