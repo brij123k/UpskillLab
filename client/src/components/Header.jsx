@@ -5,6 +5,7 @@ import AdmissionFormModal from "./Modal/BasicEnrollNowModal";
 import { useQuery } from "@tanstack/react-query";
 // import { categoryAPI, courseAPI } from "../config/api-repository";
 import {getDataHandler } from "../config/services";
+import { useAuth } from "../context/AuthContext";
 
 function Header() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
@@ -12,7 +13,8 @@ function Header() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-
+  const { isAuthenticated,logout,getUserRole } = useAuth();
+  
    // Fetch categories using React Query
    const { data: categoriesData, isLoading: isCategoriesLoading } = useQuery({
     queryKey: ["categories"],
@@ -323,6 +325,27 @@ function Header() {
             </NavLink>
           </div>
           <div className="flex space-x-3 ml-6 xl:ml-8 2xl:ml-10">
+          {isAuthenticated ? (
+            <>
+  <NavLink to={
+    getUserRole() === 'STUDENT' ? '/Student/Dashboard' :
+    getUserRole() === 'TEACHER' ? '/Teacher/Dashboard' :
+    '/Login'
+  }>
+    <motion.button className="bg-[#4D2C5E] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#3A2150] transition-all shadow-sm hover:shadow-md whitespace-nowrap">
+      Dashboard
+    </motion.button>
+  </NavLink>
+  <motion.button
+              onClick={() => logout()}
+              whileHover={{ y: -2 }}
+              className="bg-[#FF7426] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#E65100] transition-all shadow-sm hover:shadow-md whitespace-nowrap cursor-pointer"
+            >
+              Logout
+</motion.button>
+  </>
+) : (
+   <>
             <motion.button
               onClick={() => setIsModalOpen(true)}
               whileHover={{ y: -2 }}
@@ -338,12 +361,35 @@ function Header() {
                 Login
               </motion.button>
             </NavLink>
+            </>
+)}
           </div>
         </div>
 
         {/* Mobile Navigation (unchanged) */}
         <div className="lg:hidden flex items-center">
           <div className="hidden sm:flex gap-3 mr-4">
+          {isAuthenticated ? (
+            <>
+  <NavLink to={
+    getUserRole() === 'STUDENT' ? '/Student/Dashboard' :
+    getUserRole() === 'TEACHER' ? '/Teacher/Dashboard' :
+    '/Login'
+  }>
+    <motion.button className="bg-[#4D2C5E] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#3A2150] transition-all shadow-sm hover:shadow-md whitespace-nowrap">
+      Dashboard
+    </motion.button>
+  </NavLink>
+  <motion.button
+              onClick={() => logout()}
+              whileHover={{ y: -2 }}
+              className="bg-[#FF7426] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#E65100] transition-all shadow-sm hover:shadow-md whitespace-nowrap cursor-pointer"
+            >
+              Logout
+</motion.button>
+  </>
+) : (
+   <>
             <button
               className="bg-[#4D2C5E] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-[#3A2150] transition-colors whitespace-nowrap"
               onClick={() => setIsModalOpen(true)}
@@ -355,6 +401,8 @@ function Header() {
                 Login
               </button>
             </NavLink>
+            </>
+)}
           </div>
           <button
             onClick={toggleDrawer}
@@ -578,19 +626,45 @@ function Header() {
                   </div>
                 </div>
 
-                <div className="p-4 border-t border-gray-100 shrink-0">
-                  <button
-                    className="w-full bg-[#4D2C5E] text-white px-6 py-3 rounded-full text-base font-medium hover:bg-[#3A2150] transition-colors shadow-sm mb-3"
-                    onClick={() => setIsModalOpen(true)}
-                  >
-                    ENROLL NOW
-                  </button>
-                  <NavLink to="/Login">
-                    <button className="w-full bg-[#FF7426] text-white px-6 py-3 rounded-full text-base font-medium hover:bg-[#E65100] transition-colors shadow-sm">
-                     Login
-                    </button>
-                  </NavLink>
-                </div>
+                <div className="p-4 border-t border-gray-100 shrink-0 ml-6 xl:ml-8 2xl:ml-10">
+  {isAuthenticated ? (
+    <>
+      <NavLink to={getUserRole() === 'Teacher' ? '/Teacher/Dashboard' : '/Student/Dashboard'}>
+        <motion.button
+          whileHover={{ y: -2 }}
+          className="w-full bg-[#4D2C5E] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#3A2150] transition-all shadow-sm hover:shadow-md whitespace-nowrap mb-3"
+        >
+          Dashboard
+        </motion.button>
+      </NavLink>
+      <motion.button
+        onClick={() => logout()}
+        whileHover={{ y: -2 }}
+        className="w-full bg-[#FF7426] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#E65100] transition-all shadow-sm hover:shadow-md whitespace-nowrap cursor-pointer"
+      >
+        Logout
+      </motion.button>
+    </>
+  ) : (
+    <>
+      <motion.button
+        onClick={() => setIsModalOpen(true)}
+        whileHover={{ y: -2 }}
+        className="w-full bg-[#4D2C5E] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#3A2150] transition-all shadow-sm hover:shadow-md whitespace-nowrap mb-3"
+      >
+        ENROLL NOW
+      </motion.button>
+      <NavLink to="/Login">
+        <motion.button
+          whileHover={{ y: -2 }}
+          className="w-full bg-[#FF7426] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#E65100] transition-all shadow-sm hover:shadow-md whitespace-nowrap cursor-pointer"
+        >
+          Login
+        </motion.button>
+      </NavLink>
+    </>
+  )}
+</div>
               </div>
             </motion.div>
           </>

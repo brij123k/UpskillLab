@@ -5,8 +5,9 @@ import {
   FiTrendingUp, FiVideo, FiBell, FiUser, 
   FiLogOut, FiSend, FiMenu, FiX, FiChevronRight
 } from "react-icons/fi";
-
+import { useAuth } from '../../context/AuthContext';
 function TeacherHeader() {
+  const {logout} = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -224,7 +225,10 @@ function TeacherHeader() {
                     Notifications
                   </NavLink>
                   <button
-                    onClick={() => navigate('/logout')}
+                    onClick={() => {
+                      logout();
+                    
+                    }}
                     className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center"
                   >
                     <FiLogOut className="mr-2" />
@@ -330,7 +334,13 @@ function TeacherHeader() {
               </NavLink>
 
               <div className="pt-4 mt-4 border-t border-gray-200">
-                <button className="w-full py-2 text-red-600 text-left flex items-center">
+                <button
+                onClick={() => {
+                  logout();
+                
+                }}
+                
+                className="w-full py-2 text-red-600 text-left flex items-center">
                   <FiLogOut className="mr-3" />
                   Logout
                 </button>

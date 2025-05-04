@@ -3,8 +3,8 @@ import GuestLayout from "./layout/GuestLayout";
 import TeacherPanelLayout from "./layout/TeacherPanelLayout";
 import StudentPanelLayout from "./layout/StudentPanelLayout";
 import { exact } from "prop-types";
-
-
+import AuthGuard from "./AuthGuard";
+import ProtectedRoute from "./components/ProtectedRoute";
 const Index = ({ children }) => {
   return (<>{children}</>)
 }
@@ -42,6 +42,34 @@ const TeacherNotifications= lazy(()=> import("./pages/Dashboard/Teacher/TeacherN
 
 // Student Panel lazyImport
 const StudentDashboard= lazy(()=> import("./pages/Dashboard/Student/StudentDashboard"))
+const StudentStudyMaterials= lazy(()=> import("./pages/Dashboard/Student/StudyMaterials"))
+const StudentClassSchedule= lazy(()=> import("./pages/Dashboard/Student/ClassSchedule"))
+const StudentLiveClasses= lazy(()=> import("./pages/Dashboard/Student/LiveClasses"))
+const StudentHistory= lazy(()=> import("./pages/Dashboard/Student/StudentHistory"))
+const StudentJobs= lazy(()=> import("./pages/Dashboard/Student/StudentJobs"))
+const StudentNotification= lazy(()=> import("./pages/Dashboard/Student/StudentNotification"))
+const StudentProfile= lazy(()=> import("./pages/Dashboard/Student/StudentProfile"))
+const StudentRecordedVideos= lazy(()=> import("./pages/Dashboard/Student/StudentRecordedVideos"))
+const StudentTrends= lazy(()=> import("./pages/Dashboard/Student/StudentTrends"))
+const StudentDoubts= lazy(()=> import("./pages/Dashboard/Student/StudentDoubts"))
+
+
+const TeacherProtectedLayout = ({ children }) => (
+  <ProtectedRoute allowedRoles={['TEACHER']}>
+    <TeacherPanelLayout>
+      {children}
+    </TeacherPanelLayout>
+  </ProtectedRoute>
+);
+
+const StudentProtectedLayout = ({ children }) => (
+  <ProtectedRoute allowedRoles={['STUDENT']}>
+    <StudentPanelLayout>
+      {children}
+    </StudentPanelLayout>
+  </ProtectedRoute>
+);
+
 
 export const routes = [
   { exact: true, path: "/", layout: GuestLayout, component: Home },
@@ -67,16 +95,26 @@ export const routes = [
 
   // Teacher Panel Routes 
 
-  { exact: true, path:"/Teacher/Dashboard", layout:TeacherPanelLayout, component:TeacherDashboard},
-  { exact: true, path:"/Teacher/Profile", layout:TeacherPanelLayout, component:TeacherProfile},
-  { exact: true, path:"/Teacher/StudyMaterials", layout:TeacherPanelLayout, component:StudyMaterials},
-  { exact: true, path:"/Teacher/Schedule", layout:TeacherPanelLayout, component:ClassSchedule},
-  { exact: true, path:"/Teacher/Suggestions", layout:TeacherPanelLayout, component:TeacherSuggestions},
-  { exact: true, path:"/Teacher/Analysis", layout:TeacherPanelLayout, component:MarketAnalysis},
-  { exact: true, path:"/Teacher/Classes", layout:TeacherPanelLayout, component:LiveClasses},
-  { exact: true, path:"/Teacher/Doubt", layout:TeacherPanelLayout, component:DoubtHandling},
-  { exact: true, path:"/Teacher/Notifications", layout:TeacherPanelLayout, component:TeacherNotifications},
+  { exact: true, path:"/Teacher/Dashboard", layout:TeacherProtectedLayout, component:TeacherDashboard},
+  { exact: true, path:"/Teacher/Profile", layout:TeacherProtectedLayout, component:TeacherProfile},
+  { exact: true, path:"/Teacher/StudyMaterials", layout:TeacherProtectedLayout, component:StudyMaterials},
+  { exact: true, path:"/Teacher/Schedule", layout:TeacherProtectedLayout, component:ClassSchedule},
+  { exact: true, path:"/Teacher/Suggestions", layout:TeacherProtectedLayout, component:TeacherSuggestions},
+  { exact: true, path:"/Teacher/Analysis", layout:TeacherProtectedLayout, component:MarketAnalysis},
+  { exact: true, path:"/Teacher/Classes", layout:TeacherProtectedLayout, component:LiveClasses},
+  { exact: true, path:"/Teacher/Doubt", layout:TeacherProtectedLayout, component:DoubtHandling},
+  { exact: true, path:"/Teacher/Notifications", layout:TeacherProtectedLayout, component:TeacherNotifications},
   
   // Student Panel Routes
-  { exact: true, path:"/Student/Dashboard", layout:StudentPanelLayout, component:StudentDashboard},
+  { exact: true, path:"/Student/Dashboard", layout:StudentProtectedLayout, component:StudentDashboard},
+  { exact: true, path:"/Student/StudyMaterials", layout:StudentProtectedLayout, component:StudentStudyMaterials},
+  { exact: true, path:"/Student/Schedule", layout:StudentProtectedLayout, component:StudentClassSchedule},
+  { exact: true, path:"/Student/Classes", layout:StudentProtectedLayout, component:StudentLiveClasses},
+  { exact: true, path:"/Student/History", layout:StudentProtectedLayout, component:StudentHistory},
+  { exact: true, path:"/Student/Jobs", layout:StudentProtectedLayout, component:StudentJobs},
+  { exact: true, path:"/Student/Notifications", layout:StudentProtectedLayout, component:StudentNotification},
+  { exact: true, path:"/Student/Profile", layout:StudentProtectedLayout, component:StudentProfile},
+  { exact: true, path:"/Student/Recorded-videos", layout:StudentProtectedLayout, component:StudentRecordedVideos},
+  { exact: true, path:"/Student/Doubts", layout:StudentProtectedLayout, component:StudentDoubts},
+  { exact: true, path:"/Student/Trends", layout:StudentProtectedLayout, component:StudentTrends},
 ];

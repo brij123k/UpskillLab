@@ -2,26 +2,62 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { NavLink } from 'react-router-dom';
-
+import { NavLink, useNavigate } from 'react-router-dom';
+import { initiateOtpLogin, verifyOtp } from '../../config/services';
+import { useAuth } from '../../context/AuthContext';
+import { toast } from 'react-toastify';
 const LoginPage = () => {
-    const [showPassword, setShowPassword] = useState(false);
+    const [otpAttemptId, setOtpAttemptId] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
+    const { login } = useAuth();
 
-    const formik = useFormik({
+    // Formik for combined email and OTP input
+    const form = useFormik({
         initialValues: {
             email: '',
-            password: '',
-            rememberMe: false
+            otp: '',
         },
         validationSchema: Yup.object({
             email: Yup.string().email('Invalid email address').required('Required'),
-            password: Yup.string()
-                .min(8, 'Must be at least 8 characters')
-                .required('Required')
+            otp: Yup.string().when('$otpAttemptId', {
+                is: (value) => !!value,
+                then: () => Yup.string()
+                    .length(6, 'OTP must be 6 digits')
+                    .required('Required'),
+                otherwise: () => Yup.string(),
+            }),
         }),
-        onSubmit: values => {
-            alert(JSON.stringify(values, null, 2));
-        }
+        context: { otpAttemptId }, // Pass otpAttemptId to validation context
+        onSubmit: async (values, { setFieldError }) => {
+            setIsLoading(true);
+            try {
+                if (!otpAttemptId) {
+                    // Step 1: Send OTP
+                    const response = await initiateOtpLogin(values.email);
+                    setOtpAttemptId(response.attemptId);
+                    toast.success(`OTP sent te ${values.email}`);
+                } else {
+                    // Step 2: Verify OTP
+                    const response = await verifyOtp(otpAttemptId, values.otp);
+                    login({
+                        authToken: response.authToken,
+                        authTokenExpiryDate: response.authTokenExpiryDate,
+                        refreshToken: response.refreshToken,
+                    });
+                    // navigate('/Teacher/Dashboard');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                if (!otpAttemptId) {
+                    setFieldError('email', 'Failed to send OTP. Please try again.');
+                } else {
+                    setFieldError('otp', 'Invalid OTP. Please try again.');
+                }
+            } finally {
+                setIsLoading(false);
+            }
+        },
     });
 
     // Animation variants
@@ -30,61 +66,48 @@ const LoginPage = () => {
         show: {
             opacity: 1,
             transition: {
-                staggerChildren: 0.1
-            }
-        }
+                staggerChildren: 0.1,
+            },
+        },
     };
 
     const item = {
         hidden: { opacity: 0, y: 10 },
-        show: { 
-            opacity: 1, 
+        show: {
+            opacity: 1,
             y: 0,
             transition: {
-                type: "spring",
-                stiffness: 100
-            }
-        }
+                type: 'spring',
+                stiffness: 100,
+            },
+        },
     };
 
     return (
         <div className="w-full min-h-screen bg-[#fdf8ee] flex items-center justify-center p-4">
-            <motion.div 
+            <motion.div
                 className="w-full max-w-5xl rounded-xl overflow-hidden flex flex-col lg:flex-row"
                 initial={{ scale: 0.98 }}
                 animate={{ scale: 1 }}
                 transition={{ duration: 0.3 }}
             >
                 {/* Left Side - Login Form */}
-                <motion.div 
-                    className="w-full lg:w-1/2 p-6 sm:p-8 bg-white shadow-2xl rounded-4xl flex flex-col justify-center"
+                <motion.div
+                    className="w-full sm:w-2/3 sm:m-auto lg:w-1/2 p-6 sm:p-8 bg-white shadow-2xl rounded-4xl flex flex-col justify-center"
                     variants={container}
                     initial="hidden"
                     animate="show"
                 >
                     {/* Title */}
-                    <motion.h2 
+                    <motion.h2
                         className="text-2xl sm:text-3xl text-center font-bold mb-4 sm:mb-6 text-gray-800"
                         variants={item}
                     >
-                        Log <motion.span 
-                            className='text-[#FF7426]'
-                            animate={{ 
-                                scale: [1, 1.05, 1],
-                                rotate: [0, 2, -2, 0]
-                            }}
-                            transition={{
-                                duration: 4,
-                                repeat: Infinity,
-                                repeatDelay: 3
-                            }}
-                        >
-                            In
-                        </motion.span>
+                        Login with OTP
                     </motion.h2>
 
                     {/* Form */}
-                    <form onSubmit={formik.handleSubmit} className="space-y-3 sm:space-y-4">
+                    <form onSubmit={form.handleSubmit} className="space-y-3 sm:space-y-4">
                         {/* Email */}
                         <motion.div variants={item}>
                             <div className="relative">
@@ -92,248 +115,151 @@ const LoginPage = () => {
                                     type="email"
                                     id="email"
                                     name="email"
-                                    onChange={formik.handleChange}
-                                    onBlur={formik.handleBlur}
-                                    value={formik.values.email}
+                                    onChange={form.handleChange}
+                                    onBlur={form.handleBlur}
+                                    value={form.values.email}
                                     className="w-full px-0 py-2 text-sm sm:text-base border-0 border-b border-gray-300 focus:border-[#4D2C5E] focus:outline-none focus:ring-0 peer"
+                                    disabled={isLoading || otpAttemptId}
                                 />
                                 <label
                                     htmlFor="email"
                                     className={`absolute left-0 text-gray-500 transition-all duration-200 pointer-events-none
-                                        ${formik.values.email ? 
-                                        'text-[#4D2C5E] text-xs sm:text-sm -translate-y-3' : 
-                                        'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
+                                        ${form.values.email
+                                            ? 'text-[#4D2C5E] text-xs sm:text-sm -translate-y-3'
+                                            : 'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
                                     `}
                                 >
                                     Email
                                 </label>
                             </div>
                             <AnimatePresence>
-                                {formik.touched.email && formik.errors.email && (
+                                {form.touched.email && form.errors.email && (
                                     <motion.p
                                         className="mt-1 text-xs sm:text-sm text-red-500"
                                         initial={{ opacity: 0, height: 0 }}
                                         animate={{ opacity: 1, height: 'auto' }}
                                         exit={{ opacity: 0, height: 0 }}
                                     >
-                                        {formik.errors.email}
+                                        {form.errors.email}
                                     </motion.p>
                                 )}
                             </AnimatePresence>
                         </motion.div>
 
-                        {/* Password */}
-<motion.div variants={item}>
-    <div className="relative">
-        <input
-            type={showPassword ? "text" : "password"}
-            id="password"
-            name="password"
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            value={formik.values.password}
-            className="w-full px-0 py-2 text-sm sm:text-base border-0 border-b border-gray-300 focus:border-[#4D2C5E] focus:outline-none focus:ring-0 peer pr-8"
-        />
-        <label
-            htmlFor="password"
-            className={`absolute left-0 text-gray-500 transition-all duration-200 pointer-events-none
-                ${formik.values.password ? 
-                'text-[#4D2C5E] text-xs sm:text-sm -translate-y-3' : 
-                'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
-            `}
-        >
-            Password
-        </label>
-        <motion.button
-            type="button"
-            className="absolute right-0 bottom-2 text-gray-500 hover:text-[#FF7426]"
-            onClick={() => setShowPassword(!showPassword)}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-        >
-            {showPassword ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                    <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                    <path d="M3.293 3.293a1 1 0 011.414 0l12 12a1 1 0 01-1.414 1.414l-12-12a1 1 0 010-1.414z" />
-                </svg>
-            ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-                    <path fillRule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clipRule="evenodd" />
-                </svg>
-            )}
-        </motion.button>
-    </div>
-    <div className="flex justify-between items-start">
-        <AnimatePresence>
-            {formik.touched.password && formik.errors.password && (
-                <motion.p
-                    className="mt-1 text-xs sm:text-sm text-red-500"
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                >
-                    {formik.errors.password}
-                </motion.p>
-            )}
-        </AnimatePresence>
-        <motion.div
-            className="text-right"
-            variants={item}
-        >
-            <NavLink to="/ForgetPassword">
-                <motion.span
-                    className="text-xs sm:text-sm text-[#FF7426] hover:underline"
-                    whileHover={{ scale: 1.05 }}
-                >
-                    Forgot Password?
-                </motion.span>
-            </NavLink>
-        </motion.div>
-    </div>
-</motion.div>
-
-                        {/* Remember Me */}
-                        <motion.div 
-                            className="flex items-center"
-                            variants={item}
-                        >
-                            <motion.input
-                                id="rememberMe"
-                                name="rememberMe"
-                                type="checkbox"
-                                checked={formik.values.rememberMe}
-                                onChange={formik.handleChange}
-                                className="h-4 w-4 text-[#4D2C5E] focus:ring-[#4D2C5E] border-gray-300 rounded"
-                                whileHover={{ scale: 1.1 }}
-                                whileTap={{ scale: 0.9 }}
-                            />
-                            <label htmlFor="rememberMe" className="ml-2 block text-sm sm:text-base text-gray-700">
-                                Remember Me
-                            </label>
+                        {/* OTP Input */}
+                        <motion.div variants={item}>
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    id="otp"
+                                    name="otp"
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
+                                    maxLength="6"
+                                    onChange={form.handleChange}
+                                    onBlur={form.handleBlur}
+                                    value={form.values.otp}
+                                    className="w-full px-0 py-2 text-sm sm:text-base border-0 border-b border-gray-300 focus:border-[#4D2C5E] focus:outline-none focus:ring-0 peer tracking-widest"
+                                    disabled={isLoading || !otpAttemptId}
+                                />
+                                <label
+                                    htmlFor="otp"
+                                    className={`absolute left-0 text-gray-500 transition-all duration-200 pointer-events-none
+                                        ${form.values.otp
+                                            ? 'text-[#4D2C5E] text-xs sm:text-sm -translate-y-3'
+                                            : 'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
+                                    `}
+                                >
+                                    Enter OTP
+                                </label>
+                            </div>
+                            <AnimatePresence>
+                                {form.touched.otp && form.errors.otp && (
+                                    <motion.p
+                                        className="mt-1 text-xs sm:text-sm text-red-500 text-center"
+                                        initial={{ opacity: 0, height: 0 }}
+                                        animate={{ opacity: 1, height: 'auto' }}
+                                        exit={{ opacity: 0, height: 0 }}
+                                    >
+                                        {form.errors.otp}
+                                    </motion.p>
+                                )}
+                            </AnimatePresence>
+                            {otpAttemptId && (
+                                <motion.p
+                                    className="text-sm text-gray-600 mt-2"
+                                    variants={item}
+                                >
+                                    We've sent a 6-digit OTP to your email. Please check your inbox.
+                                </motion.p>
+                            )}
                         </motion.div>
 
-                        {/* Login Button */}
+                        {/* Submit Button */}
                         <motion.button
                             type="submit"
                             className="w-full bg-[#4D2C5E] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#5F3A73] transition-colors relative overflow-hidden group text-sm sm:text-base"
                             variants={item}
-                            whileHover={{ 
-                                scale: 1.02,
-                                boxShadow: "0 4px 8px rgba(77, 44, 94, 0.2)"
+                            disabled={isLoading}
+                            whileHover={{
+                                scale: isLoading ? 1 : 1.02,
+                                boxShadow: isLoading
+                                    ? 'none'
+                                    : '0 4px 8px rgba(77, 44, 94, 0.2)',
                             }}
-                            whileTap={{ scale: 0.98 }}
+                            whileTap={{ scale: isLoading ? 1 : 0.98 }}
                         >
-                            <span className="relative z-10">Login</span>
-                            <motion.span
-                                className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100"
-                                initial={{ scale: 0 }}
-                                whileHover={{ scale: 1 }}
-                                transition={{ duration: 0.3 }}
-                            />
+                            {isLoading ? (
+                                <span className="inline-flex items-center">
+                                    <svg
+                                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <circle
+                                            className="opacity-25"
+                                            cx="12"
+                                            cy="12"
+                                            r="10"
+                                            stroke="currentColor"
+                                            strokeWidth="4"
+                                        ></circle>
+                                        <path
+                                            className="opacity-75"
+                                            fill="currentColor"
+                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                        ></path>
+                                    </svg>
+                                    {otpAttemptId ? 'Verifying...' : 'Sending...'}
+                                </span>
+                            ) : (
+                                <span className="relative z-10">
+                                    {otpAttemptId ? 'Verify OTP' : 'Send OTP'}
+                                </span>
+                            )}
                         </motion.button>
 
-                        {/* Divider */}
-                        <motion.div 
-                            className="relative my-3 sm:my-4"
-                            variants={item}
-                        >
-                            <div className="absolute inset-0 flex items-center">
-                                <motion.div 
-                                    className="w-full border-t border-gray-300"
-                                    initial={{ scaleX: 0 }}
-                                    animate={{ scaleX: 1 }}
-                                    transition={{ duration: 0.5 }}
-                                />
-                            </div>
-                            <div className="relative flex justify-center">
-                                <span className="px-2 bg-white text-gray-500 text-sm">or</span>
-                            </div>
-                        </motion.div>
-
-                        {/* Social Login Buttons */}
-                        <motion.div variants={item}>
+                        {/* Back to email button (only when OTP input is active) */}
+                        {otpAttemptId && (
                             <motion.button
                                 type="button"
-                                className="flex items-center justify-center w-full py-2 border border-gray-300 rounded-lg mb-2 hover:bg-gray-50 transition-colors cursor-pointer"
-                                whileHover={{ y: -3, scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
+                                onClick={() => {
+                                    setOtpAttemptId(null);
+                                    form.setFieldValue('otp', '');
+                                }}
+                                className="w-full text-[#4D2C5E] py-2 px-4 rounded-lg font-medium hover:underline transition-colors text-sm sm:text-base"
+                                variants={item}
+                                disabled={isLoading}
                             >
-                                <img 
-                                    src="/images/google.svg" 
-                                    alt="google" 
-                                    className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" 
-                                />
-                                <span className="text-xs sm:text-sm">Login With Google</span>
+                                Back to email input
                             </motion.button>
-                        </motion.div>
-                        
-                        {/* <motion.div variants={item}>
-                            <motion.button
-                                type="button"
-                                className="flex items-center justify-center w-full py-2 bg-[#3575dc] text-white rounded-lg mb-2 hover:bg-[#3575dc]/90 transition-colors cursor-pointer"
-                                whileHover={{ y: -3, scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                            >
-                                <img 
-                                    src="/images/facebook_w.svg" 
-                                    alt="facebook" 
-                                    className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" 
-                                />
-                                <span className="text-xs sm:text-sm">Login With Facebook</span>
-                            </motion.button>
-                        </motion.div>
-
-                        <motion.div variants={item}>
-                            <motion.button
-                                type="button"
-                                className="flex items-center justify-center w-full py-2 bg-[#404040] text-white rounded-lg hover:bg-[#202020] transition-colors cursor-pointer"
-                                whileHover={{ y: -3, scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                            >
-                                <img 
-                                    src="/images/apple_w.svg" 
-                                    alt="apple" 
-                                    className="h-4 w-4 sm:h-5 sm:w-5 mr-1 sm:mr-2" 
-                                />
-                                <span className="text-xs sm:text-sm">Login With Apple</span>
-                            </motion.button>
-                        </motion.div> */}
-
-                        {/* Terms */}
-                        <motion.p
-                            className="text-xs sm:text-sm text-center text-gray-500 mt-3 sm:mt-4"
-                            variants={item}
-                        >
-                            By continuing, you agree to the{' '}
-                            <motion.a 
-                                href="/TermsOfService" 
-                                className="text-[#FF7426] hover:underline"
-                                whileHover={{ scale: 1.05 }}
-                            >
-                                Terms of Service
-                            </motion.a>{' '}
-                            and{' '}
-                            <motion.a 
-                                href="/PrivacyPolicy" 
-                                className="text-[#FF7426] hover:underline"
-                                whileHover={{ scale: 1.05 }}
-                            >
-                                Privacy Policy
-                            </motion.a>
-                        </motion.p>
+                        )}
                     </form>
                 </motion.div>
 
                 {/* Right Side - Animated Image */}
-                <motion.div 
+                <motion.div
                     className="hidden lg:flex w-1/2 items-center justify-center p-6 relative overflow-hidden"
                     initial={{ opacity: 0, x: 50 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -345,16 +271,14 @@ const LoginPage = () => {
                         className="relative z-10 w-full h-auto max-h-[70%] object-contain"
                         animate={{
                             y: [0, -15, 0],
-                            scale: [1, 1.02, 1]
+                            scale: [1, 1.02, 1],
                         }}
                         transition={{
                             duration: 8,
                             repeat: Infinity,
-                            ease: "easeInOut"
+                            ease: 'easeInOut',
                         }}
                     />
-
-                    {/* Floating elements */}
                     {[...Array(8)].map((_, i) => (
                         <motion.div
                             key={i}
@@ -373,7 +297,7 @@ const LoginPage = () => {
                             transition={{
                                 duration: Math.random() * 15 + 10,
                                 repeat: Infinity,
-                                repeatType: "reverse",
+                                repeatType: 'reverse',
                             }}
                         />
                     ))}

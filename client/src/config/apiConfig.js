@@ -3,7 +3,11 @@ const url = "https://api.upskillab.com";
 const ApiConfig = {
   url,
   // Auth
-  login: `${url}/auth/login`,
+  // login: `${url}/auth/login`,
+  otpLogin: `${url}/auth/otp-login`,         // New endpoint for initiating OTP
+  verifyOtp: `${url}/auth/otp/enter`, 
+  getUserDetails: `${url}/auth/details`,
+  refreshToken:`${url}/auth/refresh`,
   
   stats : `${url}/stats`,
   // Categories

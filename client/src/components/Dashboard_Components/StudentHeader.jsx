@@ -1,17 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { 
   FiHome, FiBook, FiCalendar, FiVideo, 
   FiMessageSquare, FiTrendingUp, FiBriefcase, 
-  FiBell, FiUser, FiLogOut, FiMenu, FiX
+  FiBell, FiUser, FiLogOut,FiClock, FiMenu, FiX
 } from 'react-icons/fi';
 
 const StudentHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
   const notificationRef = useRef(null);
   const navigate = useNavigate();
-
+  const {logout} = useAuth()
   // Mock notifications
   const notifications = [
     { id: 1, text: "New study material uploaded for Python course", time: "2 hours ago" },
@@ -57,7 +59,7 @@ const StudentHeader = () => {
           </NavLink>
 
           <NavLink
-            to="/student/study-materials"
+            to="/Student/StudyMaterials"
             className={({ isActive }) => 
               `flex items-center ${isActive ? 'text-[#4D2C5E] font-semibold' : 'text-gray-700 hover:text-[#4D2C5E]'}`
             }
@@ -67,7 +69,7 @@ const StudentHeader = () => {
           </NavLink>
 
           <NavLink
-            to="/student/schedule"
+            to="/Student/Schedule"
             className={({ isActive }) => 
               `flex items-center ${isActive ? 'text-[#4D2C5E] font-semibold' : 'text-gray-700 hover:text-[#4D2C5E]'}`
             }
@@ -77,7 +79,7 @@ const StudentHeader = () => {
           </NavLink>
 
           <NavLink
-            to="/student/live-classes"
+            to="/Student/Classes"
             className={({ isActive }) => 
               `flex items-center ${isActive ? 'text-[#4D2C5E] font-semibold' : 'text-gray-700 hover:text-[#4D2C5E]'}`
             }
@@ -87,7 +89,7 @@ const StudentHeader = () => {
           </NavLink>
 
           <NavLink
-            to="/student/doubts"
+            to="/Student/Doubts"
             className={({ isActive }) => 
               `flex items-center ${isActive ? 'text-[#4D2C5E] font-semibold' : 'text-gray-700 hover:text-[#4D2C5E]'}`
             }
@@ -127,7 +129,7 @@ const StudentHeader = () => {
                   ))}
                 </div>
                 <NavLink
-                  to="/student/notifications"
+                  to="/Student/Notifications"
                   className="block px-3 py-2 text-sm text-center text-[#4D2C5E] font-medium border-t border-gray-100 hover:bg-gray-50"
                 >
                   View All Notifications
@@ -137,18 +139,94 @@ const StudentHeader = () => {
           </div>
 
           {/* Profile */}
-          <div className="flex items-center space-x-2">
+          <div className="relative">
+      <button
+        onClick={() => setIsProfileDropdownOpen(!isProfileDropdownOpen)}
+        className="flex items-center space-x-1 focus:outline-none"
+      >
+        <img
+          src="/images/default-student-avatar.png"
+          alt="Student"
+          className="h-8 w-8 rounded-full border border-[#4D2C5E]"
+        />
+        <svg
+          className={`h-4 w-4 text-gray-600 ${isProfileDropdownOpen ? "rotate-180" : ""}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {isProfileDropdownOpen && (
+        <div
+          className="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg z-50 border border-gray-200"
+          onMouseLeave={() => setIsProfileDropdownOpen(false)}
+        >
+          <div className="py-1">
             <NavLink
-              to="/student/profile"
-              className="flex items-center space-x-1"
+              to="/Student/Profile"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+              onClick={() => setIsProfileDropdownOpen(false)}
             >
-              <img
-                src="/images/default-student-avatar.png"
-                alt="Student"
-                className="h-8 w-8 rounded-full border border-[#4D2C5E]"
-              />
+              <FiUser className="mr-2" />
+              My Profile
             </NavLink>
+            
+            <NavLink
+              to="/Student/Jobs"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+              onClick={() => setIsProfileDropdownOpen(false)}
+            >
+              <FiBriefcase className="mr-2" />
+              Jobs
+            </NavLink>
+            
+            <NavLink
+              to="/student/recorded-videos"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+              onClick={() => setIsProfileDropdownOpen(false)}
+            >
+              <FiVideo className="mr-2" />
+              Recorded Videos
+            </NavLink>
+            
+            <NavLink
+              to="/Student/Trends"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+              onClick={() => setIsProfileDropdownOpen(false)}
+            >
+              <FiTrendingUp className="mr-2" />
+              Trends
+            </NavLink>
+            
+            <NavLink
+              to="/Student/History"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+              onClick={() => setIsProfileDropdownOpen(false)}
+            >
+              <FiClock className="mr-2" />
+              History
+            </NavLink>
+            
+            <div className="border-t border-gray-100"></div>
+            
+            <button
+              onClick={() => {
+                logout();
+                setIsProfileDropdownOpen(false);
+              }}
+              
+              className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center"
+            >
+              <FiLogOut className="mr-2" />
+              Logout
+            </button>
           </div>
+        </div>
+      )}
+    </div>
         </div>
 
         {/* Mobile Menu Button */}
@@ -162,7 +240,7 @@ const StudentHeader = () => {
 
       {/* Mobile Menu */}
       {isMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-black bg-opacity-50">
+        <div className="lg:hidden fixed inset-0 z-40 bg-transparent bg-opacity-50">
           <div className="bg-white w-4/5 h-full overflow-y-auto float-right">
             <div className="flex justify-between items-center p-4 border-b border-gray-200">
               <img src="/images/student-logo.png" alt="Logo" className="h-8" />
@@ -182,7 +260,7 @@ const StudentHeader = () => {
               </NavLink>
 
               <NavLink
-                to="/student/study-materials"
+                to="/Student/StudyMaterials"
                 className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -191,7 +269,7 @@ const StudentHeader = () => {
               </NavLink>
 
               <NavLink
-                to="/student/schedule"
+                to="/Student/Schedule"
                 className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -200,7 +278,7 @@ const StudentHeader = () => {
               </NavLink>
 
               <NavLink
-                to="/student/live-classes"
+                to="/Student/Classes"
                 className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -209,7 +287,7 @@ const StudentHeader = () => {
               </NavLink>
 
               <NavLink
-                to="/student/doubts"
+                to="/Student/Doubts"
                 className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -218,7 +296,7 @@ const StudentHeader = () => {
               </NavLink>
 
               <NavLink
-                to="/student/notifications"
+                to="/Student/Notifications"
                 className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
                 onClick={() => setIsMenuOpen(false)}
               >
@@ -227,17 +305,52 @@ const StudentHeader = () => {
               </NavLink>
 
               <NavLink
-                to="/student/profile"
+                to="/Student/Profile"
                 className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <FiUser className="inline mr-3" />
                 Profile
               </NavLink>
+              <NavLink
+              to="/Student/Jobs"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+              onClick={() => setIsProfileDropdownOpen(false)}
+            >
+              <FiBriefcase className="mr-2" />
+              Jobs
+            </NavLink>
+            
+            <NavLink
+              to="/student/recorded-videos"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+              onClick={() => setIsProfileDropdownOpen(false)}
+            >
+              <FiVideo className="mr-2" />
+              Recorded Videos
+            </NavLink>
+            
+            <NavLink
+              to="/Student/Trends"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+              onClick={() => setIsProfileDropdownOpen(false)}
+            >
+              <FiTrendingUp className="mr-2" />
+              Trends
+            </NavLink>
+            
+            <NavLink
+              to="/Student/History"
+              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+              onClick={() => setIsProfileDropdownOpen(false)}
+            >
+              <FiClock className="mr-2" />
+              History
+            </NavLink>
 
               <div className="pt-4 mt-4 border-t border-gray-200">
                 <button 
-                  onClick={() => navigate('/logout')}
+                  onClick={() => logout()}
                   className="w-full py-2 text-red-600 text-left flex items-center"
                 >
                   <FiLogOut className="mr-3" />

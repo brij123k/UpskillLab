@@ -162,9 +162,140 @@ export const getBlogs = async (params = {}) => {
   });
 };
 
-// export const getBlogById = async (id) => {
-//   return makeRequest("GET", `blogById/${id}`, {
-//     isUrl: true, // This tells makeRequest to use the URL directly
-//     params: { id }
-//   });
-// };
+
+export const initiateOtpLogin = async (email) => {
+  try {
+    const response = await axios.post(ApiConfig.otpLogin, { email });
+    
+    if (response?.status === 200 || response?.status === 201) {
+      return response.data; // Contains attemptId
+    } else {
+      throw new Error(response?.data?.message || "Failed to send OTP");
+    }
+  } catch (error) {
+    console.error("OTP initiation error:", error);
+    const errorMsg = error.response?.data?.message || 
+                    "Failed to send OTP. Please try again.";
+    toast.error(errorMsg);
+    throw error;
+  }
+};
+
+export const verifyOtp = async (attemptId, otpCode) => {
+  try {
+    const response = await axios.post(ApiConfig.verifyOtp, {otpCode, attemptId});
+    console.log(response)
+    if (response?.status === 200 || response?.status === 201) {
+      toast.success("Login successful!");
+      return response.data; // Contains tokens
+    } else {
+      throw new Error(response?.data?.message || "OTP verification failed");
+    }
+  } catch (error) {
+    console.error("OTP verification error:", error);
+    const errorMsg = error.response?.data?.message || 
+                    "Invalid OTP. Please try again.";
+    toast.error(errorMsg);
+    throw error;
+  }
+};
+
+export const getUserDetails = async () => {
+  const storedAuth = sessionStorage.getItem('auth');
+  const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
+  
+  if (!initialAuth?.authToken) {
+    throw new Error('No authentication token found');
+  }
+
+  try {
+    const response = await axios.get(
+      ApiConfig.getUserDetails,
+      {
+        headers: {
+          'Authorization': `Bearer ${initialAuth.authToken}`,
+          'Content-Type': 'application/json'
+        }
+      }
+    );
+
+    if (response?.status === 200) {
+      return response.data;
+    } else {
+      throw new Error(response?.data?.message || "Failed to fetch user details");
+    }
+  } catch (error) {
+    console.error("Failed to get user details:", error);
+    
+    // Handle specific error cases
+    if (error.response?.status === 401) {
+      // Token is invalid or expired
+      throw new Error('Session expired. Please login again.');
+    } else if (error.response?.status === 403) {
+      // Forbidden - user doesn't have permission
+      throw new Error('You do not have permission to access this resource');
+    }
+    
+    const errorMsg = error.response?.data?.message || 
+                    "Failed to fetch user information";
+    toast.error(errorMsg);
+    throw error;
+  }
+};
+
+
+export const refreshAuthToken = async () => {
+  const storedAuth = sessionStorage.getItem('auth');
+  const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
+
+  if (!initialAuth?.refreshToken) {
+    throw new Error('No refresh token found');
+  }
+
+  try {
+    const response = await axios.post(
+      ApiConfig.refreshToken, // Assumed endpoint, e.g., '/auth/refresh'
+      {
+        refreshToken: initialAuth.refreshToken,
+      },
+      {
+        headers: {
+          'Authorization': `Bearer ${initialAuth.authToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    return response;
+
+    // if (response?.status === 200) {
+    //   const { authToken, authTokenExpiryDate, refreshToken } = response.data;
+      
+    //   // Update stored authentication data
+    //   const updatedAuth = {
+    //     authToken,
+    //     authTokenExpiryDate,
+    //     refreshToken: refreshToken || initialAuth.refreshToken, // Use new refreshToken if provided
+    //   };
+    //   sessionStorage.setItem('auth', JSON.stringify(updatedAuth));
+
+    //   return updatedAuth;
+    // } else {
+    //   throw new Error(response?.data?.message || 'Failed to refresh authentication token');
+    // }
+  } catch (error) {
+    console.error('Failed to refresh token:', error);
+
+    // Handle specific error cases
+    if (error.response?.status === 401) {
+      // Invalid or expired refresh token
+      throw new Error('Session expired. Please login again.');
+    } else if (error.response?.status === 403) {
+      // Forbidden - invalid refresh token or permission issue
+      throw new Error('Invalid refresh token');
+    }
+
+    const errorMsg = error.response?.data?.message || 'Failed to refresh authentication token';
+    toast.error(errorMsg);
+    throw error;
+  }
+};
