@@ -2,6 +2,7 @@ const url = "https://api.upskillab.com";
 
 const ApiConfig = {
   url,
+  uploadFiles: `${url}/file`,
   // Auth
   // login: `${url}/auth/login`,
   otpLogin: `${url}/auth/otp-login`,         // New endpoint for initiating OTP
@@ -58,6 +59,24 @@ const ApiConfig = {
 
   //youtube
   youtube: `${url}/youtube-videos?all=1`, // Base endpoint for all youtube operations
+
+
+  // teacher panel
+
+  teacherProfile:`${url}/teachers/me`,
+  studyMaterial:`${url}/study-materials`,
+  studyMaterialById:(id)=>`${url}/study-materials/${id}`,
+  studyMaterialByTeacher:(id)=>`${url}/study-materials/teacher/${id}`,
+
+  // Schedule
+  ClassSchedule:`${url}/Class-Schedule/teacher`,
+  doubtsResponse:(id)=>`${url}/doubts/${id}/message`,
+
+  // student panel
+  studentProfile:`${url}/enrollment`,
+  studyMaterialByCourse:(id)=>`${url}/study-materials/course/${id}`,
+  doubts:`${url}/doubts`
+
 };
 
 export default ApiConfig;

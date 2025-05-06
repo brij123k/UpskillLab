@@ -1,66 +1,124 @@
-import React, { useState } from 'react';
-import { FiSearch, FiFile, FiFolder, FiDownload } from 'react-icons/fi';
+import React, { useEffect, useState } from 'react';
+import { FiUpload, FiSearch, FiFile, FiDownload, FiTrash2, FiX } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+import { getDataHandlerWithToken } from '../../../config/services';
+import ApiConfig from '../../../config/apiConfig';
 
 const StudyMaterials = () => {
-  const [activeCourse, setActiveCourse] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [studyMaterials, setStudyMaterials] = useState([]);
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mock data
-  const courses = [
-    { id: 1, name: "Python Fundamentals" },
-    { id: 2, name: "Web Development" },
-    { id: 3, name: "Data Science" }
-  ];
+  // Fetch student profile and enrolled courses
+  const fetchStudentProfile = async () => {
+    try {
+      setIsLoading(true);
+      const response = await getDataHandlerWithToken('studentProfile');
+      return response.batch || [];
+    } catch (error) {
+      toast.error("Failed to load student profile");
+      console.error('Error fetching student profile:', error);
+      return [];
+    }
+  };
 
-  const materials = [
-    { id: 1, name: "Python Basics.pdf", course: "Python Fundamentals", date: "2023-06-10", size: "2.4 MB" },
-    { id: 2, name: "HTML-CSS Cheat Sheet.pdf", course: "Web Development", date: "2023-06-05", size: "1.8 MB" },
-    { id: 3, name: "Pandas Tutorial.docx", course: "Data Science", date: "2023-06-01", size: "3.2 MB" },
-    { id: 4, name: "OOP Concepts.zip", course: "Python Fundamentals", date: "2023-05-28", size: "5.7 MB" }
-  ];
+  // Fetch study materials for all enrolled courses
+  const fetchStudyMaterials = async () => {
+    try {
+      const batches = await fetchStudentProfile();
+      const courseIds = batches.map(batch => batch.course);
+      
+      if (courseIds.length === 0) {
+        setStudyMaterials([]);
+        return;
+      }
 
-  const filteredMaterials = materials.filter(material => {
-    const matchesCourse = activeCourse === 'all' || material.course === activeCourse;
-    const matchesSearch = material.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                         material.course.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCourse && matchesSearch;
+      // Fetch materials for each course
+      const materialsPromises = courseIds.map(courseId => {
+        const endpoint = ApiConfig.studyMaterialByCourse(courseId);
+        return getDataHandlerWithToken(endpoint, null, null, true);
+      });
+
+      const materialsResponses = await Promise.all(materialsPromises);
+      const allMaterials = materialsResponses.flatMap(res => res.studyMaterials || []);
+
+      setStudyMaterials(allMaterials);
+      setEnrolledCourses(batches);
+    } catch (error) {
+      toast.error("Failed to load study materials");
+      console.error('Error fetching study materials:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteMaterial = async (materialId) => {
+    try {
+      const confirmDelete = window.confirm("Are you sure you want to delete this material?");
+      if (!confirmDelete) return;
+      
+      const endpoint = ApiConfig.studyMaterialById(materialId);
+      await deleteDataHandler(endpoint, true);
+      toast.success("Material deleted successfully");
+      fetchStudyMaterials(); // Refresh the list
+    } catch (error) {
+      toast.error("Failed to delete material");
+      console.error('Error deleting material:', error);
+    }
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const getFileIcon = (fileLink) => {
+    const extension = fileLink.split('.').pop().toLowerCase();
+    return <FiFile className={`mr-2 ${
+      extension === 'pdf' ? 'text-red-500' : 
+      extension === 'ppt' || extension === 'pptx' ? 'text-orange-500' :
+      extension === 'doc' || extension === 'docx' ? 'text-blue-500' :
+      extension === 'zip' || extension === 'rar' ? 'text-yellow-500' : 'text-gray-500'
+    }`} />;
+  };
+
+  const filteredMaterials = studyMaterials.filter(material => {
+    console.log(material)
+    return material.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+           material.course?.courseName.toLowerCase().includes(searchQuery.toLowerCase());
   });
+
+  useEffect(() => {
+    fetchStudyMaterials();
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="p-6 flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4D2C5E]"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold text-[#4D2C5E] mb-6">Study Materials</h1>
+      {/* Main Content */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold text-[#4D2C5E]">Study Materials</h1>
+      </div>
 
-      {/* Filters and Search */}
+      {/* Search */}
       <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="relative flex-grow max-w-md">
-            <FiSearch className="absolute left-3 top-3 text-gray-400" />
-            <input
-              type="text"
-              placeholder="Search materials..."
-              className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]/50"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-          
-          <div className="flex space-x-2 overflow-x-auto pb-2 md:pb-0">
-            <button
-              onClick={() => setActiveCourse('all')}
-              className={`px-4 py-2 rounded-lg whitespace-nowrap ${activeCourse === 'all' ? 'bg-[#4D2C5E] text-white' : 'bg-gray-100 text-gray-700'}`}
-            >
-              All Courses
-            </button>
-            {courses.map(course => (
-              <button
-                key={course.id}
-                onClick={() => setActiveCourse(course.name)}
-                className={`px-4 py-2 rounded-lg whitespace-nowrap ${activeCourse === course.name ? 'bg-[#4D2C5E] text-white' : 'bg-gray-100 text-gray-700'}`}
-              >
-                {course.name}
-              </button>
-            ))}
-          </div>
+        <div className="relative">
+          <FiSearch className="absolute left-3 top-3 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Search materials..."
+            className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]/50"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </div>
       </div>
 
@@ -75,24 +133,37 @@ const StudyMaterials = () => {
         
         {filteredMaterials.length > 0 ? (
           filteredMaterials.map(material => (
-            <div key={material.id} className="grid grid-cols-12 p-4 items-center border-b hover:bg-gray-50">
+            <div key={material._id} className="grid grid-cols-12 p-4 items-center border-b hover:bg-gray-50">
               <div className="col-span-6 flex items-center">
-                <FiFile className="text-[#4D2C5E] mr-2" />
-                <span>{material.name}</span>
-                <span className="text-xs text-gray-500 ml-2">{material.size}</span>
+                {getFileIcon(material.fileLink)}
+                <div>
+                  <div className="font-medium">{material.title}</div>
+                  <div className="text-xs text-gray-500">
+                    {material.chapter?.name || 'No chapter specified'}
+                  </div>
+                </div>
               </div>
-              <div className="col-span-3">{material.course}</div>
-              <div className="col-span-2 text-sm text-gray-500">{material.date}</div>
-              <div className="col-span-1 flex justify-end">
-                <button className="text-[#4D2C5E] hover:text-[#FF7426] p-1">
+              <div className="col-span-3">{material.course?.courseName || 'N/A'}</div>
+              <div className="col-span-2 text-sm text-gray-500">
+                {formatDate(material.createdAt)}
+              </div>
+              <div className="col-span-1 flex justify-end space-x-2">
+                <a 
+                  href={material.fileLink} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-[#4D2C5E] hover:text-[#FF7426]"
+                >
                   <FiDownload />
-                </button>
+                </a>
               </div>
             </div>
           ))
         ) : (
           <div className="p-8 text-center text-gray-500">
-            No materials found matching your criteria
+            {enrolledCourses.length > 0 
+              ? "No study materials available for your enrolled courses"
+              : "You are not enrolled in any courses yet"}
           </div>
         )}
       </div>

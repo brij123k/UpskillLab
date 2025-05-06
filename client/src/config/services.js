@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 // Helper function to get auth headers
 const getAuthHeaders = (token) => ({
   headers: {
-    token: token || sessionStorage.getItem("token"),
-    "Content-Type": "application/json"
+    'Authorization': `Bearer ${token}`,
+    "Content-Type": "application/json",
   }
 });
 
@@ -62,10 +62,16 @@ export const postDataHandler = async (endPoint, data) => {
   return makeRequest("POST", endPoint, { data });
 };
 
-export const postDataHandlerWithToken = async (endPoint, data, token) => {
+export const postDataHandlerWithToken = async (endPoint, data) => {
+  const storedAuth = sessionStorage.getItem('auth');
+  const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
+  
+  if (!initialAuth?.authToken) {
+    throw new Error('No authentication token found');
+  }
   return makeRequest("POST", endPoint, { 
     data, 
-    ...getAuthHeaders(token) 
+    ...getAuthHeaders(initialAuth?.authToken) 
   });
 };
 
@@ -73,19 +79,31 @@ export const putDataHandler = async (endPoint, data) => {
   return makeRequest("PUT", endPoint, { data });
 };
 
-export const putDataHandlerWithToken = async (endPoint, data, params) => {
+export const putDataHandlerWithToken = async (endPoint, data, params, isUrl=false) => {
+  const storedAuth = sessionStorage.getItem('auth');
+  const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
+  
+  if (!initialAuth?.authToken) {
+    throw new Error('No authentication token found');
+  }
   return makeRequest("PUT", endPoint, { 
     data, 
     params, 
-    ...getAuthHeaders() 
+    isUrl,
+    ...getAuthHeaders(initialAuth?.authToken) 
   });
 };
 
-export const deleteDataHandler = async (endPoint, query, body) => {
+export const deleteDataHandler = async (endPoint, isUrl=false) => {
+  const storedAuth = sessionStorage.getItem('auth');
+  const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
+  
+  if (!initialAuth?.authToken) {
+    throw new Error('No authentication token found');
+  }
   return makeRequest("DELETE", endPoint, { 
-    params: query, 
-    data: body, 
-    ...getAuthHeaders() 
+    isUrl:isUrl, 
+    ...getAuthHeaders(initialAuth?.authToken) 
   });
 };
 
@@ -93,10 +111,29 @@ export const patchDataHandler = async (endPoint, data) => {
   return makeRequest("PATCH", endPoint, { data });
 };
 
-export const patchTokenDataHandler = async (endPoint, data) => {
+export const patchTokenDataHandler = async (endPoint, data ,isUrl=false) => {
+  const storedAuth = sessionStorage.getItem('auth');
+  const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
+  
+  if (!initialAuth?.authToken) {
+    throw new Error('No authentication token found');
+  }
+  return makeRequest("PATCH", endPoint, { 
+    data, 
+    isUrl,
+    ...getAuthHeaders(initialAuth?.authToken) 
+  });
+};
+export const putTokenDataHandler = async (endPoint, data) => {
+  const storedAuth = sessionStorage.getItem('auth');
+  const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
+  
+  if (!initialAuth?.authToken) {
+    throw new Error('No authentication token found');
+  }
   return makeRequest("PUT", endPoint, { 
     data, 
-    ...getAuthHeaders() 
+    ...getAuthHeaders(initialAuth?.authToken) 
   });
 };
 
@@ -112,11 +149,18 @@ export const getDataHandler = async (endPointOrUrl, query = {}, data = {}, isUrl
   });
 };
 
-export const getDataHandlerWithToken = async (endPoint, query, data) => {
+export const getDataHandlerWithToken = async (endPoint, query, data, isUrl = false) => {
+  const storedAuth = sessionStorage.getItem('auth');
+  const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
+  
+  if (!initialAuth?.authToken) {
+    throw new Error('No authentication token found');
+  }
   return makeRequest("GET", endPoint, { 
     params: query, 
     data, 
-    ...getAuthHeaders() 
+    isUrl,
+    ...getAuthHeaders(initialAuth?.authToken) 
   });
 };
 
@@ -266,22 +310,6 @@ export const refreshAuthToken = async () => {
       }
     );
     return response;
-
-    // if (response?.status === 200) {
-    //   const { authToken, authTokenExpiryDate, refreshToken } = response.data;
-      
-    //   // Update stored authentication data
-    //   const updatedAuth = {
-    //     authToken,
-    //     authTokenExpiryDate,
-    //     refreshToken: refreshToken || initialAuth.refreshToken, // Use new refreshToken if provided
-    //   };
-    //   sessionStorage.setItem('auth', JSON.stringify(updatedAuth));
-
-    //   return updatedAuth;
-    // } else {
-    //   throw new Error(response?.data?.message || 'Failed to refresh authentication token');
-    // }
   } catch (error) {
     console.error('Failed to refresh token:', error);
 
@@ -296,6 +324,44 @@ export const refreshAuthToken = async () => {
 
     const errorMsg = error.response?.data?.message || 'Failed to refresh authentication token';
     toast.error(errorMsg);
+    throw error;
+  }
+};
+
+
+export const uploadFileHandler = async (endPoint, file, additionalData = {}, isUrl = false) => {
+  const storedAuth = sessionStorage.getItem('auth');
+  const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
+
+  if (!initialAuth?.authToken) {
+    throw new Error('No authentication token found');
+  }
+console.log(file)
+  const formData = new FormData();
+  formData.append("files", file); // 'file' is the field name expected by the backend
+
+  // Append any additional data like userId, categoryId, etc.
+  Object.entries(additionalData).forEach(([key, value]) => {
+    formData.append(key, value);
+  });
+
+  try {
+    const url = isUrl ? endPoint : ApiConfig[endPoint];
+    const response = await axios.post(url, formData, {
+      headers: {
+        "Authorization": `Bearer ${initialAuth.authToken}`,
+        "Content-Type": "multipart/form-data"
+      }
+    });
+
+    if (response.status === 200 || response.status === 201) {
+      return response.data;
+    } else {
+      throw new Error(response?.data?.message || "File upload failed");
+    }
+  } catch (error) {
+    console.error("Upload error:", error);
+    const errorMsg = error.response?.data?.message || "Failed to upload file";
     throw error;
   }
 };

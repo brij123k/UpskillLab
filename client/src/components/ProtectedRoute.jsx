@@ -8,8 +8,10 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     isAuthenticated, 
     userDetails,
     getValidToken,
+    getUserRole,
     isAuthorized,
-    logout
+    logout,
+    loading: authLoading
   } = useAuth();
   
   const location = useLocation();
@@ -22,7 +24,9 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
   useEffect(() => {
     const checkAuthAndRole = async () => {
       try {
-        // First verify we have a valid token
+        // Wait for auth initialization to complete
+        if (authLoading) return;
+
         const validToken = await getValidToken();
         const authValid = !!validToken;
         
@@ -30,13 +34,19 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
           throw new Error("No valid token found");
         }
 
-        // Check if user has the required role
+        // Ensure userDetails is loaded
+        const role = await getUserRole();
+        if (!role) {
+          // Wait a bit more if userDetails isn't loaded yet
+          await new Promise(resolve => setTimeout(resolve, 100));
+          return checkAuthAndRole();
+        }
+
         const roleValid = allowedRoles.length === 0 || 
                          isAuthorized(allowedRoles);
 
         if (!roleValid) {
-          // Redirect based on user type
-          redirectUser(userDetails.userType);
+          redirectUser(role);
           return;
         }
 
@@ -46,7 +56,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
         });
       } catch (error) {
         console.error("Authentication check failed:", error);
-        logout(); // Clear invalid session
+        logout();
         setAuthStatus({
           isAuthenticated: false,
           isLoading: false
@@ -55,7 +65,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
     };
 
     checkAuthAndRole();
-  }, [location.pathname, allowedRoles]);
+  }, [location.pathname, allowedRoles, authLoading]);
 
   const redirectUser = (userType) => {
     switch(userType?.toUpperCase()) {
@@ -69,7 +79,7 @@ const ProtectedRoute = ({ children, allowedRoles = [] }) => {
         navigate('/Student/Dashboard', { replace: true });
         break;
       default:
-        navigate('/profile', { replace: true });
+        navigate('/', { replace: true });
     }
   };
 

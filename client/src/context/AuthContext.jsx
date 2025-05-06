@@ -13,8 +13,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Initialize auth state
-  useEffect(() => {
+// Initialize auth state
+useEffect(() => {
     const initializeAuth = async () => {
       if (auth?.authToken) {
         try {
@@ -34,7 +34,6 @@ export const AuthProvider = ({ children }) => {
   const fetchUserDetails = async () => {
     try {
       const details = await getUserDetails();
-      console.log(details)
       setUserDetails(details);
       return details;
     } catch (error) {
@@ -60,17 +59,16 @@ export const AuthProvider = ({ children }) => {
     
     try {
       const response = await refreshAuthToken();
-
-      if (response.authToken && response.authTokenExpiryDate) {
+      if (response.data.authToken && response.data.authTokenExpiryDate) {
         const newAuth = {
-          ...auth,
-          authToken: response.authToken,
-          authTokenExpiryDate: response.authTokenExpiryDate,
-          refreshToken: response.refreshToken || auth.refreshToken
+          authToken: response.data.authToken,
+          authTokenExpiryDate: response.data.authTokenExpiryDate,
+          refreshToken: response.data.refreshToken
         };
-        
+        sessionStorage.removeItem('auth');
         setAuth(newAuth);
         sessionStorage.setItem('auth', JSON.stringify(newAuth));
+        isTokenExpiredOrExpiring()
         return newAuth.authToken;
       }
       throw new Error('Invalid token response');
@@ -81,7 +79,6 @@ export const AuthProvider = ({ children }) => {
   };
 
   const getValidToken = async () => {
-    console.log(auth,"hi")
     if (!auth) return null;
     
     if (isTokenExpiredOrExpiring()) {
