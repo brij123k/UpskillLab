@@ -62,7 +62,7 @@ export const postDataHandler = async (endPoint, data) => {
   return makeRequest("POST", endPoint, { data });
 };
 
-export const postDataHandlerWithToken = async (endPoint, data) => {
+export const postDataHandlerWithToken = async (endPoint, data,isUrl=false) => {
   const storedAuth = sessionStorage.getItem('auth');
   const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
   
@@ -71,6 +71,7 @@ export const postDataHandlerWithToken = async (endPoint, data) => {
   }
   return makeRequest("POST", endPoint, { 
     data, 
+    isUrl,
     ...getAuthHeaders(initialAuth?.authToken) 
   });
 };
@@ -152,7 +153,6 @@ export const getDataHandler = async (endPointOrUrl, query = {}, data = {}, isUrl
 export const getDataHandlerWithToken = async (endPoint, query, data, isUrl = false) => {
   const storedAuth = sessionStorage.getItem('auth');
   const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
-  
   if (!initialAuth?.authToken) {
     throw new Error('No authentication token found');
   }

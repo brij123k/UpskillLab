@@ -99,16 +99,7 @@ function TeacherFooter() {
                 </li>
                 <li>
                   <NavLink 
-                    to="/Teacher/Classes" 
-                    className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base block flex items-center justify-center sm:justify-start"
-                  >
-                    <FiVideo className="mr-1 text-xs" />
-                    Live Classes
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink 
-                    to="/Teacher/Doubt" 
+                    to="/Teacher/Doubts" 
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base block flex items-center justify-center sm:justify-start"
                   >
                     <FiMessageSquare className="mr-1 text-xs" />

@@ -95,7 +95,7 @@ function TeacherHeader() {
             Schedule
           </NavLink>
 
-          <NavLink
+          {/* <NavLink
             to="/Teacher/Classes"
             className={({ isActive }) => 
               `flex items-center ${isActive ? 'text-[#4D2C5E] font-semibold' : 'text-gray-700 hover:text-[#4D2C5E]'}`
@@ -103,7 +103,7 @@ function TeacherHeader() {
           >
             <FiVideo className="mr-1" />
             Live Classes
-          </NavLink>
+          </NavLink> */}
 
           <NavLink
             to="/Teacher/Doubt"
@@ -306,14 +306,14 @@ function TeacherHeader() {
                 Market Analysis
               </NavLink>
 
-              <NavLink
+              {/* <NavLink
                 to="/Teacher/Classes"
                 className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <FiVideo className="inline mr-3" />
                 Live Classes
-              </NavLink>
+              </NavLink> */}
 
               <NavLink
                 to="/Teacher/Doubt"

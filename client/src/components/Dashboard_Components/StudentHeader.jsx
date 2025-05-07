@@ -79,16 +79,6 @@ const StudentHeader = () => {
           </NavLink>
 
           <NavLink
-            to="/Student/Classes"
-            className={({ isActive }) => 
-              `flex items-center ${isActive ? 'text-[#4D2C5E] font-semibold' : 'text-gray-700 hover:text-[#4D2C5E]'}`
-            }
-          >
-            <FiVideo className="mr-1" />
-            Live Classes
-          </NavLink>
-
-          <NavLink
             to="/Student/Doubts"
             className={({ isActive }) => 
               `flex items-center ${isActive ? 'text-[#4D2C5E] font-semibold' : 'text-gray-700 hover:text-[#4D2C5E]'}`
@@ -275,15 +265,6 @@ const StudentHeader = () => {
               >
                 <FiCalendar className="inline mr-3" />
                 Schedule
-              </NavLink>
-
-              <NavLink
-                to="/Student/Classes"
-                className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <FiVideo className="inline mr-3" />
-                Live Classes
               </NavLink>
 
               <NavLink

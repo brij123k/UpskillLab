@@ -28,7 +28,7 @@ const StudyMaterials = () => {
     try {
       const batches = await fetchStudentProfile();
       const courseIds = batches.map(batch => batch.course);
-      
+      console.log(courseIds)
       if (courseIds.length === 0) {
         setStudyMaterials([]);
         return;
@@ -37,10 +37,12 @@ const StudyMaterials = () => {
       // Fetch materials for each course
       const materialsPromises = courseIds.map(courseId => {
         const endpoint = ApiConfig.studyMaterialByCourse(courseId);
+        
         return getDataHandlerWithToken(endpoint, null, null, true);
       });
 
       const materialsResponses = await Promise.all(materialsPromises);
+      console.log(materialsResponses)
       const allMaterials = materialsResponses.flatMap(res => res.studyMaterials || []);
 
       setStudyMaterials(allMaterials);

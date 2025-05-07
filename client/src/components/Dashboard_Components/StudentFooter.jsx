@@ -97,14 +97,6 @@ const StudentFooter = () => {
                 </li>
                 <li>
                   <NavLink 
-                    to="/student/live-classes" 
-                    className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base block flex items-center justify-center sm:justify-start"
-                  >
-                    Live Classes
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink 
                     to="/student/recorded-videos" 
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base block flex items-center justify-center sm:justify-start"
                   >

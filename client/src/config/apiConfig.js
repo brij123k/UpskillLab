@@ -1,5 +1,5 @@
 const url = "https://api.upskillab.com";
-
+// const url = "http://localhost:3000"
 const ApiConfig = {
   url,
   uploadFiles: `${url}/file`,
@@ -75,7 +75,9 @@ const ApiConfig = {
   // student panel
   studentProfile:`${url}/enrollment`,
   studyMaterialByCourse:(id)=>`${url}/study-materials/course/${id}`,
-  doubts:`${url}/doubts`
+  doubts:`${url}/doubts`,
+  StudentClassSchedule:`${url}/Class-Schedule/student`,
+
 
 };
 
