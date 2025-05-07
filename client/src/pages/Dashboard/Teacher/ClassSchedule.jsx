@@ -17,13 +17,13 @@ const [platform, setPlatform] = useState('zoom');
 const [meetingLink, setMeetingLink] = useState('');
 const [meetingPassword, setMeetingPassword] = useState('');
 const [description, setDescription] = useState('');
-const [teacherId, setTeacherId] = useState('6816fe738385676f6abded43')
+const [teacherId, setTeacherId] = useState('')
   const fetchClassSessions = async () => {
     try {
       setIsLoading(true);
       const response = await getDataHandlerWithToken('ClassSchedule');
-      // const responseid = await getDataHandlerWithToken('teacherProfile');      
-      // setTeacherId(responseid._id);
+      const responseid = await getDataHandlerWithToken('teacherProfile');      
+      setTeacherId(responseid._id);
       setClassSessions(response.classSessions || []);
     } catch (error) {
       toast.error("Failed to load class sessions");

@@ -16,6 +16,7 @@ const StudyMaterials = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false); // New state for upload loading
   const [uploadForm, setUploadForm] = useState({
     title: '',
     course: '',
@@ -86,8 +87,6 @@ const StudyMaterials = () => {
     const file = e.target.files[0];
     if (file) {
       setSelectedFile(file);
-      // For demo, we'll just use a placeholder URL
-      // In a real app, you would upload the file to your server here
       setUploadForm(prev => ({
         ...prev,
         fileLink: `https://example.com/uploads/${file.name}`
@@ -107,7 +106,6 @@ const StudyMaterials = () => {
     if (name === 'course') {
     const selectedCourse = allCourses.find(course => course._id === value);
     const courseCode = selectedCourse?.courseCode;
-    // await fetchCourseDetails(courseCode);
       fetchChaptersForCourse(courseCode);
     }
   };
@@ -116,6 +114,7 @@ const StudyMaterials = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      setIsUploading(true); // Start loading
       if (!uploadForm.title || !uploadForm.course || !uploadForm.chapter || !selectedFile) {
         toast.error("Please fill all fields and select a file");
         return;
@@ -123,7 +122,6 @@ const StudyMaterials = () => {
 
       // First upload the file
       const fileUploadResponse = await uploadFileHandler('uploadFiles', selectedFile, {
-        // Add any additional metadata if needed
         category: 'study-material',
         userId: teacherId
       });
@@ -136,7 +134,7 @@ const StudyMaterials = () => {
       // Then create the study material record
       const payload = {
         title: uploadForm.title,
-        fileLink: fileUploadResponse.files[0].fileUrl, // Use the URL from file upload
+        fileLink: fileUploadResponse.files[0].fileUrl,
         course: uploadForm.course,
         chapter: uploadForm.chapter,
         teacher: teacherId
@@ -146,11 +144,13 @@ const StudyMaterials = () => {
       console.log(response)
       toast.success("Material uploaded successfully");
       setIsUploadModalOpen(false);
-      getStudyMaterial(); // Refresh the list
+      getStudyMaterial();
       resetForm();
     } catch (error) {
       console.error('Error in upload process:', error);
       toast.error(error.response?.data?.message || "Failed to upload material");
+    } finally {
+      setIsUploading(false); // End loading
     }
   };
 
@@ -172,7 +172,7 @@ const StudyMaterials = () => {
       const endpoint = ApiConfig.studyMaterialById(materialId);
       await deleteDataHandler(endpoint, true);
       toast.success("Material deleted successfully");
-      getStudyMaterial(); // Refresh the list
+      getStudyMaterial();
     } catch (error) {
       toast.error("Failed to delete material");
       console.error('Error deleting material:', error);
@@ -229,6 +229,7 @@ const StudyMaterials = () => {
                   resetForm();
                 }}
                 className="text-gray-500 hover:text-gray-700"
+                disabled={isUploading}
               >
                 <FiX size={24} />
               </button>
@@ -244,6 +245,7 @@ const StudyMaterials = () => {
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]"
                   required
+                  disabled={isUploading}
                 />
               </div>
 
@@ -255,6 +257,7 @@ const StudyMaterials = () => {
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]"
                   required
+                  disabled={isUploading}
                 >
                   <option value="">Select a course</option>
                   {allCourses.map(course => (
@@ -273,7 +276,7 @@ const StudyMaterials = () => {
                   onChange={handleInputChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]"
                   required
-                  disabled={!uploadForm.course}
+                  disabled={!uploadForm.course || isUploading}
                 >
                   <option value="">Select a chapter</option>
                   {chapters.map(chapter => (
@@ -287,7 +290,7 @@ const StudyMaterials = () => {
               <div className="mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-1">File</label>
                 <div className="flex items-center">
-                  <label className="flex flex-col items-center px-4 py-2 bg-white rounded-lg border border-gray-300 cursor-pointer hover:bg-gray-50">
+                  <label className={`flex flex-col items-center px-4 py-2 bg-white rounded-lg border border-gray-300 ${isUploading ? 'cursor-not-allowed opacity-50' : 'cursor-pointer hover:bg-gray-50'}`}>
                     <FiUpload className="mr-2" />
                     <span>{selectedFile ? selectedFile.name : 'Choose file'}</span>
                     <input 
@@ -295,6 +298,7 @@ const StudyMaterials = () => {
                       className="hidden" 
                       onChange={handleFileChange}
                       required
+                      disabled={isUploading}
                     />
                   </label>
                 </div>
@@ -308,14 +312,26 @@ const StudyMaterials = () => {
                     resetForm();
                   }}
                   className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50"
+                  disabled={isUploading}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#4D2C5E] text-white rounded-lg hover:bg-[#3A2152]"
+                  className="px-4 py-2 bg-[#4D2C5E] text-white rounded-lg hover:bg-[#3A2152] flex items-center justify-center min-w-24"
+                  disabled={isUploading}
                 >
-                  Upload
+                  {isUploading ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Uploading...
+                    </>
+                  ) : (
+                    'Upload'
+                  )}
                 </button>
               </div>
             </form>
@@ -335,7 +351,6 @@ const StudyMaterials = () => {
         </button>
       </div>
 
-      {/* Rest of your existing code... */}
       {/* Filters and Search */}
       <div className="bg-white p-4 rounded-lg shadow-sm mb-6">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">

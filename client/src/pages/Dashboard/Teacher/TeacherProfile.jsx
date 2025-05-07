@@ -39,7 +39,10 @@ const TeacherProfile = () => {
           experience: response.experience || '',
           bio: response.bio || '',
           social_links: {
-            linkedin: response.social_links?.linkedin || ''
+            linkedin: response.social_links?.linkedin || '',
+            github: response.social_links?.github || '',
+            facebook: response.social_links?.facebook || '',
+            twitter: response.social_links?.twitter || ''
           }
         });
       } else {
@@ -274,7 +277,7 @@ const TeacherProfile = () => {
       
       {/* Edit Profile Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div className="fixed inset-0 bg-[#00000056] bg-opacity-50 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">

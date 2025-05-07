@@ -25,7 +25,9 @@ const [categories, setCategories] = useState([]);
 const handelCategories = async () => {
   const res=await getDataHandler('category');
   if(res){
-    const newCategories = res.data.map((category,index) => ({
+    const newCategories = res.data
+    .filter((item) => item.active)
+    .map((category,index) => ({
       id: index+1,
       categoryId: category._id,
       title: category.categoryName,

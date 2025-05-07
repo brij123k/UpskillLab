@@ -14,6 +14,7 @@ const StudentDoubts = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [attachments, setAttachments] = useState([]);
 
+  
   // Fetch doubts and enrolled courses
   const fetchData = async () => {
     try {
