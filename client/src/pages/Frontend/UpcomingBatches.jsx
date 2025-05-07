@@ -22,44 +22,58 @@ const UpcomingBatches = () => {
     queryKey: ["upcomingBatches"],
     queryFn: () => getDataHandler("upcomingBatches", { limit: 20 }),
     select: (data) =>
-      data.map((batch) => ({
-        id: batch.batchId,
-        active:batch.active,
-        batchId: batch.batchId,
-        courseId: batch.courseId,
-        courseCode: batch.course.courseCode,
-        startDate: new Date(batch.startDate),
-        title: batch.courseName,
-        price: batch.fees,
-        originalPrice: batch.course.originalPrice,
-        duration:
-          batch.durationInDays > 30
-            ? `${Math.floor(batch.durationInDays / 30)} month${
-                Math.floor(batch.durationInDays / 30) > 1 ? "s" : ""
-              }`
-            : batch.durationInDays >= 1
-            ? `${batch.durationInDays} day${
-                batch.durationInDays > 1 ? "s" : ""
-              }`
-            : `${batch.durationInDays * 24} hour${
-                batch.durationInDays * 24 > 1 ? "s" : ""
-              }`,
-        startTime: batch.startTime
-          ? (() => {
-              return new Date(
-                `2000-01-01T${batch.startTime}:00.000`
-              ).toLocaleTimeString("en-US", {
-                hour: "numeric",
-                minute: "numeric",
+      data.map((batch) => {
+        let durationText = '';
+        const days = batch.durationInDays;
+        
+        if (days >= 365) {
+          // Convert to years with decimal
+          const years = (days / 365).toFixed(1);
+          durationText = `${years} year${years !== '1.0' ? 's' : ''}`;
+        } else if (days >= 30) {
+          // Convert to months with decimal
+          const months = (days / 30).toFixed(1);
+          durationText = `${months} month${months !== '1.0' ? 's' : ''}`;
+        } else if (days >= 7) {
+          // Convert to weeks with decimal
+          const weeks = (days / 7).toFixed(1);
+          durationText = `${weeks} week${weeks !== '1.0' ? 's' : ''}`;
+        } else if (days >= 1) {
+          // Show days with decimal
+          durationText = `${days.toFixed(1)} day${days !== 1 ? 's' : ''}`;
+        } else {
+          // Show hours with decimal
+          const hours = (days * 24).toFixed(1);
+          durationText = `${hours} hour${hours !== '1.0' ? 's' : ''}`;
+        }
+      
+        // Remove .0 decimal places for cleaner display
+        durationText = durationText.replace(/\.0/, '');
+      
+        return {
+          id: batch.batchId,
+          active: batch.active,
+          batchId: batch.batchId,
+          courseId: batch.courseId,
+          courseCode: batch.course.courseCode,
+          startDate: new Date(batch.startDate),
+          title: batch.courseName,
+          price: batch.fees,
+          originalPrice: batch.course.originalPrice,
+          duration: durationText,
+          startTime: batch.startTime
+            ? new Date(`2000-01-01T${batch.startTime}:00.000`).toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: 'numeric',
                 hour12: true,
-              });
-            })()
-          : "",
-        batchCode: batch.batchCode,
-        mode: batch.classMode,
-        remainingSeats: batch.remainingSeats,
-        totalSeats: batch.totalSeats,
-      })),
+              })
+            : '',
+          batchCode: batch.batchCode,
+          mode: batch.classMode,
+          remainingSeats: batch.remainingSeats,
+          totalSeats: batch.totalSeats,
+        };
+      })
   });
 
   // Animation variants
