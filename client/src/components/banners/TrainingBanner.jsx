@@ -103,7 +103,7 @@ const TrainingBanner = () => {
                   }
                 }}
               >
-                UpskillLab's
+                Upskillab's
               </motion.span>
             </motion.h1>
             

@@ -15,7 +15,7 @@ const StudentFooter = () => {
             <NavLink to="/student/dashboard">
               <img 
                 src="/images/student-logo.png"
-                alt="UpskillLab Student Logo"
+                alt="Upskillab Student Logo"
                 className="h-10 mx-auto lg:mx-0 mb-4"
               />
             </NavLink>
@@ -187,7 +187,7 @@ const StudentFooter = () => {
             <span className="hidden sm:block text-[#FF7426]">|</span>
             <NavLink to="/terms" className="text-[#FF7426] text-sm hover:underline">Terms & Conditions</NavLink>
           </div>
-          <p className="text-center text-sm mt-2">© {new Date().getFullYear()} UpskillLab.com. All rights reserved.</p>
+          <p className="text-center text-sm mt-2">© {new Date().getFullYear()} Upskillab.com. All rights reserved.</p>
         </div>
       </div>
     </footer>

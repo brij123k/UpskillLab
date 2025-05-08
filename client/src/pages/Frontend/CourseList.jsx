@@ -184,7 +184,7 @@ const DropdownFilter = ({
             )}
           </div>
 
-          <style jsx>{`
+          <style>{`
             .custom-scrollbar::-webkit-scrollbar {
               width: 6px;
             }
@@ -219,7 +219,7 @@ const CategoryDropdownFilter = ({
     queryFn: ({ pageParam = 0 }) =>
       getDataHandler("category", {
         skip: pageParam,
-        limit: 10,
+        limit: 100,
         searchString: searchValue || undefined,
       }),
     getNextPageParam: (lastPage, allPages) => {
@@ -231,8 +231,9 @@ const CategoryDropdownFilter = ({
   // Transform categories data for dropdown
   const categoryOptions = useMemo(() => {
     if (!data?.pages) return [];
+    console.log(data.pages)
     return data.pages.flatMap((page) =>
-      page.data.map((category) => ({
+      page.data.filter((cat)=>cat.active).map((category) => ({
         value: category._id,
         label: category.categoryName,
       }))
@@ -475,8 +476,8 @@ const CourseList = () => {
     });
   };
 
-  const courses = coursesData?.data || [];
-
+  const courses = (coursesData?.data || []).filter(course => course.active === true);
+  
   const totalCourses = coursesData?.count || 0;
 
   return (
@@ -674,7 +675,7 @@ const CourseList = () => {
           <p className="text-gray-600">
             Showing{" "}
             <span className="font-bold text-[#4D2C5E]">{courses.length}</span>{" "}
-            courses {` (of ${totalCourses})`}
+            courses {` (of ${courses.length})`}
           </p>
         </motion.div>
 
@@ -707,16 +708,15 @@ const CourseList = () => {
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 />
-                {course.studentsEnrolled > 10 && (
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="absolute top-4 left-4 bg-[#4D2C5E] text-white text-xs font-bold px-3 py-1 rounded-full shadow-md"
+                    className="absolute top-4 left-4 bg-[#fff] text-xs font-bold px-3 py-1 rounded-full shadow-md"
                   >
-                    Bestseller
+                    <img src={course?.certifierLogo || "/images/Logo.png"} className="h-5" />
+
                   </motion.div>
-                )}
                 <motion.div
                   whileHover={{ scale: 1.1 }}
                   className="absolute bottom-4 right-4 bg-white/90 text-[#FF7426] text-xs font-bold px-2 py-1 rounded"
@@ -765,7 +765,7 @@ const CourseList = () => {
                   </motion.span>
                   <div className="flex items-center text-yellow-500">
                     <span className="text-sm font-bold mr-1">
-                      {course.rating}
+                      {course.courseRating}
                     </span>
                     <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />

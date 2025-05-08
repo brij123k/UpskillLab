@@ -57,7 +57,7 @@ function TeacherHeader() {
           <div className="flex-shrink-0">
             <img
               src="/images/Logo.png"
-              alt="UpskillLab Teacher Logo"
+              alt="Upskillab Teacher Logo"
               className="h-10"
             />
           </div>

@@ -7,7 +7,7 @@ import { FiUsers, FiAlertCircle, FiMessageSquare, FiCompass, FiDollarSign } from
 import { FiAward, FiBriefcase, FiCheck, FiTrendingUp } from 'react-icons/fi';
 import PurchaseModal from '../../components/Modal/EnrollmentModal';
 import { FiFlag } from 'react-icons/fi';
-import { FiBarChart2 } from 'react-icons/fi';
+import { FiBarChart2,FiGlobe } from 'react-icons/fi';
 import ApiConfig from '../../config/apiConfig';
 // import RazorpayLogo from '../assets/razorpay-logo.svg'; // Replace with actual import
 const CourseHero = ({ course }) => {
@@ -122,13 +122,24 @@ const CourseHero = ({ course }) => {
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-[#4D2C5E]/30 to-[#FF7426]/30 mix-blend-overlay pointer-events-none" />
                             <div className="absolute inset-0 border-4 border-white/20 rounded-3xl pointer-events-none" />
-                            <iframe
+                            
+                            {course?.youtubeUrl?(<iframe
                                 src={course.youtubeUrl}
                                 title="Course Preview"
                                 className="w-full h-full relative z-0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowFullScreen
                             />
+                        ):(
+                            <>
+                            <img
+                                src={course.imageUrl}
+                                title="Course Preview"
+                                className="w-full h-full relative z-0"
+                                
+                            />
+                            </>
+                        )}
                         </motion.div>
 
                         {/* Floating decorative elements */}
@@ -208,8 +219,12 @@ const CourseKeyDetails = ({ course }) => {
           return "Starting Today!";
         }
         if (batchDate <= oneWeekFromNow) {
-          return `Starting on (${batchDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})`;
-        }
+            return batchDate.toLocaleDateString('en-US', {
+              day: 'numeric',
+              month: 'short',
+            }); // Example: "8 May"
+          }
+        
         return `Starts ${batchDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
       };
 
@@ -222,29 +237,22 @@ const CourseKeyDetails = ({ course }) => {
             bg: "#4D2C5E"
         },
         {
-            icon: <FiMonitor />,
-            label: "MODE",
-            value: course.courseMode
-                ? course.courseMode === "LIVE_ONLINE"
-                    ? "Live-Online"
-                    : course.courseMode === "OFFLINE"
-                        ? "Offline"
-                        : "Online"
-                : "Online",
-
+            icon: <FiBook />,
+            label: "FORMAT",
+            value: "Live + Recorded",
             accent: "#4D2C5E",
             bg: "#FF7426"
         },
         {
-            icon: <FiBook />,
-            label: "FORMAT",
-            value: "Live + Recorded",
+            icon: <FiGlobe />,
+            label: "Language",
+            value: course.language,    
             accent: "#FF7426",
             bg: "#4D2C5E"
         },
         {
   icon: <FiCalendar />,
-  label: "BATCH STATUS",
+  label: "Date of Accommodation",
   value: getBatchStatus(course?.startDate),
   accent: "#4D2C5E",
   bg: "#FF7426"
@@ -470,7 +478,7 @@ const ProgramInfoWithEnroll = ({ course }) => {
                                     initial={{ width: 0 }}
                                     animate={{ width: '100%' }}
                                     transition={{ delay: 0.6, duration: 0.8 }}
-                                    className="absolute bottom-0 left-0 h-1 bg-[#FF7426]"
+                                    className="absolute -bottom-2 left-0 h-1 bg-[#FF7426]"
                                 />
                             </motion.h2>
 
@@ -1020,7 +1028,7 @@ const CareerDevelopmentTrack = ({ course }) => {
                 <div className="text-center mb-20">
                     <h2 className="text-4xl font-bold text-[#4D2C5E] mb-4 relative inline-block">
                         Career Development Track
-                        <span className="absolute bottom-0 left-0 w-full h-1.5 bg-[#FF7426] rounded-full -z-10" />
+                        <span className="absolute -bottom-2 left-0 w-full h-1.5 bg-[#FF7426] rounded-full -z-10" />
                     </h2>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                         Comprehensive career support to launch your tech career
@@ -1145,7 +1153,7 @@ const CertificateSection = ({ course }) => {
                             initial={{ scaleX: 0 }}
                             animate={isInView ? { scaleX: 1 } : {}}
                             transition={{ delay: 0.3, duration: 0.8 }}
-                            className="absolute bottom-0 left-0 w-full h-1.5 bg-[#FF7426] rounded-full"
+                            className="absolute -bottom-2 left-0 w-full h-1.5 bg-[#FF7426] rounded-full"
                         />
                     </motion.h2>
                     <motion.p
@@ -1592,7 +1600,7 @@ const FAQSection = ({ course }) => {
                             initial={{ scaleX: 0 }}
                             whileInView={{ scaleX: 1 }}
                             transition={{ delay: 0.2, duration: 0.6 }}
-                            className="absolute bottom-0 -z-10 left-0 w-full h-1 bg-[#FF7426] rounded-full"
+                            className="absolute bottom- -z-10 left-0 w-full h-1 bg-[#FF7426] rounded-full"
                         />
                     </motion.h2>
                     <motion.p
@@ -1790,7 +1798,8 @@ const CourseDetails = () => {
             courseMode: response.courseMode,
             discountedPrice: response.discountedPrice,
             originalPrice: response.originalPrice,
-            faqs: response.faqs
+            faqs: response.faqs,
+            language:response.language.languageName
         }
         setCourse(custemDataSet);
     };
@@ -1801,6 +1810,8 @@ const CourseDetails = () => {
         const response = res.batch
         const endpointUrl2 = ApiConfig.getCourseByCode(response.course.courseCode);
         const res2 = await getDataHandler(endpointUrl2, null, null, true);
+        console.log(res2)
+        console.log(response)
         let custemDataSet = {
             id: response._id,
             batchId: response._id,
@@ -1809,6 +1820,7 @@ const CourseDetails = () => {
             shortDescription: res2.shortDescription,
             tags: res2.tags,
             imageUrl: res2.courseImage,
+            certificateImage:res2.certificate,
             youtubeUrl: res2.youtubeUrl,
             duration: res2.courseDuration,
             startDate: response.startDate,
@@ -1819,7 +1831,8 @@ const CourseDetails = () => {
             brochure: res2.brochure,
             discountedPrice: res2.discountedPrice,
             originalPrice: res2.originalPrice,
-            faqs: res2.faqs
+            faqs: res2.faqs,
+            language:res2.language.languageName
         }
         setCourse(custemDataSet);
     };

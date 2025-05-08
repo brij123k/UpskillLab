@@ -152,7 +152,7 @@ const BlogDetailPage = () => {
             >
               <div className="flex items-center">
                 <FaUser className="mr-2 text-[#FF7426]" />
-                UpSkillLab
+                UpSkillab
               </div>
               <div className="flex items-center">
                 <FaCalendarAlt className="mr-2 text-[#FF7426]" />

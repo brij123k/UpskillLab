@@ -3,6 +3,7 @@ import { motion, AnimatePresence, useInView } from 'framer-motion';
 import VideoModal from './Modal/VideoModal';
 import { useVideoModal } from './Modal/LandingVideoModal';
 import { getDataHandler } from '../config/services';
+import { NavLink } from 'react-router-dom';
 
 const debounce = (func, wait) => {
   let timeout;
@@ -30,6 +31,7 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
   const getVideoSrc = async () => {
     try {
       const response = await getDataHandler('youtube');
+      console.log(response)
       if (response?.videos?.length > 0) {
         const videoId = response.videos[0].videoId;
         const embedUrl = `${videoId}?autoplay=1&mute=1&rel=0&enablejsapi=1`;
@@ -232,7 +234,7 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
                   </motion.button>
                 </a>
 
-                <motion.button
+               {demoVideoUrl? (<motion.button
                   onClick={() => openVideoModal(demoVideoUrl)}
                   custom={2}
                   initial="hidden"
@@ -244,6 +246,24 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
                 >
                   Watch Demo
                 </motion.button>
+):(
+  <>
+  <NavLink to={"/CourseList"}>
+  <motion.button
+                  custom={2}
+                  initial="hidden"
+                  animate="visible"
+                  variants={textVariants}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg w-full sm:w-fit shadow-md hover:shadow-lg"
+                >
+                  View Courses
+  </motion.button>
+  </NavLink>
+  </>
+)
+}
               </div>
             </div>
 

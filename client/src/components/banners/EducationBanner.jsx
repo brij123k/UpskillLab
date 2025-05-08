@@ -262,7 +262,7 @@ const EducationBanner = () => {
                sm:mb-8
              " // Responsive font and margin
            >
-             Jumpstart your career with UpskillLab’s Training & Internship Program – a
+             Jumpstart your career with Upskillab’s Training & Internship Program – a
              hands-on, project-based learning initiative.
            </p>
            <div className="space-y-6">

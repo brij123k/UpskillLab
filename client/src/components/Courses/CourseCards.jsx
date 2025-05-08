@@ -7,7 +7,7 @@ function CourseCards() {
  const navigation= useNavigate()
     
   return (
-    <div className='bg-white relative overflow-hidden'>
+    <div className='bg-white relative overflow-hidden' id='Courses'>
       {/* Background decorative elements */}
       <div className='w-[80%] h-[80%] absolute top-20 left-[-250px] blur-lg rounded-full bg-[#FF74261A] z-0'></div>
       <img 

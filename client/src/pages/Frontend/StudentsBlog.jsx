@@ -91,7 +91,7 @@ const BlogCard = ({
 
         {/* Meta Info */}
         <div className="flex items-center justify-between text-xs text-gray-500 border-t border-gray-100 pt-3">
-          <span>UpSkillLab</span>
+          <span>UpSkillab</span>
           <div className="flex items-center space-x-2">
             <span>{formattedDate}</span>
             <span>•</span>
@@ -156,7 +156,7 @@ const StudentsBlog = () => {
             animate={{ y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            UpSkillLab <span className="text-[#FF7426]">Student Blog</span>
+            UpSkillab <span className="text-[#FF7426]">Student Blog</span>
           </motion.h1>
 
           <motion.p

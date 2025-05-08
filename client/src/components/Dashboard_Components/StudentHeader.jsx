@@ -40,7 +40,7 @@ const StudentHeader = () => {
           <div className="flex-shrink-0">
             <img
               src="/images/student-logo.png"
-              alt="UpskillLab Student Logo"
+              alt="Upskillab Student Logo"
               className="h-10"
             />
           </div>

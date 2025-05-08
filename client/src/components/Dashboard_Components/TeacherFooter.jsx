@@ -15,7 +15,7 @@ function TeacherFooter() {
             <NavLink to="/Teacher/Dashboard">
               <img 
                 src='/images/Logo.png'
-                alt="UpskillLab Teacher Logo"
+                alt="Upskillab Teacher Logo"
                 className="h-10 mx-auto lg:mx-0 mb-4"
               />
             </NavLink>
@@ -185,7 +185,7 @@ function TeacherFooter() {
             <span className="hidden sm:block text-[#FF7426]">|</span>
             <NavLink to="/teacher/terms" className="text-[#FF7426] text-sm hover:underline">Terms & Conditions</NavLink>
           </div>
-          <p className="text-center text-sm mt-2">© {new Date().getFullYear()} UpskillLab.com. All rights reserved.</p>
+          <p className="text-center text-sm mt-2">© {new Date().getFullYear()} Upskillab.com. All rights reserved.</p>
         </div>
       </div>
     </footer>

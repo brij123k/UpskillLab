@@ -144,7 +144,7 @@ const SuccessStory = () => {
           variants={itemVariants}
           className="text-lg max-w-2xl text-white/90"
         >
-          Discover how our students transformed their careers through UpskillLab programs.
+          Discover how our students transformed their careers through Upskillab programs.
         </motion.p>
         
         <motion.div 

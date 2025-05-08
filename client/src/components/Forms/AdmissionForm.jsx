@@ -140,7 +140,7 @@ const AdmissionForm = () => {
             className="w-full lg:w-1/2"
           >
             <div className="bg-gradient-to-br from-[#4D2C5E] to-[#2A1A3A] p-6 sm:p-8 rounded-xl text-white h-full">
-              <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Welcome to UpskillLab!</h2>
+              <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Welcome to Upskillab!</h2>
               <p className="text-sm sm:text-md font-bold mb-4 sm:mb-6" >You're about to embark on a transformational journey. Here’s what makes our programs stand out.</p>
               <div className="space-y-6">
                 <div className="flex items-start">

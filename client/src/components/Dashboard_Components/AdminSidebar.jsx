@@ -78,7 +78,7 @@ const Sidebar = ({ mode, setMode }) => {
               />
             </div>
             <span className="font-bold text-lg">
-              {mode === "upskill" ? "UpSkillLab" : "CounselHub"}
+              {mode === "upskill" ? "UpSkillab" : "CounselHub"}
             </span>
           </div>
         )}
@@ -144,7 +144,7 @@ const Sidebar = ({ mode, setMode }) => {
           <span className="text-lg"><FiRepeat /></span>
           {isOpen && (
             <span className="ml-3">
-              Switch to {mode === "upskill" ? "CounselHub" : "UpSkillLab"}
+              Switch to {mode === "upskill" ? "CounselHub" : "UpSkillab"}
             </span>
           )}
         </button>

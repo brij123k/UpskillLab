@@ -127,7 +127,7 @@ const UpcomingBatches = () => {
             <div className="relative rounded-xl overflow-hidden shadow-2xl h-[300px] sm:h-[350px] lg:h-full">
               <img
                 src={bannerImageUrl}
-                alt="Students learning together at UpSkillLab"
+                alt="Students learning together at UpSkillab"
                 className="w-full h-full object-cover rounded-xl"
                 loading="lazy"
               />

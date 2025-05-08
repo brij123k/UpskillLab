@@ -20,7 +20,6 @@ function Header() {
     queryKey: ["categories"],
     queryFn: async () => {
       const categories = await getDataHandler("category", {
-        limit: 5,
         featured: true,
       });
 
@@ -62,12 +61,15 @@ function Header() {
       return courses.data;
     },
     select: (data) => {
-      return data.map((course) => ({
+      return data
+      .filter((course) => course.featured === true && course.active)
+      .map((course) => ({
         id: course._id,
         title: course.courseName,
         imageUrl: course.courseImage,
         duration: course.courseDuration,
         courseCode: course.courseCode,
+
       }));
     },
   });
@@ -102,7 +104,7 @@ function Header() {
           <motion.div whileHover={{ scale: 1.05 }} className="flex-shrink-0">
             <img
               src="/images/Logo.png"
-              alt="UpskillLab Logo"
+              alt="Upskillab Logo"
               className="h-8 sm:h-10 lg:h-12 2xl:h-14 transition-all duration-200"
             />
           </motion.div>
@@ -179,7 +181,11 @@ function Header() {
                           </h3>
                         </div>
                         <ul className="space-y-1 px-4 pb-4">
-                          {courseCategories.map((category) => (
+                          {courseCategories
+                          .filter((category) => {
+                            return category.courses.length !== 0;
+                          })
+                          .map((category) => (
                             <li key={category.id}>
                               <button
                                 onClick={() => handleCategorySelect(category)}
@@ -239,7 +245,8 @@ function Header() {
                                     </div>
                                   </div>
                                 ))
-                              : AllCourses.slice(0, 4).map((course) => (
+                              : AllCourses.slice(0, 4)
+                              .map((course) => (
                                 <button 
                                 key={course.id}
                                 className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group"
@@ -499,7 +506,11 @@ function Header() {
                         <div className="mt-2 pl-4 space-y-2">
                           {/* Categories List with Courses */}
                           <div className="space-y-4">
-                            {courseCategories.map((category) => {
+                            {courseCategories
+                            .filter((category) => {
+                              return category.courses.length !== 0;
+                            })
+                            .map((category) => {
                               const isCategoryOpen =
                                 selectedCategory?.id === category.id;
                               return (

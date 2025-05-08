@@ -107,7 +107,7 @@ const PrivacyPolicy = () => {
             className="text-gray-700 mb-4 leading-relaxed"
             variants={item}
           >
-            At UpSkillLab, we are committed to protecting your privacy. This Privacy Policy explains how we collect, 
+            At UpSkillab, we are committed to protecting your privacy. This Privacy Policy explains how we collect, 
             use, disclose, and safeguard your information when you use our platform.
           </motion.p>
         </motion.section>

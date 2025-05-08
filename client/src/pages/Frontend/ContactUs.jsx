@@ -394,7 +394,7 @@ const ContactPage = () => {
     {
       icon: <FaMapMarkerAlt />,
       title: "Our Location",
-      info: "UpSkillLab Headquarters",
+      info: "UpSkillab Headquarters",
       description: "H-187, Lohia Rd, H Block, Sector 63, Noida, Uttar Pradesh 201301"
     },
     {
@@ -439,7 +439,7 @@ const ContactPage = () => {
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 100 }}
     >
-      Contact <span className="text-[#FF7426]">UpSkillLab</span>
+      Contact <span className="text-[#FF7426]">UpSkillab</span>
     </motion.h1>
     
     <motion.p
@@ -538,13 +538,13 @@ const ContactPage = () => {
   {/* Map container */}
   <div className="relative h-full w-full z-10">
     <iframe
-      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3888.003168749709!2d77.59441431482193!3d12.9719629908566!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1670c9b44e6d%3A0xf15e5e5e9a9f8c1!2sBangalore%20International%20Tech%20Park!5e0!3m2!1sen!2sin!4v1620000000000!5m2!1sen!2sin"
+      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.018894796157!2d77.3804614!3d28.629195799999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ceff845df14d9%3A0xa0a97bdb85d0a42f!2sWorkWings!5e0!3m2!1sen!2sin!4v1746748077678!5m2!1sen!2sin"
       width="100%"
       height="100%"
       style={{ border: 0, filter: "grayscale(10%) contrast(105%) saturate(90%)" }}
       allowFullScreen=""
       loading="lazy"
-      title="UpSkillLab Location"
+      title="UpSkillab Location"
       className="absolute inset-0"
     />
     
@@ -600,8 +600,8 @@ const ContactPage = () => {
         <FaMapMarkerAlt className="text-[#FF7426]" />
       </div>
       <div>
-        <h4 className="font-bold text-gray-800">UpSkillLab Headquarters</h4>
-        <p className="text-sm text-gray-600 mt-1">123 Tech Park, Innovation Road, Bengaluru, Karnataka 560001</p>
+        <h4 className="font-bold text-gray-800">UpSkillab Headquarters</h4>
+        <p className="text-sm text-gray-600 mt-1">H-187, Lohia Rd, H Block, Sector 63, Noida, Uttar Pradesh 201301</p>
       </div>
     </div>
   </motion.div>

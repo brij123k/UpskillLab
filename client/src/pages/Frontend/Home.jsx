@@ -181,7 +181,7 @@ function Home() {
                         Easily Accessible
                       </h2>
                       <p className='text-gray-600 text-sm sm:text-base mt-1'>
-                        Learning will feel very comfortable with UpskillLab.
+                        Learning will feel very comfortable with Upskillab.
                       </p>
                     </div>
                   </motion.div>

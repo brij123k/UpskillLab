@@ -87,7 +87,7 @@ const TermsOfService = () => {
             className="text-gray-700 mb-4 leading-relaxed"
             variants={item}
           >
-            Welcome to UpSkillLab. These Terms of Service ("Terms") govern your access to and use of our 
+            Welcome to UpSkillab. These Terms of Service ("Terms") govern your access to and use of our 
             website, services, and applications. By using our services, you agree to these Terms.
           </motion.p>
         </motion.section>
@@ -100,7 +100,7 @@ const TermsOfService = () => {
           },
           {
             title: "2. Content Ownership",
-            content: "All course materials, text, graphics, logos, and other content are the property of UpSkillLab or its licensors and are protected by intellectual property laws."
+            content: "All course materials, text, graphics, logos, and other content are the property of UpSkillab or its licensors and are protected by intellectual property laws."
           },
           {
             title: "3. Acceptable Use",
@@ -120,7 +120,7 @@ const TermsOfService = () => {
           },
           {
             title: "7. Limitation of Liability",
-            content: "UpSkillLab will not be liable for any indirect, incidental, or consequential damages arising from your use of our services."
+            content: "UpSkillab will not be liable for any indirect, incidental, or consequential damages arising from your use of our services."
           },
           {
             title: "8. Changes to Terms",

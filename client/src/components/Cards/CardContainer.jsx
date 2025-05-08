@@ -7,9 +7,9 @@ const CardsContainer = () => {
     {
       title: 'Future-Ready Skills Start Here!',
       description:
-        'Welcome to UpskillLab, your one-stop destination to...',
+        'Welcome to Upskillab, your one-stop destination to...',
       fullDescription:
-        'Welcome to UpskillLab, your one-stop destination to prepare for the future. We offer cutting-edge training, reskilling, and upskilling in the most in-demand domains such as Artificial Intelligence (AI), Data Science, Python, Excel, and beyond. Whether you’re a student aiming to upskill for free, a working professional exploring blended learning models, or an ambitious individual looking to fast-track your career, we’ve got a curated path for you. Join us and take charge of your career with expert-led programs, real-world projects, and industry recognition.',
+        'Welcome to Upskillab, your one-stop destination to prepare for the future. We offer cutting-edge training, reskilling, and upskilling in the most in-demand domains such as Artificial Intelligence (AI), Data Science, Python, Excel, and beyond. Whether you’re a student aiming to upskill for free, a working professional exploring blended learning models, or an ambitious individual looking to fast-track your career, we’ve got a curated path for you. Join us and take charge of your career with expert-led programs, real-world projects, and industry recognition.',
       image:
         'https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
       icon: <FiCode />, // Icon for tech skills (AI, Data Science, Python)
@@ -22,9 +22,9 @@ const CardsContainer = () => {
     {
       title: 'Redefine Learning. Reimagine Careers.',
       description:
-        'UpskillLab blends personalized, community-driven learning with....',
+        'Upskillab blends personalized, community-driven learning with....',
       fullDescription:
-        'At UpskillLab, we believe in transformative education. Our approach blends personalized, community-driven learning, immersive and interactive content curated by domain experts, and differentiated instruction models that cater to diverse learning needs. Each course is designed with the perfect balance of academic theory and industry relevance, ensuring you’re not just learning — you’re becoming job-ready.',
+        'At Upskillab, we believe in transformative education. Our approach blends personalized, community-driven learning, immersive and interactive content curated by domain experts, and differentiated instruction models that cater to diverse learning needs. Each course is designed with the perfect balance of academic theory and industry relevance, ensuring you’re not just learning — you’re becoming job-ready.',
       image:
         'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
       icon: <FiBook />, // Icon for learning and education
@@ -39,7 +39,7 @@ const CardsContainer = () => {
       description:
         'Turn your passion into a profession with focused...',
       fullDescription:
-        'Turn your passion into a profession with UpskillLab. Explore focused learning paths in Python Programming, Excel for Business, Data Visualization with Power BI, and Foundational to Advanced Data Science. Join our digital academy today and step into a future where your skills unlock the door to limitless professional opportunities.',
+        'Turn your passion into a profession with Upskillab. Explore focused learning paths in Python Programming, Excel for Business, Data Visualization with Power BI, and Foundational to Advanced Data Science. Join our digital academy today and step into a future where your skills unlock the door to limitless professional opportunities.',
       image:
         'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80',
       icon: <FiStar />, // Icon for passion and achievement
