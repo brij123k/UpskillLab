@@ -153,7 +153,7 @@ const TeacherDashboard = () => {
   </div>
 
   {/* Pending Doubts Card */}
-  <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-[#FF7426] hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/Teacher/Doubts')}>
+  <div className="bg-white rounded-xl shadow-md p-6 border-l-4 border-[#FF7426] hover:shadow-lg transition-shadow cursor-pointer" onClick={() => navigate('/Teacher/Doubt')}>
     <div className="flex justify-between">
       <div>
         <h3 className="text-gray-500 text-sm font-medium">Pending Doubts</h3>
@@ -266,7 +266,7 @@ const TeacherDashboard = () => {
                   <FiMessageSquare className="mr-2" /> Pending Doubts
                 </h2>
                 <button 
-                  onClick={() => navigate('/Teacher/Doubts')}
+                  onClick={() => navigate('/Teacher/Doubt')}
                   className="text-sm text-[#FF7426] hover:underline"
                 >
                   View All
@@ -276,7 +276,7 @@ const TeacherDashboard = () => {
             <div className="divide-y divide-gray-200">
               {dashboardData.pendingDoubts.length > 0 ? (
                 dashboardData.pendingDoubts.map((doubt, index) => (
-                  <div key={index} className="p-4 hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => navigate('/Teacher/Doubts')}>
+                  <div key={index} className="p-4 hover:bg-gray-50 transition-colors cursor-pointer" onClick={() => navigate('/Teacher/Doubt')}>
                     <div className="flex justify-between">
                       <div>
                         <h3 className="font-medium text-[#4D2C5E]">{doubt.student?.name || 'Student'}</h3>
