@@ -38,7 +38,7 @@ function Header() {
         image: category.categoryImage,
         description: category.categoryDescription,
         courses: allCourses.data
-          .filter((course) => course.category._id === category._id)
+          .filter((course) => course.category._id === category._id && course.active)
           .map((course) => ({
             id: course._id,
             courseCode: course.courseCode,
