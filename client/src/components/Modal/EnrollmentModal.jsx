@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { registerBatch } from "../../config/services";
 import { FiUser, FiMail, FiPhone, FiLock } from "react-icons/fi";
 
-const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase }) => {
+const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase ,topic=null }) => {
   // State management
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
@@ -82,6 +82,22 @@ const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase }) => {
     return true;
   };
 
+   const downloadBrochure = () => {
+        if (!course?.brochure) {
+            window.alert("No brochure available for this course");
+            return;
+        }
+
+        const link = document.createElement("a");
+        link.href = course.brochure;
+        link.setAttribute("download", "");
+        link.setAttribute("target", "");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        return;
+    };
+
   // Payment initialization
   const initiatePayment = async () => {
     try {
@@ -98,7 +114,7 @@ const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase }) => {
         orderId: response.orderId,
         paymentSessionId: response.paymentSessionId,
       }));
-
+      downloadBrochure()
       return true;
     } catch (error) {
       toast.error(error.response?.data?.message || "Payment initialization failed");
@@ -227,7 +243,15 @@ const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase }) => {
       {/* Header */}
       <div className="sticky top-0 bg-[#4D2C5E] p-3 sm:p-4 text-white z-10">
         <div className="flex justify-between items-center mb-2 sm:mb-3">
-          <h2 className="text-base sm:text-lg font-bold truncate">Enroll in {course.title}</h2>
+            {topic==null?(
+          <h2 className="text-base sm:text-lg font-bold truncate">
+            Enroll in {course.title}
+            </h2>
+            ):(<>
+          <h2 className="text-base sm:text-lg font-bold truncate">
+            {topic}
+            </h2>
+            </>)}
           <button onClick={onClose} className="text-white hover:text-[#FF7426] p-1">
             ✕
           </button>
@@ -395,7 +419,7 @@ const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase }) => {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full relative">
             {showPaymentLoader && (
               <div className="absolute inset-0 flex flex-col items-center justify-center bg-white z-10">
-                <div className="animate-spin rounded-full h-10 sm:h-12 w-10 sm:w-12 border-t-4 border-b-4 border-[#FF7426]"></div>
+                <div className="animate-spin rounded-full h-10 sm:h-12 w-10 sm:w-12 border-t-4 border-W-4 border-[#FF7426]"></div>
                 <p className="mt-3 sm:mt-4 text-gray-600 text-sm">Loading secure payment gateway...</p>
               </div>
             )}

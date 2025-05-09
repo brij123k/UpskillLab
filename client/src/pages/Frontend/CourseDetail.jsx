@@ -9,6 +9,8 @@ import PurchaseModal from '../../components/Modal/EnrollmentModal';
 import { FiFlag } from 'react-icons/fi';
 import { FiBarChart2,FiGlobe } from 'react-icons/fi';
 import ApiConfig from '../../config/apiConfig';
+import { toast } from "react-toastify";
+import AdmissionFormModal from '../../components/Modal/BasicEnrollNowModal';
 // import RazorpayLogo from '../assets/razorpay-logo.svg'; // Replace with actual import
 const CourseHero = ({ course }) => {
 
@@ -252,7 +254,7 @@ const CourseKeyDetails = ({ course }) => {
         },
         {
   icon: <FiCalendar />,
-  label: "Date of Accommodation",
+  label: "Date of Commencement",
   value: getBatchStatus(course?.startDate),
   accent: "#4D2C5E",
   bg: "#FF7426"
@@ -359,6 +361,7 @@ const CourseKeyDetails = ({ course }) => {
                                 </motion.div>
 
                                 {/* Content */}
+                                
                                 <motion.h3
                                     initial={{ y: 10, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
@@ -709,29 +712,43 @@ const ProgramInfoWithEnroll = ({ course }) => {
 
 
 const TeachingPlan = ({ course }) => {
+    const batchCode = course.batchId;
+    const startDate = course.startDate;
+    const brochure=course.brochure
+    const courseId=course.title
     const ref = useRef(null);
     const isInView = useInView(ref, { once: false, amount: 0.1 });
     const [expandedSession, setExpandedSession] = useState(null);
     const [isDownloading, setIsDownloading] = useState(false);
+    const [selectedCourse, setSelectedCourse] = useState(null);
+    const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const handleEnrollClick = (course) => {
+        setSelectedCourse(course);
+        setIsEnrollModalOpen(true);
+    };
 
+    const handleEnrollSubmit = () => {
+        setIsEnrollModalOpen(false);
+    };
     const toggleSession = (sessionIndex) => {
         setExpandedSession(expandedSession === sessionIndex ? null : sessionIndex);
     };
 
-    const downloadBrochure = () => {
-        if (!course?.brochure) {
-            window.alert("No brochure available for this course");
-            return;
-        }
+    // const downloadBrochure = () => {
+    //     if (!course?.brochure) {
+    //         window.alert("No brochure available for this course");
+    //         return;
+    //     }
 
-        const link = document.createElement("a");
-        link.href = course.brochure;
-        link.setAttribute("download", "");
-        link.setAttribute("target", "_blank");
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-    };
+    //     const link = document.createElement("a");
+    //     link.href = course.brochure;
+    //     link.setAttribute("download", "");
+    //     link.setAttribute("target", "_blank");
+    //     document.body.appendChild(link);
+    //     link.click();
+    //     document.body.removeChild(link);
+    // };
 
     // Flatten all sessions from all weeks into a single array
     const allSessions = course.weeks.flatMap(week => week.sessions);
@@ -931,7 +948,25 @@ const TeachingPlan = ({ course }) => {
                         type="button"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        onClick={downloadBrochure}
+                        // onClick={downloadBrochure}
+                        onClick={() => {
+                                        if (batchCode === "0") {
+                                            setIsModalOpen(true)
+                                        } else {
+                                            // Get today's date (normalized to start of day)
+                                            const today = new Date();
+                                            today.setHours(0, 0, 0, 0);
+
+                                            // Get batch start date (ensure it's a valid Date object)
+                                            const batchStartDate = new Date(startDate || 0);
+
+                                            if (batchStartDate >= today) {
+                                                handleEnrollClick(course);
+                                            } else {
+                                                setIsModalOpen(true)
+                                            }
+                                        }
+                                    }}
                         disabled={isDownloading}
                         className={`flex items-center gap-2 px-5 py-2.5 border-2 rounded-lg transition-all duration-200 ${isDownloading
                             ? 'bg-gray-200 border-gray-300 text-gray-500 cursor-wait'
@@ -957,6 +992,24 @@ const TeachingPlan = ({ course }) => {
                     </motion.button>
                 </motion.div>
             </div>
+            {selectedCourse && (
+                <PurchaseModal
+                    course={selectedCourse}
+                    batchCode={batchCode}
+                    isOpen={isEnrollModalOpen}
+                    onClose={() => { setIsEnrollModalOpen(false); setSelectedCourse(null) }}
+                    onEnroll={handleEnrollSubmit}
+                    topic='Continue the form to download the brochure'
+                />
+            )}
+            <AdmissionFormModal
+            
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        topic='Continue the form to download the brochure'
+        brochure={brochure}
+        currentCourseName={courseId}
+      />
         </div>
     );
 };
@@ -1813,7 +1866,7 @@ const CourseDetails = () => {
         console.log(res2)
         console.log(response)
         let custemDataSet = {
-            id: response._id,
+            id: res2._id,
             batchId: response._id,
             title: res2.courseName,
             batchCode: response.batchCode,

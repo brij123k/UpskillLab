@@ -79,6 +79,22 @@ const EnrollmentModal = ({ batch, onClose }) => {
     return true;
   };
 
+     const downloadBrochure = () => {
+        if (!course?.brochure) {
+            window.alert("No brochure available for this course");
+            return;
+        }
+
+        const link = document.createElement("a");
+        link.href = course.brochure;
+        link.setAttribute("download", "");
+        link.setAttribute("target", "");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        return;
+    };
+
   // Payment initialization
   const initializePayment = async () => {
     try {
@@ -95,7 +111,7 @@ const EnrollmentModal = ({ batch, onClose }) => {
         orderId: response.orderId,
         paymentSessionId: response.paymentSessionId,
       }));
-
+      downloadBrochure()
       return true;
     } catch (error) {
       toast.error(error.response?.data?.message || "Payment initialization failed");

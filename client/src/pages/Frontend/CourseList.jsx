@@ -521,22 +521,21 @@ const CourseList = () => {
               </motion.p>
 
               <motion.div className="flex flex-col sm:flex-row gap-4">
-                <a href="#Courses">
+                <a href="#Courses" variants={itemVariants}
+                    className="bg-[#FF7426] hover:bg-[#E65100] text-white font-bold py-3 px-8 rounded-full transition-colors shadow-lg" >
                   <motion.button
-                    variants={itemVariants}
-                    className="bg-[#FF7426] hover:bg-[#E65100] text-white font-bold py-3 px-8 rounded-full transition-colors shadow-lg"
+                    className="text-center w-full" 
                   >
                     Browse Courses
                   </motion.button>
                 </a>
-                <NavLink to="/ContactUs">
                   <motion.button
+                    onClick={() => setIsModalOpen(true)}
                     variants={itemVariants}
                     className="bg-white/20 hover:bg-white/30 text-white font-bold py-3 px-8 rounded-full transition-colors border border-white/20"
                   >
                     Speak to Advisor
                   </motion.button>
-                </NavLink>
               </motion.div>
             </motion.div>
 
@@ -772,10 +771,15 @@ const CourseList = () => {
                     </svg>
                   </div>
                 </div>
-
+<button onClick={() => navigate(`/courseDetails/course/${course.courseCode}`, {
+                    state: {
+                      courseCode: course.courseCode
+                    }
+                  })}>
                 <h3 className="text-xl font-bold text-[#4D2C5E] mb-2">
                   {course.courseName}
                 </h3>
+                </button>
                 <p className="text-gray-600 mb-4">
                   {course.category.categoryName}
                 </p>

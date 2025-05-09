@@ -21,6 +21,7 @@ const AdmissionForm = () => {
     const res = await getDataHandler('courseDisplay');
     if (res && res.data) {
       const newCourses = res.data
+        .filter((course)=>course.active===true)
         .map((course, index) => ({
           id: index + 1,
           courseId: course._id,

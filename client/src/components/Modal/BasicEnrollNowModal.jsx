@@ -13,7 +13,7 @@ import {
 } from '../Validations';
 import { toast } from "react-toastify";
 import { postDataHandler, getDataHandler } from '../../config/services';
-const AdmissionFormModal = ({ isOpen, onClose }) => {
+const AdmissionFormModal = ({isOpen, onClose,topic=null,brochure=null,currentCourseName=null }) => {
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [loader, setLoader] = useState(false);
 
@@ -22,6 +22,7 @@ const AdmissionFormModal = ({ isOpen, onClose }) => {
       const res = await getDataHandler('courseDisplay');
       if (res && res.data) {
         const newCourses = res.data
+          .filter((course)=>course.active===true)
           .map((course, index) => ({
             id: index + 1,
             courseId: course._id,
@@ -88,6 +89,7 @@ const AdmissionFormModal = ({ isOpen, onClose }) => {
         }
         const res = await postDataHandler('demoSession', data)
         if (res) {
+          downloadBrochure()
           toast.success('Demo session booked successfully!');
         }
         
@@ -98,13 +100,29 @@ const AdmissionFormModal = ({ isOpen, onClose }) => {
       }
     }
 
+       const downloadBrochure = () => {
+        if (!course?.brochure) {
+            // window.alert("No brochure available for this course");
+            return;
+        }
+
+        const link = document.createElement("a");
+        link.href = brochure;
+        link.setAttribute("download", "");
+        link.setAttribute("target", "");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        return;
+    };
+
   // Rest of your component remains the same...
   const formik = useFormik({
     initialValues: {
       fullName: '',
       email: '',
       phone: '',
-      course: '',
+      course: currentCourseName || '',
       studentType: ''
     },
     validationSchema,
@@ -135,7 +153,7 @@ const AdmissionFormModal = ({ isOpen, onClose }) => {
   }, [formik]);
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Start Your Learning Journey">
+    <Modal isOpen={isOpen} onClose={onClose} title={topic!==null?topic:`Start Your Learning Journey`}>
       <AnimatePresence mode="wait">
         {submitSuccess ? (
           <SuccessMessage />
@@ -146,6 +164,7 @@ const AdmissionFormModal = ({ isOpen, onClose }) => {
             handleRadioChange={handleRadioChange}
             handleSelectChange={handleSelectChange}
             courses={courses}
+            currentCourseName={currentCourseName}
           />
         )}
       </AnimatePresence>
@@ -177,7 +196,7 @@ const SuccessMessage = () => (
 );
 
 // Form Content Component
-const FormContent = ({ formik, handleInputChange, handleRadioChange, handleSelectChange,courses   }) => (
+const FormContent = ({ formik, handleInputChange, handleRadioChange, handleSelectChange,courses ,currentCourseName}) => (
   <motion.div
     key="form"
     initial={{ opacity: 0 }}
@@ -232,6 +251,7 @@ const FormContent = ({ formik, handleInputChange, handleRadioChange, handleSelec
         formik={formik}
         handleSelectChange={handleSelectChange}
         courses={courses}
+        currentCourseName={currentCourseName}
       />
 
       <StudentTypeRadio 
@@ -285,7 +305,7 @@ const FormInput = React.memo(({ icon, label, id, name, type, placeholder, formik
 ));
 
 // Course Select Component
-const CourseSelect = React.memo(({ formik, handleSelectChange, courses }) => (
+const CourseSelect = React.memo(({ formik, handleSelectChange, courses,currentCourseName }) => (
   <motion.div
     initial={{ opacity: 0, y: 10 }}
     animate={{ opacity: 1, y: 0 }}
@@ -301,16 +321,22 @@ const CourseSelect = React.memo(({ formik, handleSelectChange, courses }) => (
       </div>
       <select
         id="course"
-        name="course"
-        onChange={handleSelectChange}
-        onBlur={formik.handleBlur}
-        value={formik.values.course}
-        className={`pl-10 w-full px-4 py-3 rounded-lg border ${
-          formik.errors.course && formik.touched.course ? 'border-red-500' : 'border-gray-300'
-        } focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent appearance-none bg-white`}
+  name="course"
+  onChange={handleSelectChange}
+  onBlur={formik.handleBlur}
+  value={currentCourseName !== null ? currentCourseName : formik.values.course}
+  disabled={currentCourseName !== null} // This disables the select if currentCourseName exists
+  className={`pl-10 w-full px-4 py-3 rounded-lg border ${
+    formik.errors.course && formik.touched.course 
+      ? 'border-red-500' 
+      : 'border-gray-300'
+  } focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent appearance-none bg-white ${
+    currentCourseName !== null ? 'bg-gray-100 cursor-not-allowed' : ''
+  }`}
       >
         <option value="">Select a course</option>
-        {courses.map((course) => (
+        {courses
+        .map((course) => (
           <option key={course.title} value={course.title}>
             {course.title}
           </option>
