@@ -112,7 +112,7 @@ function Footer() {
                   </NavLink>
                 </li>
                 <li className="text-[#606060] text-sm sm:text-base">
-                  Trivision Partners Private Limited<br />
+                  UpSkillab Headquarters<br />
                   H-187, Lohia Rd, H Block, Sector 63<br />
                   Noida, Uttar Pradesh 201301
                 </li>
