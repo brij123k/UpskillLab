@@ -394,14 +394,14 @@ const ContactPage = () => {
     {
       icon: <FaMapMarkerAlt />,
       title: "Our Location",
-      info: "UpSkillab Headquarters",
+      info: "Upskillab",
       description: "H-187, Lohia Rd, H Block, Sector 63, Noida, Uttar Pradesh 201301"
     },
     {
       icon: <FaPhone />,
       title: "Phone Number",
       info: "+91-9958958123",
-      description: "Monday to Friday, 9am to 6pm IST"
+      description: "Monday to Saturday, 10am to 7pm IST"
     },
     {
       icon: <FaEnvelope />,
@@ -439,7 +439,7 @@ const ContactPage = () => {
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 100 }}
     >
-      Contact <span className="text-[#FF7426]">UpSkillab</span>
+      Contact <span className="text-[#FF7426]">Upskillab</span>
     </motion.h1>
     
     <motion.p
@@ -544,7 +544,7 @@ const ContactPage = () => {
       style={{ border: 0, filter: "grayscale(10%) contrast(105%) saturate(90%)" }}
       allowFullScreen=""
       loading="lazy"
-      title="UpSkillab Location"
+      title="Upskillab Location"
       className="absolute inset-0"
     />
     
@@ -600,7 +600,7 @@ const ContactPage = () => {
         <FaMapMarkerAlt className="text-[#FF7426]" />
       </div>
       <div>
-        <h4 className="font-bold text-gray-800">UpSkillab Headquarters</h4>
+        <h4 className="font-bold text-gray-800">UpSkillab</h4>
         <p className="text-sm text-gray-600 mt-1">H-187, Lohia Rd, H Block, Sector 63, Noida, Uttar Pradesh 201301</p>
       </div>
     </div>

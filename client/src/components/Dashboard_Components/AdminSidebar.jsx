@@ -78,7 +78,7 @@ const Sidebar = ({ mode, setMode }) => {
               />
             </div>
             <span className="font-bold text-lg">
-              {mode === "upskill" ? "UpSkillab" : "CounselHub"}
+              {mode === "upskill" ? "Upskillab" : "CounselHub"}
             </span>
           </div>
         )}

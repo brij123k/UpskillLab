@@ -112,7 +112,7 @@ function Footer() {
                   </NavLink>
                 </li>
                 <li className="text-[#606060] text-sm sm:text-base">
-                  UpSkillab Headquarters<br />
+                  Upskillab<br />
                   H-187, Lohia Rd, H Block, Sector 63<br />
                   Noida, Uttar Pradesh 201301
                 </li>

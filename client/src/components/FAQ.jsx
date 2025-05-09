@@ -268,22 +268,22 @@ const FAQ = ({ faqs }) => {
                             className="relative"
                             whileHover="hover"
                         >
-                            <div className="absolute -inset-8 rounded-3xl bg-gradient-to-br from-[#FF7426] to-[#4D2C5E] opacity-20 blur-xl"></div>
+                            <div className="absolute -inset-8 rounded-3xl opacity-20  blur-xl"></div>
                             <motion.div 
-                                className="relative overflow-hidden rounded-2xl"
+                                className="relative overflow-hidden rounded-2xl shadow-2xl border-1 border-[#4D2C5E]"
                                 whileHover={{ scale: 1.02 }}
                             >
                                 <img
-                                    src="https://img.freepik.com/free-vector/faq-concept-illustration_114360-7515.jpg"
+                                    src="/images/7720441.png"
                                     alt="FAQ Illustration"
                                     className="h-auto w-full max-w-md object-cover"
                                 />
-                                <motion.div 
+                                {/* <motion.div 
                                     className="absolute inset-0 bg-gradient-to-t from-[#4D2C5E] to-transparent opacity-30"
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 0.3 }}
                                     transition={{ delay: 1 }}
-                                />
+                                /> */}
                             </motion.div>
                             
                             {/* Floating elements */}

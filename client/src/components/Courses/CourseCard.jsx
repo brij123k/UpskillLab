@@ -115,9 +115,9 @@ const CourseCard = ({
             </div>
             <button 
               onClick={() => navigate(`/courseDetails/course/${courseCode}`, { state: { courseId, courseCode } })}
-              className="flex items-center text-[#FF7426] hover:text-[#FF915E] transition-colors"
+              className="flex items-center border-1 rounded-2xl border-[#4D2C5E] px-2 py-1 hover:bg-[#4D2C5E] cursor-pointer text-[#4D2C5E] hover:text-[#fff] transition-colors"
             >
-              <span className="mr-1 font-medium">View more</span>
+              <span className="mr-1 font-normal">View more</span>
               <FiArrowRight />
             </button>
           </div>

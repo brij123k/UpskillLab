@@ -314,7 +314,7 @@ function Home() {
               >
                 <div className="absolute inset-0 flex items-center justify-center">
                   <motion.img
-                    src="/images/contact Us.png"
+                    src="/images/Contact.png"
                     alt="Contact us illustration"
                     className="w-full h-full object-contain"
                   />
