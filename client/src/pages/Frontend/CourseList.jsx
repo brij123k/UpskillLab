@@ -711,9 +711,9 @@ const CourseList = () => {
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.3 }}
-                    className="absolute top-4 left-4 bg-[#fff] text-xs font-bold px-3 py-1 rounded-full shadow-md"
+                    className="absolute top-4 left-4 bg-white/90 text-xs font-bold p-2 rounded-full shadow-md"
                   >
-                    <img src={course?.certifierLogo || "/images/Logo.png"} className="h-5" />
+                    <img src={course?.certifierLogo || "/images/Logo.svg"} className="h-7 shadow-2xl" />
 
                   </motion.div>
                 <motion.div
