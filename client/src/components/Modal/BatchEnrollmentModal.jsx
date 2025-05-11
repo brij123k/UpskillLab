@@ -105,13 +105,14 @@ const EnrollmentModal = ({ batch, onClose }) => {
         phone: formData.phone,
         amount: paymentData.discountedPrice,
       });
+      console.log(response)
 
       setPaymentData(prev => ({
         ...prev,
         orderId: response.orderId,
         paymentSessionId: response.paymentSessionId,
       }));
-      downloadBrochure()
+      // downloadBrochure()
       return true;
     } catch (error) {
       toast.error(error.response?.data?.message || "Payment initialization failed");
