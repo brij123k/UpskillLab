@@ -68,9 +68,14 @@ const ApiConfig = {
   studyMaterialById:(id)=>`${url}/study-materials/${id}`,
   studyMaterialByTeacher:(id)=>`${url}/study-materials/teacher/${id}`,
 
+  teacherSugegstions:`${url}/suggestions`,
+  teacherSugegstionsget:`${url}/suggestions/teacher`,
   // Schedule
   ClassSchedule:`${url}/Class-Schedule/teacher`,
   doubtsResponse:(id)=>`${url}/doubts/${id}/message`,
+  Notifications:(role)=>`${url}/notifications/role/${role}`,
+  MarkAsReadNotifications:(id)=>`${url}/notifications/${id}/read`,
+  deleteNotifications:(id)=>`${url}/notifications/${id}/`,
 
   // student panel
   studentProfile:`${url}/enrollment`,

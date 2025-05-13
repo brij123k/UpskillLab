@@ -1,97 +1,161 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiBell, FiChevronRight, FiFilter, FiSearch, FiCheck, FiTrash2 } from 'react-icons/fi';
-
+import ApiConfig from '../../../config/apiConfig';
+import { deleteDataHandler, getDataHandlerWithToken, patchTokenDataHandler } from '../../../config/services';
+import { toast } from 'react-toastify';
+import useNotificationService from '../../../config/notificationService';
 const StudentNotifications = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  
-  // Mock notification data
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: 'doubt',
-      title: 'New doubt in Python course',
-      message: 'Student Rahul asked: "How do decorators work in Python?"',
-      time: '10 minutes ago',
-      read: false,
-      course: 'Python Fundamentals',
-      date: '2023-06-15'
-    },
-    {
-      id: 2,
-      type: 'reminder',
-      title: 'Class starting soon',
-      message: 'Your "Web Development" class starts in 30 minutes',
-      time: '1 hour ago',
-      read: true,
-      course: 'Web Development',
-      date: '2023-06-15'
-    },
-    {
-      id: 3,
-      type: 'submission',
-      title: 'Assignment submitted',
-      message: 'Priya has submitted the Data Science assignment',
-      time: '3 hours ago',
-      read: false,
-      course: 'Data Science',
-      date: '2023-06-14'
-    },
-    {
-      id: 4,
-      type: 'enrollment',
-      title: 'New student enrolled',
-      message: 'Amit has enrolled in your Advanced Python course',
-      time: '1 day ago',
-      read: true,
-      course: 'Advanced Python',
-      date: '2023-06-13'
-    },
-    {
-      id: 5,
-      type: 'system',
-      title: 'System maintenance',
-      message: 'Scheduled maintenance this weekend. Platform will be unavailable for 2 hours.',
-      time: '2 days ago',
-      read: true,
-      course: '',
-      date: '2023-06-12'
+  const {notifications, setNotifications} = useNotificationService('student',['student','teacherStudent','adminStudent']);
+  const [loading, setLoading] = useState(true);
+  const [notificationTypes, setNotificationTypes] = useState([]);
+
+  // Function to format time difference
+  const formatTimeAgo = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+    
+    if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    return `${Math.floor(diffInSeconds / 86400)} days ago`;
+  };
+
+  // Function to format date
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: 'numeric' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  // Function to get notification title based on type
+  const getTitleByType = (type) => {
+    const typeMap = {
+      'ALERT': 'System Alert',
+      'DOUBT': 'Doubt Response',
+      'COURSE_UPDATE': 'Course Update',
+      'ASSIGNMENT': 'New Assignment',
+      'GRADE': 'Grade Posted',
+      'REMINDER': 'Reminder',
+      'ANNOUNCEMENT': 'Announcement',
+      'FEEDBACK': 'Feedback'
+    };
+    return typeMap[type] || type.replace('_', ' ');
+  };
+
+  const fetchNotifications = async () => {
+    try {
+      setLoading(true);
+      const endpoint = ApiConfig.Notifications('student');
+      const endpoint2 = ApiConfig.Notifications('teacherStudent');
+      const endpoint3 = ApiConfig.Notifications('adminStudent');
+      
+      const [response, response2, response3] = await Promise.all([
+        getDataHandlerWithToken(endpoint, null, null, true),
+        getDataHandlerWithToken(endpoint2, null, null, true),
+        getDataHandlerWithToken(endpoint3, null, null, true)
+      ]);
+      
+      const allNotifications = [
+        ...(response || []),
+        ...(response2 || []),
+        ...(response3 || [])
+      ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      // Extract unique notification types
+      const types = [...new Set(allNotifications.map(n => n.type))];
+      setNotificationTypes(types);
+      
+      setNotifications(allNotifications);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    } finally {
+      setLoading(false);
     }
-  ]);
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
 
   // Filter notifications based on active filter and search query
+  if(notifications.length>0){
+    
+  }
   const filteredNotifications = notifications.filter(notification => {
     const matchesFilter = activeFilter === 'all' || 
                          (activeFilter === 'unread' && !notification.read) ||
-                         (activeFilter === 'course' && notification.course) ||
                          (notification.type === activeFilter);
     
-    const matchesSearch = notification.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         notification.message.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         notification.course.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = getTitleByType(notification.type).toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         notification.message.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesFilter && matchesSearch;
   });
 
   // Mark notification as read
-  const markAsRead = (id) => {
-    setNotifications(notifications.map(notification => 
-      notification.id === id ? { ...notification, read: true } : notification
-    ));
+  const markAsRead = async (id) => {
+    try {
+      const endpoint = ApiConfig.MarkAsReadNotifications(id);
+      const response = await patchTokenDataHandler(endpoint, [], true);
+      if (response) {
+        setNotifications(notifications.map(notification => 
+          notification._id === id ? { ...notification, read: true } : notification
+        ));
+        toast.success("Marked As Readed")
+      }
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
   };
 
   // Delete notification
-  const deleteNotification = (id) => {
-    setNotifications(notifications.filter(notification => notification.id !== id));
+  const deleteNotification = async (id) => {
+    try {
+      const endpoint = ApiConfig.deleteNotifications(id);
+      const response = await deleteDataHandler(endpoint, true);
+      if (response) {
+        setNotifications(notifications.filter(notification => notification._id !== id));
+        toast.success("Notification Deleted")
+      }
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+    }
   };
 
   // Mark all as read
-  const markAllAsRead = () => {
-    setNotifications(notifications.map(notification => ({
-      ...notification,
-      read: true
-    })));
+  const markAllAsRead = async () => {
+    try {
+      // Optimistic UI update
+      setNotifications(notifications.map(notification => ({
+        ...notification,
+        read: true
+      })));
+      
+      // API calls for all unread notifications
+      const unreadNotifications = notifications.filter(n => !n.read);
+      await Promise.all(
+        unreadNotifications.map(async notification => {
+          const endpoint = ApiConfig.MarkAsReadNotifications(notification._id);
+          // toast.success("Marked all Read")
+          return patchTokenDataHandler(endpoint, [], true);
+        })
+      );
+    } catch (error) {
+      console.error('Error marking all notifications as read:', error);
+      fetchNotifications(); // Revert to actual state
+    }
   };
+
+  if (loading) {
+    return (
+      <div className="p-6 max-w-6xl mx-auto">
+        <div className="flex justify-center items-center h-64">
+          <p>Loading notifications...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
@@ -102,8 +166,10 @@ const StudentNotifications = () => {
         </h1>
         <button 
           onClick={markAllAsRead}
-          className="text-sm text-[#4D2C5E] hover:text-[#FF7426]"
+          className="text-sm text-[#4D2C5E] hover:text-[#FF7426] flex items-center"
+          disabled={notifications.every(n => n.read)}
         >
+          <FiCheck className="mr-1" />
           Mark all as read
         </button>
       </div>
@@ -124,7 +190,7 @@ const StudentNotifications = () => {
           </div>
           
           {/* Filter Buttons */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 overflow-x-auto py-1">
             <button
               onClick={() => setActiveFilter('all')}
               className={`px-3 py-1 rounded-full text-sm flex items-center ${activeFilter === 'all' ? 'bg-[#4D2C5E] text-white' : 'bg-gray-100 text-gray-700'}`}
@@ -138,18 +204,16 @@ const StudentNotifications = () => {
             >
               Unread
             </button>
-            <button
-              onClick={() => setActiveFilter('doubt')}
-              className={`px-3 py-1 rounded-full text-sm ${activeFilter === 'doubt' ? 'bg-[#4D2C5E] text-white' : 'bg-gray-100 text-gray-700'}`}
-            >
-              Doubts
-            </button>
-            <button
-              onClick={() => setActiveFilter('course')}
-              className={`px-3 py-1 rounded-full text-sm ${activeFilter === 'course' ? 'bg-[#4D2C5E] text-white' : 'bg-gray-100 text-gray-700'}`}
-            >
-              Course Updates
-            </button>
+            
+            {notificationTypes.map(type => (
+              <button
+                key={type}
+                onClick={() => setActiveFilter(type)}
+                className={`px-3 py-1 rounded-full text-sm whitespace-nowrap ${activeFilter === type ? 'bg-[#4D2C5E] text-white' : 'bg-gray-100 text-gray-700'}`}
+              >
+                {getTitleByType(type)}
+              </button>
+            ))}
           </div>
         </div>
       </div>
@@ -160,51 +224,54 @@ const StudentNotifications = () => {
           <ul className="divide-y divide-gray-200">
             {filteredNotifications.map(notification => (
               <li 
-                key={notification.id} 
-                className={`hover:bg-gray-50 ${!notification.read ? 'bg-blue-50' : ''}`}
+                key={notification._id} 
+                className={`hover:bg-gray-50 transition-colors ${!notification.read ? 'bg-blue-50' : ''}`}
               >
                 <div className="p-4">
                   <div className="flex justify-between items-start">
                     <div className="flex-grow">
-                      <div className="flex items-center">
+                      <div className="flex items-center flex-wrap gap-2">
                         <h3 className={`font-medium ${!notification.read ? 'text-[#4D2C5E]' : 'text-gray-700'}`}>
-                          {notification.title}
+                          {getTitleByType(notification.type)}
                         </h3>
-                        {notification.course && (
-                          <span className="ml-2 px-2 py-0.5 bg-[#FF7426]/10 text-[#FF7426] text-xs rounded-full">
-                            {notification.course}
-                          </span>
-                        )}
+                        <span className="px-2 py-0.5 bg-[#FF7426]/10 text-[#FF7426] text-xs rounded-full">
+                          {notification.type.replace('_', ' ')}
+                        </span>
                       </div>
                       <p className="text-gray-600 mt-1">{notification.message}</p>
                       <div className="flex items-center text-xs text-gray-400 mt-2">
-                        <span>{notification.time}</span>
+                        <span>{formatTimeAgo(notification.createdAt)}</span>
                         <span className="mx-2">•</span>
-                        <span>{notification.date}</span>
+                        <span>{formatDate(notification.createdAt)}</span>
                       </div>
                     </div>
                     <div className="flex space-x-2 ml-4">
                       {!notification.read && (
                         <button
-                          onClick={() => markAsRead(notification.id)}
-                          className="p-1 text-green-600 hover:text-green-800"
+                          onClick={() => markAsRead(notification._id)}
+                          className="p-1 text-green-600 hover:text-green-800 transition-colors"
                           title="Mark as read"
                         >
                           <FiCheck />
                         </button>
                       )}
                       <button
-                        onClick={() => deleteNotification(notification.id)}
-                        className="p-1 text-red-500 hover:text-red-700"
+                        onClick={() => deleteNotification(notification._id)}
+                        className="p-1 text-red-500 hover:text-red-700 transition-colors"
                         title="Delete"
                       >
                         <FiTrash2 />
                       </button>
                     </div>
                   </div>
-                  {notification.type === 'doubt' && (
-                    <button className="mt-3 text-sm text-[#4D2C5E] hover:text-[#FF7426] flex items-center">
-                      Respond to doubt <FiChevronRight className="ml-1" />
+                  {notification.type === 'DOUBT' && (
+                    <button className="mt-3 text-sm text-[#4D2C5E] hover:text-[#FF7426] flex items-center transition-colors">
+                      View doubt <FiChevronRight className="ml-1" />
+                    </button>
+                  )}
+                  {notification.type === 'ASSIGNMENT' && (
+                    <button className="mt-3 text-sm text-[#4D2C5E] hover:text-[#FF7426] flex items-center transition-colors">
+                      View assignment <FiChevronRight className="ml-1" />
                     </button>
                   )}
                 </div>
@@ -225,23 +292,26 @@ const StudentNotifications = () => {
         )}
       </div>
 
-      {/* Pagination (would be dynamic in real app) */}
+      {/* Pagination */}
       {filteredNotifications.length > 0 && (
         <div className="flex justify-between items-center mt-6 px-4">
-          <button className="px-4 py-2 text-sm text-gray-700 hover:text-[#4D2C5E]">
+          <button 
+            className="px-4 py-2 text-sm text-gray-700 hover:text-[#4D2C5E] disabled:opacity-50"
+            disabled={true}
+          >
             Previous
           </button>
           <div className="flex space-x-1">
-            {[1, 2, 3].map(page => (
-              <button
-                key={page}
-                className={`w-8 h-8 rounded-full text-sm ${page === 1 ? 'bg-[#4D2C5E] text-white' : 'text-gray-700 hover:bg-gray-100'}`}
-              >
-                {page}
-              </button>
-            ))}
+            <button
+              className="w-8 h-8 rounded-full text-sm bg-[#4D2C5E] text-white"
+            >
+              1
+            </button>
           </div>
-          <button className="px-4 py-2 text-sm text-gray-700 hover:text-[#4D2C5E]">
+          <button 
+            className="px-4 py-2 text-sm text-gray-700 hover:text-[#4D2C5E] disabled:opacity-50"
+            disabled={true}
+          >
             Next
           </button>
         </div>

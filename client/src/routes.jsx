@@ -33,7 +33,7 @@ const TeacherDashboard= lazy(()=> import("./pages/Dashboard/Teacher/TeacherDashb
 const TeacherProfile= lazy(()=> import("./pages/Dashboard/Teacher/TeacherProfile"))
 const StudyMaterials= lazy(()=> import("./pages/Dashboard/Teacher/StudyMaterials"))
 const ClassSchedule= lazy(()=> import("./pages/Dashboard/Teacher/ClassSchedule"))
-const TeacherSuggestions= lazy(()=> import("./pages/Dashboard/Teacher/TeacherSuggestions"))
+const TeacherSuggestions= lazy(()=> import("./pages/Dashboard/Teacher/TeacherSuggestion"))
 const MarketAnalysis= lazy(()=> import("./pages/Dashboard/Teacher/MarketAnalysis"))
 const LiveClasses= lazy(()=> import("./pages/Dashboard/Teacher/LiveClasses"))
 const DoubtHandling= lazy(()=> import("./pages/Dashboard/Teacher/DoubtHandling"))

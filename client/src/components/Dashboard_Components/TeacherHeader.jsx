@@ -5,29 +5,87 @@ import {
   FiTrendingUp, FiVideo, FiBell, FiUser, 
   FiLogOut, FiSend, FiMenu, FiX, FiChevronRight
 } from "react-icons/fi";
+
+import { FaChalkboardTeacher} from "react-icons/fa";
 import { useAuth } from '../../context/AuthContext';
+import ApiConfig from "../../config/apiConfig";
+import useNotificationService from "../../config/notificationService";
+import { getDataHandlerWithToken } from "../../config/services";
 function TeacherHeader() {
   const {logout} = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
-  const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
+const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] = useState(false);
-  const [newSuggestion, setNewSuggestion] = useState("");
   const navigate = useNavigate();
+  const {notifications, setNotifications} = useNotificationService('teacher',['teacher','teacherStudent','adminTeacher'])
+  const [loading, setLoading] = useState(true);
 
-  // Notification dropdown ref for click outside detection
   const notificationRef = useRef(null);
 
-  // Mock data
-  const notifications = [
-    { id: 1, text: "New doubt in Python course", time: "10 min ago", read: false },
-    { id: 2, text: "Class reminder: Web Dev at 3 PM", time: "1 hour ago", read: true },
-    { id: 3, text: "Student completed assignment", time: "2 hours ago", read: false },
-    { id: 4, text: "New enrollment in Data Science", time: "5 hours ago", read: true }
-  ];
+  
+  const formatTimeAgo = (dateString) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInSeconds = Math.floor((now - date) / 1000);
+    
+    if (diffInSeconds < 60) return `${diffInSeconds} seconds ago`;
+    if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+    if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+    return `${Math.floor(diffInSeconds / 86400)} days ago`;
+  };
 
-  const unreadNotifications = notifications.filter(notification => !notification.read);
+  // Get notification title by type
+  const getTitleByType = (type) => {
+    const typeMap = {
+      'ALERT': 'System Alert',
+      'DOUBT': 'New Doubt',
+      'COURSE_UPDATE': 'Course Update',
+      'SUBMISSION': 'Assignment Submitted',
+      'ENROLLMENT': 'New Enrollment',
+      'REMINDER': 'Reminder',
+      'ANNOUNCEMENT': 'Announcement',
+      'FEEDBACK': 'Feedback'
+    };
+    return typeMap[type] || type.replace('_', ' ');
+  };
 
+  // Fetch initial notifications
+  const fetchNotifications = async () => {
+    try {
+      setLoading(true);
+      const endpoint = ApiConfig.Notifications('teacher');
+      const endpoint2 = ApiConfig.Notifications('adminTeacher');
+      const endpoint3 = ApiConfig.Notifications('teacherStudent');
+      
+      const [response, response2, response3] = await Promise.all([
+        getDataHandlerWithToken(endpoint, null, null, true),
+        getDataHandlerWithToken(endpoint2, null, null, true),
+        getDataHandlerWithToken(endpoint3, null, null, true)
+      ]);
+      
+      const allNotifications = [
+        ...(response || []),
+        ...(response2 || []),
+        ...(response3 || [])
+      ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      
+      // Get top 5 latest notifications
+      const latestNotifications = allNotifications.slice(0, 5);
+      console.log(latestNotifications)
+      setNotifications(latestNotifications);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+      toast.error('Failed to load notifications');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(()=>{
+    fetchNotifications()
+  },[])
+ 
   // Click outside handler for notification dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -45,10 +103,10 @@ function TeacherHeader() {
   // Toggle notification dropdown
   const toggleNotificationDropdown = () => {
     setIsNotificationDropdownOpen(!isNotificationDropdownOpen);
-    // Close other dropdowns if open
     setIsProfileDropdownOpen(false);
   };
 
+  const unreadNotifications = notifications.filter(notification => !notification.read);
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <nav className="max-w-8xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -102,7 +160,7 @@ function TeacherHeader() {
             }
           >
             <FiVideo className="mr-1" />
-            Live Classes
+            Teacher Suggestions
           </NavLink> */}
 
           <NavLink
@@ -140,16 +198,32 @@ function TeacherHeader() {
                 </div>
                 
                 <div className="py-1 max-h-96 overflow-y-auto">
-                  {notifications.length > 0 ? (
+                  {loading ? (
+                    <div className="px-3 py-4 text-center text-gray-500">
+                      Loading notifications...
+                    </div>
+                  ) : notifications.length > 0 ? (
                     notifications.map(notification => (
                       <div 
-                        key={notification.id} 
+                        key={notification._id} 
                         className={`px-3 py-3 border-b border-gray-100 cursor-pointer hover:bg-gray-50 ${
                           !notification.read ? 'bg-blue-50' : ''
                         }`}
                       >
-                        <p className="text-gray-800">{notification.text}</p>
-                        <p className="text-xs text-gray-400 mt-1">{notification.time}</p>
+                        <div className="flex justify-between items-start">
+                          <div>
+                            <p className="text-sm font-medium text-gray-800">
+                              {getTitleByType(notification.type)}
+                            </p>
+                            <p className="text-xs text-gray-600 mt-1">{notification.message}</p>
+                            <p className="text-xs text-gray-400 mt-1">
+                              {formatTimeAgo(notification.createdAt)}
+                            </p>
+                          </div>
+                          <span className="px-2 py-0.5 bg-[#FF7426]/10 text-[#FF7426] text-xs rounded-full whitespace-nowrap">
+                            {notification.type.replace('_', ' ')}
+                          </span>
+                        </div>
                       </div>
                     ))
                   ) : (
@@ -216,6 +290,13 @@ function TeacherHeader() {
                   >
                     <FiTrendingUp className="mr-2" />
                     Market Analysis
+                  </NavLink>
+                  <NavLink
+                    to="/Teacher/Suggestions"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                  >
+                    <FaChalkboardTeacher className="mr-2" />
+                    Teacher Suggestions
                   </NavLink>
                   <NavLink
                     to="/Teacher/Notifications"
@@ -306,14 +387,15 @@ function TeacherHeader() {
                 Market Analysis
               </NavLink>
 
-              {/* <NavLink
-                to="/Teacher/Classes"
+              <NavLink
+                to="/Teacher/Suggestions"
                 className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <FiVideo className="inline mr-3" />
-                Live Classes
-              </NavLink> */}
+              
+                <FaChalkboardTeacher className="inline mr-2" />
+                    Teacher Suggestions
+              </NavLink>
 
               <NavLink
                 to="/Teacher/Doubt"
