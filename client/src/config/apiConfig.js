@@ -78,11 +78,15 @@ const ApiConfig = {
   deleteNotifications:(id)=>`${url}/notifications/${id}/`,
 
   // student panel
+  profile:`${url}/students/me`,
   studentProfile:`${url}/enrollment`,
   studyMaterialByCourse:(id)=>`${url}/study-materials/course/${id}`,
   doubts:`${url}/doubts`,
   StudentClassSchedule:`${url}/Class-Schedule/student`,
-
+  getJobs:`${url}/jobs`,
+  postApplications:`${url}/applications`,
+  recordedVideos:`${url}/recorded-videos`,
+  recordedVideosbyid:(id)=>`${url}/recorded-videos/${id}`
 
 };
 

@@ -21,9 +21,11 @@ const StudentHeader = () => {
   const { logout } = useAuth();
   const { notifications, setNotifications } = useNotificationService('student', ['student', 'teacherStudent', 'adminStudent']);
   const [loading, setLoading] = useState(true);
-  const [socket, setSocket] = useState(null);
+  const [profileImage, setProfileImage] = useState(null);
 
   // Format time ago
+
+
   const formatTimeAgo = (dateString) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -51,6 +53,11 @@ const StudentHeader = () => {
   };
 
   // Fetch initial notifications
+  const fatchprofile=async ()=>{
+    const profile= await getDataHandlerWithToken('profile');
+    setProfileImage(profile.image)
+    console.log(profile)
+  }
   const fetchNotifications = async () => {
     try {
       setLoading(true);
@@ -81,47 +88,51 @@ const StudentHeader = () => {
     }
   };
 
+  useEffect(()=>{
+    fatchprofile()
+    fetchNotifications()
+  },[])
   // Initialize socket connection
-  useEffect(() => {
-    const newSocket = io(ApiConfig.baseUrl, {
-      path: '/socket.io',
-      transports: ['websocket'],
-      withCredentials: true
-    });
+  // useEffect(() => {
+  //   const newSocket = io(ApiConfig.baseUrl, {
+  //     path: '/socket.io',
+  //     transports: ['websocket'],
+  //     withCredentials: true
+  //   });
 
-    setSocket(newSocket);
+  //   setSocket(newSocket);
 
-    return () => {
-      newSocket.disconnect();
-    };
-  }, []);
+  //   return () => {
+  //     newSocket.disconnect();
+  //   };
+  // }, []);
 
-  // Set up socket listeners
-  useEffect(() => {
-    if (!socket) return;
+  // // Set up socket listeners
+  // useEffect(() => {
+  //   if (!socket) return;
 
-    // Listen for new notifications
-    socket.on('newNotification', (newNotification) => {
-      // Check if the notification is relevant for the student
-      if (['student', 'teacherStudent', 'adminStudent'].includes(newNotification.recipientType)) {
-        setNotifications(prev => {
-          // Add new notification at the top
-          const updated = [newNotification, ...prev];
-          // Keep only the latest 5
-          return updated.slice(0, 5);
-        });
-        // Show toast for new notification
-        toast.info(getTitleByType(newNotification.type) + ': ' + newNotification.message);
-      }
-    });
+  //   // Listen for new notifications
+  //   socket.on('newNotification', (newNotification) => {
+  //     // Check if the notification is relevant for the student
+  //     if (['student', 'teacherStudent', 'adminStudent'].includes(newNotification.recipientType)) {
+  //       setNotifications(prev => {
+  //         // Add new notification at the top
+  //         const updated = [newNotification, ...prev];
+  //         // Keep only the latest 5
+  //         return updated.slice(0, 5);
+  //       });
+  //       // Show toast for new notification
+  //       toast.info(getTitleByType(newNotification.type) + ': ' + newNotification.message);
+  //     }
+  //   });
 
-    // Initial fetch
-    fetchNotifications();
+  //   // Initial fetch
+  //   fetchNotifications();
 
-    return () => {
-      socket.off('newNotification');
-    };
-  }, [socket]);
+  //   return () => {
+  //     socket.off('newNotification');
+  //   };
+  // }, [socket]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -144,8 +155,8 @@ const StudentHeader = () => {
         <NavLink to="/student/dashboard">
           <div className="flex-shrink-0">
             <img
-              src="/images/student-logo.png"
-              alt="Upskillab Student Logo"
+              src="/images/Logo.png"
+              alt="Upskillab Logo"
               className="h-10"
             />
           </div>
@@ -273,7 +284,7 @@ const StudentHeader = () => {
               className="flex items-center space-x-1 focus:outline-none"
             >
               <img
-                src="/images/default-student-avatar.png"
+                src={profileImage}
                 alt="Student"
                 className="h-8 w-8 rounded-full border border-[#4D2C5E]"
               />

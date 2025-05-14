@@ -115,7 +115,7 @@ const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
           <div className="flex-shrink-0">
             <img
               src="/images/Logo.png"
-              alt="Upskillab Teacher Logo"
+              alt="Upskillab Logo"
               className="h-10"
             />
           </div>

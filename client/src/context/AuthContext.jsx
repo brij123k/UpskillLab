@@ -1,20 +1,23 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getUserDetails, refreshAuthToken } from '../config/services';
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
   const storedAuth = sessionStorage.getItem('auth');
   const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
-  const [isAuthenticated, setIsAuthenticated] = useState(!!initialAuth?.authToken);
+
   const [auth, setAuth] = useState(initialAuth);
   const [userDetails, setUserDetails] = useState(null);
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+  const [isAuthenticated, setIsAuthenticated] = useState(!!initialAuth?.authToken);
 
-// Initialize auth state
-useEffect(() => {
+  const tokenRefreshTimeoutRef = useRef(null);
+
+  useEffect(() => {
     const initializeAuth = async () => {
       if (auth?.authToken) {
         try {
@@ -27,8 +30,11 @@ useEffect(() => {
       }
       setLoading(false);
     };
-
     initializeAuth();
+
+    return () => {
+      clearTimeout(tokenRefreshTimeoutRef.current);
+    };
   }, []);
 
   const fetchUserDetails = async () => {
@@ -44,11 +50,11 @@ useEffect(() => {
 
   const isTokenExpiredOrExpiring = () => {
     if (!auth?.authToken || !auth?.authTokenExpiryDate) return true;
-    
+
     const expiryTime = new Date(auth.authTokenExpiryDate).getTime();
     const currentTime = Date.now();
     const bufferTime = 5 * 60 * 1000; // 5 minutes buffer
-    
+
     return expiryTime - currentTime <= bufferTime;
   };
 
@@ -56,21 +62,18 @@ useEffect(() => {
     if (!auth?.refreshToken) {
       throw new Error('No refresh token available');
     }
-    
+
     try {
       const response = await refreshAuthToken();
-      if (response.data.authToken && response.data.authTokenExpiryDate) {
-        const newAuth = {
-          authToken: response.data.authToken,
-          authTokenExpiryDate: response.data.authTokenExpiryDate,
-          refreshToken: response.data.refreshToken
-        };
-        sessionStorage.removeItem('auth');
+      const { authToken, authTokenExpiryDate, refreshToken } = response.data;
+
+      if (authToken && authTokenExpiryDate) {
+        const newAuth = { authToken, authTokenExpiryDate, refreshToken };
         setAuth(newAuth);
         sessionStorage.setItem('auth', JSON.stringify(newAuth));
-        isTokenExpiredOrExpiring()
-        return newAuth.authToken;
+        return authToken;
       }
+
       throw new Error('Invalid token response');
     } catch (error) {
       console.error('Token refresh failed:', error);
@@ -80,16 +83,16 @@ useEffect(() => {
 
   const getValidToken = async () => {
     if (!auth) return null;
-    
+
     if (isTokenExpiredOrExpiring()) {
       try {
         return await refreshToken();
-      } catch (error) {
+      } catch {
         logout();
         return null;
       }
     }
-    
+
     return auth.authToken;
   };
 
@@ -100,19 +103,20 @@ useEffect(() => {
         authTokenExpiryDate: authData.authTokenExpiryDate,
         refreshToken: authData.refreshToken
       };
-      
+
       setAuth(newAuth);
       sessionStorage.setItem('auth', JSON.stringify(newAuth));
-      
+
       const details = await fetchUserDetails();
-      
+
       if (!details.isActive) {
         throw new Error('Your account is inactive. Please contact support.');
       }
+
       setIsAuthenticated(true);
       setupTokenRefresh();
       redirectUser(details.userType);
-      
+
       return details;
     } catch (error) {
       logout();
@@ -125,42 +129,33 @@ useEffect(() => {
     setUserDetails(null);
     sessionStorage.removeItem('auth');
     setIsAuthenticated(false);
+    clearTimeout(tokenRefreshTimeoutRef.current);
     toast.success('Logged out successfully');
     navigate('/login');
   };
-
-  // const isAuthenticated = async () => {
-  //   console.log("hello")
-  //   try {
-  //     const validToken = await getValidToken();
-  //     return !!validToken;
-  //   } catch (error) {
-  //     return false;
-  //   }
-  // };
 
   const setupTokenRefresh = () => {
     if (!auth?.authTokenExpiryDate) return;
 
     const expiryTime = new Date(auth.authTokenExpiryDate).getTime();
     const currentTime = Date.now();
-    const bufferTime = 5 * 60 * 1000; // 5 minutes buffer
+    const bufferTime = 5 * 60 * 1000;
     const refreshTime = Math.max(expiryTime - currentTime - bufferTime, 0);
 
-    const timeoutId = setTimeout(async () => {
+    clearTimeout(tokenRefreshTimeoutRef.current);
+
+    tokenRefreshTimeoutRef.current = setTimeout(async () => {
       try {
         await refreshToken();
         setupTokenRefresh(); // Setup next refresh
-      } catch (error) {
+      } catch {
         logout();
       }
     }, refreshTime);
-
-    return () => clearTimeout(timeoutId);
   };
 
   const redirectUser = (userType) => {
-    switch(userType?.toUpperCase()) {
+    switch (userType?.toUpperCase()) {
       case 'ADMIN':
         window.location.href = 'https://admin.upskillab.com/';
         break;
@@ -181,22 +176,24 @@ useEffect(() => {
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      auth, 
-      userDetails,
-      loading,
-      login, 
-      logout, 
-      isAuthenticated, 
-      getValidToken,
-      isAdmin: () => userDetails?.userType?.toUpperCase() === 'ADMIN',
-      isTeacher: () => userDetails?.userType?.toUpperCase() === 'TEACHER',
-      isStudent: () => userDetails?.userType?.toUpperCase() === 'STUDENT',
-      isUserActive: () => userDetails?.isActive,
-      getUserRole: () => userDetails?.userType,
-      isAuthorized,
-      refreshUserDetails: fetchUserDetails
-    }}>
+    <AuthContext.Provider
+      value={{
+        auth,
+        userDetails,
+        loading,
+        login,
+        logout,
+        isAuthenticated,
+        getValidToken,
+        isAdmin: () => userDetails?.userType?.toUpperCase() === 'ADMIN',
+        isTeacher: () => userDetails?.userType?.toUpperCase() === 'TEACHER',
+        isStudent: () => userDetails?.userType?.toUpperCase() === 'STUDENT',
+        isUserActive: () => userDetails?.isActive,
+        getUserRole: () => userDetails?.userType,
+        isAuthorized,
+        refreshUserDetails: fetchUserDetails
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

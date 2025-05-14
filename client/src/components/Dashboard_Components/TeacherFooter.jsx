@@ -15,7 +15,7 @@ function TeacherFooter() {
             <NavLink to="/Teacher/Dashboard">
               <img 
                 src='/images/Logo.png'
-                alt="Upskillab Teacher Logo"
+                alt="Upskillab Logo"
                 className="h-10 mx-auto lg:mx-0 mb-4"
               />
             </NavLink>

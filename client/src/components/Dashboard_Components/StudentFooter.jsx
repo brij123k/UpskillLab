@@ -14,8 +14,8 @@ const StudentFooter = () => {
           <div className="w-full lg:w-[30%]">
             <NavLink to="/student/dashboard">
               <img 
-                src="/images/student-logo.png"
-                alt="Upskillab Student Logo"
+                src="/images/Logo.png"
+                alt="Upskillab Logo"
                 className="h-10 mx-auto lg:mx-0 mb-4"
               />
             </NavLink>

@@ -50,6 +50,7 @@ const StudentJobs= lazy(()=> import("./pages/Dashboard/Student/StudentJobs"))
 const StudentNotification= lazy(()=> import("./pages/Dashboard/Student/StudentNotification"))
 const StudentProfile= lazy(()=> import("./pages/Dashboard/Student/StudentProfile"))
 const StudentRecordedVideos= lazy(()=> import("./pages/Dashboard/Student/StudentRecordedVideos"))
+const RecordedVideoPlayer= lazy(()=> import("./pages/Dashboard/Student/VideoPlayerPage"))
 const StudentTrends= lazy(()=> import("./pages/Dashboard/Student/StudentTrends"))
 const StudentDoubts= lazy(()=> import("./pages/Dashboard/Student/StudentDoubts"))
 
@@ -115,6 +116,7 @@ export const routes = [
   { exact: true, path:"/Student/Notifications", layout:StudentProtectedLayout, component:StudentNotification},
   { exact: true, path:"/Student/Profile", layout:StudentProtectedLayout, component:StudentProfile},
   { exact: true, path:"/Student/Recorded-videos", layout:StudentProtectedLayout, component:StudentRecordedVideos},
+  { exact: true, path:"/Student/videos/:id", layout:StudentProtectedLayout, component:RecordedVideoPlayer},
   { exact: true, path:"/Student/Doubts", layout:StudentProtectedLayout, component:StudentDoubts},
   { exact: true, path:"/Student/Trends", layout:StudentProtectedLayout, component:StudentTrends},
 ];
