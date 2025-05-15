@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Card from './Cards';
+import {Card,CompactRating} from './Cards';
 import { getDataHandler } from '../../config/services';
 
 const StudentFeedBack = () => {
@@ -21,10 +21,11 @@ const StudentFeedBack = () => {
   }, []);
 
   return (
-    <div className="hidden lg:block w-full px-3 md:px-4 py-6 md:py-8 bg-[#4D2C5E] rounded-2xl overflow-hidden relative">
+    <div className="block w-full px-3 md:px-4 py-6 md:py-8 bg-[#4D2C5E] rounded-2xl overflow-hidden relative">
       {stats.length === 0 ? (
         <div className="text-center text-white">Loading stats...</div>
       ) : (
+        <>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 w-full">
           {stats.map((stat, index) => (
             <Card
@@ -36,6 +37,16 @@ const StudentFeedBack = () => {
             />
           ))}
         </div>
+        {/* <div className=" grid lg:hidden grid-cols-3 md:grid-cols-3 w-full">
+          {stats.map((stat, index) => (
+            <CompactRating
+              key={stat.id || index}
+              title={stat.count}
+              subtitle={stat.label}
+            />
+          ))}
+        </div> */}
+        </>
       )}
     </div>
   );

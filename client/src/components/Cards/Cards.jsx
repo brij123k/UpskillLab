@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { useState, useEffect } from 'react';
 
-const Card = ({ imageSrc, title, subtitle, animate }) => {
+ export const Card = ({ imageSrc, title, subtitle, animate }) => {
   const [count, setCount] = useState(0);
   const isNumber = !isNaN(Number(title));
 
@@ -120,5 +120,20 @@ const Card = ({ imageSrc, title, subtitle, animate }) => {
     </motion.div>
   );
 };
+export const CompactRating = ({ title, subtitle }) => {
+  return (
+    <motion.div 
+      className="flex flex-col items-center px-2 py-1 border-r-2 border-white"
+      whileHover={{ scale: 1.03 }}
+    >
+      <span className="text-[#FF7426] font-bold text-xl md:text-2xl leading-none">
+        {title}
+      </span>
+      <span className="text-white/80 text-xs md:text-sm text-center mt-1">
+        {subtitle}
+      </span>
+    </motion.div>
+  );
+};
 
-export default Card;
+// export default Card;

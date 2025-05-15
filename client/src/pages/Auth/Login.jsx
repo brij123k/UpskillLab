@@ -6,9 +6,11 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { initiateOtpLogin, verifyOtp } from '../../config/services';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
+
 const LoginPage = () => {
     const [otpAttemptId, setOtpAttemptId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [isSendingOtp, setIsSendingOtp] = useState(false);
     const navigate = useNavigate();
     const { login } = useAuth();
 
@@ -28,37 +30,44 @@ const LoginPage = () => {
                 otherwise: () => Yup.string(),
             }),
         }),
-        context: { otpAttemptId }, // Pass otpAttemptId to validation context
+        context: { otpAttemptId },
         onSubmit: async (values, { setFieldError }) => {
+            if (!otpAttemptId) return; // Prevent form submission for email step
+            
             setIsLoading(true);
             try {
-                if (!otpAttemptId) {
-                    // Step 1: Send OTP
-                    const response = await initiateOtpLogin(values.email);
-                    setOtpAttemptId(response.attemptId);
-                    toast.success(`OTP sent te ${values.email}`);
-                } else {
-                    // Step 2: Verify OTP
-                    const response = await verifyOtp(otpAttemptId, values.otp);
-                    login({
-                        authToken: response.authToken,
-                        authTokenExpiryDate: response.authTokenExpiryDate,
-                        refreshToken: response.refreshToken,
-                    });
-                    // navigate('/Teacher/Dashboard');
-                }
+                // Verify OTP
+                const response = await verifyOtp(otpAttemptId, values.otp);
+                login({
+                    authToken: response.authToken,
+                    authTokenExpiryDate: response.authTokenExpiryDate,
+                    refreshToken: response.refreshToken,
+                });
+                // navigate('/Teacher/Dashboard');
             } catch (error) {
                 console.error('Error:', error);
-                if (!otpAttemptId) {
-                    setFieldError('email', 'Failed to send OTP. Please try again.');
-                } else {
-                    setFieldError('otp', 'Invalid OTP. Please try again.');
-                }
+                setFieldError('otp', 'Invalid OTP. Please try again.');
             } finally {
                 setIsLoading(false);
             }
         },
     });
+
+    const handleSendOtp = async () => {
+        if (!form.values.email || form.errors.email) return;
+        
+        setIsSendingOtp(true);
+        try {
+            const response = await initiateOtpLogin(form.values.email);
+            setOtpAttemptId(response.attemptId);
+            toast.success(`OTP sent to ${form.values.email}`);
+        } catch (error) {
+            console.error('Error:', error);
+            form.setFieldError('email', 'Failed to send OTP. Please try again.');
+        } finally {
+            setIsSendingOtp(false);
+        }
+    };
 
     // Animation variants
     const container = {
@@ -106,159 +115,190 @@ const LoginPage = () => {
                         Login with OTP
                     </motion.h2>
 
-                    {/* Form */}
-                    <form onSubmit={form.handleSubmit} className="space-y-3 sm:space-y-4">
-                        {/* Email */}
-                        <motion.div variants={item}>
-                            <div className="relative">
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    onChange={form.handleChange}
-                                    onBlur={form.handleBlur}
-                                    value={form.values.email}
-                                    className="w-full px-0 py-2 text-sm sm:text-base border-0 border-b border-gray-300 focus:border-[#4D2C5E] focus:outline-none focus:ring-0 peer"
-                                    disabled={isLoading || otpAttemptId}
-                                />
-                                <label
-                                    htmlFor="email"
-                                    className={`absolute left-0 text-gray-500 transition-all duration-200 pointer-events-none
-                                        ${form.values.email
-                                            ? 'text-[#4D2C5E] text-xs sm:text-sm -translate-y-3'
-                                            : 'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
-                                    `}
+                    {/* Email Input with Send OTP Button */}
+                    <motion.div variants={item} className="space-y-4">
+                        <div className="relative">
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                onChange={form.handleChange}
+                                onBlur={form.handleBlur}
+                                value={form.values.email}
+                                className="w-full px-0 py-2 text-sm sm:text-base border-0 border-b border-gray-300 focus:border-[#4D2C5E] focus:outline-none focus:ring-0 peer"
+                                disabled={isSendingOtp || otpAttemptId}
+                            />
+                            <label
+                                htmlFor="email"
+                                className={`absolute left-0 text-gray-500 transition-all duration-200 pointer-events-none
+                                    ${form.values.email
+                                        ? 'text-[#4D2C5E] text-xs sm:text-sm -translate-y-3'
+                                        : 'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
+                                `}
+                            >
+                                Email
+                            </label>
+                            {!otpAttemptId && (
+                                <button
+                                    type="button"
+                                    onClick={handleSendOtp}
+                                    className="absolute right-0 top-1/2 -translate-y-1/2 bg-[#4D2C5E] text-white px-4 py-1 rounded-lg text-sm hover:bg-[#5F3A73] transition-colors"
+                                    disabled={!form.values.email || !!form.errors.email || isSendingOtp}
                                 >
-                                    Email
-                                </label>
-                            </div>
-                            <AnimatePresence>
-                                {form.touched.email && form.errors.email && (
-                                    <motion.p
-                                        className="mt-1 text-xs sm:text-sm text-red-500"
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: 'auto' }}
-                                        exit={{ opacity: 0, height: 0 }}
-                                    >
-                                        {form.errors.email}
-                                    </motion.p>
-                                )}
-                            </AnimatePresence>
-                        </motion.div>
-
-                        {/* OTP Input */}
-                        <motion.div variants={item}>
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    id="otp"
-                                    name="otp"
-                                    inputMode="numeric"
-                                    pattern="[0-9]*"
-                                    maxLength="6"
-                                    onChange={form.handleChange}
-                                    onBlur={form.handleBlur}
-                                    value={form.values.otp}
-                                    className="w-full px-0 py-2 text-sm sm:text-base border-0 border-b border-gray-300 focus:border-[#4D2C5E] focus:outline-none focus:ring-0 peer tracking-widest"
-                                    disabled={isLoading || !otpAttemptId}
-                                />
-                                <label
-                                    htmlFor="otp"
-                                    className={`absolute left-0 text-gray-500 transition-all duration-200 pointer-events-none
-                                        ${form.values.otp
-                                            ? 'text-[#4D2C5E] text-xs sm:text-sm -translate-y-3'
-                                            : 'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
-                                    `}
-                                >
-                                    Enter OTP
-                                </label>
-                            </div>
-                            <AnimatePresence>
-                                {form.touched.otp && form.errors.otp && (
-                                    <motion.p
-                                        className="mt-1 text-xs sm:text-sm text-red-500 text-center"
-                                        initial={{ opacity: 0, height: 0 }}
-                                        animate={{ opacity: 1, height: 'auto' }}
-                                        exit={{ opacity: 0, height: 0 }}
-                                    >
-                                        {form.errors.otp}
-                                    </motion.p>
-                                )}
-                            </AnimatePresence>
-                            {otpAttemptId && (
+                                    {isSendingOtp ? (
+                                        <span className="inline-flex items-center">
+                                            <svg
+                                                className="animate-spin -ml-1 mr-1 h-3 w-3 text-white"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <circle
+                                                    className="opacity-25"
+                                                    cx="12"
+                                                    cy="12"
+                                                    r="10"
+                                                    stroke="currentColor"
+                                                    strokeWidth="4"
+                                                ></circle>
+                                                <path
+                                                    className="opacity-75"
+                                                    fill="currentColor"
+                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                                ></path>
+                                            </svg>
+                                            Sending
+                                        </span>
+                                    ) : 'Send OTP'}
+                                </button>
+                            )}
+                        </div>
+                        <AnimatePresence>
+                            {form.touched.email && form.errors.email && (
                                 <motion.p
-                                    className="text-sm text-gray-600 mt-2"
-                                    variants={item}
+                                    className="mt-1 text-xs sm:text-sm text-red-500"
+                                    initial={{ opacity: 0, height: 0 }}
+                                    animate={{ opacity: 1, height: 'auto' }}
+                                    exit={{ opacity: 0, height: 0 }}
                                 >
-                                    We've sent a 6-digit OTP to your email. Please check your inbox.
+                                    {form.errors.email}
                                 </motion.p>
                             )}
-                        </motion.div>
+                        </AnimatePresence>
+                    </motion.div>
 
-                        {/* Submit Button */}
-                        <motion.button
-                            type="submit"
-                            className="w-full bg-[#4D2C5E] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#5F3A73] transition-colors relative overflow-hidden group text-sm sm:text-base"
-                            variants={item}
-                            disabled={isLoading}
-                            whileHover={{
-                                scale: isLoading ? 1 : 1.02,
-                                boxShadow: isLoading
-                                    ? 'none'
-                                    : '0 4px 8px rgba(77, 44, 94, 0.2)',
-                            }}
-                            whileTap={{ scale: isLoading ? 1 : 0.98 }}
-                        >
-                            {isLoading ? (
-                                <span className="inline-flex items-center">
-                                    <svg
-                                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <circle
-                                            className="opacity-25"
-                                            cx="12"
-                                            cy="12"
-                                            r="10"
-                                            stroke="currentColor"
-                                            strokeWidth="4"
-                                        ></circle>
-                                        <path
-                                            className="opacity-75"
-                                            fill="currentColor"
-                                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                                        ></path>
-                                    </svg>
-                                    {otpAttemptId ? 'Verifying...' : 'Sending...'}
-                                </span>
-                            ) : (
-                                <span className="relative z-10">
-                                    {otpAttemptId ? 'Verify OTP' : 'Send OTP'}
-                                </span>
-                            )}
-                        </motion.button>
-
-                        {/* Back to email button (only when OTP input is active) */}
+                    {/* OTP Input (only shown after OTP is sent) */}
+                    <AnimatePresence>
                         {otpAttemptId && (
-                            <motion.button
-                                type="button"
-                                onClick={() => {
-                                    setOtpAttemptId(null);
-                                    form.setFieldValue('otp', '');
-                                }}
-                                className="w-full text-[#4D2C5E] py-2 px-4 rounded-lg font-medium hover:underline transition-colors text-sm sm:text-base"
+                            <motion.div
                                 variants={item}
-                                disabled={isLoading}
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                className="space-y-4 mt-4"
                             >
-                                Back to email input
-                            </motion.button>
+                                <div className="relative">
+                                    <input
+                                        type="text"
+                                        id="otp"
+                                        name="otp"
+                                        inputMode="numeric"
+                                        pattern="[0-9]*"
+                                        maxLength="6"
+                                        onChange={form.handleChange}
+                                        onBlur={form.handleBlur}
+                                        value={form.values.otp}
+                                        className="w-full px-0 py-2 text-sm sm:text-base border-0 border-b border-gray-300 focus:border-[#4D2C5E] focus:outline-none focus:ring-0 peer tracking-widest"
+                                        disabled={isLoading}
+                                    />
+                                    <label
+                                        htmlFor="otp"
+                                        className={`absolute left-0 text-gray-500 transition-all duration-200 pointer-events-none
+                                            ${form.values.otp
+                                                ? 'text-[#4D2C5E] text-xs sm:text-sm -translate-y-3'
+                                                : 'top-2 text-sm sm:text-base peer-focus:text-[#4D2C5E] peer-focus:text-xs sm:peer-focus:text-sm peer-focus:-translate-y-5'}
+                                        `}
+                                    >
+                                        Enter OTP
+                                    </label>
+                                </div>
+                                <AnimatePresence>
+                                    {form.touched.otp && form.errors.otp && (
+                                        <motion.p
+                                            className="mt-1 text-xs sm:text-sm text-red-500"
+                                            initial={{ opacity: 0, height: 0 }}
+                                            animate={{ opacity: 1, height: 'auto' }}
+                                            exit={{ opacity: 0, height: 0 }}
+                                        >
+                                            {form.errors.otp}
+                                        </motion.p>
+                                    )}
+                                </AnimatePresence>
+                                <p className="text-sm text-gray-600">
+                                    We've sent a 6-digit OTP to your email. Please check your inbox.
+                                </p>
+
+                                {/* Login Button */}
+                                <motion.button
+                                    type="submit"
+                                    onClick={() => form.handleSubmit()}
+                                    className="w-full bg-[#4D2C5E] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#5F3A73] transition-colors relative overflow-hidden group text-sm sm:text-base"
+                                    disabled={isLoading || !form.values.otp}
+                                    whileHover={{
+                                        scale: isLoading ? 1 : 1.02,
+                                        boxShadow: isLoading
+                                            ? 'none'
+                                            : '0 4px 8px rgba(77, 44, 94, 0.2)',
+                                    }}
+                                    whileTap={{ scale: isLoading ? 1 : 0.98 }}
+                                >
+                                    {isLoading ? (
+                                        <span className="inline-flex items-center">
+                                            <svg
+                                                className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <circle
+                                                    className="opacity-25"
+                                                    cx="12"
+                                                    cy="12"
+                                                    r="10"
+                                                    stroke="currentColor"
+                                                    strokeWidth="4"
+                                                ></circle>
+                                                <path
+                                                    className="opacity-75"
+                                                    fill="currentColor"
+                                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                                                ></path>
+                                            </svg>
+                                            Verifying...
+                                        </span>
+                                    ) : (
+                                        'Login'
+                                    )}
+                                </motion.button>
+
+                                {/* Back to email button */}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setOtpAttemptId(null);
+                                        form.setFieldValue('otp', '');
+                                    }}
+                                    className="w-full text-[#4D2C5E] py-2 px-4 rounded-lg font-medium hover:underline transition-colors text-sm sm:text-base"
+                                    disabled={isLoading}
+                                >
+                                    Back to email input
+                                </button>
+                            </motion.div>
                         )}
-                    </form>
+                    </AnimatePresence>
                 </motion.div>
 
-                {/* Right Side - Animated Image */}
+                {/* Right Side - Animated Image (same as before) */}
                 <motion.div
                     className="hidden lg:flex w-1/2 items-center justify-center p-6 relative overflow-hidden"
                     initial={{ opacity: 0, x: 50 }}

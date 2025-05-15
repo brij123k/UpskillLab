@@ -147,7 +147,7 @@ const TeacherDoubtHandling = () => {
                           status === 'pending' ? 'bg-yellow-500' : 'bg-green-500'
                         }`}></span>
                         <h3 className="text-lg font-semibold text-[#4D2C5E]">
-                          {doubt.student?.name || 'Unknown Student'}
+                          {doubt.student?.fullName || 'Unknown Student'}
                         </h3>
                       </div>
                       <p className="text-sm text-gray-500 mb-2">

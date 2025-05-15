@@ -86,8 +86,8 @@ const ApiConfig = {
   getJobs:`${url}/jobs`,
   postApplications:`${url}/applications`,
   recordedVideos:`${url}/recorded-videos`,
-  recordedVideosbyid:(id)=>`${url}/recorded-videos/${id}`
-
+  recordedVideosbyid:(id)=>`${url}/recorded-videos/${id}`,
+  studentHistory:`${url}/student-info`
 };
 
 export default ApiConfig;

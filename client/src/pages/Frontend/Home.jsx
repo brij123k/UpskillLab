@@ -76,14 +76,16 @@ function Home() {
       <div className='min-h-fit'>
         <CarouselContainer />
       </div>
+      
+      
+      <div className='px-4 lg:px-20'>
+        <ImageCarousel />
+      </div>
       <div className="bg-[url('/images/bgStars.png')] bg-cover bg-center px-8">
-
-
-
         <StudentFeedBack />
-
-        <CardsContainer />
-
+      </div>
+      <div className=''>
+        <StudentTestimonials />
       </div>
       <div className='w-full bg-[#FDF8EE] font-roboto overflow-hidden'>
         <div className='max-w-8xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 py-8 md:py-12 lg:py-16'>
@@ -242,27 +244,23 @@ function Home() {
       </div>
 
 
+      <CardsContainer />
+      
+
+
       <CourseCards />
-      <div className='py-4'>
+      <div className=''>
         <EnqueryBanner />
       </div>
-      <div className='px-4 lg:px-20'>
-
-        <ImageCarousel />
-
-
-      </div>
-      <EducationBanner />
+      
       <div className='py-4'>
         <ScrollableCategories />
       </div>
-      <div className='py-4'>
+      <div className='pt-4'>
         <SuccessTestimonial />
       </div>
-      <div className='py-4'>
-        <StudentTestimonials />
-      </div>
-      <div className='py-4'>
+      <EducationBanner />
+      <div className='pb-4'>
         <AdmissionForm />
       </div>
       <FAQ faqs={faqs} />
