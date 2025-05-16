@@ -17,11 +17,13 @@ const StudentHistory = () => {
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState('courses');
-
+  const [courses,setcourses]= useState(null)
   const fetchStudentHistory = async () => {
     try {
       setLoading(true);
       const response = await getDataHandlerWithToken('studentHistory');
+      const courses = await getDataHandlerWithToken('courseDisplay')
+      setcourses(courses.data)
       setStudentData(response.students[0]);
     } catch (error) {
       console.error('Error fetching student history:', error);
@@ -42,50 +44,57 @@ const StudentHistory = () => {
   };
 
   // Categorize courses by status
-  const categorizeCourses = () => {
-    if (!studentData?.orderHistory) return { completed: [], inProgress: [], upcoming: [] };
-    
-    const now = new Date();
-    return studentData.orderHistory.reduce((acc, order) => {
+ const categorizeCourses = () => {
+  if (!studentData?.orderHistory) return { completed: [], inProgress: [], upcoming: [] };
+  
+  const now = new Date();
+  // First filter only COMPLETED status orders for the courses section
+  return studentData.orderHistory
+    .filter(order => order.status === 'COMPLETED')
+    .reduce((acc, order) => {
       try {
         const batch = order.batchId;
+        const courseId= batch.course
+        const courseDetail = courses.find((detail) => detail._id == courseId);
+      
         const startDate = new Date(batch.startDate);
         const endDate = new Date(startDate);
         endDate.setDate(endDate.getDate() + batch.duration);
         
-        let status;
-        if (order.status === 'COMPLETED') {
-          status = 'completed';
-        } else if (now > endDate) {
-          status = 'completed';
+        let displayStatus;
+        if (now > endDate) {
+          displayStatus = 'completed'; // Course has ended
         } else if (now >= startDate && now <= endDate) {
-          status = 'inProgress';
+          displayStatus = 'inProgress'; // Course is ongoing
         } else {
-          status = 'upcoming';
+          displayStatus = 'upcoming'; // Course hasn't started
         }
         
         const course = {
           id: order.orderId,
-          title: batch.course || order.courseTitle,
-          batchCode: batch.batchCode,
-          status,
+          title: courseDetail.courseName || order.courseTitle,
+          batchCode: courseDetail.category.categoryName,
+          status: displayStatus, // Use calculated display status
+          originalStatus: order.status, // Keep original COMPLETED status
           startDate: batch.startDate,
           endDate: endDate.toISOString(),
           duration: batch.duration,
-          teacher: batch.teacher,
           amount: order.totalAmount,
           paid: order.amountPaid,
-          imageUrl: batch.imageUrl
+          imageUrl: courseDetail.courseImage
         };
         
-        acc[status].push(course);
+        acc[displayStatus].push(course);
         return acc;
       } catch (e) {
         console.error('Error parsing course:', e);
         return acc;
       }
     }, { completed: [], inProgress: [], upcoming: [] });
-  };
+};
+
+// For Order History - show all orders as-is
+
 
   // Process attendance history
   const getAttendanceHistory = () => {
@@ -366,7 +375,7 @@ const StudentHistory = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center gap-1">
-                          <FiDollarSign className="text-gray-400" />
+                          ₹
                           <span className="text-sm font-medium">
                             {order.amountPaid} / {order.totalAmount}
                           </span>
@@ -433,10 +442,7 @@ const CourseCard = ({ course, type }) => {
               {startDate.toLocaleDateString()} - {endDate.toLocaleDateString()}
             </span>
           </div>
-          <div className="flex items-center gap-2">
-            <FiUser className="text-gray-400" />
-            <span>Instructor: {course.teacher?.slice(0, 8)}...</span>
-          </div>
+          
         </div>
         
         {type === 'progress' && (
