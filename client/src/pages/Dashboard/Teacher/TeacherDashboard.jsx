@@ -516,7 +516,7 @@ const allNotifications = responses.flat().sort((a, b) => new Date(b.createdAt) -
           </div>
 
           {/* Market Trends */}
-          <div className="bg-white rounded-xl shadow-md p-6">
+          {/* <div className="bg-white rounded-xl shadow-md p-6">
             <h2 className="text-xl font-bold text-[#4D2C5E] mb-4 flex items-center">
               <FiTrendingUp className="mr-2" /> Market Trends
             </h2>
@@ -553,7 +553,7 @@ const allNotifications = responses.flat().sort((a, b) => new Date(b.createdAt) -
             >
               View detailed analysis
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
 

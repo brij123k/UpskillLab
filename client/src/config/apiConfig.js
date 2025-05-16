@@ -76,7 +76,8 @@ const ApiConfig = {
   Notifications:(role)=>`${url}/notifications/role/${role}`,
   MarkAsReadNotifications:(id)=>`${url}/notifications/${id}/read`,
   deleteNotifications:(id)=>`${url}/notifications/${id}/`,
-
+  resourse:`${url}/resources`,
+  resoursebyId:(id)=>`${url}/resources/${id}`,
   // student panel
   profile:`${url}/students/me`,
   studentProfile:`${url}/enrollment`,

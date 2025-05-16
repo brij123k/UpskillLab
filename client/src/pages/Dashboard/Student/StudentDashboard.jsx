@@ -388,7 +388,7 @@ const navigate = useNavigate();
         {/* Right Column */}
         <div className="space-y-6">
           {/* Quick Stats */}
-          <div className="bg-white rounded-xl shadow-lg p-6">
+          {/* <div className="bg-white rounded-xl shadow-lg p-6">
             <h2 className="text-xl font-bold text-[#4D2C5E] mb-4">Quick Stats</h2>
             <div className="space-y-4">
               <div className="flex justify-between items-center">
@@ -410,7 +410,7 @@ const navigate = useNavigate();
                 <span className="text-[#4D2C5E] font-medium">3</span>
               </div>
             </div>
-          </div>
+          </div> */}
 
           {/* Recent Materials */}
           <div className="bg-white rounded-xl shadow-lg p-6">

@@ -216,7 +216,7 @@ const TeacherSuggestions = () => {
                         </span>
                       )}
                     </div>
-                    <div className="flex space-x-2">
+                    {/* <div className="flex space-x-2">
                       <button
                         onClick={() => handleEdit(suggestion)}
                         className="text-[#4D2C5E] hover:text-[#FF7426] p-1.5 md:p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
@@ -224,7 +224,7 @@ const TeacherSuggestions = () => {
                       >
                         <FiEdit2 className="h-4 w-4 md:h-5 md:w-5" />
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </motion.div>
               ))}

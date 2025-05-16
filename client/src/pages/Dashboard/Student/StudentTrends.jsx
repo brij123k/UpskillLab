@@ -1,20 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { FiSearch, FiTrendingUp, FiBookmark, FiExternalLink, FiDownload } from 'react-icons/fi';
+import { 
+  FiSearch, 
+  FiTrendingUp, 
+  FiBookmark, 
+  FiExternalLink, 
+  FiDownload,
+  FiMessageSquare,
+  FiUser,
+  FiClock,
+  FiCheckCircle
+} from 'react-icons/fi';
 import { getDataHandlerWithToken } from '../../../config/services';
 
 const StudentTrends = () => {
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [trends, setTrends] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+
   const handleTrends = async () => {
     try {
       setLoading(true);
-      const response = await getDataHandlerWithToken('trends');
-      setTrends(response.resources || []);
+      const [trendsRes, suggestionsRes] = await Promise.all([
+        getDataHandlerWithToken('trends'),
+        getDataHandlerWithToken('teacherSuggestions')
+      ]);
+      setTrends(trendsRes.resources || []);
+      setSuggestions(suggestionsRes.suggestions || []);
     } catch (error) {
-      console.error('Error fetching trends:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
@@ -34,6 +49,12 @@ const StudentTrends = () => {
     return matchesTab && matchesSearch;
   });
 
+  const filteredSuggestions = suggestions.filter(suggestion => {
+    return suggestion.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+           suggestion.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+           suggestion.content.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
   const toggleSaveTrend = (trendId) => {
     // In real app, this would update backend
     alert(`Trend ${trendId} save status toggled`);
@@ -48,15 +69,25 @@ const StudentTrends = () => {
     <div className="p-4 md:p-8 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-[#4D2C5E]">Market Trends</h1>
-          <p className="text-gray-600 mt-1">Discover trending materials to boost your skills</p>
+          <h1 className="text-3xl font-bold text-[#4D2C5E]">
+            {activeTab === 'suggestions' ? 'Teacher Suggestions' : 'Market Trends'}
+          </h1>
+          <p className="text-gray-600 mt-1">
+            {activeTab === 'suggestions' 
+              ? 'Personalized recommendations from your teachers' 
+              : 'Discover trending materials to boost your skills'}
+          </p>
         </div>
         
         <div className="relative w-full md:w-auto md:min-w-[300px]">
           <FiSearch className="absolute left-3 top-3.5 text-gray-400" />
           <input
             type="text"
-            placeholder="Search resources..."
+            placeholder={
+              activeTab === 'suggestions' 
+                ? 'Search suggestions...' 
+                : 'Search resources...'
+            }
             className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]/50"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
@@ -64,31 +95,37 @@ const StudentTrends = () => {
         </div>
       </div>
 
-      {/* Filters */}
+      {/* Tabs */}
       <div className="mb-8">
         <div className="flex flex-wrap gap-2">
           <button
             onClick={() => setActiveTab('all')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeTab === 'all' ? 'bg-[#4D2C5E] text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              activeTab === 'all' ? 'bg-[#4D2C5E] text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
           >
             All Resources
           </button>
-          {/* <button
-            onClick={() => setActiveTab('technologies')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeTab === 'technologies' ? 'bg-[#4D2C5E] text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-          >
-            Course Materials
-          </button> */}
           <button
             onClick={() => setActiveTab('career')}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${activeTab === 'career' ? 'bg-[#4D2C5E] text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              activeTab === 'career' ? 'bg-[#4D2C5E] text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
           >
             General Resources
+          </button>
+          <button
+            onClick={() => setActiveTab('suggestions')}
+            className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
+              activeTab === 'suggestions' ? 'bg-[#4D2C5E] text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
+          >
+            Teacher Suggestions
           </button>
         </div>
       </div>
 
-      {/* Trends List */}
+      {/* Content */}
       {loading ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, i) => (
@@ -102,107 +139,180 @@ const StudentTrends = () => {
             </div>
           ))}
         </div>
+      ) : activeTab === 'suggestions' ? (
+        filteredSuggestions.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredSuggestions.map(suggestion => (
+              <div key={suggestion._id} className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
+                <div className="p-5">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <span className="inline-block px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full mb-2">
+                        {suggestion.type}
+                      </span>
+                      <h3 className="font-bold text-lg text-[#4D2C5E] line-clamp-2">{suggestion.title}</h3>
+                    </div>
+                    {suggestion.isApproved && (
+                      <span className="flex items-center text-green-600 text-sm">
+                        <FiCheckCircle className="mr-1" /> Approved
+                      </span>
+                    )}
+                  </div>
+                  
+                  <p className="text-gray-600 text-sm line-clamp-3 mb-4">{suggestion.description}</p>
+                  
+                  <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
+                    <FiUser className="text-[#4D2C5E]" />
+                    <span>{suggestion.teacherName}</span>
+                    <FiClock className="ml-2 text-[#4D2C5E]" />
+                    <span>{formatDate(suggestion.createdAt)}</span>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    {suggestion.content && (
+                      <button
+                        onClick={() => alert(`Viewing content: ${suggestion.content}`)}
+                        className="flex items-center px-3 py-2 bg-[#4D2C5E]/10 text-[#4D2C5E] rounded-lg text-sm font-medium hover:bg-[#4D2C5E]/20 transition-colors"
+                      >
+                        <FiMessageSquare className="mr-1" /> View Content
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <EmptyState 
+            icon={<FiMessageSquare />}
+            title="No suggestions found"
+            message={
+              searchQuery 
+                ? "No suggestions match your search criteria"
+                : "Your teachers haven't made any suggestions yet"
+            }
+          />
+        )
       ) : filteredTrends.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredTrends.map(trend => (
-            <div key={trend._id} className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
-              {trend.image && (
-                <div className="h-48 overflow-hidden">
-                  <img 
-                    src={trend.image} 
-                    alt={trend.title} 
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      e.target.onerror = null; 
-                      e.target.src = 'https://via.placeholder.com/400x200?text=No+Image';
-                    }}
-                  />
-                </div>
-              )}
-              
-              <div className="p-5">
-                <div className="flex justify-between items-start mb-3">
-                  <div>
-                    {trend.courseId?.courseName && (
-                      <span className="inline-block px-2 py-1 bg-[#4D2C5E]/10 text-[#4D2C5E] text-xs font-medium rounded-full mb-2">
-                        {trend.courseId.courseName}
-                      </span>
-                    )}
-                    <h3 className="font-bold text-lg text-[#4D2C5E] line-clamp-2">{trend.title}</h3>
-                  </div>
-                  <button 
-                    onClick={() => toggleSaveTrend(trend._id)}
-                    className={`p-2 rounded-full hover:bg-gray-100 ${trend.saved ? 'text-[#FF7426]' : 'text-gray-400 hover:text-[#4D2C5E]'}`}
-                  >
-                    <FiBookmark className={trend.saved ? 'fill-current' : ''} />
-                  </button>
-                </div>
-                
-                <p className="text-gray-600 text-sm line-clamp-3 mb-4">{trend.description}</p>
-                
-                {trend.tags && trend.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {trend.tags.map((tag, index) => (
-                      <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                
-                <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
-                  <span>Added {formatDate(trend.createdAt)}</span>
-                  {trend.isApproved && (
-                    <span className="flex items-center text-green-600">
-                      <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
-                      Approved
-                    </span>
-                  )}
-                </div>
-                
-                <div className="flex flex-wrap gap-2">
-                  {trend.link && (
-                    <a 
-                      href={trend.link} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center px-3 py-2 bg-[#4D2C5E]/10 text-[#4D2C5E] rounded-lg text-sm font-medium hover:bg-[#4D2C5E]/20 transition-colors"
-                    >
-                      <FiExternalLink className="mr-1" /> Visit Link
-                    </a>
-                  )}
-                  {trend.pdf && (
-                    <a 
-                      href={trend.pdf} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="flex items-center px-3 py-2 bg-[#FF7426]/10 text-[#FF7426] rounded-lg text-sm font-medium hover:bg-[#FF7426]/20 transition-colors"
-                    >
-                      <FiDownload className="mr-1" /> Download PDF
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
+            <TrendCard 
+              key={trend._id} 
+              trend={trend} 
+              formatDate={formatDate}
+              toggleSaveTrend={toggleSaveTrend}
+            />
           ))}
         </div>
       ) : (
-        <div className="bg-white p-12 text-center rounded-xl shadow-sm">
-          <div className="max-w-md mx-auto">
-            <svg className="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-            <h3 className="mt-4 text-lg font-medium text-gray-900">No resources found</h3>
-            <p className="mt-2 text-gray-600">
-              {searchQuery 
-                ? "No resources match your search criteria. Try different keywords."
-                : "There are currently no resources available in this category."}
-            </p>
-          </div>
-        </div>
+        <EmptyState 
+          icon={<FiTrendingUp />}
+          title="No resources found"
+          message={
+            searchQuery 
+              ? "No resources match your search criteria"
+              : "There are currently no resources available in this category"
+          }
+        />
       )}
     </div>
   );
 };
+
+// Trend Card Component
+const TrendCard = ({ trend, formatDate, toggleSaveTrend }) => (
+  <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
+    {trend.image && (
+      <div className="h-48 overflow-hidden">
+        <img 
+          src={trend.image} 
+          alt={trend.title} 
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            e.target.onerror = null; 
+            e.target.src = 'https://via.placeholder.com/400x200?text=No+Image';
+          }}
+        />
+      </div>
+    )}
+    
+    <div className="p-5">
+      <div className="flex justify-between items-start mb-3">
+        <div>
+          {trend.courseId?.courseName && (
+            <span className="inline-block px-2 py-1 bg-[#4D2C5E]/10 text-[#4D2C5E] text-xs font-medium rounded-full mb-2">
+              {trend.courseId.courseName}
+            </span>
+          )}
+          <h3 className="font-bold text-lg text-[#4D2C5E] line-clamp-2">{trend.title}</h3>
+        </div>
+        <button 
+          onClick={() => toggleSaveTrend(trend._id)}
+          className={`p-2 rounded-full hover:bg-gray-100 ${trend.saved ? 'text-[#FF7426]' : 'text-gray-400 hover:text-[#4D2C5E]'}`}
+        >
+          <FiBookmark className={trend.saved ? 'fill-current' : ''} />
+        </button>
+      </div>
+      
+      <p className="text-gray-600 text-sm line-clamp-3 mb-4">{trend.description}</p>
+      
+      {trend.tags && trend.tags.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-4">
+          {trend.tags.map((tag, index) => (
+            <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+              #{tag}
+            </span>
+          ))}
+        </div>
+      )}
+      
+      <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+        <span>Added {formatDate(trend.createdAt)}</span>
+        {trend.isApproved && (
+          <span className="flex items-center text-green-600">
+            <span className="w-2 h-2 bg-green-500 rounded-full mr-1"></span>
+            Approved
+          </span>
+        )}
+      </div>
+      
+      <div className="flex flex-wrap gap-2">
+        {trend.link && (
+          <a 
+            href={trend.link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center px-3 py-2 bg-[#4D2C5E]/10 text-[#4D2C5E] rounded-lg text-sm font-medium hover:bg-[#4D2C5E]/20 transition-colors"
+          >
+            <FiExternalLink className="mr-1" /> Visit Link
+          </a>
+        )}
+        {trend.pdf && (
+          <a 
+            href={trend.pdf} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center px-3 py-2 bg-[#FF7426]/10 text-[#FF7426] rounded-lg text-sm font-medium hover:bg-[#FF7426]/20 transition-colors"
+          >
+            <FiDownload className="mr-1" /> Download PDF
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+);
+
+// Empty State Component
+const EmptyState = ({ icon: Icon, title, message }) => (
+  <div className="bg-white p-12 text-center rounded-xl shadow-sm">
+    <div className="max-w-md mx-auto">
+      <div className="w-16 h-16 mx-auto bg-gray-100 rounded-full flex items-center justify-center text-gray-400 mb-4">
+        {typeof Icon === 'function' ? <Icon className="w-8 h-8" /> : Icon}
+      </div>
+      <h3 className="mt-2 text-lg font-medium text-gray-900">{title}</h3>
+      <p className="mt-2 text-gray-600">{message}</p>
+    </div>
+  </div>
+);
 
 export default StudentTrends;

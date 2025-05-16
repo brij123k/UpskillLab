@@ -961,7 +961,8 @@ const TeachingPlan = ({ course }) => {
                                             const batchStartDate = new Date(startDate || 0);
 
                                             if (batchStartDate >= today) {
-                                                handleEnrollClick(course);
+                                                // handleEnrollClick(course);
+                                                setIsModalOpen(true)
                                             } else {
                                                 setIsModalOpen(true)
                                             }
