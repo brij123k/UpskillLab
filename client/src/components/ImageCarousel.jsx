@@ -100,117 +100,209 @@ const HiringPartnersShowcase = () => {
     // };
 
     return (
-        <div className="py-16 bg-white">
-            <div className="container mx-auto px-4">
-                {/* Title with color accent */}
-                <motion.h2 
-                    className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                >
-                    Our <span className="text-[#FF7426]">Hiring Partners</span>
-                </motion.h2>
+        <>
+         <div className="hidden lg:block py-7 bg-white">
+        <div className="container mx-auto px-4">
+          {/* Title with color accent */}
+          <motion.h2 
+              className="text-3xl md:text-4xl font-bold text-center mb-12 text-gray-800"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+          >
+              Our <span className="text-[#FF7426]">Hiring Partners</span>
+          </motion.h2>
 
-                {/* Primary Marquee - Right to Left */}
-                <div className="py-2 mb-3 relative overflow-hidden">
-                    <motion.div
-                        className="flex items-center"
-                        animate={{
-                            x: ['0%', '-100%'],
-                        }}
-                        transition={{
-                            duration: 10,
-                            repeat: Infinity,
-                            ease: 'linear',
-                        }}
-                        whileHover={{ animationPlayState: 'paused' }}
-                    >
-                        {doubledLogos.map((partner, index) => (
-                            <motion.div 
-                                key={`marquee1-${index}`}
-                                className="flex-shrink-0 mx-8"
-                                whileHover={{
-                                    scale: 1.2,
-                                    transition: { duration: 0.3 }
-                                }}
-                            >
-                                <img 
-                                    src={partner.logo} 
-                                    alt={partner.name} 
-                                    className="h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500"
-                                />
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                    {/* Gradient fade edges */}
-                    <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
-                    <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
-                </div>
+          {/* Primary Marquee - Right to Left */}
+          <div className="py-2 mb-3 relative overflow-hidden">
+              <motion.div
+                  className="flex items-center"
+                  animate={{
+                      x: ['0%', '-100%'],
+                  }}
+                  transition={{
+                      duration: 10,
+                      repeat: Infinity,
+                      ease: 'linear',
+                  }}
+                  whileHover={{ animationPlayState: 'paused' }}
+              >
+                  {doubledLogos.map((partner, index) => (
+                      <motion.div 
+                          key={`marquee1-${index}`}
+                          className="flex-shrink-0 mx-8"
+                          whileHover={{
+                              scale: 1.2,
+                              transition: { duration: 0.3 }
+                          }}
+                      >
+                          <img 
+                              src={partner.logo} 
+                              alt={partner.name} 
+                              className="h-16 object-contain grayscale hover:grayscale-0 transition-all duration-500"
+                          />
+                      </motion.div>
+                  ))}
+              </motion.div>
+              {/* Gradient fade edges */}
+              <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
+              <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
+          </div>
 
-                {/* Secondary Marquee - Left to Right (smaller logos) */}
-                <div className="py-6 relative overflow-hidden">
-                    <motion.div
-                        className="flex items-center"
-                        animate={{
-                            x: ['-100%', '0%'],
-                        }}
-                        transition={{
-                            duration: 15,
-                            repeat: Infinity,
-                            ease: 'linear',
-                        }}
-                        whileHover={{ animationPlayState: 'paused' }}
-                    >
-                        {doubledLogos.map((partner, index) => (
-                            <motion.div 
-                                key={`marquee2-${index}`}
-                                className="flex-shrink-0 mx-6"
-                                whileHover={{
-                                    scale: 1.3,
-                                    rotate: [0, -5, 5, 0],
-                                    transition: { duration: 0.5 }
-                                }}
-                            >
-                                <img 
-                                    src={partner.logo} 
-                                    alt={partner.name} 
-                                    className="h-12 object-contain opacity-90 hover:opacity-100 transition-all duration-300"
-                                />
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                    {/* Gradient fade edges */}
-                    <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
-                    <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
-                </div>
+          {/* Secondary Marquee - Left to Right (smaller logos) */}
+          <div className="py-6 relative overflow-hidden">
+              <motion.div
+                  className="flex items-center"
+                  animate={{
+                      x: ['-100%', '0%'],
+                  }}
+                  transition={{
+                      duration: 15,
+                      repeat: Infinity,
+                      ease: 'linear',
+                  }}
+                  whileHover={{ animationPlayState: 'paused' }}
+              >
+                  {doubledLogos.map((partner, index) => (
+                      <motion.div 
+                          key={`marquee2-${index}`}
+                          className="flex-shrink-0 mx-6"
+                          whileHover={{
+                              scale: 1.3,
+                              rotate: [0, -5, 5, 0],
+                              transition: { duration: 0.5 }
+                          }}
+                      >
+                          <img 
+                              src={partner.logo} 
+                              alt={partner.name} 
+                              className="h-12 object-contain opacity-90 hover:opacity-100 transition-all duration-300"
+                          />
+                      </motion.div>
+                  ))}
+              </motion.div>
+              {/* Gradient fade edges */}
+              <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white to-transparent z-10" />
+              <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-10" />
+          </div>
 
-                {/* CTA with accent color */}
-                <motion.div 
-                    className="mt-16 text-center"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                >
-                  <a href="#AdmissionForm">
-                    <motion.button
-                        // onClick={() => setIsModalOpen(true)}
-                        className="px-8 py-3 bg-[#4D2C5E] text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all cursor-pointer"  
-                        whileHover={{ 
-                            scale: 1.05,
-                            backgroundColor: '#5F3A73'
-                        }}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        Become a Partner
-                    </motion.button>
-                    </a>
-                </motion.div>
-            </div>
-
-            {/* Modal for Become a Partner form */}
-            {/* Here is modal form */}
+          {/* CTA with accent color */}
+          <motion.div 
+              className="mt-16 text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8 }}
+          >
+            <a href="#AdmissionForm">
+              <motion.button
+                  className="px-8 py-3 bg-[#4D2C5E] text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all cursor-pointer"  
+                  whileHover={{ 
+                      scale: 1.05,
+                      backgroundColor: '#5F3A73'
+                  }}
+                  whileTap={{ scale: 0.95 }}
+              >
+                  Become a Partner
+              </motion.button>
+              </a>
+          </motion.div>
         </div>
+      </div>
+
+      {/* Mobile Version - Visible on screens smaller than lg */}
+      <div className="lg:hidden py-10 bg-white">
+  <div className="container mx-auto">
+    {/* Title with color accent */}
+    <motion.h2 
+      className="text-2xl font-bold text-center text-gray-800"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+    >
+      Our <span className="text-[#FF7426]">Hiring Partners</span>
+    </motion.h2>
+
+    {/* First Marquee Row - Left to Right (larger logos) */}
+    <div className="relative overflow-hidden py-1 mb-1">
+      <marquee 
+        behavior="scroll" 
+        direction="left" 
+        scrollamount="4"
+        onMouseOver={e => e.target.stop()} 
+        onMouseOut={e => e.target.start()}
+      >
+        <div className="flex items-center">
+          {doubledLogos.map((partner, index) => (
+            <div 
+              key={`mobile-marquee1-${index}`}
+              className="flex-shrink-0 mx-2 px-3 border-1 border-[#FF7426]/10 rounded-md"
+            >
+              <img 
+                src={partner.logo} 
+                alt={partner.name} 
+                className="h-10 object-contain grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </div>
+          ))}
+        </div>
+      </marquee>
+      {/* Gradient fade edges */}
+      <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-white to-transparent z-10" />
+      <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white to-transparent z-10" />
+    </div>
+
+    {/* Second Marquee Row - Right to Left (smaller logos) */}
+    <div className="relative overflow-hidden py-1">
+      <marquee 
+        behavior="scroll" 
+        direction="right" 
+        scrollamount="3"
+        onMouseOver={e => e.target.stop()} 
+        onMouseOut={e => e.target.start()}
+      >
+        <div className="flex items-center">
+          {doubledLogos.map((partner, index) => (
+            <div 
+              key={`mobile-marquee2-${index}`}
+              className="flex-shrink-0 mx-2 px-3 border-1 border-[#FF7426]/10 rounded-md"
+            >
+              <img 
+                src={partner.logo} 
+                alt={partner.name} 
+                className="h-8 object-contain opacity-90 hover:opacity-100 transition-all duration-300"
+              />
+            </div>
+          ))}
+        </div>
+      </marquee>
+      {/* Gradient fade edges */}
+      <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-white to-transparent z-10" />
+      <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white to-transparent z-10" />
+    </div>
+
+    {/* CTA with accent color */}
+    <motion.div 
+      className="mt-8 text-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.8 }}
+    >
+      <a href="#AdmissionForm">
+        <motion.button
+          className="px-6 py-2 bg-[#4D2C5E] text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all cursor-pointer text-sm"  
+          whileHover={{ 
+            scale: 1.05,
+            backgroundColor: '#5F3A73'
+          }}
+          whileTap={{ scale: 0.95 }}
+        >
+          Become a Partner
+        </motion.button>
+      </a>
+    </motion.div>
+  </div>
+</div>
+      </>
     );
 };
 

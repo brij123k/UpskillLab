@@ -212,10 +212,10 @@ const StudentTestimonials = () => {
   };
 
   return (
-    <div className="py-16 px-4 sm:px-6 lg:px-8" style={{ background: 'linear-gradient(135deg, #F9F5FF 0%, #F0E6FF 100%)' }}>
+    <div className="pt-8 lg:py-4 px-4 sm:px-6 lg:px-8" style={{ background: 'linear-gradient(135deg, #F9F5FF 0%, #F0E6FF 100%)' }}>
       <div className="max-w-7xl mx-auto">
         <motion.h2 
-          className="text-4xl lg:text-5xl font-bold text-center mb-16 relative"
+          className="text-4xl lg:text-5xl font-bold text-center mb-8 relative"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}

@@ -152,10 +152,10 @@ function Home() {
       </div>
       
       
-      <div className='px-4 lg:px-20'>
+      <div className=''>
         <ImageCarousel />
       </div>
-      <div className="bg-[url('/images/bgStars.png')] bg-cover bg-center px-8">
+      <div className="bg-[url('/images/bgStars.png')] bg-cover bg-center">
         <StudentFeedBack />
       </div>
       <div className=''>
@@ -317,17 +317,17 @@ function Home() {
         </div>
       </div>
 
+      <CourseCards />
 
       <CardsContainer />
       
 
 
-      <CourseCards />
       <div className=''>
         <EnqueryBanner />
       </div>
       
-      <div className='py-4'>
+      <div className=''>
         <ScrollableCategories />
       </div>
       <div className='pt-4'>
