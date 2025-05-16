@@ -46,10 +46,6 @@ body {
 body #root{
   overflow-x: hidden;
 }
-.MentorshipModal::-webkit-scrollbar{
-  display: none;
-}
-
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }

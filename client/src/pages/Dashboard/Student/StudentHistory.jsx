@@ -38,7 +38,7 @@ const StudentHistory = () => {
     
     return studentData.orderHistory.map(order => {
       try {
-        const batchInfo = JSON.parse(order.batchId.replace(/\n/g, '').replace(/new ObjectId\((.*?)\)/g, '$1'));
+        const batchInfo = order.batchId;
         return {
           id: order.orderId,
           title: order.courseTitle === 'Unknown' ? batchInfo.course : order.courseTitle,

@@ -15,6 +15,7 @@ const StudentsBlog = lazy(() => import("./pages/Frontend/StudentsBlog"));
 const BlogDetailPage = lazy(()=>import("./pages/Frontend/BlogDetail"))
 const ContactUs = lazy(() => import("./pages/Frontend/ContactUs"));
 const CourseList = lazy(() => import("./pages/Frontend/CourseList"));
+const Career = lazy(() => import("./pages/Frontend/Career"));
 const Register = lazy(() => import("./pages/Auth/Register"));
 const Login = lazy(() => import("./pages/Auth/Login"));
 const ForgotPasswordPage = lazy(() => import("./pages/Auth/ForgetPassword"));
@@ -24,6 +25,7 @@ const NotFoundPage = lazy(() => import("./pages/NotFound"));
 const CourseDetailsPage = lazy(() => import("./pages/Frontend/CourseDetail"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
 
 
 
@@ -80,6 +82,7 @@ export const routes = [
   { exact: true, path: "/BlogDetail/:id",layout:GuestLayout,component:BlogDetailPage},
   { exact: true, path: "/ContactUs", layout: GuestLayout, component: ContactUs},
   { exact: true, path: "/CourseList", layout: GuestLayout, component: CourseList},
+  { exact: true, path: "/Career", layout: GuestLayout, component: Career},
   // { exact: true, path: "/CourseDetails/:id", layout: GuestLayout, component: CourseDetailsPage},
   { exact: true, path: "/courseDetails/batch/:id", layout: GuestLayout, component: CourseDetailsPage},
   {
@@ -92,6 +95,7 @@ export const routes = [
   { exact: true, path: "/VerifyOTP", layout: Index, component: VerifyOTPPage},
   { exact: true, path: "/TermsOfService", layout: Index, component: TermsOfService},
   { exact: true, path: "/PrivacyPolicy", layout: Index, component: PrivacyPolicy},
+  { exact: true, path: "/RefundPolicy", layout: Index, component: RefundPolicy},
   { exact: true, path: "*", component: NotFoundPage },
 
   // Teacher Panel Routes 

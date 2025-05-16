@@ -28,7 +28,7 @@ const FAQ = ({ faqs }) => {
           p.style.fontSize = '1rem';
           p.style.lineHeight = '1.6';
           p.style.marginBottom = '1rem';
-          p.style.color = '#555';
+          p.style.color = '#4D2C5E';
         });
         
         // Return the modified HTML
@@ -270,7 +270,7 @@ const FAQ = ({ faqs }) => {
                         >
                             <div className="absolute -inset-8 rounded-3xl opacity-20  blur-xl"></div>
                             <motion.div 
-                                className="relative overflow-hidden rounded-2xl shadow-2xl border-1 border-[#4D2C5E]"
+                                className="relative overflow-hidden rounded-2xl shadow-2xl"
                                 whileHover={{ scale: 1.02 }}
                             >
                                 <img

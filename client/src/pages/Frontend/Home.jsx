@@ -69,7 +69,81 @@ function Home() {
   };
 
 
-  const faqs = Faqs;
+
+  const faqs = [
+    {
+        question: "What Upskillab wants to give you?",
+        answer: "Upskillab wants to empower you with industry-ready skills, personalized mentorship, and mental wellness support—so you don't just grow in your career, but thrive as a whole individual."
+    },
+    {
+        question: "Why choose us for education?",
+        answer: `<p>Because we don't just teach—you grow, transform, and succeed with us.</p>
+        <p>At Upskillab, we offer more than just courses:</p>
+        <ul>
+          <li>✅ Industry-verified curriculum designed with hiring partners</li>
+          <li>✅ Career mentorship by certified professionals</li>
+          <li>✅ Job guarantees or interview opportunities for select programs</li>
+          <li>✅ Real-world projects, hackathons, and case-based learning</li>
+          <li>✅ Mental wellbeing sessions & psychological support—because your mind matters too</li>
+          <li>✅ Post-course career assistance for up to a year</li>
+          <li>✅ Flexible learning formats for working professionals and students alike</li>
+        </ul>
+        <p>We're building the bridge between education, employment, and emotional wellbeing—so your success is not just professional, but personal too.</p>`
+    },
+    {
+        question: "Only at Upskillab?",
+        answer: `<p>Unlike other platforms, Upskillab combines technical upskilling with:</p>
+        <ul>
+          <li>Holistic guidance</li>
+          <li>Mental wellness support</li>
+          <li>Post-course career assistance</li>
+          <li>Personalized mentorship</li>
+        </ul>
+        <p>Get certified. Get mentored. Get hired. Stay balanced.</p>`
+    },
+    {
+        question: "Do I get a certificate after completing the course?",
+        answer: "Yes. Upon successful completion, you will receive an industry-recognized certificate, which can be verified and added to your professional profile."
+    },
+    {
+        question: "Do these programs guarantee a job?",
+        answer: "Certain programs come with a Job Guarantee or Guaranteed Interview Calls post successful completion, depending on the course structure and eligibility."
+    },
+    {
+        question: "What is the Career Mentorship Program?",
+        answer: "It's a personalized mentorship initiative where learners receive 1-on-1 guidance from certified career counselors to plan, pivot, or grow their careers with confidence."
+    },
+    {
+        question: "What is the 'Helping Hand / Connect+' feature?",
+        answer: "Helping Hand (Connect+) is our 1-year post-course career support system, ensuring learners have access to networking, job referrals, guidance, and additional resources even after course completion."
+    },
+    {
+        question: "Are there mental wellbeing sessions included?",
+        answer: "Yes. We provide monthly mental wellbeing sessions and free psychological counseling, because we believe in nurturing both the mind and career."
+    },
+    {
+        question: "What is the learning format?",
+        answer: `<p>Courses are delivered through:</p>
+        <ul>
+          <li>Live instructor-led sessions</li>
+          <li>Recorded video lectures</li>
+          <li>Hands-on projects & case studies</li>
+          <li>Peer & mentor interaction forums</li>
+        </ul>`
+    },
+    {
+        question: "Can working professionals enroll?",
+        answer: "Absolutely. All our programs are designed with flexibility in mind for students, working professionals, and career switchers."
+    },
+    {
+        question: "How can I enroll in a course?",
+        answer: "You can enroll directly through our website or connect with our academic advisors for free counseling before choosing the right program."
+    },
+    {
+        question: "Is there EMI or financial assistance available?",
+        answer: "Yes. We offer flexible EMI options and financial aid for eligible candidates. Please speak with our counselors for detailed options."
+    }
+];
   return (
     <>
 
