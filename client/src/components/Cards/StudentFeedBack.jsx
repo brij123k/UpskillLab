@@ -65,7 +65,7 @@ const StudentFeedBack = () => {
             </svg>
           </div>
           <div>
-            <h3 className="text-xl font-bold text-[#C3325F]">{currentStats.rating}</h3>
+            <h3 className="text-xl font-bold text-purple-700">{currentStats.rating}</h3>
             <p className="text-sm font-medium text-gray-700">Happy Students</p>
           </div>
         </div>
@@ -77,7 +77,7 @@ const StudentFeedBack = () => {
             </svg>
           </div>
           <div>
-            <h3 className="text-xl font-bold text-[#C3325F]">{currentStats.trained}</h3>
+            <h3 className="text-xl font-bold text-purple-700">{currentStats.trained}</h3>
             <p className="text-sm font-medium text-gray-700">Courses Trained</p>
           </div>
         </div>
@@ -89,7 +89,7 @@ const StudentFeedBack = () => {
             </svg>
           </div>
           <div>
-            <h3 className="text-xl font-bold text-[#C3325F]">{currentStats.partners}</h3>
+            <h3 className="text-xl font-bold text-purple-700">{currentStats.partners}</h3>
             <p className="text-sm font-medium text-gray-700">Hiring Partners</p>
           </div>
         </div>
@@ -105,7 +105,7 @@ const StudentFeedBack = () => {
       </svg>
     </div>
     <div className="min-w-0">
-      <h3 className="text-sm font-bold text-[#C3325F] truncate">{currentStats.rating}</h3>
+      <h3 className="text-sm font-bold text-purple-700 truncate">{currentStats.rating}</h3>
       <p className="text-[10px] font-medium text-gray-700 truncate">Happy Students</p>
     </div>
   </div>
@@ -118,7 +118,7 @@ const StudentFeedBack = () => {
       </svg>
     </div>
     <div className="min-w-0">
-      <h3 className="text-sm font-bold text-[#C3325F] truncate">{currentStats.trained}</h3>
+      <h3 className="text-sm font-bold text-purple-700 truncate">{currentStats.trained}</h3>
       <p className="text-[10px] font-medium text-gray-700 truncate">Courses</p>
     </div>
   </div>
@@ -131,7 +131,7 @@ const StudentFeedBack = () => {
       </svg>
     </div>
     <div className="min-w-0">
-      <h3 className="text-sm font-bold text-[#C3325F] truncate">{currentStats.partners}</h3>
+      <h3 className="text-sm font-bold text-purple-700 truncate">{currentStats.partners}</h3>
       <p className="text-[10px] font-medium text-gray-700 truncate">Partners</p>
     </div>
   </div>
