@@ -9,22 +9,26 @@ import {
   FiCalendar,
   FiUser,
   FiAward,
-  FiBarChart2
+  FiBarChart2,
+  FiChevronRight
 } from 'react-icons/fi';
 import { getDataHandlerWithToken } from '../../../config/services';
-
+import { useNavigate } from 'react-router-dom';
 const StudentHistory = () => {
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState('courses');
-  const [courses,setcourses]= useState(null)
+  const [courses, setCourses] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+ const navigate = useNavigate()
   const fetchStudentHistory = async () => {
     try {
       setLoading(true);
       const response = await getDataHandlerWithToken('studentHistory');
-      const courses = await getDataHandlerWithToken('courseDisplay')
-      setcourses(courses.data)
+      const courses = await getDataHandlerWithToken('courseDisplay');
+      setCourses(courses.data);
       setStudentData(response.students[0]);
+      console.log(response.students[0])
     } catch (error) {
       console.error('Error fetching student history:', error);
     } finally {
@@ -36,67 +40,60 @@ const StudentHistory = () => {
     fetchStudentHistory();
   }, []);
 
-  // Calculate attendance percentage
   const calculateAttendance = () => {
     if (!studentData?.attendanceHistory?.length) return 0;
     const attended = studentData.attendanceHistory.filter(c => c.isAttended).length;
     return Math.round((attended / studentData.attendanceHistory.length) * 100);
   };
 
-  // Categorize courses by status
- const categorizeCourses = () => {
-  if (!studentData?.orderHistory) return { completed: [], inProgress: [], upcoming: [] };
-  
-  const now = new Date();
-  // First filter only COMPLETED status orders for the courses section
-  return studentData.orderHistory
-    .filter(order => order.status === 'COMPLETED')
-    .reduce((acc, order) => {
-      try {
-        const batch = order.batchId;
-        const courseId= batch.course
-        const courseDetail = courses.find((detail) => detail._id == courseId);
-      
-        const startDate = new Date(batch.startDate);
-        const endDate = new Date(startDate);
-        endDate.setDate(endDate.getDate() + batch.duration);
-        
-        let displayStatus;
-        if (now > endDate) {
-          displayStatus = 'completed'; // Course has ended
-        } else if (now >= startDate && now <= endDate) {
-          displayStatus = 'inProgress'; // Course is ongoing
-        } else {
-          displayStatus = 'upcoming'; // Course hasn't started
+  const categorizeCourses = () => {
+    if (!studentData?.orderHistory) return { completed: [], inProgress: [], upcoming: [] };
+    
+    const now = new Date();
+    return studentData.orderHistory
+      .filter(order => order.status === 'COMPLETED')
+      .reduce((acc, order) => {
+        try {
+          const batch = order.batchId;
+          const courseId = batch.course;
+          const courseDetail = courses?.find((detail) => detail._id == courseId);
+          
+          const startDate = new Date(batch.startDate);
+          const endDate = new Date(startDate);
+          endDate.setDate(endDate.getDate() + batch.duration);
+          
+          let displayStatus;
+          if (now > endDate) {
+            displayStatus = 'completed';
+          } else if (now >= startDate && now <= endDate) {
+            displayStatus = 'inProgress';
+          } else {
+            displayStatus = 'upcoming';
+          }
+          
+          const course = {
+            id: order.orderId,
+            title: courseDetail?.courseName || order.courseTitle,
+            batchCode: courseDetail?.category?.categoryName || 'General',
+            status: displayStatus,
+            originalStatus: order.status,
+            startDate: batch.startDate,
+            endDate: endDate.toISOString(),
+            duration: batch.duration,
+            amount: order.totalAmount,
+            paid: order.amountPaid,
+            imageUrl: courseDetail?.courseImage || 'https://via.placeholder.com/300x200?text=Course+Image'
+          };
+          
+          acc[displayStatus].push(course);
+          return acc;
+        } catch (e) {
+          console.error('Error parsing course:', e);
+          return acc;
         }
-        
-        const course = {
-          id: order.orderId,
-          title: courseDetail.courseName || order.courseTitle,
-          batchCode: courseDetail.category.categoryName,
-          status: displayStatus, // Use calculated display status
-          originalStatus: order.status, // Keep original COMPLETED status
-          startDate: batch.startDate,
-          endDate: endDate.toISOString(),
-          duration: batch.duration,
-          amount: order.totalAmount,
-          paid: order.amountPaid,
-          imageUrl: courseDetail.courseImage
-        };
-        
-        acc[displayStatus].push(course);
-        return acc;
-      } catch (e) {
-        console.error('Error parsing course:', e);
-        return acc;
-      }
-    }, { completed: [], inProgress: [], upcoming: [] });
-};
+      }, { completed: [], inProgress: [], upcoming: [] });
+  };
 
-// For Order History - show all orders as-is
-
-
-  // Process attendance history
   const getAttendanceHistory = () => {
     if (!studentData?.attendanceHistory) return [];
     
@@ -118,7 +115,7 @@ const StudentHistory = () => {
         title: `Class Session`,
         status,
         date: session.scheduledDate,
-        formattedDate: sessionDate.toLocaleDateString(),
+        formattedDate: sessionDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
         time: session.scheduledStartTime,
         link: session.meetingLink,
         isUpcoming: status === 'upcoming'
@@ -126,285 +123,413 @@ const StudentHistory = () => {
     });
   };
 
+  const filterOrders = () => {
+    if (!studentData?.orderHistory) return [];
+    return studentData.orderHistory.filter(order => 
+      order.courseTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.batchId.batchCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      order.orderId.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  };
+
   const { completed, inProgress, upcoming } = categorizeCourses();
   const attendanceHistory = getAttendanceHistory();
+  const filteredOrders = filterOrders();
 
   if (loading) {
     return (
-      <div className="p-6 flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4D2C5E]"></div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#6C63FF]"></div>
       </div>
     );
   }
 
   return (
-    <div className="p-4 md:p-6 max-w-7xl mx-auto">
-      {/* Student Profile Header */}
-      <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
-        <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
-          <img 
-            src={studentData.image} 
-            alt={studentData.fullName} 
-            className="w-24 h-24 rounded-full object-cover border-4 border-[#4D2C5E]/20"
-          />
-          
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-[#4D2C5E]">{studentData.fullName}</h1>
-            <p className="text-gray-600 mb-2">{studentData.bio}</p>
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Student Profile Header */}
+        <div className="bg-gradient-to-r from-[#6C63FF] to-[#4A42E8] rounded-2xl shadow-lg p-6 mb-8 text-white">
+          <div className="flex flex-col md:flex-row gap-6 items-start md:items-center">
+            <div className="relative">
+              <img 
+                src={studentData.image || 'https://via.placeholder.com/150?text=Student'} 
+                alt={studentData.fullName} 
+                className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border-4 border-white/30 shadow-md"
+              />
+              <div className="absolute bottom-0 right-0 bg-white rounded-full p-1 shadow-sm">
+                <div className="bg-green-500 rounded-full w-4 h-4"></div>
+              </div>
+            </div>
             
-            <div className="flex flex-wrap gap-2 mb-4">
-              {studentData.skills?.map((skill, index) => (
-                <span key={index} className="bg-[#FF7426]/10 text-[#FF7426] px-3 py-1 rounded-full text-sm">
-                  {skill}
+            <div className="flex-1">
+              <h1 className="text-2xl md:text-3xl font-bold">{studentData.fullName}</h1>
+              <p className="text-white/90 mb-3">{studentData.bio || 'Active learner at our platform'}</p>
+              
+              <div className="flex flex-wrap gap-2 mb-4">
+                {studentData.skills?.map((skill, index) => (
+                  <span key={index} className="bg-white/20 text-white px-3 py-1 rounded-full text-sm">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Stats Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+            {/* Attendance Card */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-white/80">Attendance</p>
+                  <p className="text-2xl font-bold text-white">
+                    {calculateAttendance()}%
+                  </p>
+                </div>
+                <div className="p-3 rounded-full bg-white/10">
+                  <FiCheckCircle className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div className="mt-3">
+                <div className="w-full bg-white/20 rounded-full h-2">
+                  <div 
+                    className="bg-white h-2 rounded-full" 
+                    style={{ width: `${calculateAttendance()}%` }}
+                  ></div>
+                </div>
+                <div className="flex justify-between text-xs text-white/80 mt-1">
+                  <span>{studentData?.attendanceHistory?.filter(c => c.isAttended).length || 0} attended</span>
+                  <span>{studentData?.attendanceHistory?.length || 0} total</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Courses Card */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-white/80">Courses</p>
+                  <p className="text-2xl font-bold text-white">
+                    {completed.length + inProgress.length + upcoming.length}
+                  </p>
+                </div>
+                <div className="p-3 rounded-full bg-white/10">
+                  <FiBook className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div className="flex justify-between text-xs text-white/80 mt-3">
+                <span className="flex items-center">
+                  <span className="w-2 h-2 rounded-full bg-amber-400 mr-1"></span>
+                  {inProgress.length} in progress
                 </span>
-              ))}
+                <span className="flex items-center">
+                  <span className="w-2 h-2 rounded-full bg-green-400 mr-1"></span>
+                  {completed.length} completed
+                </span>
+              </div>
             </div>
-            
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="bg-[#F9F5FF] p-3 rounded-lg">
-                <div className="flex items-center gap-2 text-[#4D2C5E]">
-                  <FiBook />
-                  <span className="font-medium">Courses</span>
+
+            {/* Orders Card */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-white/80">Orders</p>
+                  <p className="text-2xl font-bold text-white">
+                    {studentData?.orderHistory?.length || 0}
+                  </p>
                 </div>
-                <div className="text-2xl font-bold mt-1">{studentData.orderHistory?.length || 0}</div>
+                <div className="p-3 rounded-full bg-white/10">
+                  <FiDollarSign className="h-6 w-6 text-white" />
+                </div>
               </div>
-              
-              <div className="bg-[#FFF5F0] p-3 rounded-lg">
-                <div className="flex items-center gap-2 text-[#FF7426]">
-                  <FiAward />
-                  <span className="font-medium">Completed</span>
-                </div>
-                <div className="text-2xl font-bold mt-1">{studentData.completedCourses || 0}</div>
-              </div>
-              
-              <div className="bg-[#F0F9FF] p-3 rounded-lg">
-                <div className="flex items-center gap-2 text-blue-500">
-                  <FiBarChart2 />
-                  <span className="font-medium">Attendance</span>
-                </div>
-                <div className="text-2xl font-bold mt-1">{calculateAttendance()}%</div>
-              </div>
-              
-              <div className="bg-[#F0F0FF] p-3 rounded-lg">
-                <div className="flex items-center gap-2 text-indigo-500">
-                  <FiUser />
-                  <span className="font-medium">Type</span>
-                </div>
-                <div className="text-2xl font-bold mt-1 capitalize">{studentData.studentType.toLowerCase()}</div>
+              <div className="flex justify-between text-xs text-white/80 mt-3">
+                <span className="flex items-center">
+                  <span className="w-2 h-2 rounded-full bg-green-400 mr-1"></span>
+                  {studentData?.orderHistory?.filter(o => o.status === 'COMPLETED').length || 0} completed
+                </span>
+                <span className="flex items-center">
+                  <span className="w-2 h-2 rounded-full bg-yellow-400 mr-1"></span>
+                  {studentData?.orderHistory?.filter(o => o.status !== 'COMPLETED').length || 0} pending
+                </span>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Navigation Tabs */}
-      <div className="flex overflow-x-auto mb-6 bg-white rounded-lg shadow-sm p-1">
-        <button
-          onClick={() => setActiveSection('courses')}
-          className={`px-4 py-2 rounded-md whitespace-nowrap ${activeSection === 'courses' ? 'bg-[#4D2C5E] text-white' : 'text-gray-700'}`}
-        >
-          My Courses
-        </button>
-        <button
-          onClick={() => setActiveSection('attendance')}
-          className={`px-4 py-2 rounded-md whitespace-nowrap ${activeSection === 'attendance' ? 'bg-[#4D2C5E] text-white' : 'text-gray-700'}`}
-        >
-          Attendance
-        </button>
-        <button
-          onClick={() => setActiveSection('orders')}
-          className={`px-4 py-2 rounded-md whitespace-nowrap ${activeSection === 'orders' ? 'bg-[#4D2C5E] text-white' : 'text-gray-700'}`}
-        >
-          Order History
-        </button>
-      </div>
-
-      {/* Courses Section */}
-      {activeSection === 'courses' && (
-        <div className="space-y-6">
-          {/* In Progress Courses */}
-          {inProgress.length > 0 && (
-            <div>
-              <h2 className="text-xl font-bold text-[#4D2C5E] mb-4 flex items-center gap-2">
-                <FiClock className="text-[#FF7426]" /> In Progress ({inProgress.length})
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {inProgress.map(course => (
-                  <CourseCard key={course.id} course={course} type="progress" />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Upcoming Courses */}
-          {upcoming.length > 0 && (
-            <div>
-              <h2 className="text-xl font-bold text-[#4D2C5E] mb-4 flex items-center gap-2">
-                <FiCalendar className="text-blue-500" /> Upcoming ({upcoming.length})
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {upcoming.map(course => (
-                  <CourseCard key={course.id} course={course} type="upcoming" />
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Completed Courses */}
-          {completed.length > 0 && (
-            <div>
-              <h2 className="text-xl font-bold text-[#4D2C5E] mb-4 flex items-center gap-2">
-                <FiCheckCircle className="text-green-500" /> Completed ({completed.length})
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {completed.map(course => (
-                  <CourseCard key={course.id} course={course} type="completed" />
-                ))}
-              </div>
-            </div>
-          )}
+        {/* Navigation Tabs */}
+        <div className="flex overflow-x-auto mb-8 bg-white rounded-xl shadow-sm">
+          <button
+            onClick={() => setActiveSection('courses')}
+            className={`px-6 py-3 rounded-xl whitespace-nowrap flex items-center gap-2 transition-all ${activeSection === 'courses' ? 'bg-[#6C63FF] text-white shadow-md' : 'text-gray-700 hover:bg-gray-100'}`}
+          >
+            <FiBook className="w-5 h-5" />
+            My Courses
+            <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+              {completed.length + inProgress.length + upcoming.length}
+            </span>
+          </button>
+          <button
+            onClick={() => setActiveSection('attendance')}
+            className={`px-6 py-3 rounded-xl whitespace-nowrap flex items-center gap-2 transition-all ${activeSection === 'attendance' ? 'bg-[#6C63FF] text-white shadow-md' : 'text-gray-700 hover:bg-gray-100'}`}
+          >
+            <FiCheckCircle className="w-5 h-5" />
+            Attendance
+            <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+              {studentData?.attendanceHistory?.length || 0}
+            </span>
+          </button>
+          <button
+            onClick={() => setActiveSection('orders')}
+            className={`px-6 py-3 rounded-xl whitespace-nowrap flex items-center gap-2 transition-all ${activeSection === 'orders' ? 'bg-[#6C63FF] text-white shadow-md' : 'text-gray-700 hover:bg-gray-100'}`}
+          >
+            <FiDollarSign className="w-5 h-5" />
+            Order History
+            <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+              {studentData?.orderHistory?.length || 0}
+            </span>
+          </button>
         </div>
-      )}
 
-      {/* Attendance Section */}
-      {activeSection === 'attendance' && (
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          <div className="p-6">
-            <h2 className="text-xl font-bold text-[#4D2C5E] mb-4">Attendance History</h2>
-            
-            <div className="mb-6">
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Overall Attendance</span>
-                <span className="text-sm font-medium">{calculateAttendance()}%</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-2.5">
-                <div 
-                  className="bg-[#4D2C5E] h-2.5 rounded-full" 
-                  style={{ width: `${calculateAttendance()}%` }}
-                ></div>
-              </div>
-            </div>
-            
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#4D2C5E] uppercase tracking-wider">Date</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#4D2C5E] uppercase tracking-wider">Time</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#4D2C5E] uppercase tracking-wider">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#4D2C5E] uppercase tracking-wider">Link</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {attendanceHistory.map(session => (
-                    <tr key={session.id}>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {session.formattedDate}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {session.time}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {session.status === 'attended' ? (
-                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                            Attended
-                          </span>
-                        ) : session.status === 'missed' ? (
-                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                            Missed
-                          </span>
-                        ) : (
-                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                            Upcoming
-                          </span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {session.link ? (
-                          <a 
-                            href={session.link} 
-                            target="_blank" 
-                            rel="noopener noreferrer"
-                            className="text-blue-600 hover:underline"
-                          >
-                            Join
-                          </a>
-                        ) : (
-                          <span className="text-gray-400">Not available</span>
-                        )}
-                      </td>
-                    </tr>
+        {/* Courses Section */}
+        {activeSection === 'courses' && (
+          <div className="space-y-8">
+            {/* In Progress Courses */}
+            {inProgress.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-sm p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-bold text-gray-800 flex items-center gap-3">
+                    <div className="bg-amber-100 p-2 rounded-full">
+                      <FiClock className="text-amber-600 w-5 h-5" />
+                    </div>
+                    In Progress Courses ({inProgress.length})
+                  </h2>
+                  <button
+                  className="text-sm text-[#6C63FF] hover:underline flex items-center">
+                    View all <FiChevronRight className="ml-1" />
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {inProgress.map(course => (
+                    <CourseCard key={course.id} course={course} type="progress" />
                   ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      )}
+                </div>
+              </div>
+            )}
 
-      {/* Order History Section */}
-      {activeSection === 'orders' && (
-        <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-          <div className="p-6">
-            <h2 className="text-xl font-bold text-[#4D2C5E] mb-4">Order History</h2>
-            
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#4D2C5E] uppercase tracking-wider">Order ID</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#4D2C5E] uppercase tracking-wider">Course</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#4D2C5E] uppercase tracking-wider">Batch</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#4D2C5E] uppercase tracking-wider">Amount</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-[#4D2C5E] uppercase tracking-wider">Status</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {studentData.orderHistory?.map(order => (
-                    <tr key={order.orderId}>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {order.orderId.slice(0, 8)}...
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">
-                          {order.courseTitle === 'Unknown' ? order.batchId.course : order.courseTitle}
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-500">{order.batchId.batchCode}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-1">
-                          ₹
-                          <span className="text-sm font-medium">
-                            {order.amountPaid} / {order.totalAmount}
-                          </span>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        {order.status === 'COMPLETED' ? (
-                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                            Completed
-                          </span>
-                        ) : (
-                          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                            Pending
-                          </span>
-                        )}
-                      </td>
-                    </tr>
+            {/* Upcoming Courses */}
+            {upcoming.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-sm p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-bold text-gray-800 flex items-center gap-3">
+                    <div className="bg-blue-100 p-2 rounded-full">
+                      <FiCalendar className="text-blue-600 w-5 h-5" />
+                    </div>
+                    Upcoming Courses ({upcoming.length})
+                  </h2>
+                  <button className="text-sm text-[#6C63FF] hover:underline flex items-center">
+                    View all <FiChevronRight className="ml-1" />
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {upcoming.map(course => (
+                    <CourseCard key={course.id} course={course} type="upcoming" />
                   ))}
-                </tbody>
-              </table>
+                </div>
+              </div>
+            )}
+
+            {/* Completed Courses */}
+            {completed.length > 0 && (
+              <div className="bg-white rounded-2xl shadow-sm p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-xl font-bold text-gray-800 flex items-center gap-3">
+                    <div className="bg-green-100 p-2 rounded-full">
+                      <FiCheckCircle className="text-green-600 w-5 h-5" />
+                    </div>
+                    Completed Courses ({completed.length})
+                  </h2>
+                  <button className="text-sm text-[#6C63FF] hover:underline flex items-center">
+                    View all <FiChevronRight className="ml-1" />
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {completed.map(course => (
+                    <CourseCard key={course.id} course={course} type="completed" />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Attendance Section */}
+        {activeSection === 'attendance' && (
+          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div className="p-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-800 mb-1">Attendance Overview</h2>
+                  <p className="text-gray-600">Your class participation history</p>
+                </div>
+                
+                <div className="bg-[#6C63FF]/10 p-4 rounded-xl border border-[#6C63FF]/20">
+                  <div className="flex items-center gap-4">
+                    <div className="text-center">
+                      <p className="text-3xl font-bold text-[#6C63FF]">{calculateAttendance()}%</p>
+                      <p className="text-xs text-gray-600">Overall Attendance</p>
+                    </div>
+                    <div className="h-12 border-l border-gray-300"></div>
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                        Attended: {studentData?.attendanceHistory?.filter(c => c.isAttended).length || 0}
+                      </p>
+                      <p className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                        Missed: {studentData?.attendanceHistory?.filter(c => !c.isAttended).length || 0}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Attendance Table */}
+              <div className="overflow-x-auto rounded-lg border border-gray-200">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      {/* <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th> */}
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {attendanceHistory.map(session => (
+                      <tr key={session.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">{session.formattedDate}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-500">{session.time}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {session.status === 'attended' ? (
+                            <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              Attended
+                            </span>
+                          ) : session.status === 'missed' ? (
+                            <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                              Missed
+                            </span>
+                          ) : (
+                            <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                              Upcoming
+                            </span>
+                          )}
+                        </td>
+                        {/* <td className="px-6 py-4 whitespace-nowrap">
+                          {session.link ? (
+                            <a 
+                              href={session.link} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium ${session.isUpcoming ? 'bg-[#6C63FF] text-white hover:bg-[#5A52E0]' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}
+                            >
+                              {session.isUpcoming ? 'Join Now' : 'View Recording'}
+                            </a>
+                          ) : (
+                            <span className="text-xs text-gray-400">Not available</span>
+                          )}
+                        </td> */}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Order History Section */}
+        {activeSection === 'orders' && (
+          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div className="p-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-800 mb-1">Order History</h2>
+                  <p className="text-gray-600">All your course purchases and transactions</p>
+                </div>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FiSearch className="h-5 w-5 text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Search orders..."
+                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6C63FF] focus:border-[#6C63FF] transition-all"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              </div>
+              
+              <div className="overflow-x-auto rounded-lg border border-gray-200">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Batch</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {filteredOrders.map(order => (
+                      <tr key={order.orderId} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-[#6C63FF]">#{order.orderId.slice(0, 8)}...</div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="text-sm font-medium text-gray-900">
+                            {order.courseTitle === 'Unknown' ? order.batchId.course : order.courseTitle}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-500">{order.batchId.batchCode}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-1 text-sm font-medium">
+                            ₹{order.amountPaid}
+                            <span className="text-gray-400">/</span>
+                            <span className="text-gray-500">₹{order.totalAmount}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {order.status === 'COMPLETED' ? (
+                            <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              Completed
+                            </span>
+                          ) : (
+                            <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                              Pending
+                            </span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
-// Course Card Component
 const CourseCard = ({ course, type }) => {
   const startDate = new Date(course.startDate);
   const endDate = new Date(startDate);
@@ -415,65 +540,86 @@ const CourseCard = ({ course, type }) => {
     ? Math.min(100, Math.max(0, ((now - startDate) / (endDate - startDate)) * 100))
     : 0;
 
+  const statusColors = {
+    progress: {
+      bg: 'bg-amber-100',
+      text: 'text-amber-600',
+      icon: <FiClock className="w-5 h-5 text-amber-600" />
+    },
+    upcoming: {
+      bg: 'bg-blue-100',
+      text: 'text-blue-600',
+      icon: <FiCalendar className="w-5 h-5 text-blue-600" />
+    },
+    completed: {
+      bg: 'bg-green-100',
+      text: 'text-green-600',
+      icon: <FiCheckCircle className="w-5 h-5 text-green-600" />
+    }
+  };
+
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow">
-      {course.imageUrl && (
-        <div className="h-40 overflow-hidden">
-          <img 
-            src={course.imageUrl} 
-            alt={course.title} 
-            className="w-full h-full object-cover"
-          />
+    <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-all duration-300 group">
+      <div className="relative h-40 overflow-hidden">
+        <img 
+          src={course.imageUrl} 
+          alt={course.title} 
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+        <div className={`absolute top-4 right-4 ${statusColors[type].bg} p-2 rounded-full shadow-sm`}>
+          {statusColors[type].icon}
         </div>
-      )}
+      </div>
       
-      <div className="p-4">
-        <div className="flex justify-between items-start mb-2">
-          <h3 className="font-bold text-[#4D2C5E]">{course.title}</h3>
-          <span className="text-xs bg-[#4D2C5E]/10 text-[#4D2C5E] px-2 py-1 rounded">
+      <div className="p-5">
+        <div className="flex justify-between items-start mb-3">
+          <h3 className="font-bold text-gray-800 text-lg line-clamp-2">{course.title}</h3>
+          <span className="text-xs bg-[#6C63FF]/10 text-[#6C63FF] px-2 py-1 rounded whitespace-nowrap">
             {course.batchCode}
           </span>
         </div>
         
-        <div className="text-sm text-gray-600 mb-3">
-          <div className="flex items-center gap-2 mb-1">
-            <FiCalendar className="text-gray-400" />
+        <div className="text-sm text-gray-600 mb-4 space-y-2">
+          <div className="flex items-center gap-2">
+            <FiCalendar className="text-gray-400 flex-shrink-0" />
             <span>
-              {startDate.toLocaleDateString()} - {endDate.toLocaleDateString()}
+              {startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} - {endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
             </span>
           </div>
-          
+          <div className="flex items-center gap-2">
+            <FiClock className="text-gray-400 flex-shrink-0" />
+            <span>{course.duration} days course</span>
+          </div>
         </div>
         
         {type === 'progress' && (
-          <div className="mb-3">
+          <div className="mb-4">
             <div className="flex justify-between text-xs text-gray-500 mb-1">
               <span>Course Progress</span>
               <span>{Math.round(progress)}%</span>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-1.5">
+            <div className="w-full bg-gray-200 rounded-full h-2">
               <div 
-                className="bg-[#FF7426] h-1.5 rounded-full" 
+                className="bg-[#FF7426] h-2 rounded-full" 
                 style={{ width: `${progress}%` }}
               ></div>
             </div>
           </div>
         )}
         
-        <div className="flex justify-between items-center mt-4">
-          <span className={`text-sm font-medium ${
-            type === 'completed' ? 'text-green-500' :
-            type === 'progress' ? 'text-[#FF7426]' :
-            'text-blue-500'
-          }`}>
+        <div className="flex justify-between items-center">
+          <span className={`text-sm font-medium ${statusColors[type].text}`}>
             {type === 'completed' ? 'Completed' : 
              type === 'progress' ? 'In Progress' : 
              'Upcoming'}
           </span>
           
-          <div className="text-xs text-gray-500">
-            {course.duration} days
-          </div>
+          {/* <button
+          
+          className="text-sm text-[#6C63FF] hover:text-[#5A52E0] font-medium flex items-center">
+            View details <FiChevronRight className="ml-1" />
+          </button> */}
         </div>
       </div>
     </div>

@@ -66,6 +66,14 @@ const allNotifications = responses.flat().sort((a, b) => new Date(b.createdAt) -
       const now = new Date();
 
       const upcomingClasses = (classResponse.classSessions || [])
+        const future = upcomingClasses.filter(classItem => {
+          // Combine date and time for accurate comparison
+          const classDate = new Date(classItem.scheduledDate);
+          const [hours, minutes] = classItem.scheduledStartTime.split(':');
+          classDate.setHours(parseInt(hours), parseInt(minutes));
+          
+          return classDate > now;
+        });
       const today = upcomingClasses.filter(session => {
           const sessionDate = new Date(session.scheduledDate);
           return (
@@ -101,6 +109,7 @@ const allNotifications = responses.flat().sort((a, b) => new Date(b.createdAt) -
         upcomingClasses,
         pendingDoubts,
         studyMaterials,
+        futureClasses:future,
        recentNotifications: allNotifications.slice(0, 5) || [],
         marketTrends: marketResponse.trends?.slice(0, 3) || [],
         teachingStats: statsResponse || {
@@ -165,7 +174,7 @@ const allNotifications = responses.flat().sort((a, b) => new Date(b.createdAt) -
       <div>
         <h3 className="text-gray-500 text-sm font-medium">Upcoming Classes</h3>
         <p className="text-3xl font-bold text-[#4D2C5E] mt-2">
-          {dashboardData.upcomingClasses.length}
+          {dashboardData.futureClasses.length}
         </p>
       </div>
       <div className="p-3 bg-[#4D2C5E]/10 rounded-full">
@@ -173,10 +182,10 @@ const allNotifications = responses.flat().sort((a, b) => new Date(b.createdAt) -
       </div>
     </div>
     <div className="mt-4">
-      {dashboardData.upcomingClasses.length > 0 ? (
+      {dashboardData.futureClasses.length > 0 ? (
         <div className="flex items-center text-sm text-gray-600">
           <FiClock className="mr-1" />
-          <span>Next: {formatDate(dashboardData.upcomingClasses[0].scheduledDate)}</span>
+          <span>Next: {formatDate(dashboardData.futureClasses[0].scheduledDate)}</span>
         </div>
       ) : (
         <div className="text-sm text-gray-500">No classes scheduled</div>

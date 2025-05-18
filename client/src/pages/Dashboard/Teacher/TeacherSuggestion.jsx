@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FiPlus, FiX, FiClock, FiCheckCircle, FiAlertCircle, FiEdit2, FiTrash2 } from 'react-icons/fi';
+import { FiPlus, FiX, FiClock, FiCheckCircle, FiAlertCircle, FiEdit2, FiTrash2, FiFilter } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { postDataHandlerWithToken, getDataHandlerWithToken, putDataHandlerWithToken } from '../../../config/services';
 import { toast } from 'react-toastify';
@@ -8,9 +8,12 @@ import 'react-toastify/dist/ReactToastify.css';
 const TeacherSuggestions = () => {
   const [showModal, setShowModal] = useState(false);
   const [suggestions, setSuggestions] = useState([]);
+  const [filteredSuggestions, setFilteredSuggestions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [batches, setBatches] = useState([]);
   const [teacherProfile, setTeacherProfile] = useState(null);
+  const [activeTab, setActiveTab] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
   
   // Form state
   const [title, setTitle] = useState('');
@@ -38,6 +41,7 @@ const TeacherSuggestions = () => {
         // Fetch teacher's suggestions
         const suggestionsResponse = await getDataHandlerWithToken('teacherSugegstionsget');
         setSuggestions(suggestionsResponse.suggestions || []);
+        setFilteredSuggestions(suggestionsResponse.suggestions || []);
         
       } catch (error) {
         toast.error('Failed to load data');
@@ -49,6 +53,30 @@ const TeacherSuggestions = () => {
     
     fetchData();
   }, []);
+
+  // Filter suggestions based on active tab and search query
+  useEffect(() => {
+    let filtered = [...suggestions];
+    
+    // Apply status filter
+    if (activeTab === 'approved') {
+      filtered = filtered.filter(s => s.isApproved);
+    } else if (activeTab === 'pending') {
+      filtered = filtered.filter(s => !s.isApproved);
+    }
+    
+    // Apply search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter(s => 
+        s.title.toLowerCase().includes(query) || 
+        s.description.toLowerCase().includes(query) ||
+        (s.content && s.content.toLowerCase().includes(query))
+      );
+    }
+    
+    setFilteredSuggestions(filtered);
+  }, [activeTab, searchQuery, suggestions]);
 
   // Handle form submission
   const handleSubmit = async (e) => {
@@ -102,15 +130,15 @@ const TeacherSuggestions = () => {
   };
 
   // Edit suggestion
-  const handleEdit = (suggestion) => {
-    setTitle(suggestion.title);
-    setDescription(suggestion.description);
-    setType(suggestion.type);
-    setContent(suggestion.content);
-    setSelectedBatchId(suggestion.batchId);
-    setEditingId(suggestion._id);
-    setShowModal(true);
-  };
+  // const handleEdit = (suggestion) => {
+  //   setTitle(suggestion.title);
+  //   setDescription(suggestion.description);
+  //   setType(suggestion.type);
+  //   setContent(suggestion.content);
+  //   setSelectedBatchId(suggestion.batchId);
+  //   setEditingId(suggestion._id);
+  //   setShowModal(true);
+  // };
 
   // Format date
   const formatDate = (dateString) => {
@@ -146,85 +174,170 @@ const TeacherSuggestions = () => {
           </motion.button>
         </div>
 
+        {/* Filter Controls */}
+        <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-6 border border-gray-100">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            {/* Status Tabs */}
+            <div className="flex space-x-1 rounded-lg bg-gray-100 p-1">
+              {['all', 'approved', 'pending'].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
+                    activeTab === tab
+                      ? 'bg-white text-[#4D2C5E] shadow-sm'
+                      : 'text-gray-600 hover:text-gray-800'
+                  }`}
+                >
+                  {tab === 'all' && 'All Suggestions'}
+                  {tab === 'approved' && (
+                    <span className="flex items-center">
+                      <FiCheckCircle className="mr-2 h-4 w-4 text-green-500" />
+                      Approved
+                    </span>
+                  )}
+                  {tab === 'pending' && (
+                    <span className="flex items-center">
+                      <FiClock className="mr-2 h-4 w-4 text-yellow-500" />
+                      Pending
+                    </span>
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Search Input */}
+            <div className="relative w-full md:w-64">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <FiFilter className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]/30 focus:border-[#4D2C5E] transition-colors duration-200"
+                placeholder="Filter suggestions..."
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="bg-white p-4 rounded-xl shadow border border-gray-100">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Total Suggestions</p>
+                <p className="text-2xl font-bold text-[#4D2C5E]">{suggestions.length}</p>
+              </div>
+              <div className="p-3 rounded-full bg-[#4D2C5E]/10 text-[#4D2C5E]">
+                <FiPlus className="h-6 w-6" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white p-4 rounded-xl shadow border border-gray-100">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Approved</p>
+                <p className="text-2xl font-bold text-green-600">
+                  {suggestions.filter(s => s.isApproved).length}
+                </p>
+              </div>
+              <div className="p-3 rounded-full bg-green-100 text-green-600">
+                <FiCheckCircle className="h-6 w-6" />
+              </div>
+            </div>
+          </div>
+          
+          <div className="bg-white p-4 rounded-xl shadow border border-gray-100">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-gray-500">Pending Review</p>
+                <p className="text-2xl font-bold text-yellow-600">
+                  {suggestions.filter(s => !s.isApproved).length}
+                </p>
+              </div>
+              <div className="p-3 rounded-full bg-yellow-100 text-yellow-600">
+                <FiClock className="h-6 w-6" />
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Suggestions List */}
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-8 border border-gray-100">
-          {suggestions.length > 0 ? (
-            <div className="space-y-4">
-              {suggestions.map((suggestion, index) => (
+          {filteredSuggestions.length > 0 ? (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {filteredSuggestions.map((suggestion) => (
                 <motion.div 
                   key={suggestion._id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  className="border border-gray-200 rounded-lg p-4 md:p-5 hover:shadow-md transition-shadow duration-200 group"
+                  transition={{ duration: 0.2 }}
+                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200 group relative"
                 >
-                  <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-3 mb-3">
+                  {/* Status Ribbon */}
+                  <div className={`absolute -top-2 -right-2 px-2 py-1 rounded text-xs font-medium ${
+                    suggestion.isApproved 
+                      ? 'bg-green-100 text-green-800' 
+                      : 'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {suggestion.isApproved ? 'Approved' : 'Pending'}
+                  </div>
+                  
+                  <div className="flex flex-col h-full">
                     <div className="flex-1">
-                      <h3 className="text-lg md:text-xl font-semibold text-[#4D2C5E] group-hover:text-[#3A2152] transition-colors">
+                      <h3 className="text-lg font-semibold text-[#4D2C5E] group-hover:text-[#3A2152] transition-colors mb-2">
                         {suggestion.title}
                       </h3>
-                      <div className="flex flex-wrap items-center gap-2 mt-1">
-                        <span className="text-xs md:text-sm text-gray-500">
+                      
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-xs text-gray-500">
                           {formatDate(suggestion.createdAt)}
                         </span>
-                        <span className="hidden md:block text-gray-300">•</span>
-                        <span className="text-xs md:text-sm text-gray-500 capitalize">
+                        <span className="text-gray-300">•</span>
+                        <span className="text-xs text-gray-500 capitalize">
                           {suggestion.type}
                         </span>
                         {suggestion.batchId && (
                           <>
-                            <span className="hidden md:block text-gray-300">•</span>
-                            <span className="text-xs md:text-sm text-gray-500">
+                            <span className="text-gray-300">•</span>
+                            <span className="text-xs text-gray-500">
                               {batches.find(b => b._id === suggestion.batchId)?.batchCode || 'N/A'}
                             </span>
                           </>
                         )}
                       </div>
+                      
+                      <p className="text-gray-700 text-sm mb-3 line-clamp-2">
+                        {suggestion.description}
+                      </p>
                     </div>
-                    <div>
-                      {suggestion.isApproved ? (
-                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs md:text-sm font-medium bg-green-100 text-green-800">
-                          <FiCheckCircle className="mr-1 h-3 w-3 md:h-4 md:w-4" />
-                          Approved
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs md:text-sm font-medium bg-yellow-100 text-yellow-800">
-                          <FiClock className="mr-1 h-3 w-3 md:h-4 md:w-4" />
-                          Pending
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                  
-                  <div className="mb-4">
-                    <p className="text-gray-700">{suggestion.description}</p>
-                    {suggestion.content && (
-                      <div className="mt-3 p-3 bg-gray-50 rounded-md">
-                        <h4 className="text-xs md:text-sm font-medium text-gray-500 mb-1">Detailed Content:</h4>
-                        <p className="text-gray-700 whitespace-pre-line text-sm md:text-base">
-                          {suggestion.content}
-                        </p>
+                    
+                    <div className="mt-auto pt-3 border-t border-gray-100">
+                      <div className="flex justify-between items-center">
+                        {/* <button
+                          onClick={() => handleEdit(suggestion)}
+                          className="text-sm text-[#4D2C5E] hover:text-[#FF7426] flex items-center"
+                        >
+                          <FiEdit2 className="mr-1 h-4 w-4" />
+                          Edit
+                        </button> */}
+                        
+                        {suggestion.isApproved ? (
+                          <span className="flex items-center text-xs text-green-600">
+                            <FiCheckCircle className="mr-1 h-3 w-3" />
+                            Approved
+                          </span>
+                        ) : (
+                          <span className="flex items-center text-xs text-yellow-600">
+                            <FiClock className="mr-1 h-3 w-3" />
+                            Under Review
+                          </span>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  
-                  <div className="flex justify-between items-center">
-                    <div>
-                      {suggestion.batchId && (
-                        <span className="inline-block bg-[#4D2C5E]/10 text-[#4D2C5E] text-xs px-2 py-1 rounded md:hidden">
-                          Batch: {batches.find(b => b._id === suggestion.batchId)?.batchCode || 'N/A'}
-                        </span>
-                      )}
                     </div>
-                    {/* <div className="flex space-x-2">
-                      <button
-                        onClick={() => handleEdit(suggestion)}
-                        className="text-[#4D2C5E] hover:text-[#FF7426] p-1.5 md:p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
-                        title="Edit"
-                      >
-                        <FiEdit2 className="h-4 w-4 md:h-5 md:w-5" />
-                      </button>
-                    </div> */}
                   </div>
                 </motion.div>
               ))}
@@ -234,17 +347,30 @@ const TeacherSuggestions = () => {
               <div className="mx-auto w-20 h-20 md:w-24 md:h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
                 <FiAlertCircle className="h-8 w-8 md:h-12 md:w-12 text-gray-400" />
               </div>
-              <h3 className="text-lg md:text-xl font-medium text-gray-900 mb-1">No suggestions yet</h3>
+              <h3 className="text-lg md:text-xl font-medium text-gray-900 mb-1">
+                {activeTab === 'all' ? 'No suggestions yet' : `No ${activeTab} suggestions`}
+              </h3>
               <p className="text-gray-500 max-w-md mx-auto mb-4">
-                You haven't submitted any suggestions yet. Share your ideas to help us improve!
+                {activeTab === 'all'
+                  ? 'You haven\'t submitted any suggestions yet. Share your ideas to help us improve!'
+                  : `You don't have any ${activeTab} suggestions at the moment.`}
               </p>
-              <button
-                onClick={() => setShowModal(true)}
-                className="text-[#4D2C5E] hover:text-[#3A2152] font-medium flex items-center justify-center mx-auto"
-              >
-                <FiPlus className="mr-2" />
-                Create Your First Suggestion
-              </button>
+              {activeTab !== 'all' ? (
+                <button
+                  onClick={() => setActiveTab('all')}
+                  className="text-[#4D2C5E] hover:text-[#3A2152] font-medium flex items-center justify-center mx-auto"
+                >
+                  View All Suggestions
+                </button>
+              ) : (
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="text-[#4D2C5E] hover:text-[#3A2152] font-medium flex items-center justify-center mx-auto"
+                >
+                  <FiPlus className="mr-2" />
+                  Create Your First Suggestion
+                </button>
+              )}
             </div>
           )}
         </div>
@@ -252,142 +378,158 @@ const TeacherSuggestions = () => {
         {/* New Suggestion Modal */}
         <AnimatePresence>
           {showModal && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-            >
-              <motion.div 
-                initial={{ scale: 0.95, y: 20 }}
-                animate={{ scale: 1, y: 0 }}
-                exit={{ scale: 0.95, y: 20 }}
-                className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
+            <motion.div
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  exit={{ opacity: 0 }}
+  className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+>
+  <motion.div
+    initial={{ scale: 0.95, y: 20, opacity: 0 }}
+    animate={{ scale: 1, y: 0, opacity: 1 }}
+    exit={{ scale: 0.95, y: 20, opacity: 0 }}
+    transition={{ type: "spring", damping: 25, stiffness: 400 }}
+    className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[95vh] overflow-y-auto border border-gray-100"
+  >
+    <div className="p-6 md:p-8">
+      <div className="flex justify-between items-start mb-6">
+        <div>
+          <h2 className="text-2xl md:text-3xl font-bold text-[#4D2C5E]">
+            {editingId ? 'Edit Suggestion' : 'New Suggestion'}
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            {editingId ? 'Update your suggestion details' : 'Share your valuable feedback with us'}
+          </p>
+        </div>
+        <button
+          onClick={() => {
+            setShowModal(false);
+            resetForm();
+          }}
+          className="text-gray-400 hover:text-gray-600 transition-colors duration-200 p-1 -mt-2 -mr-2"
+          disabled={isSubmitting}
+          aria-label="Close modal"
+        >
+          <FiX className="h-6 w-6" />
+        </button>
+      </div>
+
+      <form className="space-y-6" onSubmit={handleSubmit}>
+        <div className="space-y-5">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Title*</label>
+            <input
+              type="text"
+              value={title}
+              onChange={e => setTitle(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#4D2C5E]/50 focus:border-[#4D2C5E] transition-all duration-200 placeholder-gray-400"
+              placeholder="Suggestion title"
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Description*</label>
+            <textarea
+              rows={3}
+              value={description}
+              onChange={e => setDescription(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#4D2C5E]/50 focus:border-[#4D2C5E] transition-all duration-200 placeholder-gray-400"
+              placeholder="Brief description of your suggestion"
+              required
+              disabled={isSubmitting}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Type*</label>
+              <select
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#4D2C5E]/50 focus:border-[#4D2C5E] transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiAjdjQ1Njc1IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBvbHlsaW5lIHBvaW50cz0iNiA5IDEyIDE1IDE4IDkiPjwvcG9seWxpbmU+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem] bg-[length:1.5rem]"
+                value={type}
+                onChange={e => setType(e.target.value)}
+                required
+                disabled={isSubmitting}
               >
-                <div className="p-6">
-                  <div className="flex justify-between items-center mb-6">
-                    <h2 className="text-xl md:text-2xl font-bold text-[#4D2C5E]">
-                      {editingId ? 'Edit Suggestion' : 'New Suggestion'}
-                    </h2>
-                    <button
-                      onClick={() => {
-                        setShowModal(false);
-                        resetForm();
-                      }}
-                      className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
-                      disabled={isSubmitting}
-                    >
-                      <FiX className="h-6 w-6" />
-                    </button>
-                  </div>
+                <option value="">Select suggestion type</option>
+                <option value="curriculum">📚 Curriculum Improvement</option>
+                <option value="teaching">👩‍🏫 Teaching Methodology</option>
+                <option value="assessment">📝 Assessment & Grading</option>
+                <option value="resources">💻 Learning Resources</option>
+                <option value="projects">🛠️ Projects & Assignments</option>
+                <option value="platform">🖥️ Platform Features</option>
+                <option value="career">💼 Career Guidance</option>
+                <option value="community">🤝 Student Community</option>
+                <option value="events">🎓 Events & Workshops</option>
+                <option value="other">✨ Other Suggestions</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Batch (optional)</label>
+              <select
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#4D2C5E]/50 focus:border-[#4D2C5E] transition-all duration-200 appearance-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiAjdjQ1Njc1IiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHBvbHlsaW5lIHBvaW50cz0iNiA5IDEyIDE1IDE4IDkiPjwvcG9seWxpbmU+PC9zdmc+')] bg-no-repeat bg-[center_right_1rem] bg-[length:1.5rem]"
+                value={selectedBatchId}
+                onChange={e => setSelectedBatchId(e.target.value)}
+                disabled={isSubmitting}
+              >
+                <option value="">-- Not batch specific --</option>
+                {batches.map(batch => (
+                  <option key={batch._id} value={batch._id}>
+                    {batch.course?.courseName} ({batch.batchCode})
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
 
-                  <form className="space-y-4" onSubmit={handleSubmit}>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1.5">Title*</label>
-                      <input
-                        type="text"
-                        value={title}
-                        onChange={e => setTitle(e.target.value)}
-                        className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#4D2C5E]/30 focus:border-[#4D2C5E] transition-colors duration-200"
-                        placeholder="Suggestion title"
-                        required
-                        disabled={isSubmitting}
-                      />
-                    </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Detailed Content</label>
+            <textarea
+              rows={5}
+              value={content}
+              onChange={e => setContent(e.target.value)}
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#4D2C5E]/50 focus:border-[#4D2C5E] transition-all duration-200 placeholder-gray-400"
+              placeholder="Provide detailed information about your suggestion..."
+              disabled={isSubmitting}
+            />
+          </div>
+        </div>
 
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1.5">Description*</label>
-                      <textarea
-                        rows="3"
-                        value={description}
-                        onChange={e => setDescription(e.target.value)}
-                        className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#4D2C5E]/30 focus:border-[#4D2C5E] transition-colors duration-200"
-                        placeholder="Brief description of your suggestion"
-                        required
-                        disabled={isSubmitting}
-                      ></textarea>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">Type*</label>
-                        <select
-                          className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#4D2C5E]/30 focus:border-[#4D2C5E] transition-colors duration-200"
-                          value={type}
-                          onChange={e => setType(e.target.value)}
-                          required
-                          disabled={isSubmitting}
-                        >
-                          <option value="curriculum">Curriculum</option>
-                          <option value="POST">Post</option>
-                          <option value="platform">Platform Improvement</option>
-                          <option value="other">Other</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1.5">Batch (optional)</label>
-                        <select
-                          className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#4D2C5E]/30 focus:border-[#4D2C5E] transition-colors duration-200"
-                          value={selectedBatchId}
-                          onChange={e => setSelectedBatchId(e.target.value)}
-                          disabled={isSubmitting}
-                        >
-                          <option value="">-- Not batch specific --</option>
-                          {batches.map(batch => (
-                            <option key={batch._id} value={batch._id}>
-                              {batch.course?.courseName} ({batch.batchCode})
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1.5">Detailed Content</label>
-                      <textarea
-                        rows="5"
-                        value={content}
-                        onChange={e => setContent(e.target.value)}
-                        className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-[#4D2C5E]/30 focus:border-[#4D2C5E] transition-colors duration-200"
-                        placeholder="Provide detailed information about your suggestion..."
-                        disabled={isSubmitting}
-                      ></textarea>
-                    </div>
-
-                    <div className="mt-6 flex justify-end space-x-3">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setShowModal(false);
-                          resetForm();
-                        }}
-                        className="px-4 md:px-5 py-2 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200"
-                        disabled={isSubmitting}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        type="submit"
-                        className="px-4 md:px-5 py-2 bg-[#4D2C5E] text-white rounded-lg hover:bg-[#3A2152] transition-colors duration-200 flex items-center justify-center min-w-32"
-                        disabled={isSubmitting}
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            {editingId ? 'Updating...' : 'Submitting...'}
-                          </>
-                        ) : (
-                          editingId ? 'Update Suggestion' : 'Submit Suggestion'
-                        )}
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </motion.div>
-            </motion.div>
+        <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-2">
+          <button
+            type="button"
+            onClick={() => {
+              setShowModal(false);
+              resetForm();
+            }}
+            className="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium"
+            disabled={isSubmitting}
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="px-5 py-2.5 bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white rounded-lg hover:opacity-90 transition-all duration-200 font-medium shadow-sm flex items-center justify-center min-w-36"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                {editingId ? 'Updating...' : 'Submitting...'}
+              </>
+            ) : (
+              editingId ? 'Update Suggestion' : 'Submit Suggestion'
+            )}
+          </button>
+        </div>
+      </form>
+    </div>
+  </motion.div>
+</motion.div>
           )}
         </AnimatePresence>
       </div>
