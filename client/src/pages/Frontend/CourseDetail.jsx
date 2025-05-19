@@ -1512,6 +1512,7 @@ const TeachingPlan = ({ course }) => {
   const batchCode = course.batchId;
   const startDate = course.startDate;
   const brochure = course.brochure;
+//   console.log(brochure)
   const courseId = course.title;
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, amount: 0.1 });

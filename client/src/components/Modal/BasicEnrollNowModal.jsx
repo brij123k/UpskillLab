@@ -14,6 +14,7 @@ import {
 import { toast } from "react-toastify";
 import { postDataHandler, getDataHandler } from '../../config/services';
 const AdmissionFormModal = ({isOpen, onClose,topic=null,brochure=null,currentCourseName=null }) => {
+  console.log(brochure)
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [loader, setLoader] = useState(false);
 
@@ -88,6 +89,7 @@ const AdmissionFormModal = ({isOpen, onClose,topic=null,brochure=null,currentCou
           experience: studentType
         }
         const res = await postDataHandler('demoSession', data)
+        console.log(res)
         if (res) {
           downloadBrochure()
           toast.success('Demo session booked successfully!');
@@ -101,8 +103,8 @@ const AdmissionFormModal = ({isOpen, onClose,topic=null,brochure=null,currentCou
     }
 
        const downloadBrochure = () => {
-        if (!course?.brochure) {
-            // window.alert("No brochure available for this course");
+        if (brochure==null) {
+            window.alert("No brochure available for this course");
             return;
         }
 
