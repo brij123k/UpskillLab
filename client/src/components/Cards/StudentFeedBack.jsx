@@ -57,82 +57,85 @@ const StudentFeedBack = () => {
       </div>
 
       {/* Tablet View - Compact Cards (hidden on mobile and desktop) */}
-      <div className="hidden md:flex lg:hidden flex-row items-center justify-between gap-3 w-full">
-        <div className="flex-1 bg-white shadow-sm rounded-lg px-4 py-3 flex items-center gap-3 border border-purple-100">
-          <div className="bg-purple-50 p-2 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-purple-700" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 12c2.7 0 5.5 1.3 6 4v2H6v-2c0-2.7 3.3-4 6-4zm0-2c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>
-            </svg>
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-purple-700">{currentStats.rating}+</h3>
-            <p className="text-sm font-medium text-gray-700">Happy Students</p>
-          </div>
-        </div>
-
-        <div className="flex-1 bg-white shadow-sm rounded-lg px-4 py-3 flex items-center gap-3 border border-purple-100">
-          <div className="bg-purple-50 p-2 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-purple-700" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M20 6H4V4h16v2zm0 2v10H4V8h16zm-2 2H6v6h12v-6z"/>
-            </svg>
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-purple-700">{currentStats.trained}+</h3>
-            <p className="text-sm font-medium text-gray-700">Courses Trained</p>
-          </div>
-        </div>
-
-        <div className="flex-1 bg-white shadow-sm rounded-lg px-4 py-3 flex items-center gap-3 border border-purple-100">
-          <div className="bg-purple-50 p-2 rounded-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-purple-700" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 2a7 7 0 100 14 7 7 0 000-14zm0 16c-4.67 0-8 2.34-8 5v1h16v-1c0-2.66-3.33-5-8-5z"/>
-            </svg>
-          </div>
-          <div>
-            <h3 className="text-xl font-bold text-purple-700">{currentStats.partners}+</h3>
-            <p className="text-sm font-medium text-gray-700">Hiring Partners</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile View - Compact Cards */}
-     <div className="flex md:hidden flex-row items-center justify-between gap-1 sm:gap-2 w-full overflow-x-auto py-1">
+<div className="hidden md:flex lg:hidden flex-row items-center justify-between gap-3 w-full">
   {/* Card 1 */}
-  <div className="flex-shrink-0 bg-white shadow-xs rounded-lg px-2 py-1.5 flex items-center gap-1.5 border border-purple-100 min-w-[30%]">
-    <div className="bg-purple-50 p-1 rounded">
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-purple-700" fill="currentColor" viewBox="0 0 24 24">
+  <div className="flex-1 bg-white shadow-sm rounded-lg px-4 py-3 flex items-center gap-3 border border-[#4D2C5E]/10">
+    <div className="bg-[#4D2C5E]/10 p-2 rounded-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#4D2C5E]" fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 12c2.7 0 5.5 1.3 6 4v2H6v-2c0-2.7 3.3-4 6-4zm0-2c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>
       </svg>
     </div>
-    <div className="min-w-0">
-      <h3 className="text-sm font-bold text-purple-700 truncate">{currentStats.rating}+</h3>
-      <p className="text-[10px] font-medium text-gray-700 truncate">Happy Students</p>
+    <div>
+      <h3 className="text-xl font-bold text-[#FF7426]">{currentStats.rating}</h3>
+      <p className="text-sm font-medium text-[#4D2C5E]">Happy Students</p>
     </div>
   </div>
 
   {/* Card 2 */}
-  <div className="flex-shrink-0 bg-white shadow-xs rounded-lg px-2 py-1.5 flex items-center gap-1.5 border border-purple-100 min-w-[30%]">
-    <div className="bg-purple-50 p-1 rounded">
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-purple-700" fill="currentColor" viewBox="0 0 24 24">
+  <div className="flex-1 bg-white shadow-sm rounded-lg px-4 py-3 flex items-center gap-3 border border-[#4D2C5E]/10">
+    <div className="bg-[#4D2C5E]/10 p-2 rounded-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#4D2C5E]" fill="currentColor" viewBox="0 0 24 24">
         <path d="M20 6H4V4h16v2zm0 2v10H4V8h16zm-2 2H6v6h12v-6z"/>
       </svg>
     </div>
-    <div className="min-w-0">
-      <h3 className="text-sm font-bold text-purple-700 truncate">{currentStats.trained}+</h3>
-      <p className="text-[10px] font-medium text-gray-700 truncate">Courses</p>
+    <div>
+      <h3 className="text-xl font-bold text-[#FF7426]">{currentStats.trained}</h3>
+      <p className="text-sm font-medium text-[#4D2C5E]">Courses Trained</p>
     </div>
   </div>
 
   {/* Card 3 */}
-  <div className="flex-shrink-0 bg-white shadow-xs rounded-lg px-2 py-1.5 flex items-center gap-1.5 border border-purple-100 min-w-[30%]">
-    <div className="bg-purple-50 p-1 rounded">
-      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-purple-700" fill="currentColor" viewBox="0 0 24 24">
+  <div className="flex-1 bg-white shadow-sm rounded-lg px-4 py-3 flex items-center gap-3 border border-[#4D2C5E]/10">
+    <div className="bg-[#4D2C5E]/10 p-2 rounded-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-[#4D2C5E]" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 2a7 7 0 100 14 7 7 0 000-14zm0 16c-4.67 0-8 2.34-8 5v1h16v-1c0-2.66-3.33-5-8-5z"/>
+      </svg>
+    </div>
+    <div>
+      <h3 className="text-xl font-bold text-[#FF7426]">{currentStats.partners}</h3>
+      <p className="text-sm font-medium text-[#4D2C5E]">Hiring Partners</p>
+    </div>
+  </div>
+</div>
+
+      {/* Mobile View - Compact Cards */}
+    <div className="flex md:hidden flex-row items-center justify-between gap-1 w-full overflow-x-auto py-1 px-1">
+  {/* Card 1 */}
+  <div className="flex-shrink-0 bg-white shadow-xs rounded-lg px-1.5 py-1 flex items-center gap-1 border border-[#4D2C5E]/10 min-w-[28%]">
+    <div className="bg-[#4D2C5E]/10 p-1 rounded">
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#4D2C5E]" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M12 12c2.7 0 5.5 1.3 6 4v2H6v-2c0-2.7 3.3-4 6-4zm0-2c-1.65 0-3-1.35-3-3s1.35-3 3-3 3 1.35 3 3-1.35 3-3 3z"/>
+      </svg>
+    </div>
+    <div className="min-w-0">
+      <h3 className="text-xs font-bold text-[#FF7426] truncate">{currentStats.rating}+</h3>
+      <p className="text-[9px] font-medium text-[#4D2C5E] truncate">Happy Students</p>
+    </div>
+  </div>
+
+  {/* Card 2 */}
+  <div className="flex-shrink-0 bg-white shadow-xs rounded-lg px-1.5 py-1 flex items-center gap-1 border border-[#4D2C5E]/10 min-w-[28%]">
+    <div className="bg-[#4D2C5E]/10 p-1 rounded">
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#4D2C5E]" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M20 6H4V4h16v2zm0 2v10H4V8h16zm-2 2H6v6h12v-6z"/>
+      </svg>
+    </div>
+    <div className="min-w-0">
+      <h3 className="text-xs font-bold text-[#FF7426] truncate">{currentStats.trained}+</h3>
+      <p className="text-[9px] font-medium text-[#4D2C5E] truncate">Courses</p>
+    </div>
+  </div>
+
+  {/* Card 3 */}
+  <div className="flex-shrink-0 bg-white shadow-xs rounded-lg px-1.5 py-1 flex items-center gap-1 border border-[#4D2C5E]/10 min-w-[28%]">
+    <div className="bg-[#4D2C5E]/10 p-1 rounded">
+      <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-[#4D2C5E]" fill="currentColor" viewBox="0 0 24 24">
         <path d="M12 2a7 7 0 100 14 7 7 0 000-14zm0 16c-4.67 0-8 2.34-8 5v1h16v-1c0-2.66-3.33-5-8-5z"/>
       </svg>
     </div>
     <div className="min-w-0">
-      <h3 className="text-sm font-bold text-purple-700 truncate">{currentStats.partners}+</h3>
-      <p className="text-[10px] font-medium text-gray-700 truncate">Partners</p>
+      <h3 className="text-xs font-bold text-[#FF7426] truncate">{currentStats.partners}+</h3>
+      <p className="text-[9px] font-medium text-[#4D2C5E] truncate">Partners</p>
     </div>
   </div>
 </div>

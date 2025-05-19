@@ -61,29 +61,6 @@ const FAQ = ({ faqs }) => {
         }
     };
 
-    const imageVariants = {
-        hidden: { opacity: 0, x: -50, rotate: -5 },
-        visible: {
-            opacity: 1,
-            x: 0,
-            rotate: 0,
-            transition: { 
-                duration: 0.8, 
-                ease: "easeOut",
-                type: "spring",
-                damping: 10
-            }
-        },
-        hover: {
-            rotate: [0, 2, -2, 0],
-            transition: {
-                duration: 1.5,
-                repeat: Infinity,
-                repeatType: "reverse"
-            }
-        }
-    };
-
     const answerVariants = {
         hidden: { 
             opacity: 0, 
@@ -149,7 +126,7 @@ const FAQ = ({ faqs }) => {
                 transition={{ delay: 0.8 }}
             />
 
-            <div className="max-w-7xl mx-auto">
+            <div className="max-w-4xl mx-auto"> {/* Reduced max-width to make FAQ items more centered */}
                 {/* Header */}
                 <motion.div 
                     className="text-center mb-16"
@@ -177,146 +154,84 @@ const FAQ = ({ faqs }) => {
                     </motion.p>
                 </motion.div>
 
-                <div className="flex flex-col lg:flex-row gap-12">
-                    {/* FAQ Items */}
-                    <motion.div 
-                        className="w-full lg:w-1/2 space-y-4"
-                        variants={containerVariants}
-                    >
-                        {faqs.map((faq, index) => (
-                            <motion.div 
-                                key={index}
-                                className={`overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md ${
-                                    openIndex === index ? 'ring-2 ring-[#FF7426]' : ''
-                                }`}
-                                variants={itemVariants}
-                                whileHover={{ 
-                                    y: -3,
-                                    boxShadow: "0 10px 20px -5px rgba(0,0,0,0.1)"
-                                }}
+                {/* FAQ Items - now taking full width */}
+                <motion.div 
+                    className="w-full space-y-4"
+                    variants={containerVariants}
+                >
+                    {faqs.map((faq, index) => (
+                        <motion.div 
+                            key={index}
+                            className={`overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all duration-200 hover:shadow-md ${
+                                openIndex === index ? 'ring-2 ring-[#FF7426]' : ''
+                            }`}
+                            variants={itemVariants}
+                            whileHover={{ 
+                                y: -3,
+                                boxShadow: "0 10px 20px -5px rgba(0,0,0,0.1)"
+                            }}
+                            layout
+                        >
+                            <motion.button
+                                className="flex w-full items-center justify-between p-6 text-left"
+                                onClick={() => toggleAnswer(index)}
+                                whileTap={{ scale: 0.98 }}
                                 layout
                             >
-                                <motion.button
-                                    className="flex w-full items-center justify-between p-6 text-left"
-                                    onClick={() => toggleAnswer(index)}
-                                    whileTap={{ scale: 0.98 }}
+                                <motion.h3 
+                                    className="text-lg font-semibold text-[#4D2C5E]"
                                     layout
                                 >
-                                    <motion.h3 
-                                        className="text-lg font-semibold text-[#4D2C5E]"
-                                        layout
+                                    {faq.question}
+                                </motion.h3>
+                                <motion.div
+                                    className="ml-4 h-6 w-6 rounded-full bg-[#FF7426] p-1 text-white"
+                                    animate={{ 
+                                        rotate: openIndex === index ? 180 : 0,
+                                        backgroundColor: openIndex === index ? "#4D2C5E" : "#FF7426"
+                                    }}
+                                    transition={{ duration: 0.3 }}
+                                    layout
+                                >
+                                    <svg 
+                                        xmlns="http://www.w3.org/2000/svg" 
+                                        className="h-4 w-4" 
+                                        fill="none" 
+                                        viewBox="0 0 24 24" 
+                                        stroke="currentColor"
                                     >
-                                        {faq.question}
-                                    </motion.h3>
+                                        <path 
+                                            strokeLinecap="round" 
+                                            strokeLinejoin="round" 
+                                            strokeWidth={2} 
+                                            d="M19 9l-7 7-7-7" 
+                                        />
+                                    </svg>
+                                </motion.div>
+                            </motion.button>
+
+                            <AnimatePresence>
+                                {openIndex === index && (
                                     <motion.div
-                                        className="ml-4 h-6 w-6 rounded-full bg-[#FF7426] p-1 text-white"
-                                        animate={{ 
-                                            rotate: openIndex === index ? 180 : 0,
-                                            backgroundColor: openIndex === index ? "#4D2C5E" : "#FF7426"
-                                        }}
-                                        transition={{ duration: 0.3 }}
+                                        className="overflow-hidden"
+                                        variants={answerVariants}
+                                        initial="hidden"
+                                        animate="visible"
+                                        exit="exit"
                                         layout
                                     >
-                                        <svg 
-                                            xmlns="http://www.w3.org/2000/svg" 
-                                            className="h-4 w-4" 
-                                            fill="none" 
-                                            viewBox="0 0 24 24" 
-                                            stroke="currentColor"
-                                        >
-                                            <path 
-                                                strokeLinecap="round" 
-                                                strokeLinejoin="round" 
-                                                strokeWidth={2} 
-                                                d="M19 9l-7 7-7-7" 
-                                            />
-                                        </svg>
+                                    <div className="px-6 pb-6 pt-0">
+                                        <div
+                                        className=""
+                                        dangerouslySetInnerHTML={{ __html: formatAnswerHTML(faq.answer) }}
+                                        />
+                                    </div>
                                     </motion.div>
-                                </motion.button>
-
-                                <AnimatePresence>
-                                    {openIndex === index && (
-                                        <motion.div
-                                            className="overflow-hidden"
-                                            variants={answerVariants}
-                                            initial="hidden"
-                                            animate="visible"
-                                            exit="exit"
-                                            layout
-                                        >
-                                        <div className="px-6 pb-6 pt-0">
-  <div
-  className=""
-  dangerouslySetInnerHTML={{ __html: formatAnswerHTML(faq.answer) }}
-/>
-</div>
-
-
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-
-                    {/* Image Section */}
-                    <motion.div 
-                        className="hidden lg:flex lg:w-1/2 items-center justify-center"
-                        variants={imageVariants}
-                    >
-                        <motion.div 
-                            className="relative"
-                            whileHover="hover"
-                        >
-                            <div className="absolute -inset-8 rounded-3xl opacity-20  blur-xl"></div>
-                            <motion.div 
-                                className="relative overflow-hidden rounded-2xl shadow-2xl"
-                                whileHover={{ scale: 1.02 }}
-                            >
-                                <img
-                                    src="/images/7720441.png"
-                                    alt="FAQ Illustration"
-                                    className="h-auto w-full max-w-md object-cover"
-                                />
-                                {/* <motion.div 
-                                    className="absolute inset-0 bg-gradient-to-t from-[#4D2C5E] to-transparent opacity-30"
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 0.3 }}
-                                    transition={{ delay: 1 }}
-                                /> */}
-                            </motion.div>
-                            
-                            {/* Floating elements */}
-                            <motion.div
-                                className="absolute -bottom-8 -left-8 h-16 w-16 rounded-full bg-[#FF7426]"
-                                animate={{
-                                    y: [0, -15, 0],
-                                    opacity: [0.6, 0.8, 0.6]
-                                }}
-                                transition={{
-                                    duration: 4,
-                                    repeat: Infinity,
-                                    ease: "easeInOut"
-                                }}
-                            />
-                            <motion.div
-                                className="absolute -top-8 -right-8 h-20 w-20 rounded-full bg-[#4D2C5E]"
-                                animate={{
-                                    y: [0, -20, 0],
-                                    opacity: [0.4, 0.7, 0.4]
-                                }}
-                                transition={{
-                                    duration: 5,
-                                    repeat: Infinity,
-                                    ease: "easeInOut",
-                                    delay: 0.5
-                                }}
-                            />
+                                )}
+                            </AnimatePresence>
                         </motion.div>
-                    </motion.div>
-                </div>
-
-                
+                    ))}
+                </motion.div>
             </div>
         </motion.section>
     );

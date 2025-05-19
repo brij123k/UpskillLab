@@ -44,6 +44,7 @@ const MarketAnalysis = () => {
       setLoading(true);
       const response = await getDataHandlerWithToken('resourse');
       const courseResponse = await getDataHandler('courseDisplay');
+      console.log(resource)
       setCourses(courseResponse.data || []);
       setResources(response.resources || []);
     } catch (error) {

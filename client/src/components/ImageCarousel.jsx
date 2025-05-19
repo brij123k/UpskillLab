@@ -3,12 +3,12 @@ import { motion } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { AnimatePresence } from 'framer-motion';
 import {getDataHandler} from '../config/services';
-import { NavLink } from 'react-router-dom';
-
+import {useNavigate } from 'react-router-dom';
 const HiringPartnersShowcase = () => {
     const [hiringPartners, setHiringPartners] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate()
     // const [isModalOpen, setIsModalOpen] = useState(false);
 
     // const [formData, setFormData] = useState({
@@ -193,8 +193,8 @@ const HiringPartnersShowcase = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
           >
-            <a href="#AdmissionForm">
               <motion.button
+              onClick={()=>navigate("/ContactUs")}
                   className="px-8 py-3 bg-[#4D2C5E] text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all cursor-pointer"  
                   whileHover={{ 
                       scale: 1.05,
@@ -204,7 +204,6 @@ const HiringPartnersShowcase = () => {
               >
                   Become a Partner
               </motion.button>
-              </a>
           </motion.div>
         </div>
       </div>
@@ -287,8 +286,8 @@ const HiringPartnersShowcase = () => {
       animate={{ opacity: 1 }}
       transition={{ delay: 0.8 }}
     >
-      <a href="#AdmissionForm">
         <motion.button
+        onClick={()=>navigate("/ContactUs")}
           className="px-6 py-2 bg-[#4D2C5E] text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all cursor-pointer text-sm"  
           whileHover={{ 
             scale: 1.05,
@@ -298,7 +297,6 @@ const HiringPartnersShowcase = () => {
         >
           Become a Partner
         </motion.button>
-      </a>
     </motion.div>
   </div>
 </div>

@@ -5,13 +5,6 @@ import { useVideoModal } from './Modal/LandingVideoModal';
 import { getDataHandler } from '../config/services';
 import { NavLink } from 'react-router-dom';
 
-const debounce = (func, wait) => {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
-  };
-};
 
 const TextCarousel = ({ slides, autoPlayVideo = false }) => {
   const [demoVideoUrl, setDemoVideoUrl] = useState(null);
@@ -78,25 +71,25 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
     }
   };
 
-  const slideVariants = {
-    enter: (direction) => ({
-      x: direction === 'right' ? '100%' : '-100%',
-      opacity: 0,
-    }),
-    center: {
-      x: 0,
-      opacity: 1,
-      transition: {
-        x: { type: 'spring', stiffness: 300, damping: 30 },
-        opacity: { duration: 0.4 },
-      },
+const slideVariants = {
+  enter: (direction) => ({
+    x: direction === 'right' ? '100%' : '-100%',
+    opacity: 0,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    transition: {
+      x: { type: 'spring', stiffness: 300, damping: 30, duration: 0.5 },
+      opacity: { duration: 0.4 },
     },
-    exit: (direction) => ({
-      x: direction === 'right' ? '-30%' : '30%',
-      opacity: 0,
-      transition: { duration: 0.3 },
-    }),
-  };
+  },
+  exit: (direction) => ({
+    x: direction === 'right' ? '-30%' : '30%',
+    opacity: 0,
+    transition: { duration: 0.5 }, // Increased from 0.3
+  }),
+};
 
   const viewportVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -165,7 +158,7 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
       />
 
       <div ref={contentRef} className="relative w-full">
-        <AnimatePresence custom={direction} initial={false}>
+        <AnimatePresence custom={direction} initial={false}mode="wait" >
           <motion.div
             key={currentIndex}
             custom={direction}

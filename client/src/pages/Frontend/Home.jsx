@@ -17,11 +17,13 @@ import AdmissionForm from '../../components/Forms/AdmissionForm'
 import { getDataHandler } from '../../config/services';
 import { Faqs } from '../../data';
 import { NavLink } from 'react-router-dom';
+import AdmissionFormModal from '../../components/Modal/BasicEnrollNowModal';
 function Home() {
   const controls = useAnimation();
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, margin: "-100px" });
   const [banner, setBanner] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   //For primiun banner
   const handleBanners = async () => {
 
@@ -392,11 +394,26 @@ function Home() {
                   />
                 </div>
               </motion.div>
+
+              <div className="fixed bottom-4 right-0 flex justify-center md:hidden z-40 px-4">
+    <motion.button
+    onClick={() => setIsModalOpen(true)}
+      className="bg-[#FF7426] text-sm hover:bg-[#e56722] text-white font-bold py-2 px-4 rounded-full shadow-lg w-full max-w-md flex items-center justify-center"
+      whileHover={{ scale: 1.03 }}
+      whileTap={{ scale: 0.97 }}
+    >
+      Enroll Now <FiArrowRight className="ml-2" />
+    </motion.button>
+  </div>
             </div>
           </div>
         </div>
       </div>
 
+<AdmissionFormModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
 
     </>
   )

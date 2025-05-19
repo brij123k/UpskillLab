@@ -7,6 +7,9 @@ import { useQuery } from "@tanstack/react-query";
 import {getDataHandler } from "../config/services";
 import { useAuth } from "../context/AuthContext";
 
+
+
+
 function Header() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isCoursesDropdownOpen, setIsCoursesDropdownOpen] = useState(false);
@@ -95,9 +98,56 @@ function Header() {
     color: isActive ? "#FF7426" : "#374151",
     fontWeight: isActive ? "600" : "400",
   });
-
+const [announcements, setAnnouncements] = useState([
+  "🚀 New Python Bootcamp starting June 15th!",
+  "🎉 50% Scholarship for first 10 enrollments this week",
+  "⭐ Student of the Month: Rohan Sharma (Data Science)",
+  "📢 Upcoming Webinar: 'AI Career Paths' - May 25th, 5PM IST",
+    "🚀 New Python Bootcamp starting June 15th!",
+  "🎉 50% Scholarship for first 10 enrollments this week",
+  "⭐ Student of the Month: Rohan Sharma (Data Science)",
+  "📢 Upcoming Webinar: 'AI Career Paths' - May 25th, 5PM IST",
+    "🚀 New Python Bootcamp starting June 15th!",
+  "🎉 50% Scholarship for first 10 enrollments this week",
+  "⭐ Student of the Month: Rohan Sharma (Data Science)",
+  "📢 Upcoming Webinar: 'AI Career Paths' - May 25th, 5PM IST"
+]);
   return (
+    
     <header className="bg-white shadow-sm sticky top-0 z-50">
+
+        {/* News Ticker - Add this */}
+  <div className="bg-[#4D2C5E] text-white py-2 px-4 overflow-hidden">
+    <div className="max-w-8xl mx-auto relative">
+      <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#4D2C5E] to-transparent z-10"></div>
+      <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#4D2C5E] to-transparent z-10"></div>
+      
+      <div className="flex items-center">
+        <span className="font-bold mr-4 whitespace-nowrap text-sm sm:text-base">
+          LATEST:
+        </span>
+        <div className="overflow-hidden flex-1">
+          <motion.div
+            className="flex whitespace-nowrap"
+            animate={{
+              x: ["0%", "-100%"],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          >
+            {announcements.map((item, index) => (
+              <span key={index} className="text-sm sm:text-base mr-16">
+                {item}
+              </span>
+            ))}
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  </div>
       <nav className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 2xl:px-12 py-3 flex items-center justify-between">
         {/* Logo */}
         <NavLink to="/">
