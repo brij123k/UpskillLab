@@ -326,15 +326,15 @@ function Home() {
       
 
 
-      <div className=''>
-        <EnqueryBanner />
+      <div>
+        <EnqueryBanner/>
       </div>
       
       <div className=''>
         <ScrollableCategories />
       </div>
-      <CertificationSlider/>
         <SuccessTestimonial />
+      <CertificationSlider/>
       <EducationBanner />
       <div className='pb-4'>
         <AdmissionForm />

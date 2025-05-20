@@ -184,6 +184,11 @@ import { getDataHandler } from '../../config/services';
 
 
 const CourseHero = ({ course }) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+      const brochure = course.brochure;
+        const courseId = course.title;
+        const startDate = course.startDate;
+        const batchCode = course.batchId;
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -289,6 +294,20 @@ const CourseHero = ({ course }) => {
                             className="flex flex-wrap gap-4 mt-8"
                         >
                             <motion.button
+                            onClick={()=>{
+                                if (batchCode === "0") {
+                setIsModalOpen(true);
+              } else {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const batchStartDate = new Date(startDate || 0);
+                if (batchStartDate >= today) {
+                  setIsModalOpen(true);
+                } else {
+                  setIsModalOpen(true);
+                }
+              }
+                            }}
                                 whileHover={{ 
                                     scale: 1.05,
                                     boxShadow: '0 8px 24px rgba(255, 116, 38, 0.3)'
@@ -298,6 +317,7 @@ const CourseHero = ({ course }) => {
                             >
                                 Enroll Now
                             </motion.button>
+                            <a href='#Plan'>
                             <motion.button
                                 whileHover={{ 
                                     scale: 1.05,
@@ -306,8 +326,9 @@ const CourseHero = ({ course }) => {
                                 whileTap={{ scale: 0.98 }}
                                 className="px-6 py-3 bg-white text-[#4D2C5E] font-medium rounded-lg border border-[#4D2C5E]/20 hover:bg-[#4D2C5E]/5 transition-all"
                             >
-                                Watch Preview
+                                Watch Plan
                             </motion.button>
+                            </a>
                         </motion.div>
                     </div>
 
@@ -386,6 +407,14 @@ const CourseHero = ({ course }) => {
                     </motion.div>
                 </div>
             </div>
+
+            <AdmissionFormModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        topic="Continue the form to download the brochure"
+        brochure={brochure}
+        currentCourseName={courseId}
+      />
         </motion.div>
     );
 };
@@ -1553,7 +1582,7 @@ const TeachingPlan = ({ course }) => {
   const allSessions = course.weeks.flatMap(week => week.sessions);
 
   return (
-    <div ref={ref} className="w-full py-6 sm:py-8 px-4 sm:px-6 md:px-8 bg-white relative overflow-hidden font-sans antialiased">
+    <div ref={ref} id='Plan' className="w-full py-6 sm:py-8 px-4 sm:px-6 md:px-8 bg-white relative overflow-hidden font-sans antialiased">
       <style>
         {`
           .timeline {
@@ -2520,7 +2549,7 @@ const FAQSection = ({ course }) => {
                         <p className="text-[#4D2C5E]/80 mb-6 max-w-md mx-auto">
                             {course?.faqCtaText || "Our team is available 24/7 to help you with any inquiries about the program."}
                         </p>
-                        <NavLink to={course?.faqCtaLink || "/contact"}>
+                        <NavLink to={course?.faqCtaLink || "/ContactUs"}>
                             <motion.button
                                 whileHover={{
                                     scale: 1.05,

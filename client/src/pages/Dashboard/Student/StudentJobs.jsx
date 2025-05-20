@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FiSearch, FiBriefcase, FiBookmark, FiClock, FiX, FiUpload } from 'react-icons/fi';
-import { getDataHandler, postDataHandler } from '../../../config/services';
+import { getDataHandler, getDataHandlerWithToken, postDataHandler } from '../../../config/services';
 import { formatDistanceToNow } from 'date-fns';
 import { message } from 'antd';
 
@@ -11,37 +11,57 @@ const StudentJobs = () => {
   const [loading, setLoading] = useState(true);
   const [showApplicationModal, setShowApplicationModal] = useState(false);
   const [selectedJob, setSelectedJob] = useState(null);
-  const [applicationForm, setApplicationForm] = useState({
-    fullName: '',
-    email: '',
-    phoneNumber: '',
-    jobId: '',
-    qualification: {
-      collegeName: '',
-      passingYear: 0,
-      branch: ''
-    },
-    resume: null
-  });
-  const [formErrors, setFormErrors] = useState({});
-  const fileInputRef = useRef(null);
+  const [profile, setProfile] = useState(null);
+const [applicationForm, setApplicationForm] = useState({
+  fullName: '',
+  email: '',
+  phoneNumber: '',
+  jobId: '',
+  qualification: {
+    collegeName: '',
+    passingYear: 0,
+    branch: ''
+  },
+  resume: null
+});
 
-  const jobHandler = async () => {
-    try {
-      setLoading(true);
-      const response = await getDataHandler('getJobs');
-      setJobs(response.jobs || []);
-    } catch (error) {
-      console.error('Error fetching jobs:', error);
-      message.error('Failed to load jobs');
-    } finally {
-      setLoading(false);
-    }
-  };
+const [formErrors, setFormErrors] = useState({});
+const fileInputRef = useRef(null);
 
-  useEffect(() => {
-    jobHandler();
-  }, []);
+const jobHandler = async () => {
+  try {
+    setLoading(true);
+    const response = await getDataHandler('getJobs');
+    const profileData = await getDataHandlerWithToken('studentProfile');
+    console.log(profileData)
+    setProfile(profileData);
+    setJobs(response.jobs || []);
+  } catch (error) {
+    console.error('Error fetching jobs:', error);
+    message.error('Failed to load jobs');
+  } finally {
+    setLoading(false);
+  }
+};
+
+useEffect(() => {
+  jobHandler();
+}, []);
+
+// Update form state once profile is available
+useEffect(() => {
+  if (profile) {
+    setApplicationForm(prev => ({
+      ...prev,
+      fullName: profile.student?.fullName || '',
+      email: profile.user?.email || '',
+      phoneNumber: profile.user?.mobileNumber || '',
+      qualification: {
+    collegeName: profile.student?.college || '',
+  },
+    }));
+  }
+}, [profile]);
 
   const filteredJobs = jobs.filter(job => 
     job.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -123,6 +143,7 @@ const StudentJobs = () => {
       // Create FormData for file upload
       const formData = new FormData();
 
+      formData.append('source', "upskill");
       formData.append('fullName', applicationForm.fullName);
       formData.append('email', applicationForm.email);
       formData.append('phoneNumber', applicationForm.phoneNumber);
@@ -194,12 +215,12 @@ const StudentJobs = () => {
               >
                 Recommended
               </button>
-              <button
+              {/* <button
                 onClick={() => setActiveTab('saved')}
                 className={`px-4 py-2 rounded-xl transition ${activeTab === 'saved' ? 'bg-[#4D2C5E] text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
               >
                 Saved Jobs
-              </button>
+              </button> */}
               <button
                 onClick={() => setActiveTab('applied')}
                 className={`px-4 py-2 rounded-xl transition ${activeTab === 'applied' ? 'bg-[#4D2C5E] text-white shadow-md' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
@@ -340,7 +361,7 @@ const StudentJobs = () => {
 
               <form onSubmit={handleSubmit}>
                 <div className="space-y-4">
-                  <div>
+                  {/* <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
                     <input
                       type="text"
@@ -374,13 +395,13 @@ const StudentJobs = () => {
                       className={`w-full p-2 border ${formErrors.phoneNumber ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]/50`}
                     />
                     {formErrors.phoneNumber && <p className="text-red-500 text-xs mt-1">{formErrors.phoneNumber}</p>}
-                  </div>
+                  </div> */}
 
                   {/* Qualification Fields */}
                   <div className="border-t border-gray-200 pt-4">
                     <h3 className="text-sm font-medium text-gray-700 mb-3">Qualification Details *</h3>
                     
-                    <div className="mb-3">
+                    {/* <div className="mb-3">
                       <label className="block text-sm font-medium text-gray-700 mb-1">College Name *</label>
                       <input
                         type="text"
@@ -390,7 +411,7 @@ const StudentJobs = () => {
                         className={`w-full p-2 border ${formErrors.collegeName ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]/50`}
                       />
                       {formErrors.collegeName && <p className="text-red-500 text-xs mt-1">{formErrors.collegeName}</p>}
-                    </div>
+                    </div> */}
                     
                     <div className="mb-3">
                       <label className="block text-sm font-medium text-gray-700 mb-1">Passing Year *</label>

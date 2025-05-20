@@ -89,7 +89,8 @@ const ApiConfig = {
   recordedVideos:`${url}/recorded-videos`,
   recordedVideosbyid:(id)=>`${url}/recorded-videos/${id}`,
   studentHistory:`${url}/student-info`,
-  trends:`${url}/resources`
+  trends:`${url}/resources`,
+  studentAttendance:`${url}/live-classes/attendance`
 
 };
 

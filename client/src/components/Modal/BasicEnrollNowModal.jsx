@@ -368,7 +368,7 @@ const StudentTypeRadio = React.memo(({ formik, handleRadioChange }) => (
     <label className="block text-sm font-medium text-gray-700 mb-3">
       I am a: <span className="text-[#FF7426]">*</span>
     </label>
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <StudentRadioOption
         value="Fresher"
         icon={<FiUser />}

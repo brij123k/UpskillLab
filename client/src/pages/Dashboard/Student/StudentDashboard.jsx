@@ -35,14 +35,12 @@ const navigate = useNavigate();
         // Fetch all data in parallel
         const [
           profileRes, 
-          classesRes, 
-          // materialsRes, 
+          classesRes,
           notificationsRes,
           attendanceRes
         ] = await Promise.all([
           getDataHandlerWithToken('studentProfile'),
           getDataHandlerWithToken('StudentClassSchedule'),
-          // getDataHandlerWithToken('studyMaterials'),
           getDataHandlerWithToken(endpoint, null, null, true),
           getDataHandlerWithToken('studentAttendance')
         ]);
@@ -89,13 +87,14 @@ const navigate = useNavigate();
           
           return isBefore(start, now) && isAfter(end, now);
         });
-
+        console.log(attendanceRes)
         // Calculate attendance percentage
         let attendancePercentage = 0;
-        if (attendanceRes && attendanceRes.attendance && attendanceRes.attendance.length > 0) {
-          const totalClasses = attendanceRes.attendance.length;
-          const attendedClasses = attendanceRes.attendance.filter(cls => cls.status === 'present').length;
+        if (attendanceRes && attendanceRes.classes && attendanceRes.classes.length > 0) {
+          const totalClasses = attendanceRes.classes.length;
+          const attendedClasses = attendanceRes.classes.filter(cls => cls.isAttended === true).length;
           attendancePercentage = Math.round((attendedClasses / totalClasses) * 100);
+          console.log(totalClasses,attendedClasses,attendancePercentage)
         }
 
         setTodayClasses(today);
@@ -171,7 +170,7 @@ const navigate = useNavigate();
           title="Attendance"
           value={stats.attendance}
           color="from-[#10B981] to-[#34D399]"
-          unit=" %"
+          unit="%"
         />
         {/* <StatCard 
           icon={<FiAward className="text-2xl" />}
