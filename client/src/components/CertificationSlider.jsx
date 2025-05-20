@@ -88,7 +88,7 @@ const CertificationSlider = () => {
         </motion.div>
 
         {/* Desktop - Infinite Scrolling Slider */}
-        <div className="hidden md:block overflow-hidden">
+        <div className="overflow-hidden">
           <motion.div
             className="flex"
             variants={infiniteScrollVariants}
@@ -114,7 +114,7 @@ const CertificationSlider = () => {
         </div>
 
         {/* Mobile - Static Grid */}
-        <motion.div 
+        {/* <motion.div 
           className="grid grid-cols-2 gap-4 md:hidden"
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
@@ -136,7 +136,7 @@ const CertificationSlider = () => {
               <h3 className="text-sm font-medium text-gray-900 text-center">{cert.name}</h3>
             </motion.div>
           ))}
-        </motion.div>
+        </motion.div> */}
       </div>
     </div>
   );

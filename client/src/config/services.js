@@ -114,7 +114,20 @@ export const putDataHandlerWithToken = async (endPoint, data, params, isUrl=fals
     ...getAuthHeaders(initialAuth?.authToken) 
   });
 };
-
+export const putDataHandlerWithTokenFormData = async (endPoint, data, params, isUrl=false) => {
+  const storedAuth = sessionStorage.getItem('auth');
+  const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
+  
+  if (!initialAuth?.authToken) {
+    throw new Error('No authentication token found');
+  }
+  return makeRequest("PUT", endPoint, { 
+    data, 
+    params, 
+    isUrl,
+    ...getAuthHeadersFormData(initialAuth?.authToken) 
+  });
+};
 export const deleteDataHandler = async (endPoint, isUrl=false) => {
   const storedAuth = sessionStorage.getItem('auth');
   const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;

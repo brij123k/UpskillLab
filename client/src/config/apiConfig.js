@@ -90,8 +90,8 @@ const ApiConfig = {
   recordedVideosbyid:(id)=>`${url}/recorded-videos/${id}`,
   studentHistory:`${url}/student-info`,
   trends:`${url}/resources`,
-  studentAttendance:`${url}/live-classes/attendance`
-
+  studentAttendance:`${url}/live-classes/attendance`,
+  appliedJobs:(email)=>`${url}/applications/applied-jobs/${email}`
 };
 
 export default ApiConfig;

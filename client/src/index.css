@@ -137,3 +137,67 @@ button:focus-visible {
     background-color: #f9f9f9;
   } */
 }
+.beautiful-scrollbar {
+  /* For Webkit browsers (Chrome, Safari, Edge) */
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+    border: 2px solid #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+
+  /* For Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+
+  /* For Internet Explorer */
+  scrollbar-base-color: #f1f1f1;
+  scrollbar-face-color: #c1c1c1;
+  scrollbar-3dlight-color: #f1f1f1;
+  scrollbar-highlight-color: #f1f1f1;
+  scrollbar-shadow-color: #c1c1c1;
+  scrollbar-darkshadow-color: #f1f1f1;
+  scrollbar-track-color: #f1f1f1;
+  scrollbar-arrow-color: #c1c1c1;
+}
+
+/* Dark theme variation */
+.beautiful-scrollbar-dark {
+  /* For Webkit browsers (Chrome, Safari, Edge) */
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #2d3748;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #4a5568;
+    border-radius: 10px;
+    border: 2px solid #2d3748;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #718096;
+  }
+
+  /* For Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #4a5568 #2d3748;
+}
