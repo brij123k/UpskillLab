@@ -16,6 +16,7 @@ const BlogDetailPage = lazy(()=>import("./pages/Frontend/BlogDetail"))
 const ContactUs = lazy(() => import("./pages/Frontend/ContactUs"));
 const CourseList = lazy(() => import("./pages/Frontend/CourseList"));
 const Career = lazy(() => import("./pages/Frontend/Career"));
+const AboutSection = lazy(() => import("./pages/Frontend/AboutSection"));
 const Register = lazy(() => import("./pages/Auth/Register"));
 const Login = lazy(() => import("./pages/Auth/Login"));
 const ForgotPasswordPage = lazy(() => import("./pages/Auth/ForgetPassword"));
@@ -83,6 +84,7 @@ export const routes = [
   { exact: true, path: "/ContactUs", layout: GuestLayout, component: ContactUs},
   { exact: true, path: "/CourseList", layout: GuestLayout, component: CourseList},
   { exact: true, path: "/Career", layout: GuestLayout, component: Career},
+  { exact: true, path: "/About", layout: GuestLayout, component: AboutSection},
   // { exact: true, path: "/CourseDetails/:id", layout: GuestLayout, component: CourseDetailsPage},
   { exact: true, path: "/courseDetails/batch/:id", layout: GuestLayout, component: CourseDetailsPage},
   {

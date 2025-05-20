@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-
+import { Helmet } from 'react-helmet-async';
 const PrivacyPolicy = () => {
   // Animation variants
   const container = {
@@ -254,6 +254,12 @@ const PrivacyPolicy = () => {
           }}
         />
       </div>
+
+      <Helmet>
+  <title>Privacy Policy | Upskillab - Your Data, Your Control</title>
+  <meta name="description" content="Learn how Upskillab collects, uses, and protects your personal information while using our learning platform." />
+  <meta name="keywords" content="upskilllab privacy policy, data protection, education privacy, online education privacy, upskillab user data" />
+</Helmet>
     </motion.div>
   );
 };

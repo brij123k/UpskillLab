@@ -8,6 +8,7 @@ import SuccessStoriesCarousel from '../../components/SuccessStoriesCarousel';
 import TrainingBanner from '../../components//banners/TrainingBanner';
 import FeedbaackBanner from '../../components/banners/FeedbackBanner';
 import { getDataHandler } from '../../config/services';
+import { Helmet } from 'react-helmet-async';
 const SuccessStory = () => {
   const [story, setStory] = useState([]);
   const [activeStat, setActiveStat] = useState(0);
@@ -296,6 +297,20 @@ const SuccessStory = () => {
 
         <TrainingBanner/>
         <FeedbaackBanner/>
+
+        <Helmet>
+  <title>Upskillab Success Stories | Transforming Careers Through Learning</title>
+  <meta name="description" content="Read inspiring success stories of individuals who advanced their careers through Upskillab's online courses." />
+  <meta name="keywords" content="Upskillab success stories, career transformation, online learning impact, student testimonials" />
+  <meta property="og:title" content="Upskillab Success Stories | Transforming Careers Through Learning" />
+  <meta property="og:description" content="Discover how Upskillab's online courses have helped individuals achieve their career goals." />
+  <meta property="og:url" content="https://upskillab.com/success-stories" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Upskillab Success Stories | Transforming Careers Through Learning" />
+  <meta name="twitter:description" content="Explore real-life success stories from Upskillab learners who have transformed their careers." />
+</Helmet>
+
     </div>
   );
 };

@@ -15,8 +15,10 @@ import SuccessTestimonial from '../../components/testimonial/SuccessTestimonial 
 import StudentTestimonials from '../../components/testimonial/StudentsTestimonial'
 import AdmissionForm from '../../components/Forms/AdmissionForm'
 import { getDataHandler } from '../../config/services';
+import CertificationSlider from '../../components/CertificationSlider';
 import { Faqs } from '../../data';
 import { NavLink } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import AdmissionFormModal from '../../components/Modal/BasicEnrollNowModal';
 function Home() {
   const controls = useAnimation();
@@ -148,7 +150,6 @@ function Home() {
 ];
   return (
     <>
-
       <div className='min-h-fit'>
         <CarouselContainer />
       </div>
@@ -332,9 +333,8 @@ function Home() {
       <div className=''>
         <ScrollableCategories />
       </div>
-      <div className='pt-4'>
+      <CertificationSlider/>
         <SuccessTestimonial />
-      </div>
       <EducationBanner />
       <div className='pb-4'>
         <AdmissionForm />
@@ -414,6 +414,22 @@ function Home() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
+
+
+<Helmet>
+  <title>Upskillab | Empowering Your Career Through Online Learning</title>
+  <meta name="description" content="Upskillab offers a variety of online courses to help you upskill and advance your career. Join our community of learners today." />
+  <meta name="keywords" content="upkillab, upskilllab, upskilling, upskill lab, online upskillab, online education upskillab, education upskillab, online learning, career development, education online courses" />
+  <meta property="og:title" content="Upskillab | Empowering Your Career Through Online Learning" />
+  <meta property="og:description" content="Join Upskillab to access a wide range of online courses designed to boost your skills and career prospects." />
+  <meta property="og:url" content="https://upskillab.com" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Upskillab | Empowering Your Career Through Online Learning" />
+  <meta name="twitter:description" content="Explore Upskillab's online courses to enhance your skills and career opportunities." />
+</Helmet>
+
+
 
     </>
   )

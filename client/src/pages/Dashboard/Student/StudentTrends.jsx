@@ -24,7 +24,7 @@ const StudentTrends = () => {
       setLoading(true);
       const [trendsRes, suggestionsRes] = await Promise.all([
         getDataHandlerWithToken('trends'),
-        getDataHandlerWithToken('teacherSuggestions')
+        getDataHandlerWithToken('teacherSugegstions')
       ]);
       setTrends(trendsRes.resources || []);
       setSuggestions(suggestionsRes.suggestions || []);

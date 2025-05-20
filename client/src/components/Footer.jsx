@@ -74,6 +74,7 @@ function Footer() {
               <h3 className="text-[#00052E] text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Company</h3>
               <ul className="space-y-2 sm:space-y-3">
                 <li><NavLink to="/" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Home</NavLink></li>
+                <li><NavLink to="/About" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">About Us</NavLink></li>
                 <li><NavLink to="/CourseList" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Popular Course</NavLink></li>
                 <li><NavLink to="/upcoming-batches/" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Latest Batches</NavLink></li>
                 <li><NavLink to="/Students-Blog" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Blog</NavLink></li>

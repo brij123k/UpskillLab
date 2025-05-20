@@ -6,6 +6,7 @@ import Footer from '../../components/Footer';
 import {FaPlus, FaMinus, FaLocationArrow } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import { postDataHandler } from '../../config/services';
+import { Helmet } from 'react-helmet-async';
 // const ContactCard = ({ icon, title, info, description }) => {
 //   return (
 //     <motion.div
@@ -624,6 +625,24 @@ const ContactPage = () => {
 </motion.div>
         </div>
       </motion.section>
+
+
+
+      <Helmet>
+  <title>Contact Upskillab | Get in Touch with Our Team</title>
+  <meta name="description" content="Have questions or need assistance? Contact Upskillab's support team for help with our online courses." />
+  <meta name="keywords" content="Upskillab contact, support, online courses help, customer service" />
+  <meta property="og:title" content="Contact Upskillab | Get in Touch with Our Team" />
+  <meta property="og:description" content="Reach out to Upskillab for any inquiries or support regarding our online learning programs." />
+  <meta property="og:url" content="https://upskillab.com/contact" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Contact Upskillab | Get in Touch with Our Team" />
+  <meta name="twitter:description" content="Need assistance? Contact Upskillab's support team for help with our online courses." />
+</Helmet>
+
+
+
     </div>
   );
 };

@@ -44,7 +44,7 @@ const MarketAnalysis = () => {
       setLoading(true);
       const response = await getDataHandlerWithToken('resourse');
       const courseResponse = await getDataHandler('courseDisplay');
-      console.log(resource)
+      console.log(response)
       setCourses(courseResponse.data || []);
       setResources(response.resources || []);
     } catch (error) {
@@ -471,7 +471,7 @@ const MarketAnalysis = () => {
                       )}
                     </div>
                     
-                    {/* <div className="flex gap-2">
+                    <div className="flex gap-2">
                       <button
                         onClick={() => handleEdit(resource)}
                         className="p-1 text-[#4D2C5E] hover:text-[#5F3A73] transition-colors hover:bg-[#4D2C5E]/10 rounded"
@@ -486,7 +486,7 @@ const MarketAnalysis = () => {
                       >
                         <FiTrash2 />
                       </button>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               </div>

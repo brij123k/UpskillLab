@@ -12,6 +12,7 @@ import { useLocation } from "react-router-dom";
 import BatchEnrollmentModal from "../../components/Modal/BatchEnrollmentModal";
 import ApiConfig from "../../config/apiConfig";
 import { toast } from "react-toastify";
+import { Helmet } from 'react-helmet-async';
 import AdmissionFormModal from "../../components/Modal/BasicEnrollNowModal";
 const bannerVariants = {
   hidden: { opacity: 0 },
@@ -879,6 +880,22 @@ const CourseList = () => {
         isOpen={isModalOpen} 
         onClose={() => setIsModalOpen(false)} 
       />
+
+
+      <Helmet>
+  <title>Upskillab Courses | Advance Your Skills Online</title>
+  <meta name="description" content="Browse Upskillab's extensive catalog of online courses to enhance your skills and career growth." />
+  <meta name="keywords" content="Upskillab courses, online courses, skill development, upskilling, education online" />
+  <meta property="og:title" content="Upskillab Courses | Advance Your Skills Online" />
+  <meta property="og:description" content="Discover a variety of online courses at Upskillab designed to help you upskill and achieve your career goals." />
+  <meta property="og:url" content="https://upskillab.com/courses" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Upskillab Courses | Advance Your Skills Online" />
+  <meta name="twitter:description" content="Explore Upskillab's online courses to boost your skills and career prospects." />
+</Helmet>
+
+
     </div>
   );
 };

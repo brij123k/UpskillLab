@@ -7,7 +7,7 @@ import { initiateOtpLogin, verifyOtp } from '../../config/services';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import { FaHome, FaArrowLeft } from 'react-icons/fa';
-
+import { Helmet } from 'react-helmet-async';
 const LoginPage = () => {
     const [otpAttemptId, setOtpAttemptId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -340,6 +340,16 @@ const LoginPage = () => {
                     </motion.div>
                 </motion.div>
             </motion.div>
+
+
+
+            <Helmet>
+  <title>Login | Upskillab - Access Your Learning Dashboard</title>
+  <meta name="description" content="Login to your Upskillab account to access your courses, progress, and personalized learning dashboard." />
+  <meta name="keywords" content="upskilllab login, upkillab login, online education login, upskillab dashboard, login to upskilllab" />
+</Helmet>
+
+
         </div>
     );
 };

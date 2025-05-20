@@ -9,6 +9,7 @@ import AdmissionForm from '../../components/Forms/AdmissionForm';
 import { getBlogs } from '../../config/services';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 // Blog Card Component
 
 const TruncatedHTML = ({ html, maxLength = 150 }) => {
@@ -212,6 +213,22 @@ const StudentsBlog = () => {
       </div>
       <TrainingBanner />
       <FeedbaackBanner />
+
+      <Helmet>
+  <title>Upskillab Student Blog | Insights and Tips for Online Learners</title>
+  <meta name="description" content="Explore articles, tips, and insights from Upskillab students to enhance your online learning experience." />
+  <meta name="keywords" content="Upskillab blog, student insights, online learning tips, education articles" />
+  <meta property="og:title" content="Upskillab Student Blog | Insights and Tips for Online Learners" />
+  <meta property="og:description" content="Read blog posts from Upskillab students sharing their experiences and advice on online learning." />
+  <meta property="og:url" content="https://upskillab.com/student-blog" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Upskillab Student Blog | Insights and Tips for Online Learners" />
+  <meta name="twitter:description" content="Gain valuable insights and tips from Upskillab's student community through our blog." />
+</Helmet>
+
+
+
     </div>
   );
 };

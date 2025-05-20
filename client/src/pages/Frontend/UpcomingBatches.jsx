@@ -7,7 +7,7 @@ import Modal from "../../components/Modal/CommonModal";
 import BatchEnrollmentModal from "../../components/Modal/BatchEnrollmentModal";
 import { useQuery } from "@tanstack/react-query";
 import { getDataHandler } from "../../config/services"; // Updated import
-
+import { Helmet } from 'react-helmet-async';
 const UpcomingBatches = () => {
   const [selectedBatch, setSelectedBatch] = useState(null);
   const [enrollCourse, setEnrollCourse] = useState(null);
@@ -256,6 +256,22 @@ const UpcomingBatches = () => {
 
       <TrainingBanner />
       <FeedbaackBanner />
+
+
+      <Helmet>
+  <title>Upcoming Course Batches | Upskillab Online Learning</title>
+  <meta name="description" content="Stay updated with Upskillab's upcoming course batches and enroll in the next session to advance your skills." />
+  <meta name="keywords" content="Upskillab upcoming batches, course schedule, online learning, enrollment dates" />
+  <meta property="og:title" content="Upcoming Course Batches | Upskillab Online Learning" />
+  <meta property="og:description" content="Check out the schedule for Upskillab's upcoming course batches and plan your learning journey." />
+  <meta property="og:url" content="https://upskillab.com/upcoming-batches" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Upcoming Course Batches | Upskillab Online Learning" />
+  <meta name="twitter:description" content="Find out when Upskillab's next course batches start and secure your spot today." />
+</Helmet>
+
+
     </div>
   );
 };

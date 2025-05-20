@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-
+import { Helmet } from 'react-helmet-async';
 const TermsOfService = () => {
   // Animation variants
   const container = {
@@ -194,6 +194,13 @@ const TermsOfService = () => {
           }}
         />
       </div>
+
+
+      <Helmet>
+  <title>Terms & Conditions | Upskillab - Platform Usage Rules</title>
+  <meta name="description" content="Read the terms and conditions of using Upskillab’s educational services. Understand your rights and responsibilities." />
+  <meta name="keywords" content="upskilllab terms, upskillab conditions, online education terms, e-learning agreement, user agreement upskillab" />
+</Helmet>
     </motion.div>
   );
 };
