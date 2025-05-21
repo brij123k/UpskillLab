@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaBriefcase, FaUsers, FaHandshake, FaChartLine, FaHeart, FaLightbulb } from 'react-icons/fa';
 import { NavLink, useNavigate } from 'react-router-dom';
-
+import { getDataHandler,postDataHandler } from '../../config/services';
 const Careers = () => {
-
+ const jobHandler= async ()=>{
+  const response = await getDataHandler('getPublicJobs')
+  console.log(response)
+ }
+ useEffect(()=>{
+  jobHandler()
+ })
     const navigate = useNavigate()
   // Animation variants
   const container = {

@@ -9,6 +9,9 @@ const ApiConfig = {
   verifyOtp: `${url}/auth/otp/enter`, 
   getUserDetails: `${url}/auth/details`,
   refreshToken:`${url}/auth/refresh`,
+
+  getPublicJobs:`${url}/jobs/public/job`,
+  postpublicApplication:`${url}/applications`,
   
   stats : `${url}/stats`,
   // Categories
