@@ -4,6 +4,7 @@ import { getDataHandler, postDataHandlerWithToken, getDataHandlerWithToken } fro
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import LiveClassesSection from '../../../components/LiveClassesSection';
+import ApiConfig from '../../../config/apiConfig';
 
 const ClassSchedule = () => {
   const [showModal, setShowModal] = useState(false);
@@ -21,9 +22,9 @@ const ClassSchedule = () => {
   const [meetingPassword, setMeetingPassword] = useState('');
   const [description, setDescription] = useState('');
   const [teacherId, setTeacherId] = useState('');
-  // New state for attendance modal
   const [showAttendanceModal, setShowAttendanceModal] = useState(false);
   const [selectedSessionAttendance, setSelectedSessionAttendance] = useState([]);
+  const [selectedSessionDetails, setSelectedSessionDetails] = useState(null);
 
   const fetchClassSessions = async () => {
     try {
@@ -53,18 +54,41 @@ const ClassSchedule = () => {
     }
   };
 
-  // New function to fetch attendance data
   const fetchAttendance = async (sessionId) => {
     try {
-      setIsLoading(true);
-      const response = await getDataHandlerWithToken(`ClassSchedule/attendance/${sessionId}`);
-      setSelectedSessionAttendance(response.attendance || []);
+      // setIsLoading(true);
+      const endpoint = ApiConfig.studentClassAttendance(sessionId);
+      const response = await getDataHandlerWithToken(endpoint, null, null, true);
+      setSelectedSessionAttendance(response.students || []);
+      setSelectedSessionDetails({
+        _id: response._id,
+        meetingLink: response.meetingLink,
+        scheduledDate: response.scheduledDate,
+        scheduledStartTime: response.scheduledStartTime,
+        totalAttended: response.totalAttended
+      });
     } catch (error) {
       toast.error('Failed to load attendance data');
       console.error('Error fetching attendance:', error);
       setSelectedSessionAttendance([]);
-    } finally {
-      setIsLoading(false);
+      setSelectedSessionDetails(null);
+    } 
+  };
+
+  const updateAttendance = async (userId, isAttended) => {
+    try {
+      const payload = {
+        sessionId: selectedSessionDetails._id,
+        userId,
+        isAttended
+      };
+      await postDataHandlerWithToken('updateStudentAttendance', payload);
+      toast.success('Attendance updated successfully');
+      // Refresh attendance data
+      fetchAttendance(selectedSessionDetails._id);
+    } catch (error) {
+      toast.error('Failed to update attendance');
+      console.error('Error updating attendance:', error);
     }
   };
 
@@ -475,7 +499,7 @@ const ClassSchedule = () => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700YCLE-5E] mb-1.5">Meeting Password (optional)</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">Meeting Password (optional)</label>
                     <input
                       type="text"
                       value={meetingPassword}
@@ -517,68 +541,89 @@ const ClassSchedule = () => {
           </div>
         )}
 
-        {/* New Attendance Modal */}
-        {showAttendanceModal && (
-          <div className="fixed inset-0 bg-[#00000080] flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-              <div className="p-6">
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-2xl font-bold text-[#4D2C5E]">Attendance Details</h2>
-                  <button
-                    onClick={() => setShowAttendanceModal(false)}
-                    className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
-                  >
-                    <FiX className="h-6 w-6" />
-                  </button>
-                </div>
+       {showAttendanceModal && (
+  <div className="fixed inset-0 bg-[#00000080] flex items-center justify-center z-50 p-4">
+    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-bold text-[#4D2C5E]">Attendance Details</h2>
+          <button
+            onClick={() => setShowAttendanceModal(false)}
+            className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+          >
+            <FiX className="h-6 w-6" />
+          </button>
+        </div>
 
-                {isLoading ? (
-                  <div className="flex justify-center items-center h-32">
-                    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#4D2C5E]"></div>
-                  </div>
-                ) : selectedSessionAttendance.length > 0 ? (
-                  <div className="space-y-4">
-                    {selectedSessionAttendance.map((attendee, index) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-                      >
-                        <div className="flex items-center">
-                          <FiUsers className="h-5 w-5 text-[#4D2C5E] mr-3" />
-                          <span className="text-gray-700">{attendee.studentName || 'Unknown'}</span>
-                        </div>
-                        <span
-                          className={`text-sm font-medium ${
-                            attendee.status === 'Present'
-                              ? 'text-green-600'
-                              : attendee.status === 'Absent'
-                              ? 'text-red-600'
-                              : 'text-gray-600'
-                          }`}
-                        >
-                          {attendee.status || 'N/A'}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center text-gray-500 py-8">
-                    No attendance recorded for this class.
-                  </div>
-                )}
-
-                <div className="mt-6 flex justify-end">
-                  <button
-                    onClick={() => setShowAttendanceModal(false)}
-                    className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200"
-                  >
-                    Close
-                  </button>
-                </div>
+        {selectedSessionDetails && (
+          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+            <h3 className="text-lg font-semibold text-[#4D2C5E] mb-2">Class Details</h3>
+            <div className="space-y-2">
+              <div className="flex items-center text-gray-600 text-sm">
+                <FiCalendar className="mr-2 h-4 w-4 text-[#4D2C5E]" />
+                {formatDate(selectedSessionDetails.scheduledDate)}
+              </div>
+              <div className="flex items-center text-gray-600 text-sm">
+                <FiClock className="mr-2 h-4 w-4 text-[#4D2C5E]" />
+                {formatTime(selectedSessionDetails.scheduledStartTime)}
+              </div>
+              <div className="flex items-center text-gray-600 text-sm">
+                <FiVideo className="mr-2 h-4 w-4 text-[#4D2C5E]" />
+                <a href={selectedSessionDetails.meetingLink} target="_blank" rel="noopener noreferrer" className="text-[#4D2C5E] hover:underline">
+                  Meeting Link
+                </a>
+              </div>
+              <div className="flex items-center text-gray-600 text-sm">
+                <FiUsers className="mr-2 h-4 w-4 text-[#4D2C5E]" />
+                Total Attended: {selectedSessionDetails.totalAttended}
               </div>
             </div>
           </div>
         )}
+
+        {isLoading ? (
+          <div className="flex justify-center items-center h-32">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#4D2C5E]"></div>
+          </div>
+        ) : selectedSessionAttendance.length > 0 ? (
+          <div className="space-y-4">
+            {selectedSessionAttendance.map((attendee, index) => (
+              <div
+                key={index}
+                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+              >
+                <div className="flex items-center">
+                  <FiUsers className="h-5 w-5 text-[#4D2C5E] mr-3" />
+                  <span className="text-gray-700">{attendee.name || 'Unknown'}</span>
+                </div>
+                <span
+                  className={`text-sm font-medium ${
+                    attendee.isAttended ? 'text-green-600' : 'text-red-600'
+                  }`}
+                >
+                  {attendee.isAttended ? 'Present' : 'Absent'}
+                </span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center text-gray-500 py-8">
+            No attendance recorded for this class.
+          </div>
+        )}
+
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={() => setShowAttendanceModal(false)}
+            className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
       </div>
     </div>
   );

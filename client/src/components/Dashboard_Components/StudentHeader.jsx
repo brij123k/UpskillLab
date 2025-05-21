@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { 
-  FiHome, FiBook, FiCalendar, FiVideo, 
+  FiHome, FiBook, FiCalendar, FiVideo, FiStar,FiFileText,
   FiMessageSquare, FiTrendingUp, FiBriefcase, 
   FiBell, FiUser, FiLogOut, FiClock, FiMenu, FiX, FiChevronRight
 } from 'react-icons/fi';
@@ -330,6 +330,24 @@ const StudentHeader = () => {
                     <FiVideo className="mr-2" />
                     Recorded Videos
                   </NavLink>
+
+                  <NavLink
+                    to="/student/Testimonial"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    onClick={() => setIsProfileDropdownOpen(false)}
+                  >
+                    <FiStar  className="mr-2" />
+                    Testimonial
+                  </NavLink>
+
+                  <NavLink
+                    to="/student/Blogs"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    onClick={() => setIsProfileDropdownOpen(false)}
+                  >
+                    <FiFileText  className="mr-2" />
+                    Blogs
+                  </NavLink>
                   
                   <NavLink
                     to="/Student/Trends"
@@ -469,6 +487,25 @@ const StudentHeader = () => {
               >
                 <FiVideo className="inline mr-3" />
                 Recorded Videos
+              </NavLink>
+
+
+<NavLink
+                to="/student/Testimonial"
+                className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <FiStar className="inline mr-3" />
+                Testimonial
+              </NavLink>
+
+              <NavLink
+                to="/student/Blogs"
+                className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <FiFileText className="inline mr-3" />
+                Blogs
               </NavLink>
 
               <NavLink

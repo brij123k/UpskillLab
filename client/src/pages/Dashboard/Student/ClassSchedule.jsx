@@ -95,7 +95,7 @@ const StudentClassSchedule = () => {
     const bDate = new Date(`${b.scheduledDate}T${b.scheduledStartTime}`);
     return bDate - aDate;
   });
-
+console.log(pastClasses)
   const formatDate = (dateString) => {
     return format(new Date(dateString), 'MMM d, yyyy');
   };

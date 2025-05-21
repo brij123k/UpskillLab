@@ -27,6 +27,7 @@ const CourseDetailsPage = lazy(() => import("./pages/Frontend/CourseDetail"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
+const TeacherRegistration = lazy(() => import("./pages/TeacherRegistration"));
 
 
 
@@ -56,6 +57,8 @@ const StudentRecordedVideos= lazy(()=> import("./pages/Dashboard/Student/Student
 const RecordedVideoPlayer= lazy(()=> import("./pages/Dashboard/Student/VideoPlayerPage"))
 const StudentTrends= lazy(()=> import("./pages/Dashboard/Student/StudentTrends"))
 const StudentDoubts= lazy(()=> import("./pages/Dashboard/Student/StudentDoubts"))
+const StudentTestimonial= lazy(()=> import("./pages/Dashboard/Student/StudentTestimonial"))
+const StudentBlogs= lazy(()=> import("./pages/Dashboard/Student/StudentBlogs"))
 
 
 const TeacherProtectedLayout = ({ children }) => (
@@ -98,6 +101,7 @@ export const routes = [
   { exact: true, path: "/TermsOfService", layout: Index, component: TermsOfService},
   { exact: true, path: "/PrivacyPolicy", layout: Index, component: PrivacyPolicy},
   { exact: true, path: "/RefundPolicy", layout: Index, component: RefundPolicy},
+  { exact: true, path: "/Teacher/Register", layout: Index, component: TeacherRegistration},
   { exact: true, path: "*", component: NotFoundPage },
 
   // Teacher Panel Routes 
@@ -125,4 +129,6 @@ export const routes = [
   { exact: true, path:"/Student/videos/:id", layout:StudentProtectedLayout, component:RecordedVideoPlayer},
   { exact: true, path:"/Student/Doubts", layout:StudentProtectedLayout, component:StudentDoubts},
   { exact: true, path:"/Student/Trends", layout:StudentProtectedLayout, component:StudentTrends},
+  { exact: true, path:"/Student/Testimonial", layout:StudentProtectedLayout, component:StudentTestimonial},
+  { exact: true, path:"/Student/Blogs", layout:StudentProtectedLayout, component:StudentBlogs},
 ];

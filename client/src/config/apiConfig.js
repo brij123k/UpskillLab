@@ -10,6 +10,7 @@ const ApiConfig = {
   getUserDetails: `${url}/auth/details`,
   refreshToken:`${url}/auth/refresh`,
 
+  registerTeacher: `${url}/teachers`,
   getPublicJobs:`${url}/jobs/public/job`,
   postpublicApplication:`${url}/applications`,
   
@@ -70,7 +71,7 @@ const ApiConfig = {
   studyMaterial:`${url}/study-materials`,
   studyMaterialById:(id)=>`${url}/study-materials/${id}`,
   studyMaterialByTeacher:(id)=>`${url}/study-materials/teacher/${id}`,
-
+  studentClassAttendance:(id)=>`${url}/live-classes/${id}/attendance/teacher`,
   teacherSugegstions:`${url}/suggestions`,
   teacherSugegstionsget:`${url}/suggestions/teacher`,
   // Schedule
@@ -81,6 +82,8 @@ const ApiConfig = {
   deleteNotifications:(id)=>`${url}/notifications/${id}/`,
   resourse:`${url}/resources`,
   resoursebyId:(id)=>`${url}/resources/${id}`,
+
+
   // student panel
   profile:`${url}/students/me`,
   studentProfile:`${url}/enrollment`,
@@ -94,7 +97,14 @@ const ApiConfig = {
   studentHistory:`${url}/student-info`,
   trends:`${url}/resources`,
   studentAttendance:`${url}/live-classes/attendance`,
-  appliedJobs:(email)=>`${url}/applications/applied-jobs/${email}`
+  appliedJobs:(email)=>`${url}/applications/applied-jobs/${email}`,
+
+  studenttestimonial:`${url}/testimonials`,
+  testimonilaById:(id)=>`${url}/testimonials/${id}`,
+
+  studentBlogs:`${url}/blogs`,
+  getStudentBlogs:`${url}/blogs/students`,
+  studentBlogById:(id)=>`${url}/blogs/${id}`
 };
 
 export default ApiConfig;
