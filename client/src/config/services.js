@@ -20,16 +20,12 @@ const getAuthHeadersFormData = (token) => ({
 const handleResponse = (res, successMessage) => {
   // Check for both 200 and 201 status codes
   if (res?.status === 200 || res?.status === 201) {
-    if (successMessage) {
-      toast.success(successMessage);
-    }
     return res.data;
   } else {
     // Modified to match likely API error structure
     const errorMsg = res?.data?.message || 
                     res?.data?.error ||
                     "Request failed";
-    toast.error(errorMsg);
     throw res?.data || res; // Throw instead of return to maintain error flow
   }
 };
@@ -41,7 +37,6 @@ const handleError = (error) => {
                   error.response?.data?.error || 
                   error.message || 
                   "Request failed";
-  toast.error(errorMsg);
   throw error.response?.data || error.response || error; // Throw to maintain error flow
 };
 

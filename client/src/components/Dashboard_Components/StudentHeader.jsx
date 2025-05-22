@@ -19,10 +19,10 @@ const StudentHeader = () => {
   const notificationRef = useRef(null);
   const navigate = useNavigate();
   const { logout } = useAuth();
-  const { notifications, setNotifications } = useNotificationService('student', ['student', 'teacherStudent', 'adminStudent']);
+  // const { notifications, setNotifications } = useNotificationService('student', ['student', 'teacherStudent', 'adminStudent']);
   const [loading, setLoading] = useState(true);
   const [profileImage, setProfileImage] = useState(null);
-
+  const [profileId,setProfileId]= useState('')
   // Format time ago
 
 
@@ -53,28 +53,29 @@ const StudentHeader = () => {
   };
 
   // Fetch initial notifications
-  const fatchprofile=async ()=>{
-    const profile= await getDataHandlerWithToken('profile');
-    setProfileImage(profile.image)
-    console.log(profile)
-  }
   const fetchNotifications = async () => {
     try {
       setLoading(true);
+      const profile= await getDataHandlerWithToken('profile');
+    setProfileId(profile._id)
+    setProfileImage(profile.image)
       const endpoint = ApiConfig.Notifications('student');
       const endpoint2 = ApiConfig.Notifications('teacherStudent');
       const endpoint3 = ApiConfig.Notifications('adminStudent');
-      
-      const [response, response2, response3] = await Promise.all([
+      const endpoint4= ApiConfig.NotificationsbyId(profile._id)
+      const [response, response2, response3,response4 ] = await Promise.all([
         getDataHandlerWithToken(endpoint, null, null, true),
         getDataHandlerWithToken(endpoint2, null, null, true),
-        getDataHandlerWithToken(endpoint3, null, null, true)
+        getDataHandlerWithToken(endpoint3, null, null, true),
+        getDataHandlerWithToken(endpoint4, null, null, true)
+        
       ]);
       
       const allNotifications = [
         ...(response || []),
         ...(response2 || []),
-        ...(response3 || [])
+        ...(response3 || []),
+        ...(response4 || [])
       ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       
       // Get top 5 latest notifications
@@ -89,9 +90,10 @@ const StudentHeader = () => {
   };
 
   useEffect(()=>{
-    fatchprofile()
     fetchNotifications()
   },[])
+
+  const { notifications, setNotifications } = useNotificationService(profileId, ['student', 'teacherStudent', 'adminStudent']);
   // Initialize socket connection
   // useEffect(() => {
   //   const newSocket = io(ApiConfig.baseUrl, {

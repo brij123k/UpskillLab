@@ -7,10 +7,9 @@ import useNotificationService from '../../../config/notificationService';
 const StudentNotifications = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const {notifications, setNotifications} = useNotificationService('student',['student','teacherStudent','adminStudent']);
   const [loading, setLoading] = useState(true);
   const [notificationTypes, setNotificationTypes] = useState([]);
-
+  const [profileId,setProfileId]= useState('')
   // Function to format time difference
   const formatTimeAgo = (dateString) => {
     const date = new Date(dateString);
@@ -47,20 +46,24 @@ const StudentNotifications = () => {
   const fetchNotifications = async () => {
     try {
       setLoading(true);
+      const profile = await getDataHandlerWithToken("profile")
+      setProfileId(profile._id)
       const endpoint = ApiConfig.Notifications('student');
       const endpoint2 = ApiConfig.Notifications('teacherStudent');
       const endpoint3 = ApiConfig.Notifications('adminStudent');
-      
-      const [response, response2, response3] = await Promise.all([
+      const endpoint4= ApiConfig.NotificationsbyId(profile._id)
+      const [response, response2, response3,response4] = await Promise.all([
         getDataHandlerWithToken(endpoint, null, null, true),
         getDataHandlerWithToken(endpoint2, null, null, true),
-        getDataHandlerWithToken(endpoint3, null, null, true)
+        getDataHandlerWithToken(endpoint3, null, null, true),
+        getDataHandlerWithToken(endpoint4, null, null, true)
       ]);
       
       const allNotifications = [
         ...(response || []),
         ...(response2 || []),
-        ...(response3 || [])
+        ...(response3 || []),
+        ...(response4 || [])
       ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       // Extract unique notification types
       const types = [...new Set(allNotifications.map(n => n.type))];
@@ -77,6 +80,9 @@ const StudentNotifications = () => {
   useEffect(() => {
     fetchNotifications();
   }, []);
+
+  const {notifications, setNotifications} = useNotificationService(profileId,['student','teacherStudent','adminStudent']);
+
 
   // Filter notifications based on active filter and search query
   if(notifications.length>0){

@@ -63,8 +63,8 @@ const TeacherRegistration = () => {
         experience: ''
       });
     } catch (error) {
-      console.error('Error submitting registration:', error);
-      toast.error(error.response?.data?.message || 'Failed to submit registration');
+      // console.error('Error submitting registration:', error);
+      toast.error(error?.data?.message || 'Failed to submit registration');
     } finally {
       setIsSubmitting(false);
     }

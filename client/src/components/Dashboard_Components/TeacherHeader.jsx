@@ -18,9 +18,9 @@ function TeacherHeader() {
 const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] = useState(false);
   const navigate = useNavigate();
-  const {notifications, setNotifications} = useNotificationService('teacher',['teacher','teacherStudent','adminTeacher'])
+  
   const [loading, setLoading] = useState(true);
-
+  const [profileId,setProfileId]= useState('')
   const notificationRef = useRef(null);
 
   
@@ -54,20 +54,25 @@ const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const fetchNotifications = async () => {
     try {
       setLoading(true);
+      const profile= await getDataHandlerWithToken('teacherProfile')
+      setProfileId(profile._id)
       const endpoint = ApiConfig.Notifications('teacher');
       const endpoint2 = ApiConfig.Notifications('adminTeacher');
       const endpoint3 = ApiConfig.Notifications('teacherStudent');
-      
-      const [response, response2, response3] = await Promise.all([
+       const endpoint4= ApiConfig.NotificationsbyId(profile._id)
+       
+      const [response, response2, response3,response4] = await Promise.all([
         getDataHandlerWithToken(endpoint, null, null, true),
         getDataHandlerWithToken(endpoint2, null, null, true),
-        getDataHandlerWithToken(endpoint3, null, null, true)
+        getDataHandlerWithToken(endpoint3, null, null, true),
+        getDataHandlerWithToken(endpoint4, null, null, true)
       ]);
       
       const allNotifications = [
         ...(response || []),
         ...(response2 || []),
-        ...(response3 || [])
+        ...(response3 || []),
+        ...(response4 || [])
       ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       
       // Get top 5 latest notifications
@@ -86,6 +91,7 @@ const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
     fetchNotifications()
   },[])
  
+const {notifications, setNotifications} = useNotificationService(profileId,['teacher','teacherStudent','adminTeacher'])
   // Click outside handler for notification dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {

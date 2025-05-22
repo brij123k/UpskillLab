@@ -78,6 +78,7 @@ const ApiConfig = {
   ClassSchedule:`${url}/Class-Schedule/teacher`,
   doubtsResponse:(id)=>`${url}/doubts/${id}/message`,
   Notifications:(role)=>`${url}/notifications/role/${role}`,
+  NotificationsbyId:(id)=>`${url}/notifications/user/${id}`,
   MarkAsReadNotifications:(id)=>`${url}/notifications/${id}/read`,
   deleteNotifications:(id)=>`${url}/notifications/${id}/`,
   resourse:`${url}/resources`,

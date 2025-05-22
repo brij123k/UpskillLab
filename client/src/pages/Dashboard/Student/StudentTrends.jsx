@@ -8,9 +8,11 @@ import {
   FiMessageSquare,
   FiUser,
   FiClock,
-  FiCheckCircle
+  FiCheckCircle,
+  FiX
 } from 'react-icons/fi';
 import { getDataHandlerWithToken } from '../../../config/services';
+import BlogContentRenderer from '../../../components/BlogContentRenderer';
 
 const StudentTrends = () => {
   const [activeTab, setActiveTab] = useState('all');
@@ -18,6 +20,8 @@ const StudentTrends = () => {
   const [trends, setTrends] = useState([]);
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedResource, setSelectedResource] = useState(null);
+  const [selectedSuggestion, setSelectedSuggestion] = useState(null);
 
   const handleTrends = async () => {
     try {
@@ -65,8 +69,138 @@ const StudentTrends = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  const openResourceModal = (resource) => {
+    setSelectedResource(resource);
+  };
+
+  const openSuggestionModal = (suggestion) => {
+    setSelectedSuggestion(suggestion);
+  };
+
+  const closeModal = () => {
+    setSelectedResource(null);
+    setSelectedSuggestion(null);
+  };
+
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto">
+      {/* Resource View Modal */}
+      {selectedResource && (
+        <div className="fixed inset-0 bg-[#0006] bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white p-4 border-b flex justify-between items-center">
+              <h2 className="text-xl font-bold text-[#4D2C5E]">{selectedResource.title}</h2>
+              <button onClick={closeModal} className="text-gray-500 hover:text-gray-700">
+                <FiX className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="p-6">
+              {selectedResource.image && (
+                <img 
+                  src={selectedResource.image} 
+                  alt={selectedResource.title} 
+                  className="w-full h-64 object-cover rounded-lg mb-6"
+                  onError={(e) => {
+                    e.target.onerror = null; 
+                    e.target.src = 'https://via.placeholder.com/800x400?text=No+Image';
+                  }}
+                />
+              )}
+              
+              <div className="flex flex-wrap gap-4 mb-6">
+                {selectedResource.courseId?.courseName && (
+                  <span className="px-3 py-1 bg-[#4D2C5E]/10 text-[#4D2C5E] text-sm font-medium rounded-full">
+                    {selectedResource.courseId.courseName}
+                  </span>
+                )}
+                {selectedResource.tags && selectedResource.tags.map((tag, index) => (
+                  <span key={index} className="px-3 py-1 bg-gray-100 text-gray-600 text-sm rounded-full">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+              
+              <div className="prose max-w-none">
+                {selectedResource.description ? (
+                  <BlogContentRenderer content={selectedResource.description} />
+                ) : (
+                  <p className="text-gray-600">{selectedResource.description}</p>
+                )}
+              </div>
+              
+              <div className="mt-8 pt-6 border-t flex flex-wrap gap-4">
+                {selectedResource.link && (
+                  <a 
+                    href={selectedResource.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center px-4 py-2 bg-[#4D2C5E] text-white rounded-lg font-medium hover:bg-[#4D2C5E]/90 transition-colors"
+                  >
+                    <FiExternalLink className="mr-2" /> Visit Resource
+                  </a>
+                )}
+                {selectedResource.pdf && (
+                  <a 
+                    href={selectedResource.pdf} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center px-4 py-2 bg-[#FF7426] text-white rounded-lg font-medium hover:bg-[#FF7426]/90 transition-colors"
+                  >
+                    <FiDownload className="mr-2" /> Download PDF
+                  </a>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
+      {/* Suggestion View Modal */}
+      {selectedSuggestion && (
+        <div className="fixed inset-0 bg-[#0006] bg-opacity-50 z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white p-4 border-b flex justify-between items-center">
+              <h2 className="text-xl font-bold text-[#4D2C5E]">{selectedSuggestion.title}</h2>
+              <button onClick={closeModal} className="text-gray-500 hover:text-gray-700">
+                <FiX className="w-6 h-6" />
+              </button>
+            </div>
+            
+            <div className="p-6">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-full bg-[#4D2C5E]/10 flex items-center justify-center text-[#4D2C5E]">
+                  <FiUser className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-medium">{selectedSuggestion.teacherName}</p>
+                  <p className="text-sm text-gray-500">{formatDate(selectedSuggestion.createdAt)}</p>
+                </div>
+                {selectedSuggestion.isApproved && (
+                  <span className="ml-auto flex items-center text-green-600 text-sm">
+                    <FiCheckCircle className="mr-1" /> Approved
+                  </span>
+                )}
+              </div>
+              
+              <div className="mb-4">
+                <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 text-sm font-medium rounded-full">
+                  {selectedSuggestion.type}
+                </span>
+              </div>
+              
+              <div className="prose max-w-none">
+                {selectedSuggestion.content ? (
+                  <BlogContentRenderer content={selectedSuggestion.content} />
+                ) : (
+                  <p className="text-gray-600">{selectedSuggestion.description}</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-[#4D2C5E]">
@@ -169,14 +303,12 @@ const StudentTrends = () => {
                   </div>
                   
                   <div className="flex flex-wrap gap-2">
-                    {suggestion.content && (
-                      <button
-                        onClick={() => alert(`Viewing content: ${suggestion.content}`)}
-                        className="flex items-center px-3 py-2 bg-[#4D2C5E]/10 text-[#4D2C5E] rounded-lg text-sm font-medium hover:bg-[#4D2C5E]/20 transition-colors"
-                      >
-                        <FiMessageSquare className="mr-1" /> View Content
-                      </button>
-                    )}
+                    <button
+                      onClick={() => openSuggestionModal(suggestion)}
+                      className="flex items-center px-3 py-2 bg-[#4D2C5E] text-white rounded-lg text-sm font-medium hover:bg-[#4D2C5E]/90 transition-colors"
+                    >
+                      <FiMessageSquare className="mr-1" /> View Details
+                    </button>
                   </div>
                 </div>
               </div>
@@ -201,6 +333,7 @@ const StudentTrends = () => {
               trend={trend} 
               formatDate={formatDate}
               toggleSaveTrend={toggleSaveTrend}
+              openResourceModal={openResourceModal}
             />
           ))}
         </div>
@@ -220,10 +353,10 @@ const StudentTrends = () => {
 };
 
 // Trend Card Component
-const TrendCard = ({ trend, formatDate, toggleSaveTrend }) => (
+const TrendCard = ({ trend, formatDate, toggleSaveTrend, openResourceModal }) => (
   <div className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
     {trend.image && (
-      <div className="h-48 overflow-hidden">
+      <div className="h-48 overflow-hidden cursor-pointer" onClick={() => openResourceModal(trend)}>
         <img 
           src={trend.image} 
           alt={trend.title} 
@@ -244,7 +377,12 @@ const TrendCard = ({ trend, formatDate, toggleSaveTrend }) => (
               {trend.courseId.courseName}
             </span>
           )}
-          <h3 className="font-bold text-lg text-[#4D2C5E] line-clamp-2">{trend.title}</h3>
+          <h3 
+            className="font-bold text-lg text-[#4D2C5E] line-clamp-2 cursor-pointer hover:underline"
+            onClick={() => openResourceModal(trend)}
+          >
+            {trend.title}
+          </h3>
         </div>
         <button 
           onClick={() => toggleSaveTrend(trend._id)}
@@ -254,12 +392,25 @@ const TrendCard = ({ trend, formatDate, toggleSaveTrend }) => (
         </button>
       </div>
       
-      <p className="text-gray-600 text-sm line-clamp-3 mb-4">{trend.description}</p>
+      <p 
+        className="text-gray-600 text-sm line-clamp-3 mb-4 cursor-pointer hover:text-gray-800"
+        onClick={() => openResourceModal(trend)}
+      >
+      {(() => {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = trend.description;
+    return tempDiv.textContent || tempDiv.innerText || '';
+  })()}
+      </p>
       
       {trend.tags && trend.tags.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-4">
           {trend.tags.map((tag, index) => (
-            <span key={index} className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
+            <span 
+              key={index} 
+              className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full cursor-pointer hover:bg-gray-200"
+              onClick={() => openResourceModal(trend)}
+            >
               #{tag}
             </span>
           ))}
@@ -277,6 +428,12 @@ const TrendCard = ({ trend, formatDate, toggleSaveTrend }) => (
       </div>
       
       <div className="flex flex-wrap gap-2">
+        <button
+          onClick={() => openResourceModal(trend)}
+          className="flex items-center px-3 py-2 bg-[#4D2C5E] text-white rounded-lg text-sm font-medium hover:bg-[#4D2C5E]/90 transition-colors"
+        >
+          <FiMessageSquare className="mr-1" /> View Content
+        </button>
         {trend.link && (
           <a 
             href={trend.link} 

@@ -7,7 +7,7 @@ import useNotificationService from '../../../config/notificationService';
 const TeacherNotifications = () => {
   const [activeFilter, setActiveFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const {notifications, setNotifications} = useNotificationService('teacher',['teacher','teacherStudent','adminTeacher']);
+  const [profileId,setProfileId]= useState('')
   const [loading, setLoading] = useState(true);
   const [notificationTypes, setNotificationTypes] = useState([]);
 
@@ -47,21 +47,25 @@ const TeacherNotifications = () => {
   const fetchNotifications = async () => {
     try {
       setLoading(true);
+      const profile= await getDataHandlerWithToken('teacherProfile')
+      setProfileId(profile._id)
       const endpoint = ApiConfig.Notifications('teacher');
       const endpoint2 = ApiConfig.Notifications('adminTeacher');
       const endpoint3 = ApiConfig.Notifications('teacherStudent');
-      
-      const [response, response2, response3] = await Promise.all([
+      const endpoint4= ApiConfig.NotificationsbyId(profile._id)
+
+      const [response, response2, response3, response4] = await Promise.all([
         getDataHandlerWithToken(endpoint, null, null, true),
         getDataHandlerWithToken(endpoint2, null, null, true),
-        getDataHandlerWithToken(endpoint3, null, null, true)
+        getDataHandlerWithToken(endpoint3, null, null, true),
+        getDataHandlerWithToken(endpoint4, null, null, true)
       ]);
-      console.log(response,response2,response3)
       
       const allNotifications = [
         ...(response || []),
         ...(response2 || []),
-        ...(response3 || [])
+        ...(response3 || []),
+        ...(response4 || [])
       ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       console.log(allNotifications)
       // Extract unique notification types
@@ -79,6 +83,8 @@ const TeacherNotifications = () => {
   useEffect(() => {
     fetchNotifications();
   }, []);
+
+  const {notifications, setNotifications} = useNotificationService(profileId,['teacher','teacherStudent','adminTeacher']);
 
   // Filter notifications based on active filter and search query
   const filteredNotifications = notifications.filter(notification => {
