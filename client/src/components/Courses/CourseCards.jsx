@@ -21,7 +21,7 @@ function CourseCards() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="relative text-center mb-12">
-            <h2 className="text-2xl lg:text-4xl font-semibold text-gray-900">
+            <h2 className="text-2xl md:text-4xl font-semibold text-gray-900">
               Explore Our World's Best <span className='text-[#FF7426]'>Courses </span>
             </h2>
           </div>

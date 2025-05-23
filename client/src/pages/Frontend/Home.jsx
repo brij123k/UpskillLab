@@ -153,14 +153,13 @@ function Home() {
       <div className='min-h-fit'>
         <CarouselContainer />
       </div>
-      
-      
-      <div className=''>
-        <ImageCarousel />
-      </div>
       <div className="bg-[url('/images/bgStars.png')] bg-cover bg-center">
         <StudentFeedBack />
       </div>
+      <div className=''>
+        <ImageCarousel />
+      </div>
+      
       <div className=''>
         <StudentTestimonials />
       </div>

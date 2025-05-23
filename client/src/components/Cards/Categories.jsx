@@ -78,7 +78,7 @@ useEffect(() => {
 
   return (
     <div className="relative max-w-7xl mx-auto py-6 px-4">
-      <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">
+      <h2 className="text-2xl md:text-4xl font-bold text-center mb-12 text-gray-800">
         Explore <span className="text-[#FF7426]">Categories</span>
       </h2>
 
