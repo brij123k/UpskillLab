@@ -7,7 +7,7 @@ import { FiUsers, FiAlertCircle, FiMessageSquare, FiCompass, FiDollarSign } from
 import { FiAward, FiBriefcase, FiCheck, FiTrendingUp } from 'react-icons/fi';
 import PurchaseModal from '../../components/Modal/EnrollmentModal';
 import { FiFlag } from 'react-icons/fi';
-import { FiBarChart2, FiGlobe } from 'react-icons/fi';
+import { FiBarChart2,FiArrowRight, FiGlobe } from 'react-icons/fi';
 import ApiConfig from '../../config/apiConfig';
 import { toast } from "react-toastify";
 import AdmissionFormModal from '../../components/Modal/BasicEnrollNowModal';
@@ -185,166 +185,147 @@ import { getDataHandler } from '../../config/services';
 
 const CourseHero = ({ course }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-      const brochure = course.brochure;
-        const courseId = course.title;
-        const startDate = course.startDate;
-        const batchCode = course.batchId;
+    const brochure = course.brochure;
+    const courseId = course.title;
+    const startDate = course.startDate;
+    const batchCode = course.batchId;
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8 }}
-            className="relative w-full overflow-hidden py-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-[#FDF8EE] to-[#FFF5E6]"
+            className="relative w-full overflow-hidden pt-12 pb-16 px-4 sm:px-6 bg-gradient-to-br from-[#FDF8EE] to-[#FFF5E6]"
         >
-            {/* Floating 3D spheres */}
+            {/* Floating 3D spheres - Mobile Optimized */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 0.1 }}
                     transition={{ duration: 1.5, delay: 0.3 }}
-                    className="absolute -top-32 -right-32 w-64 h-64 rounded-full bg-[#FF7426] blur-3xl"
+                    className="absolute -top-20 -right-20 w-40 h-40 rounded-full bg-[#FF7426] blur-xl md:blur-3xl"
                 />
                 <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 0.1 }}
                     transition={{ duration: 1.5, delay: 0.5 }}
-                    className="absolute -bottom-20 -left-20 w-80 h-80 rounded-full bg-[#4D2C5E] blur-3xl"
+                    className="absolute -bottom-12 -left-12 w-48 h-48 rounded-full bg-[#4D2C5E] blur-xl md:blur-3xl"
                 />
             </div>
 
             <div className="max-w-7xl mx-auto relative z-10">
-                <div className="flex flex-col lg:flex-row gap-12 items-center">
-                    {/* Left Side - Text Content */}
-                    <div className="lg:w-1/2 space-y-8">
+                <div className="flex flex-col-reverse md:flex-row gap-8 md:gap-12 items-center">
+                    {/* Left Side - Text Content (Mobile First) */}
+                    <div className="w-full md:w-1/2 space-y-6">
                         <div className="overflow-hidden">
                             <motion.h1
-  initial={{ y: 50, opacity: 0 }}
-  animate={{ y: 0, opacity: 1 }}
-  transition={{ duration: 0.8, ease: "backOut" }}
-  className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#4D2C5E] leading-tight"
->
-  {course?.title}
-  <motion.span 
-    className="block w-16 h-1.5 bg-gradient-to-r from-[#FF7426] to-[#4D2C5E] mt-2 rounded-full"
-    initial={{ scaleX: 0 }}
-    animate={{ scaleX: 1 }}
-    transition={{ delay: 0.4, duration: 0.8 }}
-  />
-</motion.h1>
-                        </div>
-
-                        <div className="overflow-hidden">
-                            <motion.p
                                 initial={{ y: 30, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
-                                transition={{ duration: 0.6, delay: 0.3 }}
-                                className="text-lg lg:text-xl text-[#4D2C5E]/90"
+                                transition={{ duration: 0.8, ease: "backOut" }}
+                                className="text-3xl sm:text-4xl  font-bold text-[#4D2C5E] leading-tight"
                             >
-                                {course?.shortDescription || "Master modern technologies with industry experts through hands-on projects."}
-                            </motion.p>
+                                {course?.title}
+                                <motion.span 
+                                    className="block w-16 h-1.5 bg-gradient-to-r from-[#FF7426] to-[#4D2C5E] mt-3 rounded-full"
+                                    initial={{ scaleX: 0 }}
+                                    animate={{ scaleX: 1 }}
+                                    transition={{ delay: 0.4, duration: 0.8 }}
+                                />
+                            </motion.h1>
                         </div>
 
-                        {/* Enhanced Tags */}
+                        <motion.p
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.6, delay: 0.3 }}
+                            className="text-base sm:text-lg text-[#4D2C5E]/90 text-justify"
+                        >
+                            {course?.shortDescription || "Master modern technologies with industry experts through hands-on projects."}
+                        </motion.p>
+
+                        {/* Tags - Mobile Optimized */}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ staggerChildren: 0.1, delayChildren: 0.5 }}
-                            className="flex flex-wrap gap-3 mt-6"
+                            className="flex flex-wrap gap-2 mt-4"
                         >
                             {course?.tags?.length > 0 ? (
-                                course.tags.map((tag, index) => (
+                                course.tags.slice(0, 3).map((tag, index) => (
                                     <motion.span
                                         key={index}
-                                        initial={{ y: 20, opacity: 0 }}
+                                        initial={{ y: 15, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
                                         whileHover={{
                                             scale: 1.05,
                                             backgroundColor: '#4D2C5E',
                                             color: 'white',
-                                            boxShadow: '0 6px 16px rgba(77, 44, 94, 0.3)',
-                                            transition: { duration: 0.2 }
                                         }}
-                                        className="px-4 py-2 bg-white text-[#4D2C5E] rounded-full text-sm font-medium border border-[#4D2C5E]/20 shadow-sm cursor-default transition-all"
+                                        className="px-3 py-1.5 bg-white text-[#4D2C5E] rounded-full text-xs sm:text-sm font-medium border border-[#4D2C5E]/20 shadow-xs cursor-default"
                                     >
-                                        {tag}
+                                        {tag.length > 12 ? `${tag.substring(0, 12)}...` : tag}
                                     </motion.span>
                                 ))
                             ) : (
                                 <motion.span
-                                    initial={{ y: 20, opacity: 0 }}
+                                    initial={{ y: 15, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
-                                    whileHover={{
-                                        scale: 1.05,
-                                        backgroundColor: '#4D2C5E',
-                                        color: 'white',
-                                        boxShadow: '0 6px 16px rgba(77, 44, 94, 0.3)'
-                                    }}
-                                    className="px-4 py-2 bg-white text-[#4D2C5E] rounded-full text-sm font-medium border border-[#4D2C5E]/20 shadow-sm cursor-default transition-all"
+                                    className="px-3 py-1.5 bg-white text-[#4D2C5E] rounded-full text-xs sm:text-sm font-medium border border-[#4D2C5E]/20 shadow-xs"
                                 >
                                     Industry-Relevant
                                 </motion.span>
                             )}
                         </motion.div>
 
-                        {/* Enhanced CTA Buttons */}
+                        {/* CTA Buttons - Stacked on Mobile */}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.7 }}
-                            className="flex flex-wrap gap-4 mt-8"
+                            className="flex flex-col sm:flex-row gap-3 mt-6"
                         >
                             <motion.button
-                            onClick={()=>{
-                                if (batchCode === "0") {
-                setIsModalOpen(true);
-              } else {
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const batchStartDate = new Date(startDate || 0);
-                if (batchStartDate >= today) {
-                  setIsModalOpen(true);
-                } else {
-                  setIsModalOpen(true);
-                }
-              }
-                            }}
-                                whileHover={{ 
-                                    scale: 1.05,
-                                    boxShadow: '0 8px 24px rgba(255, 116, 38, 0.3)'
+                                onClick={() => {
+                                    if (batchCode === "0") {
+                                        setIsModalOpen(true);
+                                    } else {
+                                        const today = new Date();
+                                        today.setHours(0, 0, 0, 0);
+                                        const batchStartDate = new Date(startDate || 0);
+                                        if (batchStartDate >= today) {
+                                            setIsModalOpen(true);
+                                        } else {
+                                            setIsModalOpen(true);
+                                        }
+                                    }
                                 }}
+                                whileHover={{ scale: 1.03 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="px-6 py-3 bg-[#FF7426] text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all"
+                                className="px-5 py-2.5 sm:px-6 sm:py-3 bg-[#FF7426] text-white font-medium rounded-lg shadow-sm hover:shadow-md transition-all text-sm sm:text-base"
                             >
                                 Enroll Now
                             </motion.button>
-                            <a href='#Plan'>
-                            <motion.button
-                                whileHover={{ 
-                                    scale: 1.05,
-                                    boxShadow: '0 8px 24px rgba(77, 44, 94, 0.1)'
-                                }}
-                                whileTap={{ scale: 0.98 }}
-                                className="px-6 py-3 bg-white text-[#4D2C5E] font-medium rounded-lg border border-[#4D2C5E]/20 hover:bg-[#4D2C5E]/5 transition-all"
+                            <a href='#Plan'
+                            className="px-5 text-center py-2.5 sm:px-6 sm:py-3 bg-white text-[#4D2C5E] font-medium rounded-lg border border-[#4D2C5E]/20 hover:bg-[#4D2C5E]/5 transition-all text-sm sm:text-base"
                             >
-                                Watch Plan
-                            </motion.button>
+                                <motion.button
+                                    whileHover={{ scale: 1.03 }}
+                                    whileTap={{ scale: 0.98 }}
+                                    
+                                >
+                                    View Course Plan
+                                </motion.button>
                             </a>
                         </motion.div>
                     </div>
 
-                    {/* Right Side - Enhanced Media Container */}
+                    {/* Right Side - Media (Top on Mobile) */}
                     <motion.div
-                        initial={{ x: 100, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
+                        initial={{ y: -20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
-                        className="lg:w-1/2 w-full aspect-video rounded-2xl overflow-hidden shadow-2xl relative group"
+                        className="w-full md:w-1/2 aspect-video rounded-xl sm:rounded-2xl overflow-hidden shadow-lg sm:shadow-xl relative group mb-6 md:mb-0"
                     >
-                        {/* Glow effect */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#4D2C5E]/10 to-[#FF7426]/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-                        
-                        {/* Border animation */}
-                        <div className="absolute inset-0 border-2 border-transparent group-hover:border-[#FF7426]/30 transition-all duration-500 rounded-2xl pointer-events-none" />
-                        
                         {/* Media content */}
                         {course?.youtubeUrl ? (
                             <iframe
@@ -365,9 +346,9 @@ const CourseHero = ({ course }) => {
                                 <div className="absolute inset-0 flex items-center justify-center">
                                     <motion.div
                                         whileHover={{ scale: 1.1 }}
-                                        className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-xl cursor-pointer"
+                                        className="w-12 h-12 sm:w-16 sm:h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg cursor-pointer"
                                     >
-                                        <svg className="w-6 h-6 text-[#FF7426] ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg className="w-5 h-5 sm:w-6 sm:h-6 text-[#FF7426] ml-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                         </svg>
@@ -375,46 +356,17 @@ const CourseHero = ({ course }) => {
                                 </div>
                             </div>
                         )}
-                        
-                        {/* Floating elements */}
-                        <motion.div
-                            animate={{
-                                y: [0, -10, 0],
-                                x: [0, 5, 0],
-                                rotate: [0, 2, 0]
-                            }}
-                            transition={{
-                                duration: 8,
-                                repeat: Infinity,
-                                ease: "easeInOut"
-                            }}
-                            className="absolute top-4 left-4 w-8 h-8 bg-[#FF7426] rounded-full opacity-20"
-                        />
-                        <motion.div
-                            animate={{
-                                y: [0, 15, 0],
-                                x: [0, -8, 0],
-                                rotate: [0, -3, 0]
-                            }}
-                            transition={{
-                                duration: 7,
-                                repeat: Infinity,
-                                ease: "easeInOut",
-                                delay: 0.5
-                            }}
-                            className="absolute bottom-4 right-4 w-12 h-12 bg-[#4D2C5E] rounded-full opacity-20"
-                        />
                     </motion.div>
                 </div>
             </div>
 
             <AdmissionFormModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        topic="Continue the form to download the brochure"
-        brochure={brochure}
-        currentCourseName={courseId}
-      />
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                topic="Continue the form to download the brochure"
+                brochure={brochure}
+                currentCourseName={courseId}
+            />
         </motion.div>
     );
 };
@@ -958,7 +910,9 @@ const ProgramInfoWithEnroll = ({ course }) => {
                                     whileHover={{ x: 5 }}
                                 >
                                     <FiMessageSquare className="text-[#4D2C5E]" />
+                                    <NavLink to={`/ContactUs`}>
                                     <span className="font-medium text-black">Talk to an advisor</span>
+                                    </NavLink>
                                 </motion.button>
                             </div>
                         </motion.div>
@@ -1541,7 +1495,6 @@ const TeachingPlan = ({ course }) => {
   const batchCode = course.batchId;
   const startDate = course.startDate;
   const brochure = course.brochure;
-//   console.log(brochure)
   const courseId = course.title;
   const ref = useRef(null);
   const isInView = useInView(ref, { once: false, amount: 0.1 });
@@ -2587,7 +2540,7 @@ const CourseDetails = () => {
     const batchCode = location.state?.batchCode;
     const { id } = useParams();
     const type = window.location.pathname.includes('/batch/') ? 'batch' : 'course';
-
+    const [isModalOpen, setIsModalOpen] = useState(false);
     useEffect(() => {
         if (type === 'course') {
             fetchCourse(id)
@@ -2601,7 +2554,6 @@ const CourseDetails = () => {
         const endpointUrl = ApiConfig.getCourseByCode(courseCode);
 
         const response = await getDataHandler(endpointUrl, null, null, true); // pass endpointUrl directly
-        console.log(response)
         let custemDataSet = {
             id: response._id,
             batchId: response.batch?._id || "0",
@@ -2633,8 +2585,7 @@ const CourseDetails = () => {
         const response = res.batch
         const endpointUrl2 = ApiConfig.getCourseByCode(response.course.courseCode);
         const res2 = await getDataHandler(endpointUrl2, null, null, true);
-        console.log(res2)
-        console.log(response)
+
         let custemDataSet = {
             id: res2._id,
             batchId: response._id,
@@ -2800,7 +2751,21 @@ const CourseDetails = () => {
             {/* Add other components here */}
 
 
+<div className="fixed bottom-4 right-0 flex justify-center  z-40 px-4">
+                <motion.button
+                  onClick={() => setIsModalOpen(true)}
+                  className="bg-[#FF7426] text-sm hover:bg-[#e56722] text-white font-bold py-2 px-4 rounded-full shadow-lg w-full max-w-md flex items-center justify-center"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Enroll Now <FiArrowRight className="ml-2" />
+                </motion.button>
+              </div>
 
+<AdmissionFormModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
         </div>
     );
 };

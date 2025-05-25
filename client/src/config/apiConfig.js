@@ -13,7 +13,7 @@ const ApiConfig = {
   registerTeacher: `${url}/teachers`,
   getPublicJobs:`${url}/jobs/public/job`,
   postpublicApplication:`${url}/applications`,
-  
+  getAnnouncements:`${url}/announcements`,
   stats : `${url}/stats`,
   // Categories
   category: `${url}/category`,
@@ -105,7 +105,8 @@ const ApiConfig = {
 
   studentBlogs:`${url}/blogs`,
   getStudentBlogs:`${url}/blogs/students`,
-  studentBlogById:(id)=>`${url}/blogs/${id}`
+  studentBlogById:(id)=>`${url}/blogs/${id}`,
+  couponsByCourseId:(id)=>`${url}/coupons/by-course/${id}`
 };
 
 export default ApiConfig;

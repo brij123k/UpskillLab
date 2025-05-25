@@ -45,6 +45,7 @@ const TeacherNotifications= lazy(()=> import("./pages/Dashboard/Teacher/TeacherN
 
 
 // Student Panel lazyImport
+const StudentOnboarding = lazy(()=> import("./pages/Dashboard/Student/StudentOnboarding"))
 const StudentDashboard= lazy(()=> import("./pages/Dashboard/Student/StudentDashboard"))
 const StudentStudyMaterials= lazy(()=> import("./pages/Dashboard/Student/StudyMaterials"))
 const StudentClassSchedule= lazy(()=> import("./pages/Dashboard/Student/ClassSchedule"))
@@ -117,6 +118,7 @@ export const routes = [
   { exact: true, path:"/Teacher/Notifications", layout:TeacherProtectedLayout, component:TeacherNotifications},
   
   // Student Panel Routes
+  { exact: true, path:"/Student/Onboarding", layout:Index, component:StudentOnboarding},
   { exact: true, path:"/Student/Dashboard", layout:StudentProtectedLayout, component:StudentDashboard},
   { exact: true, path:"/Student/StudyMaterials", layout:StudentProtectedLayout, component:StudentStudyMaterials},
   { exact: true, path:"/Student/Schedule", layout:StudentProtectedLayout, component:StudentClassSchedule},

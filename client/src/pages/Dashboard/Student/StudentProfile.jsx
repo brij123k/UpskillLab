@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { FiUser, FiEdit, FiSave, FiMail, FiPhone, FiBook, FiX, FiUpload, FiChevronRight } from 'react-icons/fi';
-import { getDataHandler, getDataHandlerWithToken, patchTokenDataHandler } from '../../../config/services';
+import { getDataHandler, getDataHandlerWithToken, patchTokenDataHandler, patchTokenDataHandlerFormData } from '../../../config/services';
 import { message } from 'antd';
 
 const StudentProfile = () => {
@@ -21,6 +21,7 @@ const StudentProfile = () => {
     skills: []
   });
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const [imageFile, setImageFile] = useState(null); // New state for image file
   const fileInputRef = useRef(null);
 
   const studentProfileHandler = async () => {
@@ -87,22 +88,38 @@ const StudentProfile = () => {
   const handleSave = async () => {
     try {
       setLoading(true);
-      const updateData = {
-        _id: profileData._id,
-        fullName: profileData.fullName,
-        email: profileData.email,
-        mobileNumber: profileData.mobileNumber,
-        college: profileData.college,
-        studentType: profileData.studentType,
-        bio: profileData.bio,
-        skills: profileData.skills,
-        image: profileData.image
-      };
+      
+      // Create FormData object
+      const formData = new FormData();
+      
+      // Append all fields to FormData
+      formData.append('_id', profileData._id);
+      formData.append('fullName', profileData.fullName);
+      formData.append('email', profileData.email);
+      formData.append('mobileNumber', profileData.mobileNumber);
+      formData.append('college', profileData.college);
+      formData.append('studentType', profileData.studentType);
+      formData.append('bio', profileData.bio);
 
-      const response = await patchTokenDataHandler('profile', updateData);
+      profileData.skills.forEach((skill, index) => {
+      formData.append(`skills[${index}]`, skill);
+    });
+      
+      // Append image file if it exists
+      if (imageFile) {
+        formData.append('image', imageFile);
+      }
+
+      // Use FormData handler for the request
+      const response = await patchTokenDataHandlerFormData('profile', formData);
+      
       console.log("Update response:", response);
       setIsEditing(false);
+      setImageFile(null); // Reset image file after successful upload
       message.success('Profile updated successfully!');
+      
+      // Refresh profile data
+      await studentProfileHandler();
     } catch (err) {
       console.error('Error updating profile:', err);
       message.error('Failed to update profile');
@@ -132,15 +149,16 @@ const StudentProfile = () => {
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
-  const handleImageUpload = async (e) => {
+  const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // In a real app, you would upload the image to your server here
-    // For now, we'll just use a mock URL
-    const mockImageUrl = URL.createObjectURL(file);
-    setProfileData({ ...profileData, image: mockImageUrl });
-    message.info('Image updated (simulated)');
+    // Store the file object for FormData submission
+    setImageFile(file);
+    
+    // Create preview URL for immediate display
+    const previewUrl = URL.createObjectURL(file);
+    setProfileData({ ...profileData, image: previewUrl });
   };
 
   const triggerFileInput = () => {
@@ -282,17 +300,9 @@ const StudentProfile = () => {
                   <label className="block text-sm font-medium text-gray-500 mb-1 flex items-center">
                     <FiPhone className="mr-1" /> Phone
                   </label>
-                  {isEditing ? (
-                    <input
-                      type="tel"
-                      name="mobileNumber"
-                      value={profileData.mobileNumber}
-                      onChange={handleInputChange}
-                      className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]/50"
-                    />
-                  ) : (
+                  
                     <p className="text-gray-800 font-medium">{profileData.mobileNumber}</p>
-                  )}
+              
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
                   <label className="block text-sm font-medium text-gray-500 mb-1">College/University</label>

@@ -23,6 +23,7 @@ const EnrollmentModal = ({ batch, onClose }) => {
     name: "",
     email: "",
     phone: "",
+    couponCode:"",
     batchId: batch.batchCode,
     agreeTerms: false,
   });
@@ -104,18 +105,21 @@ const EnrollmentModal = ({ batch, onClose }) => {
         email: formData.email,
         phone: formData.phone,
         amount: paymentData.discountedPrice,
+        couponCode:formData.couponCode,
       });
+      console.log(formData)
       console.log(response)
 
       setPaymentData(prev => ({
         ...prev,
+        discountedPrice:response.totalAmount,
         orderId: response.orderId,
         paymentSessionId: response.paymentSessionId,
       }));
       // downloadBrochure()
       return true;
     } catch (error) {
-      toast.error(error.response?.data?.message || "Payment initialization failed");
+      toast.error(error.response?.data?.message  || error?.message || "Payment initialization failed");
       return false;
     } finally {
       setLoading(false);
@@ -303,6 +307,18 @@ const EnrollmentModal = ({ batch, onClose }) => {
                   type="tel"
                   name="phone"
                   value={formData.phone}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Coupon(Optional)</label>
+                <input
+                  type="text"
+                  name="couponCode"
+                  value={formData.couponCode}
                   onChange={handleChange}
                   className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
                   required

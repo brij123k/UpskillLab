@@ -24,6 +24,7 @@ const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase ,topic=n
     name: "",
     email: "",
     phone: "",
+    couponCode:"",
     batchId: batchCode,
     agreeTerms: false,
   });
@@ -107,17 +108,19 @@ const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase ,topic=n
         email: formData.email,
         phone: formData.phone,
         amount: paymentData.discountedPrice,
+        couponCode:formData.couponCode,
       });
 
       setPaymentData(prev => ({
         ...prev,
+        discountedPrice:response.totalAmount,
         orderId: response.orderId,
         paymentSessionId: response.paymentSessionId,
       }));
       downloadBrochure()
       return true;
     } catch (error) {
-      toast.error(error.response?.data?.message || "Payment initialization failed");
+      toast.error(error.response?.data?.message || error?.message || "Payment initialization failed");
       return false;
     } finally {
       setLoading(false);
@@ -348,6 +351,20 @@ const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase ,topic=n
                   required
                 />
               </div>
+
+              <div className="relative">
+                <FiPhone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#4D2C5E]/50" />
+                <input
+                  type="text"
+                  name="couponCode"
+                  value={formData.couponCode}
+                  onChange={handleChange}
+                  placeholder="Coupon(Optional)"
+                  className="w-full pl-10 pr-4 py-2 text-sm border border-[#4D2C5E]/20 rounded-md focus:outline-none focus:ring-1 focus:ring-[#FF7426]"
+                  required
+                />
+              </div>
+
             </div>
           </motion.div>
         )}

@@ -3,13 +3,13 @@ import {
   FiBook, FiCalendar, FiVideo, FiMessageSquare, 
   FiBell, FiBriefcase, FiDownload, FiClock,
   FiChevronRight, FiUsers, FiCheckCircle, FiAward,
-  FiBarChart2, FiBookOpen, FiLayers
+  FiBarChart2, FiBookOpen, FiLayers,FiX 
 } from 'react-icons/fi';
-import { getDataHandlerWithToken } from '../../../config/services';
 import { format, isBefore, isAfter } from 'date-fns';
 import ApiConfig from '../../../config/apiConfig';
 import useNotificationService from '../../../config/notificationService';
 import { useNavigate } from 'react-router-dom';
+import { getDataHandlerWithToken } from '../../../config/services';
 const StudentDashboard = () => {
   const [stats, setStats] = useState({
     courses: 0,
@@ -24,8 +24,33 @@ const StudentDashboard = () => {
   const [studyMaterials, setStudyMaterials] = useState([]);
   const {notifications, setNotifications} = useNotificationService('student',['student','adminStudent','teacherStudent']);
   const [loading, setLoading] = useState(true);
-
+  const [coupons, setCoupons] = useState([]);
+  const [showCouponPopup, setShowCouponPopup] = useState(false);
+  const [profileComplete, setProfileComplete] = useState(true);
 const navigate = useNavigate();
+useEffect(() => {
+  const checkProfile = async () => {
+    try {
+      const profileRes = await getDataHandlerWithToken('profile');
+      console.log(profileRes)
+      if (!profileRes.fullName || !profileRes.image) {
+        setProfileComplete(false);
+        navigate('/student/onboarding');
+      }
+    } catch (error) {
+      console.error('Error checking profile:', error);
+    }
+  };
+  
+  checkProfile();
+}, [navigate]);
+
+if (!profileComplete) {
+  return null; // Or a loading spinner
+}
+
+
+
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
@@ -47,6 +72,24 @@ const navigate = useNavigate();
         // console.log(classesRes)
         // Process data
       const courseIds = profileRes.batch.map(batch => batch.course);
+
+      if (courseIds.length > 0) {
+      const couponPromises = courseIds.map(courseId => {
+        const enpoint = ApiConfig.couponsByCourseId(courseId)
+        return getDataHandlerWithToken(enpoint,null, null, true)
+        }
+      )
+      ;
+
+      const couponResponses = await Promise.all(couponPromises);
+      const allCoupons = couponResponses.flatMap(res => res || []);
+      setCoupons(allCoupons);
+      
+      // Only show popup if there are active coupons
+      if (allCoupons.length > 0) {
+        setShowCouponPopup(true);
+      }
+    }
       if (courseIds.length === 0) {
         setStudyMaterials([]);
         return;
@@ -486,6 +529,90 @@ const navigate = useNavigate();
           </div>
         </div>
       </div>
+
+{showCouponPopup && coupons.length > 0 && (
+  <div className="fixed bottom-6 right-6 z-50 w-full max-w-xs">
+    <div className="bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden">
+      <div className="flex justify-between items-center bg-gradient-to-r from-[#4D2C5E] to-[#6D3B8E] p-4">
+        <h3 className="text-white font-bold">Available Coupons</h3>
+        <button 
+          onClick={() => setShowCouponPopup(false)}
+          className="text-white hover:text-gray-200"
+        >
+          <FiX className="h-5 w-5" />
+        </button>
+      </div>
+      
+      <div className="p-4 max-h-96 overflow-y-auto">
+        {coupons.map(coupon => {
+          const courseName = coupon.batch?.course?.courseName || coupon.course?.courseName || 'Any Course';
+          const batchCode = coupon.batch?.batchCode || 'Any Batch';
+          
+          const copyToClipboard = () => {
+            navigator.clipboard.writeText(coupon.code)
+              .then(() => {
+                // Show feedback that copy was successful
+                const originalText = document.getElementById(`coupon-${coupon._id}`).innerText;
+                document.getElementById(`coupon-${coupon._id}`).innerText = 'Copied!';
+                setTimeout(() => {
+                  document.getElementById(`coupon-${coupon._id}`).innerText = originalText;
+                }, 2000);
+              })
+              .catch(err => {
+                console.error('Failed to copy: ', err);
+              });
+          };
+          
+          return (
+            <div key={coupon._id} className="mb-4 last:mb-0 p-3 border border-gray-100 rounded-lg hover:bg-gray-50">
+              <div className="flex justify-between items-start">
+                <div>
+                  <div 
+                    id={`coupon-${coupon._id}`}
+                    onClick={copyToClipboard}
+                    className="font-bold text-[#4D2C5E] cursor-pointer hover:text-[#FF7426] transition-colors"
+                    title="Click to copy"
+                  >
+                    Use: {coupon.code}
+                  </div>
+                  <p className="text-sm font-medium text-[#4D2C5E]">
+                    {courseName} {batchCode !== 'Any Batch' && `(${batchCode})`}
+                  </p>
+                  <p className="text-sm text-gray-600 mt-1">
+                    {coupon.discountPercent}% discount
+                    {coupon.maxDiscountAmount && ` (up to ₹${coupon.maxDiscountAmount})`}
+                  </p>
+                </div>
+                <span className={`text-xs px-2 py-1 rounded-full ${
+                  coupon.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                }`}>
+                  {coupon.active ? 'Active' : 'Expired'}
+                </span>
+              </div>
+              
+              {coupon.validTo && (
+                <div className="mt-2 flex items-center text-xs text-gray-500">
+                  <FiClock className="mr-1" />
+                  <span>Valid until: {formatDate(coupon.validTo)}</span>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+      
+      <div className="px-4 py-3 bg-gray-50 text-right border-t border-gray-200">
+        <button
+          onClick={() => setShowCouponPopup(false)}
+          className="text-sm text-[#4D2C5E] hover:text-[#FF7426] font-medium"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };
@@ -508,6 +635,9 @@ const StatCard = ({ icon, title, value, color, unit }) => {
           {value > 0 ? 'Good progress' : 'No data available'}
         </p>
       </div>
+
+
+
     </div>
   );
 };
@@ -550,6 +680,11 @@ const ClassCard = ({ session, isLive }) => {
       }`}>
         {isLive ? 'Join Now' : 'View Details'}
       </button>
+
+
+
+
+
     </div>
   );
 };

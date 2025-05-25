@@ -76,12 +76,12 @@ function Home() {
 
   const faqs = [
     {
-        question: "What Upskillab wants to give you?",
-        answer: "Upskillab wants to empower you with industry-ready skills, personalized mentorship, and mental wellness support—so you don't just grow in your career, but thrive as a whole individual."
+      question: "What Upskillab wants to give you?",
+      answer: "Upskillab wants to empower you with industry-ready skills, personalized mentorship, and mental wellness support—so you don't just grow in your career, but thrive as a whole individual."
     },
     {
-        question: "Why choose us for education?",
-        answer: `<p>Because we don't just teach—you grow, transform, and succeed with us.</p>
+      question: "Why choose us for education?",
+      answer: `<p>Because we don't just teach—you grow, transform, and succeed with us.</p>
         <p>At Upskillab, we offer more than just courses:</p>
         <ul>
           <li>✅ Industry-verified curriculum designed with hiring partners</li>
@@ -95,8 +95,8 @@ function Home() {
         <p>We're building the bridge between education, employment, and emotional wellbeing—so your success is not just professional, but personal too.</p>`
     },
     {
-        question: "Only at Upskillab?",
-        answer: `<p>Unlike other platforms, Upskillab combines technical upskilling with:</p>
+      question: "Only at Upskillab?",
+      answer: `<p>Unlike other platforms, Upskillab combines technical upskilling with:</p>
         <ul>
           <li>Holistic guidance</li>
           <li>Mental wellness support</li>
@@ -106,28 +106,28 @@ function Home() {
         <p>Get certified. Get mentored. Get hired. Stay balanced.</p>`
     },
     {
-        question: "Do I get a certificate after completing the course?",
-        answer: "Yes. Upon successful completion, you will receive an industry-recognized certificate, which can be verified and added to your professional profile."
+      question: "Do I get a certificate after completing the course?",
+      answer: "Yes. Upon successful completion, you will receive an industry-recognized certificate, which can be verified and added to your professional profile."
     },
     {
-        question: "Do these programs guarantee a job?",
-        answer: "Certain programs come with a Job Guarantee or Guaranteed Interview Calls post successful completion, depending on the course structure and eligibility."
+      question: "Do these programs guarantee a job?",
+      answer: "Certain programs come with a Job Guarantee or Guaranteed Interview Calls post successful completion, depending on the course structure and eligibility."
     },
     {
-        question: "What is the Career Mentorship Program?",
-        answer: "It's a personalized mentorship initiative where learners receive 1-on-1 guidance from certified career counselors to plan, pivot, or grow their careers with confidence."
+      question: "What is the Career Mentorship Program?",
+      answer: "It's a personalized mentorship initiative where learners receive 1-on-1 guidance from certified career counselors to plan, pivot, or grow their careers with confidence."
     },
     {
-        question: "What is the 'Helping Hand / Connect+' feature?",
-        answer: "Helping Hand (Connect+) is our 1-year post-course career support system, ensuring learners have access to networking, job referrals, guidance, and additional resources even after course completion."
+      question: "What is the 'Helping Hand / Connect+' feature?",
+      answer: "Helping Hand (Connect+) is our 1-year post-course career support system, ensuring learners have access to networking, job referrals, guidance, and additional resources even after course completion."
     },
     {
-        question: "Are there mental wellbeing sessions included?",
-        answer: "Yes. We provide monthly mental wellbeing sessions and free psychological counseling, because we believe in nurturing both the mind and career."
+      question: "Are there mental wellbeing sessions included?",
+      answer: "Yes. We provide monthly mental wellbeing sessions and free psychological counseling, because we believe in nurturing both the mind and career."
     },
     {
-        question: "What is the learning format?",
-        answer: `<p>Courses are delivered through:</p>
+      question: "What is the learning format?",
+      answer: `<p>Courses are delivered through:</p>
         <ul>
           <li>Live instructor-led sessions</li>
           <li>Recorded video lectures</li>
@@ -136,18 +136,18 @@ function Home() {
         </ul>`
     },
     {
-        question: "Can working professionals enroll?",
-        answer: "Absolutely. All our programs are designed with flexibility in mind for students, working professionals, and career switchers."
+      question: "Can working professionals enroll?",
+      answer: "Absolutely. All our programs are designed with flexibility in mind for students, working professionals, and career switchers."
     },
     {
-        question: "How can I enroll in a course?",
-        answer: "You can enroll directly through our website or connect with our academic advisors for free counseling before choosing the right program."
+      question: "How can I enroll in a course?",
+      answer: "You can enroll directly through our website or connect with our academic advisors for free counseling before choosing the right program."
     },
     {
-        question: "Is there EMI or financial assistance available?",
-        answer: "Yes. We offer flexible EMI options and financial aid for eligible candidates. Please speak with our counselors for detailed options."
+      question: "Is there EMI or financial assistance available?",
+      answer: "Yes. We offer flexible EMI options and financial aid for eligible candidates. Please speak with our counselors for detailed options."
     }
-];
+  ];
   return (
     <>
       <div className='min-h-fit'>
@@ -159,7 +159,7 @@ function Home() {
       <div className=''>
         <ImageCarousel />
       </div>
-      
+
       <div className=''>
         <StudentTestimonials />
       </div>
@@ -322,18 +322,18 @@ function Home() {
       <CourseCards />
 
       <CardsContainer />
-      
+
 
 
       <div>
-        <EnqueryBanner/>
+        <EnqueryBanner />
       </div>
-      
+
       <div className=''>
         <ScrollableCategories />
       </div>
-        <SuccessTestimonial />
-      <CertificationSlider/>
+      <SuccessTestimonial />
+      <CertificationSlider />
       <EducationBanner />
       <div className='pb-4'>
         <AdmissionForm />
@@ -395,38 +395,38 @@ function Home() {
               </motion.div>
 
               <div className="fixed bottom-4 right-0 flex justify-center md:hidden z-40 px-4">
-    <motion.button
-    onClick={() => setIsModalOpen(true)}
-      className="bg-[#FF7426] text-sm hover:bg-[#e56722] text-white font-bold py-2 px-4 rounded-full shadow-lg w-full max-w-md flex items-center justify-center"
-      whileHover={{ scale: 1.03 }}
-      whileTap={{ scale: 0.97 }}
-    >
-      Enroll Now <FiArrowRight className="ml-2" />
-    </motion.button>
-  </div>
+                <motion.button
+                  onClick={() => setIsModalOpen(true)}
+                  className="bg-[#FF7426] text-sm hover:bg-[#e56722] text-white font-bold py-2 px-4 rounded-full shadow-lg w-full max-w-md flex items-center justify-center"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Enroll Now <FiArrowRight className="ml-2" />
+                </motion.button>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-<AdmissionFormModal
+      <AdmissionFormModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
 
 
-<Helmet>
-  <title>Upskillab | Empowering Your Career Through Online Learning</title>
-  <meta name="description" content="Upskillab offers a variety of online courses to help you upskill and advance your career. Join our community of learners today." />
-  <meta name="keywords" content="upkillab, upskilllab, upskilling, upskill lab, online upskillab, online education upskillab, education upskillab, online learning, career development, education online courses" />
-  <meta property="og:title" content="Upskillab | Empowering Your Career Through Online Learning" />
-  <meta property="og:description" content="Join Upskillab to access a wide range of online courses designed to boost your skills and career prospects." />
-  <meta property="og:url" content="https://upskillab.com" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Upskillab | Empowering Your Career Through Online Learning" />
-  <meta name="twitter:description" content="Explore Upskillab's online courses to enhance your skills and career opportunities." />
-</Helmet>
+      <Helmet>
+        <title>Upskillab | Empowering Your Career Through Online Learning</title>
+        <meta name="description" content="Upskillab offers a variety of online courses to help you upskill and advance your career. Join our community of learners today." />
+        <meta name="keywords" content="upkillab, upskilllab, upskilling, upskill lab, online upskillab, online education upskillab, education upskillab, online learning, career development, education online courses" />
+        <meta property="og:title" content="Upskillab | Empowering Your Career Through Online Learning" />
+        <meta property="og:description" content="Join Upskillab to access a wide range of online courses designed to boost your skills and career prospects." />
+        <meta property="og:url" content="https://upskillab.com" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Upskillab | Empowering Your Career Through Online Learning" />
+        <meta name="twitter:description" content="Explore Upskillab's online courses to enhance your skills and career opportunities." />
+      </Helmet>
 
 
 

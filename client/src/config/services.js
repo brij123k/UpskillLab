@@ -166,6 +166,20 @@ export const putTokenDataHandler = async (endPoint, data) => {
   });
 };
 
+export const patchTokenDataHandlerFormData = async (endPoint, data) => {
+  const storedAuth = sessionStorage.getItem('auth');
+  const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
+  
+  if (!initialAuth?.authToken) {
+    throw new Error('No authentication token found');
+  }
+  return makeRequest("PATCH", endPoint, { 
+    data, 
+    ...getAuthHeadersFormData(initialAuth?.authToken) 
+  });
+};
+
+
 export const deleteDataHandlerWithoutToken = async (endPoint, query) => {
   return makeRequest("DELETE", endPoint, { params: query });
 };
