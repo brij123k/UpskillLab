@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     const expiryTime = new Date(auth.authTokenExpiryDate).getTime();
     const currentTime = Date.now();
     const bufferTime = 5 * 60 * 1000; // 5 minutes buffer
-
+    
     return expiryTime - currentTime <= bufferTime;
   };
 

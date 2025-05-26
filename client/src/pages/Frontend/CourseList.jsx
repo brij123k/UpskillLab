@@ -797,7 +797,7 @@ const CourseList = () => {
               </div>
 
               {/* Action Buttons Section */}
-              <div className="px-6 pb-6 pt-0 flex justify-between gap-3">
+              <div className="px-6 pb-6 pt-0 flex justify-between flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => navigate(`/courseDetails/course/${course.courseCode}`, {
                     state: {

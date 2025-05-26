@@ -106,7 +106,7 @@ const CourseCard = ({
           </div>
 
           {/* Price and CTA */}
-          <div className="flex items-center justify-between border-t border-gray-100 pt-3">
+          <div className="flex sm:items-center sm:justify-between flex-col sm:flex-row border-t border-gray-100 pt-3">
             <div className="flex items-baseline">
               {originalPrice && (
                 <span className="text-gray-400 line-through mr-2 text-sm">₹{originalPrice}</span>
@@ -115,7 +115,7 @@ const CourseCard = ({
             </div>
             <button 
               onClick={() => navigate(`/courseDetails/course/${courseCode}`, { state: { courseId, courseCode } })}
-              className="flex items-center border-1 rounded-2xl border-[#4D2C5E] px-2 py-1 hover:bg-[#4D2C5E] cursor-pointer text-[#4D2C5E] hover:text-[#fff] transition-colors"
+              className="flex items-center justify-center border-1 rounded-2xl border-[#4D2C5E] px-2 py-1 hover:bg-[#4D2C5E] cursor-pointer text-[#4D2C5E] hover:text-[#fff] transition-colors"
             >
               <span className="mr-1 font-normal">View more</span>
               <FiArrowRight />
