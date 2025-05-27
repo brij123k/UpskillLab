@@ -24,7 +24,7 @@ function Footer() {
                 <li className="text-[#606060] text-sm sm:text-base">Follow Us On:</li>
                 <li>
                   <NavLink 
-                    to="https://www.facebook.com/share/1AF1w8dH6B" 
+                    to="https://www.facebook.com/upskillab/" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors no-underline"
@@ -34,7 +34,7 @@ function Footer() {
                 </li>
                 <li>
                   <NavLink 
-                    to="https://www.instagram.com/counselhub_upskillab?igsh=MXg4d3p5Y200NjhldQ==" 
+                    to="https://www.instagram.com/upskill_lab1/" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors no-underline"
@@ -42,7 +42,7 @@ function Footer() {
                     <FaInstagram />
                   </NavLink>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink 
                     to="https://whatsapp.com/channel/0029Vaqt47iEgGfEXJoS1K0c" 
                     target="_blank" 
@@ -51,10 +51,10 @@ function Footer() {
                   >
                     <FaWhatsapp />
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <NavLink 
-                    to="https://www.linkedin.com/company/counsel-hub" 
+                    to="https://www.linkedin.com/company/upskill-now-upskillab" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors no-underline"

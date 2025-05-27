@@ -128,21 +128,35 @@ const SuccessTestimonial = () => {
     return () => clearInterval(scrollInterval.current);
   }, [activeStudent, duplicatedTestimonials.length, testimonials.length]);
 
+  useEffect(() => {
+  if (testimonials.length > 0) {
+    testimonials.forEach(student => {
+      if (student.image) {
+        const img = new Image();
+        img.src = student.image;
+      }
+    });
+  }
+}, [testimonials]);
+
   // Animation variants
-  const testimonialVariants = {
-    enter: (direction) => ({
-      x: direction > 0 ? 100 : -100,
-      opacity: 0
-    }),
-    center: {
-      x: 0,
-      opacity: 1
-    },
-    exit: (direction) => ({
-      x: direction < 0 ? 100 : -100,
-      opacity: 0
-    })
-  };
+const testimonialVariants = {
+  enter: (direction) => ({
+    x: direction > 0 ? 50 : -50,
+    opacity: 0,
+    scale: 0.95
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1
+  },
+  exit: (direction) => ({
+    x: direction < 0 ? 50 : -50,
+    opacity: 0,
+    scale: 1.05
+  })
+};
 
   return (
     <div className="bg-gradient-to-b from-[#f3f4f8] to-[#e9ecef] p-6 md:py-12 md:px-30 rounded-xl">
@@ -158,34 +172,52 @@ const SuccessTestimonial = () => {
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-center p-6 bg-white rounded-2xl min-h-[400px] xxl:h-[500px] shadow-lg">
         {/* Column 1: Active Student's Large Image */}
         <div className="w-full lg:w-2/5 flex justify-center relative min-h-[200px] md:min-h-[300px]">
-          <motion.div 
-            className="absolute w-50 h-50 md:w-70 md:h-70 xxl:w-90 xxl:h-90"
-            animate={{
-              rotate: 360,
-              transition: {
-                duration: 60,
-                repeat: Infinity,
-                ease: "linear"
-              }
-            }}
-          >
-            <img src="/images/Elips.png" alt="Decorative background" className="w-full h-full object-contain" />
-          </motion.div>
-          <motion.div
-            className="relative w-50 h-50 md:w-70 md:h-70 xxl:w-90 xxl:h-90"
-            whileHover={{ scale: 1.05 }}
-          >
-            <img
-              src={testimonials[activeStudent]?.image || "/images/default-profile.png"}
-              alt={testimonials[activeStudent]?.name || "Student"}
-              className="w-full h-full object-cover rounded-full border-4 border-[#4D2C5E] shadow-lg"
-              onError={(e) => {
-                e.target.onerror = null; 
-                e.target.src = "/images/default-profile.png";
-              }}
-            />
-          </motion.div>
-        </div>
+  <motion.div 
+    className="absolute w-50 h-50 md:w-70 md:h-70 xxl:w-90 xxl:h-90"
+    animate={{
+      rotate: 360,
+      transition: {
+        duration: 60,
+        repeat: Infinity,
+        ease: "linear"
+      }
+    }}
+  >
+    <img src="/images/Elips.png" alt="Decorative background" className="w-full h-full object-contain" />
+  </motion.div>
+  
+  <AnimatePresence mode="wait" custom={direction}>
+    <motion.div
+      key={activeStudent}
+      className="relative w-50 h-50 md:w-70 md:h-70 xxl:w-90 xxl:h-90"
+      whileHover={{ scale: 1.05 }}
+      custom={direction}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.1 }}
+      transition={{ duration: 0.3 }}
+    >
+      <img
+        src={testimonials[activeStudent]?.image || "/images/default-profile.png"}
+        alt={testimonials[activeStudent]?.name || "Student"}
+        className="w-full h-full object-cover rounded-full border-4 border-[#4D2C5E] shadow-lg"
+        onError={(e) => {
+          e.target.onerror = null; 
+          e.target.src = "/images/default-profile.png";
+        }}
+        // Preload the next image
+        onLoad={() => {
+          const nextIndex = (activeStudent + 1) % testimonials.length;
+          const nextImage = testimonials[nextIndex]?.image;
+          if (nextImage) {
+            const img = new Image();
+            img.src = nextImage;
+          }
+        }}
+      />
+    </motion.div>
+  </AnimatePresence>
+</div>
 
         {/* Column 2: Active Student's Testimonial */}
         <div className="w-full lg:w-2/5 bg-white p-4 lg:p-6 rounded-lg space-y-4">

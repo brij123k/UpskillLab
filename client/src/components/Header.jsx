@@ -130,7 +130,7 @@ function Header() {
         .map(item => item.message);
         setAnnouncements(messages);
     }catch(err){
-      
+      console.error(err)
     }
     }
    announcementsHandler()
@@ -309,8 +309,8 @@ function Header() {
                                   setHoveredCourse(course);
                                   const rect = e.currentTarget.getBoundingClientRect();
                                   setHoverPosition({
-                                    x: rect.left + rect.width / 2,
-                                    y: rect.top + rect.height / 2
+                                    x: rect.left - rect.width / 2,
+                                    y: rect.top + rect.height
                                   });
                                 }
                               }}
