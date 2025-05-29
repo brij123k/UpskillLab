@@ -18,7 +18,8 @@ const ApiConfig = {
   // Categories
   category: `${url}/category`,
   categoryByCode: (code) => `${url}/category/code/${code}`,
-  
+  getActiveTeacher:`${url}/teachers`,
+  getAssociations:`${url}/associations`,
   successStroy: `${url}/stories`,
   // Courses
   course: `${url}/course`,

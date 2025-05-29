@@ -16,6 +16,7 @@ const TeacherProfile = () => {
     qualification: '',
     expertise: '',
     experience: '',
+    image:'',
     bio: '',
     social_links: { 
       linkedin: '',

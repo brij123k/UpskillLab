@@ -20,6 +20,7 @@ import { Faqs } from '../../data';
 import { NavLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import AdmissionFormModal from '../../components/Modal/BasicEnrollNowModal';
+import TeacherSlider from '../../components/TeacherSlider';
 function Home() {
   const controls = useAnimation();
   const ref = useRef(null);
@@ -335,6 +336,7 @@ function Home() {
       <SuccessTestimonial />
       <CertificationSlider />
       <EducationBanner />
+      <TeacherSlider/>
       <div className='pb-4'>
         <AdmissionForm />
       </div>
