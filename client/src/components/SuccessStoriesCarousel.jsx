@@ -169,7 +169,7 @@ const SuccessStoriesCarousel = () => {
               </div>
               <h3 className="text-lg sm:text-xl 2xl:text-2xl font-bold text-[#4d2c5e] text-center">{student.name}</h3>
               <p className="text-[#FF7426] font-medium text-sm sm:text-base 2xl:text-lg">{student.role}</p>
-              <p className="text-gray-600 mb-2 sm:mb-3 2xl:mb-4 text-xs sm:text-sm 2xl:text-base">at {student.company}</p>
+              <p className="text-gray-600 mb-2 sm:mb-3 2xl:mb-4 text-xs sm:text-sm 2xl:text-base"> {student.company}</p>
               
               <div className="mt-3 sm:mt-4 2xl:mt-6 w-full max-w-[200px] 2xl:max-w-[250px]">
                 <div className="flex justify-between text-xs 2xl:text-sm mb-1">
