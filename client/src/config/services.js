@@ -233,6 +233,12 @@ export const registerBatch = async (batchId, userData) => {
   });
 };
 
+export const manualRegister = async (userData) => {
+  return makeRequest("POST", "manualRegister", {
+    data:userData
+  });
+};
+
 export const initiateCashfreePayment = async (orderId, sessionId) => {
   return makeRequest("POST", "cashfreeCheckout", {
     data: { orderId, sessionId }

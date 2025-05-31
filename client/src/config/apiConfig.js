@@ -1,5 +1,5 @@
-const url = "https://api.upskillab.com";
-// const url = "http://localhost:3000"
+// const url = "https://api.upskillab.com";
+const url = "http://localhost:3000"
 const ApiConfig = {
   url,
   uploadFiles: `${url}/file`,
@@ -56,6 +56,7 @@ const ApiConfig = {
 
   // payments
   batchRegistration: `${url}/registration/batch`,
+  manualRegister: `${url}/registration/no-batch`,
   cashfreeCheckout: `${url}/payment/cashfree/redirect`,
 
   //blog

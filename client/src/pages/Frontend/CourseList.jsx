@@ -777,7 +777,7 @@ const CourseList = () => {
                       courseCode: course.courseCode
                     }
                   })}>
-                <h3 className="text-xl font-bold text-[#4D2C5E] mb-2">
+                <h3 className="text-xl text-left font-bold text-[#4D2C5E] mb-2">
                   {course.courseName}
                 </h3>
                 </button>

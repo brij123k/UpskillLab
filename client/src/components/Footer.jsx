@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { FaFacebookF, FaInstagram, FaWhatsapp, FaLinkedinIn } from 'react-icons/fa';
+import CourseEnrollmentModal from './Modal/CourseEnrollmentModal';
 
 function Footer() {
+  const [showModal, setShowModal] = useState(false);
   return (
     <footer className="bg-[#FDF8EE] text-[#606060] w-full">
       {/* Main Footer Content */}
@@ -78,7 +80,7 @@ function Footer() {
                 <li><NavLink to="/CourseList" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Popular Course</NavLink></li>
                 <li><NavLink to="/upcoming-batches/" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Latest Batches</NavLink></li>
                 <li><NavLink to="/Students-Blog" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Blog</NavLink></li>
-                <li><NavLink to="/Career" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Career</NavLink></li>
+                <li><button onClick={()=>setShowModal(true)} className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Payment</button></li>
               </ul>
             </div>
 
@@ -91,6 +93,7 @@ function Footer() {
                 <li><NavLink to="/PrivacyPolicy" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Privacy</NavLink></li>
                 <li><NavLink to="/TermsOfService" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Terms & Conditions</NavLink></li>
                 <li><NavLink to="/RefundPolicy" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Refund Policy</NavLink></li>
+                <li><NavLink to="/Career" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Career</NavLink></li>
               </ul>
             </div>
 
@@ -136,6 +139,12 @@ function Footer() {
           <p className="text-center text-sm mt-2">© {new Date().getFullYear()} Upskillab.com All rights reserved.</p>
         </div>
       </div>
+
+      {showModal && (
+        <CourseEnrollmentModal 
+          onClose={() => setShowModal(false)} 
+        />
+      )}
     </footer>
   );
 }
