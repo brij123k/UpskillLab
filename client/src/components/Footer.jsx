@@ -19,7 +19,7 @@ function Footer() {
               className="w-40 sm:w-48 md:w-52 lg:w-56 xl:w-60 mx-auto lg:mx-0"
             />
             <p className="text-[#606060] text-sm sm:text-base mt-4 sm:mt-6 mb-6 sm:mb-8 lg:mb-6 text-center lg:text-left">
-              Empowering Students to reach there potential goal for next level challenge
+              Empowering Students to reach their potential goal for next level challenge
             </p>
             <div className="text-center lg:text-left">
               <ul className="list-unstyled flex items-center gap-4 justify-center lg:justify-start">
@@ -80,7 +80,7 @@ function Footer() {
                 <li><NavLink to="/CourseList" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Popular Course</NavLink></li>
                 <li><NavLink to="/upcoming-batches/" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Latest Batches</NavLink></li>
                 <li><NavLink to="/Students-Blog" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Blog</NavLink></li>
-                <li><button onClick={()=>setShowModal(true)} className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Payment</button></li>
+                <li><button onClick={()=>setShowModal(true)} className="m-auto sm:m-0 text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Payment</button></li>
               </ul>
             </div>
 
