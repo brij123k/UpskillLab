@@ -14,6 +14,7 @@ function CourseList() {
     const res = await getDataHandler('courseDisplay');
     if (res && res.data) {
       const newCourses = res.data
+        .filter((course) => course.featured === true && course.active)
         .slice(0, 4) // Take only first 4 courses
         .map((course, index) => ({
           id: index + 1,
