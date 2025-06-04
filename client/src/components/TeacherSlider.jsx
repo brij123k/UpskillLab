@@ -41,7 +41,7 @@ function TeacherSlider() {
 
   if (loading) {
     return (
-      <div className="bg-gradient-to-b from-[#f9f2e6] to-white py-16 px-4">
+      <div className="bg-gradient-to-b bg-[#4D2C5E] to-white py-16 px-4">
         <div className="max-w-7xl mx-auto text-center">
           <div className="h-8 w-8 mx-auto border-4 border-[#FF7426] border-t-transparent rounded-full animate-spin"></div>
           <p className="mt-3 text-base text-gray-800">Loading our expert mentors...</p>
@@ -51,10 +51,10 @@ function TeacherSlider() {
   }
 
   return (
-    <section className="bg-gradient-to-b from-[#f9f2e6] to-white py-16 px-4" id="teachers">
+    <section className="bg-gradient-to-b from-[#4D2C5E] to-white py-16 px-4" id="teachers">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold text-[#4D2C5E] mb-3">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#] mb-3">
             Meet Our <span className="text-[#FF7426]">Expert Mentors</span>
           </h2>
           <div className="w-20 h-1 bg-[#FF7426] mx-auto rounded-full"></div>
