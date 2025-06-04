@@ -98,6 +98,7 @@ const ApiConfig = {
   recordedVideos:`${url}/recorded-videos`,
   recordedVideosbyid:(id)=>`${url}/recorded-videos/${id}`,
   studentHistory:`${url}/student-info`,
+  account:`${url}/api/payment-status`,
   trends:`${url}/resources`,
   studentAttendance:`${url}/live-classes/attendance`,
   appliedJobs:(email)=>`${url}/applications/applied-jobs/${email}`,

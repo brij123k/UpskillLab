@@ -26,6 +26,8 @@ const StudentHistory = () => {
       setLoading(true);
       const response = await getDataHandlerWithToken('studentHistory');
       const courses = await getDataHandlerWithToken('courseDisplay');
+      const account = await getDataHandlerWithToken('account');
+      console.log(account)
       setCourses(courses.data);
       setStudentData(response.students[0]);
       console.log(response.students[0])

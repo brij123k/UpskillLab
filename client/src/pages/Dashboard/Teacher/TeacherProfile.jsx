@@ -9,6 +9,7 @@ const TeacherProfile = () => {
   const [error, setError] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editData, setEditData] = useState({
     name: '',
@@ -16,7 +17,6 @@ const TeacherProfile = () => {
     qualification: '',
     expertise: '',
     experience: '',
-    image:'',
     bio: '',
     social_links: { 
       linkedin: '',
@@ -34,6 +34,7 @@ const TeacherProfile = () => {
         setProfile(response);
         setEditData({
           name: response.name || '',
+        
           mobileNumber: response.mobileNumber || '',
           qualification: response.qualification || '',
           expertise: response.expertise || '',
@@ -46,6 +47,9 @@ const TeacherProfile = () => {
             twitter: response.social_links?.twitter || ''
           }
         });
+        if (response.image) {
+          setImagePreview(response.image);
+        }
       } else {
         throw new Error(response.message || 'Failed to fetch profile');
       }
@@ -131,16 +135,27 @@ const TeacherProfile = () => {
         <div className="md:flex">
           {/* Profile Image Section */}
           <div className="md:w-1/3 bg-[#4D2C5E] p-8 flex flex-col items-center">
-          <div className="relative mb-6">
-  <div className="w-40 h-40 rounded-full border-4 border-white bg-[#4D2C5E] flex items-center justify-center">
-    <span className="text-white text-5xl font-bold">
-      {profile.name.split(' ').map(n => n[0]).join('').toUpperCase()}
-    </span>
-  </div>
-</div>
+            <div className="relative mb-6 group">
+              {imagePreview ? (
+                <div className="w-40 h-40 rounded-full border-4 border-white overflow-hidden">
+                  <img 
+                    src={imagePreview} 
+                    alt="Profile" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="w-40 h-40 rounded-full border-4 border-white bg-[#4D2C5E] flex items-center justify-center">
+                  <span className="text-white text-5xl font-bold">
+                    {profile.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                  </span>
+                </div>
+              )}
+            </div>
             <h2 className="text-2xl font-bold text-white text-center">{profile.name}</h2>
             <p className="text-[#FF7426] mt-2">{profile.qualification}</p>
           </div>
+
           
           {/* Profile Details Section */}
           <div className="md:w-2/3 p-8">
