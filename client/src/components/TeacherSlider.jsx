@@ -87,7 +87,8 @@ function TeacherSlider() {
           >
             {teachers.map((teacher) => (
               <SwiperSlide key={teacher._id}>
-                <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex flex-col transform hover:-translate-y-2 group">
+               <div className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full md:flex md:flex-col transform hover:-translate-y-2 group">
+
                   {/* Teacher Image - Full width and height */}
                   <div className="relative h-72 w-full overflow-hidden">
                     {teacher.image ? (
@@ -117,7 +118,8 @@ function TeacherSlider() {
                   </div>
 
                   {/* Teacher Info */}
-                  <div className="p-6 flex-1 flex flex-col">
+                 <div className="p-6 flex flex-col justify-between flex-1">
+
                     <div className="flex-1">
                       <p className="text-gray-600 text-sm mb-4 line-clamp-3">
                         {teacher.bio && teacher.bio !== "string"
@@ -127,7 +129,8 @@ function TeacherSlider() {
                     </div>
 
                     {/* Stats */}
-                    <div className="grid grid-cols-2 gap-4 mb-5">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+
                       <div className="flex items-center bg-[#FFF5EF] p-2 rounded-lg">
                         <div className="bg-[#FF7426] p-2 rounded-full mr-3">
                           <FiAward className="text-white h-4 w-4" />
