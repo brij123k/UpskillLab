@@ -8,6 +8,7 @@ import { AuthProvider } from "./context/AuthContext";
 import AuthGuard from "./AuthGuard";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ScrollToTop from "./components/ScrollToTop";
+import ExitIntentModal from "./components/ExitIntentModal"
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
             pauseOnHover
             theme="colored"
           />
+           <ExitIntentModal />
           <Suspense fallback={<PageLoading />}>
             <RenderRoutes data={routes} />
           </Suspense>
