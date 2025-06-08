@@ -6,8 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 // import { categoryAPI, courseAPI } from "../config/api-repository";
 import { getDataHandler } from "../config/services";
 import { useAuth } from "../context/AuthContext";
-
-
+import ExitIntentModal from "./components/ExitIntentModal"
 
 
 function Header() {
@@ -139,9 +138,10 @@ function Header() {
   return (
 
     <header className="bg-white shadow-sm sticky top-0 z-50">
-
+     <ExitIntentModal/>
       {/* News Ticker - Add this */}
       <div className="bg-[#4D2C5E] text-white py-2 px-4 overflow-hidden">
+        
         <div className="max-w-8xl mx-auto relative">
           <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#4D2C5E] to-transparent z-10"></div>
           <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#4D2C5E] to-transparent z-10"></div>
