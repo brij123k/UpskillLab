@@ -21,6 +21,7 @@ import { NavLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import AdmissionFormModal from '../../components/Modal/BasicEnrollNowModal';
 import TeacherSlider from '../../components/TeacherSlider';
+import ExitIntentModal from "./components/ExitIntentModal"
 function Home() {
   const controls = useAnimation();
   const ref = useRef(null);
@@ -151,6 +152,7 @@ function Home() {
   ];
   return (
     <>
+    <ExitIntentModal/>
       <div className='min-h-fit'>
         <CarouselContainer />
       </div>
