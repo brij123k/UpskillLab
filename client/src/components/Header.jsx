@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 // import { categoryAPI, courseAPI } from "../config/api-repository";
 import { getDataHandler } from "../config/services";
 import { useAuth } from "../context/AuthContext";
-import ExitIntentModal from "./components/ExitIntentModal"
+
 
 
 function Header() {
@@ -138,7 +138,7 @@ function Header() {
   return (
 
     <header className="bg-white shadow-sm sticky top-0 z-50">
-     <ExitIntentModal/>
+
       {/* News Ticker - Add this */}
       <div className="bg-[#4D2C5E] text-white py-2 px-4 overflow-hidden">
         
