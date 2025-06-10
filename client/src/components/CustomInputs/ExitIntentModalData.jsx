@@ -131,7 +131,9 @@ const ExitIntentModalData = () => {
             className="w-full lg:w-1/2 flex-1"
           >
             <div className="bg-white rounded-xl shadow-md border border-gray-100 p-4 h-full">
-              <h1 className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">OFFER BY UPSKILLAB</h1>
+{/*               <h1 className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">OFFER BY UPSKILLAB</h1> */}
+               <h1 className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">{item.name}</h1>
+{/*                <p className="mt-2 text-center text-sm text-gray-700">{item.name}</p>  */}
               {imageData.length > 0 ? (
                 imageData.map((item) => (
                   <div key={item._id} className="mb-4">
