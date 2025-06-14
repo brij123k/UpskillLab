@@ -137,10 +137,10 @@ const ExitIntentModalData = ({ onClose }) => {
             className="w-full lg:w-1/2"
           >
             <div className="bg-white rounded-xl p-4 h-full flex flex-col">
-              <h1 className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">OFFER BY UPSKILLAB</h1>
+{/*               <h1 className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">OFFER BY UPSKILLAB</h1> */}
 
   {item.name && (
-                       <h1 className="className="mt-2 text-center text-sm text-gray-700">
+                       <h1 className="className="className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">
                           {item.name}</h1>
                       )}
               <div className="flex-grow overflow-auto">
