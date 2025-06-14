@@ -131,44 +131,42 @@ const ExitIntentModalData = ({ onClose }) => {
           
           {/* Left Section (Images) */}
            <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="w-full lg:w-1/2"
-          >
-            <div className="bg-white rounded-xl p-4 h-full flex flex-col">
-              <h1 className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">OFFER BY UPSKILLAB</h1>
-
-{/*   {item.name && (
-                       <h1 className="className="className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">
-                          {item.name}</h1>
-                      )} */}
-              <div className="flex-grow overflow-auto">
-                {imageData.length > 0 ? (
-                  imageData.map((item) => (
-                    <div key={item._id} className="mb-4">
-                      <img
-                        src={item.image}
-                        alt={item.name || 'Marketing offer'}
-                        className="w-full h-auto max-h-[50vh] object-contain"
-                      />
-                    
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-sm text-gray-500">Loading images...</p>
-                )}
-              </div>
-              <div className="block mt-4 text-center">
-                <a
-                  href="https://upskillab.com/#AdmissionForm"
-                  className="inline-block bg-[#4D2C5E] hover:bg-[#3a2148] text-white font-medium py-2 px-6 rounded-lg transition-all duration-300"
-                >
-                  Apply Now
-                </a>
-              </div>
-            </div>
-          </motion.div>
+  initial={{ opacity: 0, x: 20 }}
+  animate={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.6, delay: 0.4 }}
+  className="w-full lg:w-1/2"
+>
+  <div className="bg-white rounded-xl p-4 h-full flex flex-col">
+    {imageData.length > 0 && imageData[0]?.name && (
+      <p className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">
+        {imageData[0].name}
+      </p>
+    )}
+    <div className="flex-grow overflow-auto">
+      {imageData.length > 0 ? (
+        imageData.map((item) => (
+          <div key={item._id} className="mb-4">
+            <img
+              src={item.image}
+              alt={item.name || 'Marketing offer'}
+              className="w-full h-auto max-h-[50vh] object-contain"
+            />
+          </div>
+        ))
+      ) : (
+        <p className="text-sm text-gray-500">Loading images...</p>
+      )}
+    </div>
+    <div className="block mt-4 text-center">
+      <a
+        href="https://upskillab.com/#AdmissionForm"
+        className="inline-block bg-[#4D2C5E] hover:bg-[#3a2148] text-white font-medium py-2 px-6 rounded-lg transition-all duration-300"
+      >
+        Apply Now
+      </a>
+    </div>
+  </div>
+</motion.div>
 
           {/* Right Section (Form) */}
           <motion.div
