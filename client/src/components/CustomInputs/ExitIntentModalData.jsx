@@ -138,6 +138,11 @@ const ExitIntentModalData = ({ onClose }) => {
           >
             <div className="bg-white rounded-xl p-4 h-full flex flex-col">
               <h1 className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">OFFER BY UPSKILLAB</h1>
+
+  {item.name && (
+                       <h1 className="className="mt-2 text-center text-sm text-gray-700">
+                          {item.name}</h1>
+                      )}
               <div className="flex-grow overflow-auto">
                 {imageData.length > 0 ? (
                   imageData.map((item) => (
@@ -147,11 +152,7 @@ const ExitIntentModalData = ({ onClose }) => {
                         alt={item.name || 'Marketing offer'}
                         className="w-full h-auto max-h-[50vh] object-contain"
                       />
-                      {item.name && (
-                        <p className="mt-2 text-center text-sm text-gray-700">
-                          {item.name}
-                        </p>
-                      )}
+                    
                     </div>
                   ))
                 ) : (
