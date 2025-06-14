@@ -239,6 +239,13 @@ export const manualRegister = async (userData) => {
   });
 };
 
+export const manualRegister2 = async (userData) => {
+  return makeRequest("POST", "manualRegister2", {
+    data:userData
+  });
+};
+
+
 export const initiateCashfreePayment = async (orderId, sessionId) => {
   return makeRequest("POST", "cashfreeCheckout", {
     data: { orderId, sessionId }

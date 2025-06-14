@@ -8,23 +8,37 @@ import {
   FiAlertCircle, 
   FiPlay,
   FiLock,
-  FiBookmark
+  FiBookmark,
+  FiStar,
+  FiEdit2,
+  FiX,
+  FiMessageSquare
 } from 'react-icons/fi';
-import { getDataHandlerWithToken } from '../../../config/services';
+import { getDataHandlerWithToken, patchTokenDataHandler, postDataHandlerWithToken } from '../../../config/services';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { format, isBefore, isAfter } from 'date-fns';
+import ApiConfig from '../../../config/apiConfig';
 
 const StudentClassSchedule = () => {
   const [classSessions, setClassSessions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentMonth, setCurrentMonth] = useState(new Date());
+  const [feedbackModalOpen, setFeedbackModalOpen] = useState(false);
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [feedbackData, setFeedbackData] = useState({
+    teacherId: '',
+    classSessionId: '',
+    rating: 5,
+    message: ''
+  });
+  const [myFeedbacks, setMyFeedbacks] = useState([]);
+  const [editingFeedbackId, setEditingFeedbackId] = useState(null);
 
   const fetchClassSessions = async () => {
     try {
       setIsLoading(true);
       const response = await getDataHandlerWithToken('StudentClassSchedule');
-      console.log(response)
       setClassSessions(response.classSessions || []);
     } catch (error) {
       toast.error('Failed to load class sessions');
@@ -34,8 +48,19 @@ const StudentClassSchedule = () => {
     }
   };
 
+  const fetchMyFeedbacks = async () => {
+    try {
+      const response = await getDataHandlerWithToken("getFeedback");
+      console.log(response)
+      setMyFeedbacks(response.feedbacks || []);
+    } catch (error) {
+      console.error('Error fetching feedbacks:', error);
+    }
+  };
+
   useEffect(() => {
     fetchClassSessions();
+    fetchMyFeedbacks();
   }, []);
 
   // Filter classes
@@ -95,7 +120,6 @@ const StudentClassSchedule = () => {
     const bDate = new Date(`${b.scheduledDate}T${b.scheduledStartTime}`);
     return bDate - aDate;
   });
-console.log(pastClasses)
   const formatDate = (dateString) => {
     return format(new Date(dateString), 'MMM d, yyyy');
   };
@@ -106,6 +130,71 @@ console.log(pastClasses)
     date.setHours(parseInt(hours), parseInt(minutes));
     return format(date, 'h:mm a');
   };
+
+
+  const openFeedbackModal = (session) => {
+    setSelectedSession(session);
+    
+    const existingFeedback = myFeedbacks.find(
+      fb => fb.classSessionId === session._id
+    );
+    
+    if (existingFeedback) {
+      setFeedbackData({
+        teacherId: session.teacherId?._id || '',
+        classSessionId: session._id,
+        rating: existingFeedback.rating,
+        message: existingFeedback.message
+      });
+      setEditingFeedbackId(existingFeedback._id);
+    } else {
+      setFeedbackData({
+        teacherId: session.teacherId?._id || '',
+        classSessionId: session._id,
+        rating: 5,
+        message: ''
+      });
+      setEditingFeedbackId(null);
+    }
+    
+    setFeedbackModalOpen(true);
+  };
+
+  const handleFeedbackChange = (e) => {
+    const { name, value } = e.target;
+    setFeedbackData(prev => ({
+      ...prev,
+      [name]: name === 'rating' ? parseInt(value) : value
+    }));
+  };
+
+  const submitFeedback = async () => {
+    try {
+      let response;
+      
+      if (editingFeedbackId) {
+        const endpoint = ApiConfig.feedbackwithId(editingFeedbackId);
+        console.log(endpoint)
+        response = await patchTokenDataHandler(endpoint, feedbackData, true);
+        setMyFeedbacks(prev => 
+          prev.map(fb => 
+            fb._id === editingFeedbackId ? { ...fb, ...feedbackData } : fb
+          )
+        );
+      } else {
+        response = await postDataHandlerWithToken("feedback",feedbackData);
+        setMyFeedbacks(prev => [...prev, response.feedback]);
+      }
+      
+      setFeedbackModalOpen(false);
+      toast.success('Feedback submitted successfully');
+    } catch (error) {
+      console.error('Error submitting feedback:', error);
+      toast.error('Failed to submit feedback');
+    }
+  };
+
+
 
   if (isLoading) {
     return (
@@ -144,6 +233,8 @@ console.log(pastClasses)
                     session={session} 
                     isLive={true} 
                     now={now}
+                    myFeedbacks={myFeedbacks}
+    openFeedbackModal={openFeedbackModal}
                   />
                 ))}
               </div>
@@ -165,6 +256,8 @@ console.log(pastClasses)
                     session={session} 
                     isLive={false} 
                     now={now}
+                    myFeedbacks={myFeedbacks}
+    openFeedbackModal={openFeedbackModal}
                   />
                 ))}
               </div>
@@ -195,6 +288,8 @@ console.log(pastClasses)
                   session={session} 
                   isLive={false}
                   now={now}
+                  myFeedbacks={myFeedbacks}
+    openFeedbackModal={openFeedbackModal}
                 />
               ))}
             </div>
@@ -216,6 +311,8 @@ console.log(pastClasses)
                   isLive={false}
                   isPast={true}
                   now={now}
+                   myFeedbacks={myFeedbacks}
+    openFeedbackModal={openFeedbackModal}
                 />
               ))}
             </div>
@@ -230,12 +327,90 @@ console.log(pastClasses)
             <p className="mt-1 text-gray-500">Your enrolled classes will appear here</p>
           </div>
         )}
+
+
+        {/* Feedback Modal */}
+      {feedbackModalOpen && selectedSession && (
+        <div className="fixed inset-0 bg-[#00000081] bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
+            <div className="flex justify-between items-center border-b p-4">
+              <h3 className="text-xl font-bold text-[#4D2C5E]">
+                {editingFeedbackId ? 'Edit Feedback' : 'Submit Feedback'}
+              </h3>
+              <button 
+                onClick={() => setFeedbackModalOpen(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <FiX className="h-6 w-6" />
+              </button>
+            </div>
+            
+            <div className="p-4">
+              <div className="mb-4">
+                <h4 className="font-medium text-gray-800 mb-1">Class: {selectedSession.title}</h4>
+                <p className="text-sm text-gray-600">
+                  Teacher: {selectedSession.teacherId?.name || 'Unknown'}
+                </p>
+                <p className="text-sm text-gray-600">
+                  Date: {format(new Date(selectedSession.scheduledDate), 'MMM d, yyyy')}
+                </p>
+              </div>
+              
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Rating</label>
+                <div className="flex items-center">
+                  {[1, 2, 3, 4, 5].map(star => (
+                    <button
+                      key={star}
+                      type="button"
+                      onClick={() => setFeedbackData(prev => ({ ...prev, rating: star }))}
+                      className="focus:outline-none"
+                    >
+                      <FiStar
+                        className={`h-6 w-6 ${star <= feedbackData.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`}
+                      />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="mb-4">
+                <label className="block text-gray-700 mb-2">Feedback Message</label>
+                <textarea
+                  name="message"
+                  value={feedbackData.message}
+                  onChange={handleFeedbackChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]"
+                  rows="4"
+                  placeholder="Share your experience about this class..."
+                ></textarea>
+              </div>
+            </div>
+            
+            <div className="flex justify-end space-x-3 p-4 border-t">
+              <button
+                onClick={() => setFeedbackModalOpen(false)}
+                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={submitFeedback}
+                className="px-4 py-2 bg-[#4D2C5E] text-white rounded-lg hover:bg-[#3a2152]"
+              >
+                {editingFeedbackId ? 'Update Feedback' : 'Submit Feedback'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       </div>
     </div>
   );
 };
 
-const ClassCard = ({ session, isLive, isPast = false, now }) => {
+const ClassCard = ({ session, isLive, isPast = false, now, myFeedbacks = [],openFeedbackModal }) => {
   // Calculate time remaining for live classes
   const getTimeRemaining = () => {
     if (!isLive) return null;
@@ -256,7 +431,7 @@ const ClassCard = ({ session, isLive, isPast = false, now }) => {
     return format(date, 'h:mm a');
   };
   const timeRemaining = getTimeRemaining();
-
+const existingFeedback = myFeedbacks.find(fb => fb.classSessionId === session._id);
   return (
     <div className={`bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-200 border ${
       isLive ? 'border-red-200' : 
@@ -355,6 +530,46 @@ const ClassCard = ({ session, isLive, isPast = false, now }) => {
           <FiLock className="text-gray-400 h-6 w-6" />
         )}
       </div>
+
+      {isPast && (
+        <div className="mt-4">
+          {existingFeedback ? (
+            <div className="bg-gray-50 p-3 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <FiStar
+                        key={i}
+                        className={`h-4 w-4 ${i < existingFeedback.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`}
+                      />
+                    ))}
+                  </div>
+                  {existingFeedback.message && (
+                    <p className="mt-1 text-sm text-gray-600">{existingFeedback.message}</p>
+                  )}
+                </div>
+                <button
+                  onClick={() => openFeedbackModal(session)}
+                  className="text-[#4D2C5E] hover:text-[#FF7426] p-2"
+                  title="Edit feedback"
+                >
+                  <FiEdit2 />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => openFeedbackModal(session)}
+              className="w-full py-2 bg-gray-100 hover:bg-gray-200 text-[#4D2C5E] rounded-lg flex items-center justify-center space-x-2"
+            >
+              <FiMessageSquare className="h-4 w-4" />
+              <span>Add Feedback</span>
+            </button>
+          )}
+        </div>
+      )}
+
     </div>
   );
 };

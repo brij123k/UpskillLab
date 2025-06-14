@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { toast } from "react-toastify";
-import { manualRegister } from "../../config/services";
+import { getDataHandler, manualRegister, manualRegister2 } from "../../config/services";
 
 const CourseEnrollmentModal = ({ onClose }) => {
   // State management
@@ -9,6 +9,12 @@ const CourseEnrollmentModal = ({ onClose }) => {
   const [loading, setLoading] = useState(false);
   const [cashfreeLoaded, setCashfreeLoaded] = useState(false);
   const [showPaymentLoader, setShowPaymentLoader] = useState(false);
+  const [otherCourse, setOtherCourse] = useState(false);
+  const [batches, setBatches] = useState([]);
+  const [filteredBatches, setFilteredBatches] = useState([]);
+  const [showBatchSuggestions, setShowBatchSuggestions] = useState(false);
+  const [selectedBatch, setSelectedBatch] = useState(null);
+  const [response, setResponse] = useState();
   const paymentContainerRef = useRef(null);
   const cashfreeInstance = useRef(null);
 
@@ -23,25 +29,23 @@ const CourseEnrollmentModal = ({ onClose }) => {
     email: "",
     phone: "",
     courseName: "",
+    batchId: "",
     amount: "",
     agreeTerms: true,
   });
 
-  // Mock API function - replace with your actual registration API call
-//   const registerCourse = async (data) => {
-//     // This is a mock implementation - replace with your actual API call
-//     return new Promise((resolve) => {
-//       setTimeout(() => {
-//         resolve({
-//           success: true,
-//           orderId: `ORD_${Math.floor(Math.random() * 1000000)}`,
-//           paymentSessionId: `SESSION_${Math.floor(Math.random() * 1000000)}`,
-//           amount: data.amount,
-//           courseName: data.courseName,
-//         });
-//       }, 1000);
-//     });
-//   };
+  // Load batches on component mount
+  useEffect(() => {
+    const fetchBatches = async () => {
+      try {
+        const response = await getDataHandler("upcomingBatches")
+        setBatches(response);
+      } catch (error) {
+        console.error("Failed to fetch batches:", error);
+      }
+    };
+    fetchBatches();
+  }, []);
 
   // Load Cashfree SDK
   useEffect(() => {
@@ -67,10 +71,53 @@ const CourseEnrollmentModal = ({ onClose }) => {
   // Form handlers
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
+    
+    if (name === "courseName") {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value,
+        batchId: "" // Reset batchId when course name changes
+      }));
+      
+      // Filter batches based on input
+      if (value.length > 1) {
+        const filtered = batches.filter(batch => 
+          batch.course.courseName.toLowerCase().includes(value.toLowerCase())
+        );
+        setFilteredBatches(filtered);
+        setShowBatchSuggestions(filtered.length > 0);
+      } else {
+        setShowBatchSuggestions(false);
+      }
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === "checkbox" ? checked : value,
+      }));
+    }
+  };
+
+  const handleBatchSelect = (batch) => {
+    setFormData(prev => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      courseName: batch.course.courseName,
+      batchId: batch._id,
+      amount: batch.fees || ""
     }));
+    setSelectedBatch(batch);
+    setOtherCourse(false);
+    setShowBatchSuggestions(false);
+  };
+
+  const handleOtherCourseSelect = () => {
+    setOtherCourse(true);
+    setSelectedBatch(null);
+    setFormData(prev => ({
+      ...prev,
+      batchId: "",
+      amount: ""
+    }));
+    setShowBatchSuggestions(false);
   };
 
   const validateStep = () => {
@@ -95,6 +142,10 @@ const CourseEnrollmentModal = ({ onClose }) => {
         toast.error("Please enter a valid amount");
         return false;
       }
+      if (!otherCourse && !formData.batchId) {
+        toast.error("Please select a batch from the suggestions");
+        return false;
+      }
     }
     if (step === 2 && !formData.agreeTerms) {
       toast.error("You must agree to the terms and conditions");
@@ -107,19 +158,33 @@ const CourseEnrollmentModal = ({ onClose }) => {
   const initializePayment = async () => {
     try {
       setLoading(true);
-      const response = await manualRegister({
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone,
-        courseName: formData.courseName,
-        amount: formData.amount,
-      });
+      
+      let response;
+      if (otherCourse) {
+        response = await manualRegister({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          courseName: formData.courseName,
+          amount: formData.amount,
+        });
+      } else {
+        response = await manualRegister2({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          batchId: formData.batchId,
+          amount: formData.amount,
+        });
+      }
+      
+      setResponse(response);
 
       if (response) {
         setPaymentData({
           orderId: response.orderId,
           paymentSessionId: response.paymentSessionId,
-          discountedPrice: response.totalAmount,
+          discountedPrice: response.amountPaying,
         });
         return true;
       } else {
@@ -274,7 +339,7 @@ const CourseEnrollmentModal = ({ onClose }) => {
                 />
               </div>
 
-              <div>
+              <div className="relative">
                 <label className="block text-sm font-medium text-gray-700 mb-1">Course Name*</label>
                 <input
                   name="courseName"
@@ -283,7 +348,45 @@ const CourseEnrollmentModal = ({ onClose }) => {
                   className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
                   required
                 />
+                
+                {showBatchSuggestions && (
+                  <div className="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
+                    {filteredBatches.map((batch) => (
+                      <div
+                        key={batch._id}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        onClick={() => handleBatchSelect(batch)}
+                      >
+                        <div className="font-medium">{batch.courseName}</div>
+                        <div className="text-xs text-gray-500">
+                          Starts: {new Date(batch.startDate).toLocaleDateString()} | 
+                          Price: ₹{batch.fees}
+                        </div>
+                      </div>
+                    ))}
+                    <div
+                      className="px-4 py-2 hover:bg-gray-100 cursor-pointer border-t border-gray-200 text-[#FF7426] font-medium"
+                      onClick={handleOtherCourseSelect}
+                    >
+                      Other (not listed above)
+                    </div>
+                  </div>
+                )}
               </div>
+
+              {selectedBatch && (
+                <div className="bg-gray-50 p-3 rounded-md border border-gray-200">
+                  <div className="text-sm">
+                    <div className="font-medium">Selected Batch:</div>
+                    <div>{selectedBatch.courseName}</div>
+                    <div className="text-xs text-gray-600 mt-1">
+                      {console.log(selectedBatch)}
+                      Starts: {new Date(selectedBatch.startDate).toLocaleDateString()} | 
+                      Price: ₹{selectedBatch.fees}
+                    </div>
+                  </div>
+                </div>
+              )}
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Amount (₹)*</label>
@@ -318,6 +421,16 @@ const CourseEnrollmentModal = ({ onClose }) => {
                     <span className="text-gray-600">Course:</span>
                     <span className="font-medium truncate max-w-[50%]">{formData.courseName}</span>
                   </div>
+                  
+                  {selectedBatch && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Batch Start:</span>
+                      <span className="truncate max-w-[50%]">
+                        {new Date(selectedBatch.startDate).toLocaleDateString()}
+                      </span>
+                    </div>
+                  )}
+                  
                   <div className="flex justify-between">
                     <span className="text-gray-600">Name:</span>
                     <span className="truncate max-w-[50%]">{formData.name}</span>
@@ -334,7 +447,7 @@ const CourseEnrollmentModal = ({ onClose }) => {
                 </div>
               </div>
 
-              {/* <div className="flex items-start mt-3">
+              <div className="flex items-start mt-3">
                 <input
                   type="checkbox"
                   name="agreeTerms"
@@ -346,7 +459,7 @@ const CourseEnrollmentModal = ({ onClose }) => {
                 <label className="ml-2 text-xs sm:text-sm text-gray-700">
                   I agree to the <a href="/terms" className="text-[#FF7426] underline">terms and conditions</a>
                 </label>
-              </div> */}
+              </div>
             </motion.div>
           )}
 

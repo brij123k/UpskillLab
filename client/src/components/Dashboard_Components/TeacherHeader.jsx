@@ -10,7 +10,7 @@ import { FaChalkboardTeacher} from "react-icons/fa";
 import { useAuth } from '../../context/AuthContext';
 import ApiConfig from "../../config/apiConfig";
 import useNotificationService from "../../config/notificationService";
-import { getDataHandlerWithToken } from "../../config/services";
+import { getDataHandlerWithToken, patchTokenDataHandler } from "../../config/services";
 function TeacherHeader() {
   const {logout} = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -106,6 +106,20 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
     };
   }, []);
 
+      const markAsRead = async (id) => {
+    try {
+      const endpoint = ApiConfig.MarkAsReadNotifications(id);
+      const response = await patchTokenDataHandler(endpoint, [], true);
+      if (response) {
+        setNotifications(notifications.map(notification => 
+          notification._id === id ? { ...notification, read: true } : notification
+        ));
+      }
+    } catch (error) {
+      console.error('Error marking notification as read:', error);
+    }
+  };
+
   // Toggle notification dropdown
   const toggleNotificationDropdown = () => {
     setIsNotificationDropdownOpen(!isNotificationDropdownOpen);
@@ -197,60 +211,75 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
             </button>
 
             {/* Notification Dropdown Content */}
-            {isNotificationDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg z-50 border border-gray-200">
-                <div className="p-3 border-b border-gray-200 bg-[#4D2C5E] text-white">
-                  <h3 className="font-medium">Notifications</h3>
-                </div>
-                
-                <div className="py-1 max-h-96 overflow-y-auto">
-                  {loading ? (
-                    <div className="px-3 py-4 text-center text-gray-500">
-                      Loading notifications...
-                    </div>
-                  ) : notifications.length > 0 ? (
-                    notifications.map(notification => (
-                      <div 
-                        key={notification._id} 
-                        className={`px-3 py-3 border-b border-gray-100 cursor-pointer hover:bg-gray-50 ${
-                          !notification.read ? 'bg-blue-50' : ''
-                        }`}
-                      >
-                        <div className="flex justify-between items-start">
-                          <div>
-                            <p className="text-sm font-medium text-gray-800">
-                              {getTitleByType(notification.type)}
-                            </p>
-                            <p className="text-xs text-gray-600 mt-1">{notification.message}</p>
-                            <p className="text-xs text-gray-400 mt-1">
-                              {formatTimeAgo(notification.createdAt)}
-                            </p>
-                          </div>
-                          <span className="px-2 py-0.5 bg-[#FF7426]/10 text-[#FF7426] text-xs rounded-full whitespace-nowrap">
-                            {notification.type.replace('_', ' ')}
-                          </span>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <div className="px-3 py-4 text-center text-gray-500">
-                      No notifications available
-                    </div>
+         {isNotificationDropdownOpen && (
+  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-xl z-50 border border-gray-200 transform transition-all duration-200 ease-in-out">
+    <div className="p-4 border-b border-gray-200 bg-gradient-to-r from-[#4D2C5E] to-[#6A3D7E] text-white rounded-t-lg">
+      <div className="flex justify-between items-center">
+        <h3 className="font-semibold text-sm">Notifications</h3>
+        <span className="text-xs bg-white/20 px-2 py-1 rounded-full">
+          {notifications.filter(n => !n.read).length} unread
+        </span>
+      </div>
+    </div>
+    
+    <div className="py-1 max-h-96 overflow-y-auto">
+      {loading ? (
+        <div className="px-4 py-6 flex flex-col items-center justify-center text-gray-500">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#4D2C5E] mb-2"></div>
+          <p className="text-sm">Loading notifications...</p>
+        </div>
+      ) : notifications.length > 0 ? (
+        notifications.map(notification => (
+          <div 
+            key={notification._id}
+            onClick={() => markAsRead(notification._id)}
+            className={`px-4 py-3 border-b border-gray-100 cursor-pointer transition-colors duration-150 ease-in-out ${
+              !notification.read ? 'bg-blue-50/50 hover:bg-blue-50' : 'hover:bg-gray-50'
+            }`}
+          >
+            <div className="flex justify-between items-start">
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  {!notification.read && (
+                    <span className="w-2 h-2 bg-[#FF7426] rounded-full flex-shrink-0"></span>
                   )}
+                  <p className="text-sm font-medium text-gray-800 truncate">
+                    {getTitleByType(notification.type)}
+                  </p>
                 </div>
-                
-                <div className="border-t border-gray-200">
-                  <NavLink
-                    to="/Teacher/Notifications"
-                    onClick={() => setIsNotificationDropdownOpen(false)}
-                    className="flex items-center justify-between px-3 py-2 text-sm text-[#4D2C5E] hover:bg-gray-50"
-                  >
-                    <span>See All Notifications</span>
-                    <FiChevronRight className="text-gray-400" />
-                  </NavLink>
+                <p className="text-xs text-gray-600 mt-1 line-clamp-2">{notification.message}</p>
+                <div className="flex justify-between items-center mt-2">
+                  <p className="text-xs text-gray-400">
+                    {formatTimeAgo(notification.createdAt)}
+                  </p>
+                  <span className="px-2 py-0.5 bg-[#FF7426]/10 text-[#FF7426] text-xs rounded-full whitespace-nowrap ml-2">
+                    {notification.type.replace(/_/g, ' ')}
+                  </span>
                 </div>
               </div>
-            )}
+            </div>
+          </div>
+        ))
+      ) : (
+        <div className="px-4 py-6 flex flex-col items-center justify-center text-gray-500">
+          <FiBell className="text-2xl text-gray-300 mb-2" />
+          <p className="text-sm">No notifications available</p>
+        </div>
+      )}
+    </div>
+    
+    <div className="border-t border-gray-200 bg-gray-50 rounded-b-lg">
+      <NavLink
+        to="/Teacher/Notifications"
+        onClick={() => setIsNotificationDropdownOpen(false)}
+        className="flex items-center justify-between px-4 py-3 text-sm text-[#4D2C5E] hover:bg-gray-100 transition-colors duration-150 rounded-b-lg"
+      >
+        <span className="font-medium">View all notifications</span>
+        <FiChevronRight className="text-gray-500" />
+      </NavLink>
+    </div>
+  </div>
+)}
           </div>
 
           {/* Profile Dropdown */}

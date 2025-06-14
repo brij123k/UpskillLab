@@ -1,5 +1,5 @@
-const url = "https://api.upskillab.com";
-// const url = "http://localhost:3000"
+// const url = "https://api.upskillab.com";
+const url = "http://localhost:3000"
 const ApiConfig = {
   url,
   uploadFiles: `${url}/file`,
@@ -25,6 +25,7 @@ const ApiConfig = {
   course: `${url}/course`,
   courseByCode: (code) => `${url}/course/code/${code}`,
   courseDisplay: `${url}/course/display`,
+  courseDisplaybyId:(id)=> `${url}/course/${id}`,
   
   // Testimonials
   testimonial: `${url}/testimonials`,
@@ -57,6 +58,7 @@ const ApiConfig = {
   // payments
   batchRegistration: `${url}/registration/batch`,
   manualRegister: `${url}/registration/no-batch`,
+  manualRegister2: `${url}/registration/with-batch`,
   cashfreeCheckout: `${url}/payment/cashfree/redirect`,
 
   //blog
@@ -109,7 +111,11 @@ const ApiConfig = {
   studentBlogs:`${url}/blogs`,
   getStudentBlogs:`${url}/blogs/students`,
   studentBlogById:(id)=>`${url}/blogs/${id}`,
-  couponsByCourseId:(id)=>`${url}/coupons/by-course/${id}`
+  couponsByCourseId:(id)=>`${url}/coupons/by-course/${id}`,
+
+  feedback:`${url}/feedback`,
+  feedbackwithId:(id)=>`${url}/feedback/${id}`,
+  getFeedback:`${url}/feedback/my-feedbacks`,
 };
 
 export default ApiConfig;

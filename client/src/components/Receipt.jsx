@@ -1,4 +1,4 @@
-import { Page, Document, StyleSheet, View, Text, pdf } from '@react-pdf/renderer';
+import { Page, Document, StyleSheet, View, Text, pdf,Image } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 
 // Create styles
@@ -8,20 +8,29 @@ const styles = StyleSheet.create({
     fontFamily: 'Helvetica',
     fontSize: 12,
   },
-  header: {
+  logoContainer: {
+    alignItems: 'center',
     marginBottom: 10,
+  },
+  logo: {
+    width: 150,
+    height: 50,
+    marginBottom: 10,
+  },
+  header: {
+    marginBottom: 5,
     textAlign: 'center',
     fontSize: 20,
     fontWeight: 'bold',
   },
   contactInfo: {
-    marginBottom: 10,
+    marginBottom: 15,
     textAlign: 'center',
     fontSize: 10,
   },
   table: {
     width: '100%',
-    marginTop: 20,
+    marginTop: 10,
     borderStyle: 'solid',
     borderWidth: 1,
     borderRightWidth: 0,
@@ -42,16 +51,17 @@ const styles = StyleSheet.create({
   col20: { width: '20%' },
   col30: { width: '30%' },
   col40: { width: '40%' },
+  col45: { width: '45%' },
   textRight: { textAlign: 'right' },
   textCenter: { textAlign: 'center' },
   bold: { fontWeight: 'bold' },
   sectionTitle: {
-    textAlign: 'center',
     marginVertical: 10,
     fontWeight: 'bold',
+    textDecoration: 'underline',
   },
   footer: {
-    marginTop: 10,
+    marginTop: 15,
     textAlign: 'center',
     fontSize: 10,
   },
@@ -61,6 +71,11 @@ const styles = StyleSheet.create({
 const PDFReceipt = ({ order }) => (
   <Document>
     <Page size="A4" style={styles.page}>
+      {/* Logo Section */}
+      <View style={styles.logoContainer}>
+        <Image style={styles.logo} src="/images/logo.png" />
+      </View>
+      
       <View style={styles.header}>
         <Text>Upskillab®</Text>
       </View>
@@ -75,42 +90,42 @@ const PDFReceipt = ({ order }) => (
       <View style={styles.table}>
         {/* First Row */}
         <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col25]}><Text>Receipt</Text></View>
-          <View style={[styles.tableCol, styles.col15]}><Text>{order.receiptNumber}</Text></View>
+          <View style={[styles.tableCol, styles.col20]}><Text>Receipt</Text></View>
+          <View style={[styles.tableCol, styles.col15]}><Text>{order.receiptNumber || '712'}</Text></View>
           <View style={[styles.tableCol, styles.col15]}><Text>Batch</Text></View>
-          <View style={[styles.tableCol, styles.col15]}><Text>{order.batchNumber}</Text></View>
+          <View style={[styles.tableCol, styles.col15]}><Text>{order.batchNumber || '2'}</Text></View>
           <View style={[styles.tableCol, styles.col15]}><Text>Date</Text></View>
-          <View style={[styles.tableCol, styles.col15]}><Text>{order.date}</Text></View>
+          <View style={[styles.tableCol, styles.col20]}><Text>{order.date || '25 Apr 2025'}</Text></View>
         </View>
         
         {/* Student Name Row */}
         <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col25]}><Text>Student Name:</Text></View>
-          <View style={[styles.tableCol, styles.col45]} colSpan={3}><Text>{order.studentName}</Text></View>
+          <View style={[styles.tableCol, styles.col20]}><Text>Student Name:</Text></View>
+          <View style={[styles.tableCol, styles.col30]}><Text>{order.studentName || 'salin. S. A'}</Text></View>
           <View style={[styles.tableCol, styles.col15]}><Text>Course Fee</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.textRight]}><Text>{order.courseFee}</Text></View>
+          <View style={[styles.tableCol, styles.col15, styles.textRight]}><Text>{order.courseFee || '15000'}</Text></View>
         </View>
         
         {/* Contact Number Row */}
         <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col25]}><Text>Contact Number:</Text></View>
-          <View style={[styles.tableCol, styles.col45]} colSpan={3}><Text>{order.contactNumber}</Text></View>
+          <View style={[styles.tableCol, styles.col20]}><Text>Contact Number:</Text></View>
+          <View style={[styles.tableCol, styles.col30]}><Text>{order.contactNumber || '9446172227'}</Text></View>
           <View style={[styles.tableCol, styles.col15]}><Text>Total Paid</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.textRight]}><Text>{order.totalPaid}</Text></View>
+          <View style={[styles.tableCol, styles.col15, styles.textRight]}><Text>{order.totalPaid || '3000'}</Text></View>
         </View>
         
         {/* Email Row */}
         <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col25]}><Text>Email:</Text></View>
-          <View style={[styles.tableCol, styles.col45]} colSpan={3}><Text>{order.email}</Text></View>
+          <View style={[styles.tableCol, styles.col20]}><Text>Email:</Text></View>
+          <View style={[styles.tableCol, styles.col30]}><Text>{order.email || 'salintvpm@gmail.com'}</Text></View>
           <View style={[styles.tableCol, styles.col15]}><Text>Fee Due</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.textRight]}><Text>{order.feeDue}</Text></View>
+          <View style={[styles.tableCol, styles.col15, styles.textRight]}><Text>{order.feeDue || '12000'}</Text></View>
         </View>
         
         {/* Course Row */}
         <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col25]}><Text>Course:</Text></View>
-          <View style={[styles.tableCol, styles.col45]} colSpan={3}><Text>{order.courseName}</Text></View>
+          <View style={[styles.tableCol, styles.col20]}><Text>Course:</Text></View>
+          <View style={[styles.tableCol, styles.col30]}><Text>{order.courseName || 'Mind Path Psychology'}</Text></View>
           <View style={[styles.tableCol, styles.col15]}></View>
           <View style={[styles.tableCol, styles.col15]}></View>
         </View>
@@ -122,33 +137,33 @@ const PDFReceipt = ({ order }) => (
       <View style={styles.table}>
         {/* Header Row */}
         <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col20]}><Text style={styles.textCenter}>Date</Text></View>
-          <View style={[styles.tableCol, styles.col40]}><Text style={styles.textCenter}>Transaction ID</Text></View>
-          <View style={[styles.tableCol, styles.col20]}><Text style={styles.textCenter}>Mode of Payment</Text></View>
-          <View style={[styles.tableCol, styles.col20]}><Text style={styles.textCenter}>Amount</Text></View>
+          <View style={[styles.tableCol, styles.col25]}><Text>Date</Text></View>
+          <View style={[styles.tableCol, styles.col35]}><Text>Transaction ID</Text></View>
+          <View style={[styles.tableCol, styles.col20]}><Text>Mode of Payment</Text></View>
+          <View style={[styles.tableCol, styles.col20, styles.textRight]}><Text>Amount</Text></View>
         </View>
         
         {/* Payment Row */}
         <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col20]}><Text style={styles.textCenter}>{order.paymentDate}</Text></View>
-          <View style={[styles.tableCol, styles.col40]}><Text style={styles.textCenter}>{order.transactionId}</Text></View>
-          <View style={[styles.tableCol, styles.col20]}><Text style={styles.textCenter}>UPI</Text></View>
-          <View style={[styles.tableCol, styles.col20, styles.textRight]}><Text>{order.amountPaid}</Text></View>
+          <View style={[styles.tableCol, styles.col25]}><Text>{order.paymentDate || '21 Apr 2025'}</Text></View>
+          <View style={[styles.tableCol, styles.col35]}><Text>{order.transactionId || '511163572037'}</Text></View>
+          <View style={[styles.tableCol, styles.col20]}><Text>UPI</Text></View>
+          <View style={[styles.tableCol, styles.col20, styles.textRight]}><Text>{order.amountPaid || '3000'}</Text></View>
         </View>
         
         {/* Total Paid Row */}
         <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col20]}></View>
-          <View style={[styles.tableCol, styles.col40]}></View>
-          <View style={[styles.tableCol, styles.col20]}><Text style={[styles.textCenter, styles.bold]}>Total Paid</Text></View>
-          <View style={[styles.tableCol, styles.col20, styles.textRight]}><Text>{order.totalPaid}</Text></View>
+          <View style={[styles.tableCol, styles.col25]}></View>
+          <View style={[styles.tableCol, styles.col35]}></View>
+          <View style={[styles.tableCol, styles.col20, styles.bold]}><Text>Total Paid</Text></View>
+          <View style={[styles.tableCol, styles.col20, styles.textRight]}><Text>{order.totalPaid || '3000'}</Text></View>
         </View>
       </View>
 
       {/* Amount in Words */}
       <View style={{ marginTop: 10 }}>
         <Text style={styles.bold}>Paid Amount in Words</Text>
-        <Text>{order.amountInWords}</Text>
+        <Text>{order.amountInWords || 'Three Thousand Rupees Only'}</Text>
       </View>
 
       {/* Footer */}
@@ -158,7 +173,6 @@ const PDFReceipt = ({ order }) => (
     </Page>
   </Document>
 );
-
 // Function to generate and download PDF
 const generateReceiptPDF = async (orderData) => {
   // Transform your API data to match the expected format

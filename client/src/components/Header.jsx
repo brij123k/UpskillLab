@@ -6,7 +6,7 @@ import { useQuery } from "@tanstack/react-query";
 // import { categoryAPI, courseAPI } from "../config/api-repository";
 import { getDataHandler } from "../config/services";
 import { useAuth } from "../context/AuthContext";
-
+import ExitIntentModalData from "./CustomInputs/ExitIntentModalData";
 
 
 function Header() {
@@ -19,6 +19,67 @@ function Header() {
   const [hoveredCourse, setHoveredCourse] = useState(null);
   const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 });
   const [announcements,setAnnouncements]= useState([])
+  
+
+    const [showExitIntent, setShowExitIntent] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ y: 0 });
+  const [exitIntentTriggered, setExitIntentTriggered] = useState(false);
+
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      setMousePosition({ y: e.clientY });
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Show exit intent when mouse moves toward top of screen
+  useEffect(() => {
+    const handleMouseLeave = (e) => {
+      if (e.clientY < 50 && !exitIntentTriggered) {
+        triggerExitIntent();
+      }
+    };
+
+    window.addEventListener('mouseout', handleMouseLeave);
+    return () => window.removeEventListener('mouseout', handleMouseLeave);
+  }, [exitIntentTriggered]);
+
+  // Random timer for exit intent
+  useEffect(() => {
+    if (exitIntentTriggered) return;
+
+    // Random time between 4-10 seconds
+    const minTime = 4000; // 4 seconds minimum
+    const maxTime = 10000; // 10 seconds maximum
+    const randomTime = Math.floor(Math.random() * (maxTime - minTime + 1)) + minTime;
+
+    const timer = setTimeout(() => {
+      triggerExitIntent();
+    }, randomTime);
+
+    return () => clearTimeout(timer);
+  }, [exitIntentTriggered]);
+
+  const triggerExitIntent = () => {
+    // Only trigger once per page view
+    if (exitIntentTriggered) return;
+    
+    setShowExitIntent(true);
+    setExitIntentTriggered(true);
+    
+    // Close automatically after 15 seconds if not closed by user
+    setTimeout(() => {
+      setShowExitIntent(false);
+    }, 60000);
+  };
+
+  const handleCloseExitIntent = () => {
+    setShowExitIntent(false);
+  };
+
   
   // Fetch categories using React Query
   const { data: categoriesData, isLoading: isCategoriesLoading } = useQuery({
@@ -795,6 +856,11 @@ function Header() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
       />
+      <AnimatePresence>
+        {showExitIntent && (
+          <ExitIntentModalData onClose={handleCloseExitIntent} />
+        )}
+      </AnimatePresence>
     </header>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FiMessageSquare, FiCheck, FiSend, FiSearch, FiUser, FiClock, FiPaperclip } from 'react-icons/fi';
-import { getDataHandlerWithToken, postDataHandlerWithToken } from '../../../config/services';
+import { FiMessageSquare, FiCheck, FiSend, FiSearch, FiUser, FiClock, FiPaperclip, FiX, FiImage, FiFile } from 'react-icons/fi';
+import { getDataHandlerWithToken, postDataHandlerWithToken, uploadFileHandler } from '../../../config/services';
 import { toast } from 'react-toastify';
 import ApiConfig from '../../../config/apiConfig';
 
@@ -12,6 +12,8 @@ const TeacherDoubtHandling = () => {
   const [replyText, setReplyText] = useState('');
   const [currentDoubtId, setCurrentDoubtId] = useState(null);
   const [attachments, setAttachments] = useState([]);
+  const [fileUploadProgress, setFileUploadProgress] = useState({});
+  const [uploadingFiles, setUploadingFiles] = useState(false);
 
   const fetchDoubts = async () => {
     try {
@@ -35,7 +37,69 @@ const TeacherDoubtHandling = () => {
   }, []);
 
   const handleFileChange = (e) => {
-    setAttachments(Array.from(e.target.files));
+    const files = Array.from(e.target.files);
+    if (files.length + attachments.length > 5) {
+      toast.error("You can upload up to 5 files");
+      return;
+    }
+    
+    const newAttachments = files.map(file => ({
+      file,
+      preview: file.type.startsWith('image/') ? URL.createObjectURL(file) : null,
+      name: file.name,
+      type: file.type.startsWith('image/') ? 'image' : 'document'
+    }));
+    
+    setAttachments([...attachments, ...newAttachments]);
+  };
+
+  const removeAttachment = (index) => {
+    const newAttachments = [...attachments];
+    if (newAttachments[index].preview) {
+      URL.revokeObjectURL(newAttachments[index].preview);
+    }
+    newAttachments.splice(index, 1);
+    setAttachments(newAttachments);
+  };
+
+  const uploadFiles = async () => {
+    if (attachments.length === 0) return [];
+    
+    setUploadingFiles(true);
+    const uploadedFiles = [];
+    
+    try {
+      for (let i = 0; i < attachments.length; i++) {
+        const attachment = attachments[i];
+        setFileUploadProgress(prev => ({ ...prev, [i]: 0 }));
+        
+        const response = await uploadFileHandler('uploadFiles',attachment.file,  {
+            category: 'doubt-response',
+            doubtId: currentDoubtId
+          },
+          (progressEvent) => {
+            const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setFileUploadProgress(prev => ({ ...prev, [i]: progress }));
+          }
+        );
+        
+        if (response.files && response.files[0]) {
+          uploadedFiles.push({
+            url: response.files[0].fileUrl,
+            name: attachment.name,
+            type: attachment.type
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error uploading files:', error);
+      throw error;
+    } finally {
+      setUploadingFiles(false);
+      setFileUploadProgress({});
+    }
+    
+    return uploadedFiles;
   };
 
   const handleReplySubmit = async (doubtId) => {
@@ -45,12 +109,26 @@ const TeacherDoubtHandling = () => {
     }
 
     try {
+      let uploadedAttachments = [];
+      if (attachments.length > 0) {
+              console.log(attachments)
+              const uploadPromises = attachments.map(file => 
+                uploadFileHandler('uploadFiles', file.file, {
+                  category: 'doubt-attachment',
+                  doubtId: Date.now().toString()
+                })
+              );
+
+            uploadedAttachments = await Promise.all(uploadPromises);
+      }
       const data = {
         message: replyText,
-        attachments: attachments.map(file => file.name) // In real app, upload files first
+        attachments: uploadedAttachments.map(res => res.files[0]?.fileUrl).filter(Boolean)
       };
 
       const endpoint = ApiConfig.doubtsResponse(doubtId);
+
+      console.log(endpoint)
       await postDataHandlerWithToken(endpoint, data, true);
       
       toast.success("Reply submitted successfully");
@@ -166,21 +244,40 @@ const TeacherDoubtHandling = () => {
                     <p className="text-gray-700">{doubt.question}</p>
                   </div>
 
-                  {/* Attachments */}
+                  {/* Student Attachments */}
                   {doubt.attachments?.length > 0 && (
                     <div className="mb-4">
                       <h4 className="text-xs font-medium text-gray-500 mb-2">STUDENT ATTACHMENTS</h4>
-                      <div className="flex flex-wrap gap-2">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                         {doubt.attachments.map((file, index) => (
                           <a 
                             key={index} 
-                            href={file} 
+                            href={file.url} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="text-xs px-3 py-1 bg-gray-100 rounded-lg hover:bg-gray-200 transition flex items-center"
+                            className="group relative block border rounded-lg overflow-hidden hover:shadow-md transition"
                           >
-                            <FiPaperclip className="mr-1.5" />
-                            <span>Attachment {index + 1}</span>
+                            {file.type === 'image' ? (
+                              <div className="aspect-square bg-gray-100">
+                                <img 
+                                  src={file.url} 
+                                  alt={`Attachment ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            ) : (
+                              <div className="p-4 bg-gray-50 flex flex-col items-center justify-center h-full">
+                                <FiFile className="h-8 w-8 text-gray-400 mb-2" />
+                                <span className="text-xs text-gray-700 text-center truncate w-full px-2">
+                                  {file.name || `Document ${index + 1}`}
+                                </span>
+                              </div>
+                            )}
+                            <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                              <span className="text-white text-sm font-medium bg-black/50 px-2 py-1 rounded">
+                                {file.type === 'image' ? 'View Image' : 'Download'}
+                              </span>
+                            </div>
                           </a>
                         ))}
                       </div>
@@ -206,6 +303,45 @@ const TeacherDoubtHandling = () => {
                       <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
                         <p className="text-gray-700">{latestMessage.message}</p>
                       </div>
+                      {/* Teacher Attachments */}
+                      {latestMessage.attachments?.length > 0 && (
+                        <div className="mt-4">
+                          <h4 className="text-xs font-medium text-gray-500 mb-2">YOUR ATTACHMENTS</h4>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                            {latestMessage.attachments.map((file, index) => (
+                              <a 
+                                key={index} 
+                                href={file.url} 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="group relative block border rounded-lg overflow-hidden hover:shadow-md transition"
+                              >
+                                {file.type === 'image' ? (
+                                  <div className="aspect-square bg-gray-100">
+                                    <img 
+                                      src={file.url} 
+                                      alt={`Attachment ${index + 1}`}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                ) : (
+                                  <div className="p-4 bg-gray-50 flex flex-col items-center justify-center h-full">
+                                    <FiFile className="h-8 w-8 text-gray-400 mb-2" />
+                                    <span className="text-xs text-gray-700 text-center truncate w-full px-2">
+                                      {file.name || `Document ${index + 1}`}
+                                    </span>
+                                  </div>
+                                )}
+                                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+                                  <span className="text-white text-sm font-medium bg-black/50 px-2 py-1 rounded">
+                                    {file.type === 'image' ? 'View Image' : 'Download'}
+                                  </span>
+                                </div>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ) : isExpanded ? (
@@ -225,22 +361,66 @@ const TeacherDoubtHandling = () => {
                     <div className="mb-3">
                       <label className="inline-flex items-center px-4 py-2 bg-gray-100 rounded-lg cursor-pointer hover:bg-gray-200 transition">
                         <FiPaperclip className="mr-2" />
-                        <span>Add Attachments</span>
+                        <span>Add Attachments (Max 5)</span>
                         <input 
                           type="file" 
                           className="hidden" 
                           multiple
                           onChange={handleFileChange}
+                          accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt"
                         />
                       </label>
+                      
+                      {/* Attachment Previews */}
                       {attachments.length > 0 && (
-                        <div className="mt-2 text-sm text-gray-600 space-y-1">
-                          {attachments.map((file, index) => (
-                            <div key={index} className="flex items-center">
-                              <FiPaperclip className="mr-1 text-xs" />
-                              <span className="truncate max-w-xs">{file.name}</span>
-                            </div>
-                          ))}
+                        <div className="mt-4 space-y-3">
+                          <h4 className="text-sm font-medium text-gray-700">Attachments ({attachments.length}/5)</h4>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {attachments.map((attachment, index) => (
+                              <div key={index} className="border rounded-lg p-2 flex items-start">
+                                <div className="flex-shrink-0 mr-3">
+                                  {attachment.preview ? (
+                                    <div className="w-16 h-16 bg-gray-100 rounded-md overflow-hidden">
+                                      <img 
+                                        src={attachment.preview} 
+                                        alt="Preview" 
+                                        className="w-full h-full object-cover"
+                                      />
+                                    </div>
+                                  ) : (
+                                    <div className="w-16 h-16 bg-gray-100 rounded-md flex items-center justify-center">
+                                      {attachment.type === 'image' ? (
+                                        <FiImage className="text-gray-400 text-xl" />
+                                      ) : (
+                                        <FiFile className="text-gray-400 text-xl" />
+                                      )}
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-sm font-medium text-gray-800 truncate">{attachment.name}</p>
+                                  <p className="text-xs text-gray-500">
+                                    {attachment.type === 'image' ? 'Image' : 'Document'} • 
+                                    {(attachment.file.size / 1024).toFixed(1)} KB
+                                  </p>
+                                  {fileUploadProgress[index] !== undefined && (
+                                    <div className="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                                      <div 
+                                        className="bg-[#4D2C5E] h-1.5 rounded-full" 
+                                        style={{ width: `${fileUploadProgress[index]}%` }}
+                                      ></div>
+                                    </div>
+                                  )}
+                                </div>
+                                <button
+                                  onClick={() => removeAttachment(index)}
+                                  className="text-gray-400 hover:text-gray-600 p-1"
+                                >
+                                  <FiX />
+                                </button>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -248,10 +428,23 @@ const TeacherDoubtHandling = () => {
                     <div className="flex justify-end">
                       <button
                         onClick={() => handleReplySubmit(doubt._id)}
-                        className="flex items-center px-4 py-2 bg-[#FF7426] text-white rounded-lg hover:bg-[#E65100] transition shadow-md"
+                        disabled={uploadingFiles}
+                        className="flex items-center px-4 py-2 bg-[#FF7426] text-white rounded-lg hover:bg-[#E65100] transition shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                       >
-                        <FiSend className="mr-1" />
-                        Submit Response
+                        {uploadingFiles ? (
+                          <>
+                            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <FiSend className="mr-1" />
+                            Submit Response
+                          </>
+                        )}
                       </button>
                     </div>
                   </div>

@@ -13,7 +13,7 @@ import {
 import { postDataHandler, getDataHandler } from '../../config/services';
 import { toast } from "react-toastify";
 
-const ExitIntentModalData = () => {
+const ExitIntentModalData = ({ onClose }) => {
   const [loader, setLoader] = useState(false);
   const [courses, setCourses] = useState([]);
   const [imageData, setImageData] = useState([]);
@@ -119,33 +119,40 @@ const ExitIntentModalData = () => {
   });
 
   return (
-    <div className="bg-gray-50 px-2 py-2 sm:px-4 lg:px-6" id="AdmissionForm">
-      <div className="max-w-5xl mx-auto">
-        <div className="flex flex-col lg:flex-row gap-6 items-stretch">
+    <div className="fixed inset-0 bg-[#0000004f] bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
+      <div className="bg-gray-50 rounded-xl w-fit max-w-6xl max-h-[90vh] relative">
+        <button 
+          onClick={onClose}  // Use the passed onClose function
+          className="absolute top-2 right-2 z-50 text-black hover:text-gray-700 text-2xl bg-white rounded-full w-8 h-8 flex items-center justify-center shadow-md"
+        >
+          &times;
+        </button>
+        <div className="flex flex-col lg:flex-row gap-0">
+          
           {/* Left Section (Images) */}
-
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="w-full lg:w-1/2 flex-1"
+            className="w-full lg:w-1/2"
           >
-            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-4 h-full">
+            <div className="bg-white rounded-xl p-4 h-full flex flex-col">
               <h1 className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">OFFER BY UPSKILLAB</h1>
-              {imageData.length > 0 ? (
-                imageData.map((item) => (
-                  <div key={item._id} className="mb-4">
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-full h-full object-cover"
-                    />
-                    {/* <p className="mt-2 text-center text-sm text-gray-700">{item.name}</p> */}
-                  </div>
-                ))
-              ) : (
-                <p className="text-sm text-gray-500">Loading images...</p>
-              )}
+              <div className="flex-grow overflow-auto">
+                {imageData.length > 0 ? (
+                  imageData.map((item) => (
+                    <div key={item._id} className="mb-4">
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-auto max-h-[50vh] object-contain"
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500">Loading images...</p>
+                )}
+              </div>
               <div className="block mt-4 text-center">
                 <a
                   href="https://upskillab.com/#AdmissionForm"
@@ -162,13 +169,16 @@ const ExitIntentModalData = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="hidden lg:block w-full lg:w-1/2 flex-1"
+            className="w-full hidden lg:block lg:w-1/2"
             id="AdmissionForm"
           >
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-md border border-gray-100 h-full">
-              <h2 className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">Application Form</h2>
+            <div className="bg-white p-4 sm:p-6 rounded-r-xl h-full flex flex-col">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl sm:text-2xl font-bold text-[#4D2C5E]">Application Form</h2>
+                
+              </div>
 
-              <form onSubmit={formik.handleSubmit} className="space-y-4 sm:space-y-5">
+              <form onSubmit={formik.handleSubmit} className="space-y-4 sm:space-y-5 flex-grow overflow-auto">
                 {/* Full Name */}
                 <div>
                   <input
@@ -276,7 +286,7 @@ const ExitIntentModalData = () => {
                   type="submit"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="w-full bg-[#4D2C5E] hover:bg-[#3a2148] text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center"
+                  className="w-full bg-[#4D2C5E] hover:bg-[#3a2148] text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center mt-4"
                 >
                   Submit Application <FiArrowRight className="ml-2" />
                 </motion.button>

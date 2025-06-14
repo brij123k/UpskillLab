@@ -26,21 +26,16 @@ const ExitIntentModal = () => {
     };
   }, []);
 
-  return show ? (
+  return (
+    <>
+      {show && (
     <div className="fixed inset-0 z-[9999] flex items-center justify-center pointer-events-none bg-black/30">
-      <div className="relative bg-white p-8 rounded-xl w-[90%] max-w-[800px] max-h-[80vh] overflow-y-auto shadow-lg text-center pointer-events-auto">
-        {/* Close button at top right */}
-        <button
-          onClick={() => setShow(false)}
-          className="absolute top-4 right-4 text-gray-500 hover:text-black text-xl"
-          aria-label="Close"
-        >
-          <FiX />
-        </button>
-        <ExitIntentModalData />
-      </div>
+        <ExitIntentModalData onClose={() => setShow(false)} />
     </div>
-  ) : null;
+      )}
+      {/* rest of your content */}
+    </>
+  )
 };
 
 export default ExitIntentModal;
