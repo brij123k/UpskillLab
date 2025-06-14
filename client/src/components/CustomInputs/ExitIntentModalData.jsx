@@ -138,7 +138,7 @@ const ExitIntentModalData = ({ onClose }) => {
           >
             <div className="bg-white rounded-xl p-4 h-full flex flex-col">
               <h1 className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">OFFER BY UPSKILLAB</h1>
-               <p className="mt-2 text-center text-sm text-gray-700">{item.name}</p>
+{/*                <p className="mt-2 text-center text-sm text-gray-700">{item.name}</p> */}
               <div className="flex-grow overflow-auto">
                 {imageData.length > 0 ? (
                   imageData.map((item) => (
