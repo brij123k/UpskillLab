@@ -38,10 +38,14 @@ const CourseEnrollmentModal = ({ onClose }) => {
   useEffect(() => {
     const fetchBatches = async () => {
       try {
-        const response = await getDataHandler("upcomingBatches")
-        setBatches(response);
+        const response = await getDataHandler("upcomingBatches");
+        const activeBatches = Array.isArray(response) 
+          ? response.filter(batch => batch.active) 
+          : [];
+        setBatches(activeBatches);
       } catch (error) {
         console.error("Failed to fetch batches:", error);
+        setBatches([]);
       }
     };
     fetchBatches();
@@ -82,10 +86,10 @@ const CourseEnrollmentModal = ({ onClose }) => {
       // Filter batches based on input
       if (value.length > 1) {
         const filtered = batches.filter(batch => 
-          batch.course.courseName.toLowerCase().includes(value.toLowerCase())
+          batch.course?.courseName?.toLowerCase().includes(value.toLowerCase())
         );
         setFilteredBatches(filtered);
-        setShowBatchSuggestions(filtered.length > 0);
+        setShowBatchSuggestions(true);
       } else {
         setShowBatchSuggestions(false);
       }
@@ -100,7 +104,7 @@ const CourseEnrollmentModal = ({ onClose }) => {
   const handleBatchSelect = (batch) => {
     setFormData(prev => ({
       ...prev,
-      courseName: batch.course.courseName,
+      courseName: batch.course?.courseName || "",
       batchId: batch._id,
       amount: batch.fees || ""
     }));
@@ -115,11 +119,23 @@ const CourseEnrollmentModal = ({ onClose }) => {
     setFormData(prev => ({
       ...prev,
       batchId: "",
-      amount: ""
     }));
     setShowBatchSuggestions(false);
   };
 
+  // Check if the entered course name matches any batch
+  const checkForOtherCourse = () => {
+    if (formData.courseName && !selectedBatch) {
+      const match = batches.some(batch => 
+        batch.course?.courseName?.toLowerCase() === formData.courseName.toLowerCase()
+      );
+      if (!match) {
+        setOtherCourse(true);
+      }
+    }
+  };
+
+  // Validate form step
   const validateStep = () => {
     if (step === 1) {
       if (!formData.name.trim()) {
@@ -143,8 +159,11 @@ const CourseEnrollmentModal = ({ onClose }) => {
         return false;
       }
       if (!otherCourse && !formData.batchId) {
-        toast.error("Please select a batch from the suggestions");
-        return false;
+        checkForOtherCourse();
+        if (!otherCourse) {
+          toast.error("Please select a batch from the suggestions");
+          return false;
+        }
       }
     }
     if (step === 2 && !formData.agreeTerms) {
@@ -160,7 +179,7 @@ const CourseEnrollmentModal = ({ onClose }) => {
       setLoading(true);
       
       let response;
-      if (otherCourse) {
+      if (otherCourse || !formData.batchId) {
         response = await manualRegister({
           name: formData.name,
           email: formData.email,
@@ -345,6 +364,7 @@ const CourseEnrollmentModal = ({ onClose }) => {
                   name="courseName"
                   value={formData.courseName}
                   onChange={handleChange}
+                  onBlur={checkForOtherCourse}
                   className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
                   required
                 />
@@ -357,10 +377,10 @@ const CourseEnrollmentModal = ({ onClose }) => {
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                         onClick={() => handleBatchSelect(batch)}
                       >
-                        <div className="font-medium">{batch.courseName}</div>
+                        <div className="font-medium">{batch.course?.courseName || "Unnamed Course"}</div>
                         <div className="text-xs text-gray-500">
-                          Starts: {new Date(batch.startDate).toLocaleDateString()} | 
-                          Price: ₹{batch.fees}
+                          Starts: {batch.startDate ? new Date(batch.startDate).toLocaleDateString() : "TBD"} | 
+                          Price: ₹{batch.fees || "0"}
                         </div>
                       </div>
                     ))}
@@ -378,12 +398,19 @@ const CourseEnrollmentModal = ({ onClose }) => {
                 <div className="bg-gray-50 p-3 rounded-md border border-gray-200">
                   <div className="text-sm">
                     <div className="font-medium">Selected Batch:</div>
-                    <div>{selectedBatch.courseName}</div>
+                    <div>{selectedBatch.course?.courseName || "Unnamed Course"}</div>
                     <div className="text-xs text-gray-600 mt-1">
-                      {console.log(selectedBatch)}
-                      Starts: {new Date(selectedBatch.startDate).toLocaleDateString()} | 
-                      Price: ₹{selectedBatch.fees}
+                      Starts: {selectedBatch.startDate ? new Date(selectedBatch.startDate).toLocaleDateString() : "TBD"} | 
+                      Price: ₹{selectedBatch.fees || "0"}
                     </div>
+                  </div>
+                </div>
+              )}
+
+              {otherCourse && (
+                <div className="bg-blue-50 p-3 rounded-md border border-blue-200">
+                  <div className="text-sm text-blue-700">
+                    You're registering for a custom course: <strong>{formData.courseName}</strong>
                   </div>
                 </div>
               )}
@@ -397,6 +424,7 @@ const CourseEnrollmentModal = ({ onClose }) => {
                   onChange={handleChange}
                   className="w-full px-3 py-2 text-sm sm:text-base border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF7426] focus:border-transparent"
                   required
+                 
                 />
               </div>
             </motion.div>
@@ -426,7 +454,16 @@ const CourseEnrollmentModal = ({ onClose }) => {
                     <div className="flex justify-between">
                       <span className="text-gray-600">Batch Start:</span>
                       <span className="truncate max-w-[50%]">
-                        {new Date(selectedBatch.startDate).toLocaleDateString()}
+                        {selectedBatch.startDate ? new Date(selectedBatch.startDate).toLocaleDateString() : "TBD"}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {otherCourse && (
+                    <div className="flex justify-between">
+                      <span className="text-gray-600">Type:</span>
+                      <span className="truncate max-w-[50%] font-medium text-blue-600">
+                        Custom Course
                       </span>
                     </div>
                   )}
