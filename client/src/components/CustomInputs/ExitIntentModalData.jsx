@@ -138,7 +138,15 @@ const ExitIntentModalData = ({ onClose }) => {
             className="w-full lg:w-1/2"
           >
             <div className="bg-white rounded-xl p-4 h-full flex flex-col">
-              <h1 className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">OFFER BY UPSKILLAB</h1>
+{/*               <h1 className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">OFFER BY UPSKILLAB</h1> */}
+
+
+                <div className="bg-white rounded-xl p-4 h-full flex flex-col">
+    {imageData.length > 0 && imageData[0]?.name && (
+      <p className="text-xl sm:text-2xl font-bold text-[#4D2C5E] mb-4 sm:mb-6">
+        {imageData[0].name}
+      </p>
+    )}
               <div className="flex-grow overflow-auto">
                 {imageData.length > 0 ? (
                   imageData.map((item) => (
@@ -165,6 +173,7 @@ const ExitIntentModalData = ({ onClose }) => {
                 </button>
               </div>
             </div>
+              </div> 
           </motion.div>
 
           {/* Right Section (Form) */}
