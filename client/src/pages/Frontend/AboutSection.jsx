@@ -31,19 +31,19 @@ const AboutUpskillab = () => {
 
       <div className="bg-gradient-to-b from-[#FDF8EE] to-white py-12 px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
-        <motion.div 
+        <motion.div
           className="max-w-7xl mx-auto text-center mb-16"
           initial="hidden"
           animate="visible"
           variants={staggerContainer}
         >
-          <motion.h1 
+          <motion.h1
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6"
             variants={fadeIn}
           >
             About <span className="text-[#FF7426]">Upskillab</span>
           </motion.h1>
-          <motion.p 
+          <motion.p
             className="text-xl md:text-2xl text-gray-700 max-w-4xl mx-auto"
             variants={fadeIn}
           >
@@ -52,7 +52,7 @@ const AboutUpskillab = () => {
         </motion.div>
 
         {/* Unique Proposition Section */}
-        <motion.div 
+        <motion.div
           className="max-w-7xl mx-auto bg-white rounded-3xl shadow-xl overflow-hidden mb-16"
           initial="hidden"
           whileInView="visible"
@@ -60,7 +60,7 @@ const AboutUpskillab = () => {
           variants={staggerContainer}
         >
           <div className="grid md:grid-cols-2 gap-8">
-            <motion.div 
+            <motion.div
               className="p-8 md:p-12 flex flex-col justify-center"
               variants={fadeIn}
             >
@@ -68,13 +68,14 @@ const AboutUpskillab = () => {
                 Our Unique Approach
               </h2>
               <p className="text-lg text-gray-700 mb-6">
-                Upskillab is a forward-thinking e-learning and wellbeing initiative, designed to bridge the gap between skill acquisition and mental wellness.
+                At Upskillab, we redefine online education by combining professional upskilling with mental wellbeing support—empowering learners to succeed both career-wise and personally.
               </p>
               <p className="text-lg text-gray-700">
-                We are among the first in India to offer a dual-benefit platform that combines industry-relevant courses with monthly wellbeing sessions and free access to certified psychological counseling.
+
+                We are one of the first e-learning platforms in India to introduce a dual-benefit model, offering job-ready certification courses alongside mental health services. Our approach bridges the gap between skill acquisition and emotional resilience, which is essential in today’s fast-paced and high-pressure job market.
               </p>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="bg-[#4D2C5E] p-8 md:p-12 flex items-center justify-center"
               variants={fadeIn}
             >
@@ -88,7 +89,12 @@ const AboutUpskillab = () => {
                   <h3 className="text-xl font-bold">Integrated Model</h3>
                 </div>
                 <p className="mb-8">
-                  Our integrated model addresses not just career readiness but also emotional resilience, which is a critical need in today's competitive landscape.
+                  Our integrated model delivers more than just technical or professional knowledge—it strengthens emotional intelligence, stress management, and mental wellness. In a world where burnout is common, we prepare students to be resilient, mindful, and future-ready.
+
+                  Key Benefits:
+                  * Combining career development and mental health support
+                  * Prepares learners for real-world challenges
+                  * Builds both hard and soft skills
                 </p>
                 <div className="flex items-center">
                   <div className="bg-[#FF7426] p-3 rounded-lg mr-4">
@@ -97,14 +103,24 @@ const AboutUpskillab = () => {
                     </svg>
                   </div>
                   <h3 className="text-xl font-bold">Dual Benefit Platform</h3>
+                 
                 </div>
+                 <p className="mb-8">
+                  
+                    Upskillab is more than just an e-learning platform.
+
+                    Our unique model includes:
+                    * Industry-relevant courses in high-demand fields
+                    * Monthly wellbeing sessions led by professionals
+                    * Free access to certified psychological counselling
+                  </p>
               </div>
             </motion.div>
           </div>
         </motion.div>
 
         {/* Mission Section */}
-        <motion.div 
+        <motion.div
           className="max-w-7xl mx-auto bg-[#FF7426] rounded-3xl p-8 md:p-12 mb-16 text-white"
           initial="hidden"
           whileInView="visible"
@@ -126,7 +142,7 @@ const AboutUpskillab = () => {
         </motion.div>
 
         {/* Vision Section */}
-        <motion.div 
+        <motion.div
           className="max-w-7xl mx-auto mb-16"
           initial="hidden"
           whileInView="visible"
@@ -134,13 +150,13 @@ const AboutUpskillab = () => {
           variants={staggerContainer}
         >
           <div className="text-center mb-12">
-            <motion.h2 
+            <motion.h2
               className="text-3xl font-bold text-gray-900 mb-4"
               variants={fadeIn}
             >
               Our Vision
             </motion.h2>
-            <motion.p 
+            <motion.p
               className="text-xl text-gray-700 max-w-3xl mx-auto"
               variants={fadeIn}
             >
@@ -149,7 +165,7 @@ const AboutUpskillab = () => {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            <motion.div 
+            <motion.div
               className="bg-white p-8 rounded-3xl shadow-lg border-l-4 border-[#4D2C5E]"
               variants={fadeIn}
             >
@@ -158,7 +174,7 @@ const AboutUpskillab = () => {
                 To contribute to improving India's global ranking in the Happiness Index by prioritizing mental wellbeing alongside skill development.
               </p>
             </motion.div>
-            <motion.div 
+            <motion.div
               className="bg-white p-8 rounded-3xl shadow-lg border-l-4 border-[#FF7426]"
               variants={fadeIn}
             >
@@ -171,7 +187,7 @@ const AboutUpskillab = () => {
         </motion.div>
 
         {/* Values Section */}
-        <motion.div 
+        <motion.div
           className="max-w-7xl mx-auto"
           initial="hidden"
           whileInView="visible"
@@ -218,7 +234,7 @@ const AboutUpskillab = () => {
                 color: "bg-[#FF7426]"
               }
             ].map((value, index) => (
-              <motion.div 
+              <motion.div
                 key={index}
                 className="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow"
                 variants={fadeIn}
