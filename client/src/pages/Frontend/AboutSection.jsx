@@ -91,16 +91,16 @@ const AboutUpskillab = () => {
           <h3 className="text-xl font-bold">Integrated Model</h3>
         </div>
         <p className="text-base mb-4">
-          Our integrated model delivers more than just technical or professional knowledge—it strengthens emotional intelligence, stress management, and mental wellness. In a world where burnout is common, we prepare students to be resilient, mindful, and future-ready.
+         We go beyond academics—blending career skills with mental wellness. Our model boosts emotional intelligence, resilience, and real-world readiness for a thriving future.
         </p>
-        <div>
+        {/* <div>
           <h4 className="text-sm font-semibold text-gray-200 mb-2">Key Benefits:</h4>
           <ul className="list-disc list-inside text-base space-y-2">
             <li>Combining career development and mental health support</li>
             <li>Prepares learners for real-world challenges</li>
             <li>Builds both hard and soft skills</li>
           </ul>
-        </div>
+        </div> */}
       </div>
 
       {/* Dual Benefit Platform Sub-Section */}
@@ -114,16 +114,16 @@ const AboutUpskillab = () => {
           <h3 className="text-xl font-bold">Dual Benefit Platform</h3>
         </div>
         <p className="text-base mb-4">
-          Upskillab is more than just an e-learning platform.
+          Upskillab uniquely combines job-ready courses with monthly wellbeing sessions and free psychological counselling, ensuring learners grow professionally and personally.
         </p>
-        <div>
+        {/* <div>
           <h4 className="text-sm font-semibold text-gray-200 mb-2">Our unique model includes:</h4>
           <ul className="list-disc list-inside text-base space-y-2">
             <li>Industry-relevant courses in high-demand fields</li>
             <li>Monthly wellbeing sessions led by professionals</li>
             <li>Free access to certified psychological counselling</li>
           </ul>
-        </div>
+        </div> */}
       </div>
     </div>
   </motion.div>
