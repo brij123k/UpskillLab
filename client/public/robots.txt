@@ -1,0 +1,32 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /private/
+Allow: /public/
+Allow: /CourseList
+Allow: /about
+Allow: /ContactUs
+Allow: /SuccessStory
+Allow: /UpcomingBatches
+Allow: /StudentsBlog
+Allow: /BlogDetail
+Allow: /Career
+Allow: /PrivacyPolicy
+Allow: /TermsOfService
+Allow: /RefundPolicy
+Allow: /TeacherRegistration
+Allow: /Login
+Allow: /Register
+Allow: /ForgetPassword
+Allow: /ResetPassword
+Allow: /VerifyOTP
+
+# Teacher Dashboard
+Allow: /dashboard/teacher
+Allow: /dashboard/teacher/*
+
+# Student Dashboard
+Allow: /dashboard/student
+Allow: /dashboard/student/*
+
+# Sitemap
+Sitemap: https://www.upskillab.com/sitemap.xml
