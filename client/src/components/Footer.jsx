@@ -36,7 +36,7 @@ function Footer() {
                 </li>
                 <li>
                   <NavLink 
-                    to="https://www.instagram.com/upskill_lab1/" 
+                    to="https://www.instagram.com/upskillab_" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors no-underline"
