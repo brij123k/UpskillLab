@@ -92,6 +92,8 @@ const ApiConfig = {
   // student panel
   profile:`${url}/students/me`,
   studentProfile:`${url}/enrollment`,
+  my_referral:`${url}/referral/my-referrals`,
+  referral:`${url}/referral/generate`,
   studyMaterialByCourse:(id)=>`${url}/study-materials/course/${id}`,
   doubts:`${url}/doubts`,
   StudentClassSchedule:`${url}/Class-Schedule/student`,

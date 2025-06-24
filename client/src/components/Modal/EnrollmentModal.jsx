@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { toast } from "react-toastify";
 import { registerBatch } from "../../config/services";
 import { FiUser, FiMail, FiPhone, FiLock } from "react-icons/fi";
+import { useLocation } from "react-router-dom";
 
 const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase ,topic=null }) => {
   // State management
@@ -12,7 +13,7 @@ const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase ,topic=n
   const [showPaymentLoader, setShowPaymentLoader] = useState(false);
   const paymentContainerRef = useRef(null);
   const cashfreeInstance = useRef(null);
-
+  const location = useLocation();
   const [paymentData, setPaymentData] = useState({
     orderId: "",
     paymentSessionId: "",
@@ -28,7 +29,10 @@ const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase ,topic=n
     batchId: batchCode,
     agreeTerms: false,
   });
-
+const getReferralCodeFromURL = () => {
+    const searchParams = new URLSearchParams(location.search);
+    return searchParams.get('ref') || null;
+  };
   // Load Cashfree SDK
   useEffect(() => {
     if (!isOpen) return;
@@ -103,13 +107,17 @@ const PurchaseModal = ({ course, batchCode, isOpen, onClose, onPurchase ,topic=n
   const initiatePayment = async () => {
     try {
       setLoading(true);
-      const response = await registerBatch(batchCode, {
+      const referralCode = getReferralCodeFromURL();
+      const registrationData = {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
         amount: paymentData.discountedPrice,
-        couponCode:formData.couponCode,
-      });
+        couponCode: formData.couponCode,
+        ...(referralCode && { referralCode })
+      };
+
+      const response = await registerBatch(batchCode, registrationData);
 
       setPaymentData(prev => ({
         ...prev,

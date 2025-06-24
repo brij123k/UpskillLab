@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { FiUser, FiEdit, FiSave, FiMail, FiPhone, FiBook, FiX, FiUpload, FiChevronRight } from 'react-icons/fi';
-import { getDataHandler, getDataHandlerWithToken, patchTokenDataHandler, patchTokenDataHandlerFormData } from '../../../config/services';
+import { FiUser, FiEdit,FiCopy,FiShare2, FiSave, FiMail, FiPhone, FiBook, FiX, FiUpload, FiChevronRight } from 'react-icons/fi';
+import { getDataHandler, getDataHandlerWithToken, patchTokenDataHandler, patchTokenDataHandlerFormData, postDataHandlerWithToken } from '../../../config/services';
 import { message } from 'antd';
 
 const StudentProfile = () => {
@@ -22,6 +22,10 @@ const StudentProfile = () => {
   });
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [imageFile, setImageFile] = useState(null); // New state for image file
+  const [referralData, setReferralData] = useState(null);
+  const [showReferralModal, setShowReferralModal] = useState(false);
+  const [copied, setCopied] = useState(false);
+
   const fileInputRef = useRef(null);
 
   const studentProfileHandler = async () => {
@@ -172,6 +176,101 @@ const StudentProfile = () => {
   const closeCourseDetails = () => {
     setSelectedCourse(null);
   };
+
+
+  const generateReferral = async (courseId) => {
+    try {
+      setLoading(true);
+      const response = await postDataHandlerWithToken('referral',{courseId:courseId});
+      if (response) {      
+        setReferralData(response);
+        setShowReferralModal(true);
+      }
+    } catch (err) {
+      console.error('Error generating referral:', err);
+      message.error('Failed to generate referral code');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const copyToClipboard = () => {
+    if (referralData?.code) {
+      navigator.clipboard.writeText(referralData.code);
+      setCopied(true);
+      message.success('Referral code copied!');
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+const shareOnSocialMedia = (platform) => {
+  if (!referralData || !selectedCourse) return;
+  console.log(selectedCourse)
+  // Construct the base URL with referral code
+  const shareUrl = `https://upskillab.com/courseDetails/course/${selectedCourse.courseCode}?ref=${referralData.code}`;
+  
+  // Create platform-specific messages with emojis for better engagement
+  const platformMessages = {
+    default: `🎓 Exciting Learning Opportunity! 🎓
+
+I'm taking "${selectedCourse.courseName}" and thought you might be interested too!
+
+Use my referral code ${referralData.code} to get special benefits when you enroll.
+
+Check it out here: ${shareUrl}
+
+#Learning #CareerGrowth`,
+    
+    whatsapp: `Hey! 👋
+
+I wanted to share this amazing course I'm taking - "${selectedCourse.courseName}". 
+
+If you're interested, you can use my referral code *${referralData.code}* to get special benefits when you enroll. 
+
+Here's the link: ${shareUrl}
+
+Let me know what you think!`,
+    
+    twitter: `🚀 Just enrolled in "${selectedCourse.courseName}"! 
+
+Use my referral code ${referralData.code} for special benefits. 
+
+Check it out: ${shareUrl} 
+
+#OnlineLearning #CareerGrowth`,
+    
+    linkedin: `I'm excited to share that I'm enrolled in "${selectedCourse.courseName}"!
+
+If you're looking to enhance your skills, I highly recommend this program. As a bonus, you can use my referral code ${referralData.code} for special benefits.
+
+Learn more here: ${shareUrl}
+
+#ProfessionalDevelopment #LifelongLearning`
+  };
+
+  // Get the appropriate message for the platform or use default
+  const message = platformMessages[platform] || platformMessages.default;
+  
+  let url = '';
+  switch (platform) {
+    case 'whatsapp':
+      url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+      break;
+    case 'facebook':
+      url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(message)}`;
+      break;
+    case 'twitter':
+      url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+      break;
+    case 'linkedin':
+      url = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(selectedCourse.courseName)}&summary=${encodeURIComponent(message)}`;
+      break;
+    default:
+      return;
+  }
+  
+  window.open(url, '_blank', 'noopener,noreferrer');
+};
 
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6 lg:p-8">
@@ -460,10 +559,20 @@ const StudentProfile = () => {
                         Started: {formatDate(course.startDate)}
                       </p>
                       <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
-                        <span className="text-lg font-bold text-[#4D2C5E]">
-                          ₹{course.discountedPrice || 'N/A'}
-                        </span>
-                      </div>
+  <span className="text-lg font-bold text-[#4D2C5E]">
+    ₹{course.discountedPrice || 'N/A'}
+  </span>
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      setSelectedCourse(course);
+      generateReferral(course._id);
+    }}
+    className="text-xs bg-[#FF7426] text-white px-3 py-1 rounded hover:bg-[#E65100] transition"
+  >
+    Refer & Earn
+  </button>
+</div>
                     </div>
                   </div>
                 ))}
@@ -472,6 +581,115 @@ const StudentProfile = () => {
           </div>
         )}
       </div>
+
+
+{showReferralModal && referralData && selectedCourse && (
+  <div className="fixed inset-0 bg-[#00000070] flex items-center justify-center z-50 p-4 overflow-y-auto">
+    <div className="bg-white rounded-xl shadow-xl w-full max-w-md mx-auto my-8 relative max-h-[90vh] flex flex-col">
+      {/* Modal Header */}
+      <div className="sticky top-0 bg-white p-6 pb-4 rounded-t-xl border-b border-gray-100 z-10">
+        <button 
+          onClick={() => setShowReferralModal(false)}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+        >
+          <FiX size={24} />
+        </button>
+        
+        <div className="text-center">
+          <h3 className="text-2xl font-bold text-[#4D2C5E] mb-2">Share & Earn</h3>
+          <p className="text-gray-600">
+            Share this course with friends and earn rewards when they enroll!
+          </p>
+        </div>
+      </div>
+      
+      {/* Scrollable Content */}
+      <div className="overflow-y-auto p-6 pt-4 flex-1">
+        {/* Referral Code Section */}
+        <div className="bg-[#4D2C5E]/10 p-4 rounded-lg mb-6">
+          <h4 className="font-medium text-gray-700 mb-2">Your Referral Code</h4>
+          <div className="flex items-center justify-between bg-white p-3 rounded border border-[#4D2C5E]/30">
+            <span className="font-mono text-lg font-bold text-[#4D2C5E] truncate mr-2">
+              {referralData.code}
+            </span>
+            <button
+              onClick={copyToClipboard}
+              className={`flex-shrink-0 flex items-center px-3 py-1 rounded ${copied ? 'bg-green-100 text-green-800' : 'bg-[#4D2C5E] text-white hover:bg-[#3a2152]'}`}
+            >
+              <FiCopy className="mr-1" />
+              {copied ? 'Copied!' : 'Copy'}
+            </button>
+          </div>
+        </div>
+        
+        {/* Share Options Section */}
+        <div className="mb-6">
+          <h4 className="font-medium text-gray-700 mb-3">Share Course Link</h4>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            <button 
+              onClick={() => shareOnSocialMedia('whatsapp')}
+              className="flex flex-col items-center justify-center p-3 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition"
+            >
+              <FiShare2 size={20} />
+              <span className="text-xs mt-1">WhatsApp</span>
+            </button>
+            <button 
+              onClick={() => shareOnSocialMedia('facebook')}
+              className="flex flex-col items-center justify-center p-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition"
+            >
+              <FiShare2 size={20} />
+              <span className="text-xs mt-1">Facebook</span>
+            </button>
+            <button 
+              onClick={() => shareOnSocialMedia('twitter')}
+              className="flex flex-col items-center justify-center p-3 bg-blue-50 text-blue-400 rounded-lg hover:bg-blue-100 transition"
+            >
+              <FiShare2 size={20} />
+              <span className="text-xs mt-1">Twitter</span>
+            </button>
+            <button 
+              onClick={() => shareOnSocialMedia('linkedin')}
+              className="flex flex-col items-center justify-center p-3 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition"
+            >
+              <FiShare2 size={20} />
+              <span className="text-xs mt-1">LinkedIn</span>
+            </button>
+          </div>
+        </div>
+        
+        {/* Course Info Section */}
+        <div className="mb-6 border border-gray-200 rounded-lg overflow-hidden">
+          <div className="bg-gray-50 p-3 border-b border-gray-200">
+            <h4 className="font-medium text-gray-700">Course Details</h4>
+          </div>
+          <div className="p-4">
+            <p className="font-medium text-[#4D2C5E] mb-1">{selectedCourse.courseName}</p>
+            <p className="text-sm text-gray-600 mb-2">Batch: {selectedCourse.batchCode}</p>
+            <p className="text-sm text-gray-600">Started: {formatDate(selectedCourse.startDate)}</p>
+          </div>
+        </div>
+        
+        {/* Note Section */}
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
+          <p className="text-yellow-700 text-sm">
+            <strong>Note:</strong> You'll earn rewards when your friends enroll using your referral code.
+          </p>
+        </div>
+      </div>
+      
+      {/* Footer with Share Button */}
+      <div className="sticky bottom-0 bg-white p-4 border-t border-gray-100 rounded-b-xl">
+        <button
+          onClick={() => shareOnSocialMedia('whatsapp')} // Default to WhatsApp
+          className="w-full bg-[#4D2C5E] text-white py-2 rounded-lg hover:bg-[#3a2152] transition flex items-center justify-center"
+        >
+          <FiShare2 className="mr-2" />
+          Share Now
+        </button>
+      </div>
+    </div>
+  </div>
+)}
 
     </div>
   );
