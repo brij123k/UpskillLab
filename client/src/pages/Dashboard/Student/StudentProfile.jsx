@@ -36,7 +36,7 @@ const StudentProfile = () => {
       setAllCourses(coursesResponse.data || []);
 
       if (response) {
-        const { user, student, batch } = response;
+        const { user, student,order, batch } = response;
         console.log("API Response:", response);
         
         setBatches(batch || []);
@@ -76,7 +76,6 @@ const StudentProfile = () => {
           batchCode: batch.batchCode,
           startDate: batch.startDate,
           status: batch.active ? 'Active' : 'Inactive',
-          imageUrl: batch.imageUrl,
           batchData: batch
         } : null;
       }).filter(Boolean);
@@ -529,9 +528,9 @@ Learn more here: ${shareUrl}
                     onClick={() => showCourseDetails(course)}
                   >
                     <div className="relative h-40 bg-gradient-to-r from-[#4D2C5E] to-[#7B4D8D]">
-                      {course.imageUrl ? (
+                      {course.courseImage ? (
                         <img 
-                          src={course.imageUrl} 
+                          src={course.courseImage} 
                           alt={course.courseName} 
                           className="w-full h-full object-cover"
                         />
