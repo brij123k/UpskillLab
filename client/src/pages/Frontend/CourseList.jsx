@@ -738,7 +738,7 @@ const CourseList = () => {
 
                     // 28-364 days = show in months
                     if (days <= 364) {
-                      const months = (days / 30.44).toFixed(1); // Average month length
+                      const months = (days / 30).toFixed(1); // Average month length
                       return `${months.endsWith('.0') ? months.split('.')[0] : months} month${months !== '1' ? 's' : ''}`;
                     }
 
