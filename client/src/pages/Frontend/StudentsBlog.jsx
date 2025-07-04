@@ -157,7 +157,7 @@ const StudentsBlog = () => {
             animate={{ y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            Upskillab <span className="text-[#FF7426]">Student Blog</span>
+            Upskillab <span className="text-[#FF7426]">Blog</span>
           </motion.h1>
 
           <motion.p
