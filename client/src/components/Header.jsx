@@ -795,7 +795,7 @@ function Header() {
                       className="block px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all"
                       onClick={toggleDrawer}
                     >
-                      Student Blog
+                      Blog
                     </NavLink>
                     <NavLink
                       to="/ContactUs"
