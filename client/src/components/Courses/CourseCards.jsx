@@ -2,6 +2,7 @@ import React from 'react';
 import CourseList from './CourseList';
 import { FiClock, FiUsers, FiArrowRight } from 'react-icons/fi';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 function CourseCards() {
 
  const navigation= useNavigate()
@@ -21,9 +22,17 @@ function CourseCards() {
         <div className="max-w-7xl mx-auto">
           {/* Header */}
           <div className="relative text-center mb-12">
-            <h2 className="text-2xl md:text-4xl font-semibold text-gray-900">
+{/*             <h2 className="text-2xl md:text-4xl font-semibold text-gray-900">
               Explore Our World's Best <span className='text-[#FF7426]'>Courses </span>
-            </h2>
+            </h2> */}
+
+
+// Inside JSX
+<NavLink to="/CourseList">
+  <h2 className="text-2xl md:text-4xl font-semibold text-gray-900 cursor-pointer hover:text-[#FF7426] transition-colors duration-200">
+    Explore Our World's Best <span className='text-[#FF7426]'>Courses</span>
+  </h2>
+</NavLink>
           </div>
 
           {/* Course cards list */}
