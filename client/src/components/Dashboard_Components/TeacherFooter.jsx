@@ -27,7 +27,7 @@ function TeacherFooter() {
                 <li className="text-[#606060] text-sm sm:text-base">Follow Us:</li>
                 <li>
                   <NavLink 
-                    to="https://www.facebook.com/share/1AF1w8dH6B" 
+                    to="https://www.facebook.com/upskillab/" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base transition-colors"
@@ -37,7 +37,7 @@ function TeacherFooter() {
                 </li>
                 <li>
                   <NavLink 
-                    to="https://www.instagram.com/counselhub_upskillab?igsh=MXg4d3p5Y200NjhldQ==" 
+                    to="https://www.instagram.com/upskillab_" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base transition-colors"
@@ -47,7 +47,7 @@ function TeacherFooter() {
                 </li>
                 <li>
                   <NavLink 
-                    to="https://whatsapp.com/channel/0029Vaqt47iEgGfEXJoS1K0c" 
+                    to="https://whatsapp.com/channel/0029Vb6RBx0GufJ0RYlVaj2i" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base transition-colors"
@@ -57,7 +57,7 @@ function TeacherFooter() {
                 </li>
                 <li>
                   <NavLink 
-                    to="https://www.linkedin.com/company/counsel-hub" 
+                    to="https://www.linkedin.com/company/upskill-now-upskillab" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base transition-colors"
@@ -155,15 +155,15 @@ function TeacherFooter() {
                     to="tel:+919958958123"
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base block"
                   >
-                    +91-9958958123
+                    +91-9319427070
                   </NavLink>
                 </li>
                 <li>
                   <NavLink
-                    to="mailto:teachers@upskillab.com"
+                    to="mailto:info@upskillab.com"
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base block"
                   >
-                    teachers@upskillab.com
+                    info@upskillab.com
                   </NavLink>
                 </li>
                 <li className="text-[#606060] text-sm sm:text-base">
