@@ -215,13 +215,13 @@ const ClassSchedule = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-[#4D2C5E] tracking-tight">Class Schedule</h1>
-          <button
+          {/* <button
             onClick={() => setShowModal(true)}
             className="flex items-center bg-[#FF7426] text-white px-5 py-2.5 rounded-lg hover:bg-[#E65100] transition-colors duration-200 shadow-md"
           >
             <FiPlus className="mr-2 h-5 w-5" />
             Schedule Class
-          </button>
+          </button> */}
         </div>
 
         <div className="bg-white rounded-xl shadow-lg p-6 mb-8">

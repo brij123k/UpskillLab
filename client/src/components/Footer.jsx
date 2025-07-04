@@ -44,16 +44,16 @@ function Footer() {
                     <FaInstagram />
                   </NavLink>
                 </li>
-                {/* <li>
+                <li>
                   <NavLink 
-                    to="https://whatsapp.com/channel/0029Vaqt47iEgGfEXJoS1K0c" 
+                    to="https://whatsapp.com/channel/0029Vb6RBx0GufJ0RYlVaj2i" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors no-underline"
                   >
                     <FaWhatsapp />
                   </NavLink>
-                </li> */}
+                </li>
                 <li>
                   <NavLink 
                     to="https://www.linkedin.com/company/upskill-now-upskillab" 

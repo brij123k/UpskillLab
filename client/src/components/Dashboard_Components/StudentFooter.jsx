@@ -20,14 +20,14 @@ const StudentFooter = () => {
               />
             </NavLink>
             <p className="text-[#606060] text-sm sm:text-base mt-4 sm:mt-6 mb-6 sm:mb-8 lg:mb-6 text-center lg:text-left">
-              Empowering students to achieve their learning goals
+              Where Skills Development Meets Mental Wellbeing
             </p>
             <div className="text-center lg:text-left">
               <ul className="flex items-center gap-4 justify-center lg:justify-start">
                 <li className="text-[#606060] text-sm sm:text-base">Follow Us:</li>
                 <li>
                   <NavLink 
-                    to="https://www.facebook.com/share/1AF1w8dH6B" 
+                    to="https://www.facebook.com/upskillab/" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base transition-colors"
@@ -37,7 +37,7 @@ const StudentFooter = () => {
                 </li>
                 <li>
                   <NavLink 
-                    to="https://www.instagram.com/counselhub_upskillab?igsh=MXg4d3p5Y200NjhldQ==" 
+                    to="https://www.instagram.com/upskillab_" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base transition-colors"
@@ -47,7 +47,7 @@ const StudentFooter = () => {
                 </li>
                 <li>
                   <NavLink 
-                    to="https://whatsapp.com/channel/0029Vaqt47iEgGfEXJoS1K0c" 
+                    to="https://whatsapp.com/channel/0029Vb6RBx0GufJ0RYlVaj2i" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base transition-colors"
@@ -57,7 +57,7 @@ const StudentFooter = () => {
                 </li>
                 <li>
                   <NavLink 
-                    to="https://www.linkedin.com/company/counsel-hub" 
+                    to="https://www.linkedin.com/company/upskill-now-upskillab" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base transition-colors"
@@ -81,7 +81,7 @@ const StudentFooter = () => {
               <ul className="space-y-2 sm:space-y-3">
                 <li>
                   <NavLink 
-                    to="/student/study-materials" 
+                    to="/student/StudyMaterials" 
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base block flex items-center justify-center sm:justify-start"
                   >
                     Study Materials
@@ -123,15 +123,15 @@ const StudentFooter = () => {
                 </li>
                 <li>
                   <NavLink 
-                    to="/student/course-suggestions" 
+                    to="/student/Trends" 
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base block flex items-center justify-center sm:justify-start"
                   >
-                    Course Suggestions
+                    Teacher Suggestions
                   </NavLink>
                 </li>
                 <li>
                   <NavLink 
-                    to="/student/job-openings" 
+                    to="/student/Jobs" 
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base block flex items-center justify-center sm:justify-start"
                   >
                     Job Openings
@@ -139,7 +139,7 @@ const StudentFooter = () => {
                 </li>
                 <li>
                   <NavLink 
-                    to="/student/market-trends" 
+                    to="/student/trends" 
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base block flex items-center justify-center sm:justify-start"
                   >
                     Market Trends
@@ -154,18 +154,18 @@ const StudentFooter = () => {
               <ul className="space-y-2 sm:space-y-3">
                 <li>
                   <NavLink
-                    to="tel:+919958958123"
+                    to="tel:+919319427070"
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base block"
                   >
-                    +91-9958958123
+                    +91-9319427070
                   </NavLink>
                 </li>
                 <li>
                   <NavLink
-                    to="mailto:support@upskillab.com"
+                    to="mailto:info@upskillab.com"
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base block"
                   >
-                    support@upskillab.com
+                    info@upskillab.com
                   </NavLink>
                 </li>
                 <li className="text-[#606060] text-sm sm:text-base">
