@@ -492,7 +492,7 @@ function Header() {
               style={navLinkStyle}
               className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap"
             >
-              Student Blog
+              Blog
             </NavLink>
             <NavLink
               to="/ContactUs"
