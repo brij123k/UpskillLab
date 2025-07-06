@@ -492,7 +492,7 @@ function Header() {
               style={navLinkStyle}
               className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap"
             >
-              Student Blog
+              Blog
             </NavLink>
             <NavLink
               to="/ContactUs"
@@ -795,7 +795,7 @@ function Header() {
                       className="block px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all"
                       onClick={toggleDrawer}
                     >
-                      Student Blog
+                      Blog
                     </NavLink>
                     <NavLink
                       to="/ContactUs"

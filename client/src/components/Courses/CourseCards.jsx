@@ -2,6 +2,7 @@ import React from 'react';
 import CourseList from './CourseList';
 import { FiClock, FiUsers, FiArrowRight } from 'react-icons/fi';
 import { NavLink, useNavigate } from 'react-router-dom';
+
 function CourseCards() {
 
  const navigation= useNavigate()
@@ -24,6 +25,9 @@ function CourseCards() {
             <h2 className="text-2xl md:text-4xl font-semibold text-gray-900">
               Explore Our World's Best <span className='text-[#FF7426]'>Courses </span>
             </h2>
+
+
+
           </div>
 
           {/* Course cards list */}
