@@ -9,7 +9,7 @@ import { format, isBefore, isAfter } from 'date-fns';
 import ApiConfig from '../../../config/apiConfig';
 import useNotificationService from '../../../config/notificationService';
 import { useNavigate } from 'react-router-dom';
-import { getDataHandlerWithToken } from '../../../config/services';
+import { getDataHandlerWithToken, postDataHandlerWithToken } from '../../../config/services';
 const StudentDashboard = () => {
   const [stats, setStats] = useState({
     courses: 0,
@@ -176,6 +176,19 @@ if (!profileComplete) {
     return format(new Date(dateString), 'MMM d, yyyy');
   };
 
+          const updateAttendance = async (classId) => {
+      try {
+        const payload = {
+  "isAttended": true
+}
+        const endpoint = ApiConfig.updateStudentAttendance(classId)
+        await postDataHandlerWithToken(endpoint, payload, true);
+        // toast.success('Attendance updated successfully');
+      } catch (error) {
+        // toast.error('Failed to update attendance');
+        console.error('Error updating attendance:', error);
+      }
+    };
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -288,6 +301,12 @@ if (!profileComplete) {
                     !session.isApproved ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
                   style={!session.isApproved ? {pointerEvents: 'none'} : {}}
+                  onClick={() => {
+        if (session.isApproved) {
+          
+          updateAttendance(session._id); // Assuming session.id is the classId
+        }
+      }}
                 >
                   Join Live Class
                 </a>
@@ -381,34 +400,47 @@ if (!profileComplete) {
                   </span>
                 </div>
                 
-                <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-500">
-                    {formatDate(session.scheduledDate)}
-                  </span>
-                  {isCompleted ? (
-                    <button className="px-3 py-1 rounded-lg text-sm font-medium bg-gray-200 text-gray-600 cursor-not-allowed">
-                      Completed
-                    </button>
-                  ) : (
-                    <a
-                      href={session.meetingLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`px-3 py-1 rounded-lg text-sm font-medium ${
-                        isLiveNow ? 'bg-red-500 text-white hover:bg-red-600' :
-                        session.isApproved ? 
-                          (isUpcoming ? 'bg-[#4D2C5E] text-white hover:bg-[#3a2152]' : 
-                           'bg-[#FF7426] text-white hover:bg-[#E65100]') :
-                        'bg-gray-400 text-gray-700 cursor-not-allowed'
-                      }`}
-                      style={!session.isApproved ? {pointerEvents: 'none'} : {}}
-                    >
-                      {isLiveNow ? 'Join Live' : 
-                       session.isApproved ? (isUpcoming ? 'Join Soon' : 'Join Now') : 
-                       'Pending Approval'}
-                    </a>
-                  )}
-                </div>
+               <div className="flex justify-between items-center">
+  <span className="text-xs text-gray-500">
+    {formatDate(session.scheduledDate)}
+  </span>
+  {isCompleted ? (
+    <button className="px-3 py-1 rounded-lg text-sm font-medium bg-gray-200 text-gray-600 cursor-not-allowed">
+      Completed
+    </button>
+  ) : (
+    <a
+      href={session.meetingLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`px-3 py-1 rounded-lg text-sm font-medium ${
+        isLiveNow ? 'bg-red-500 text-white hover:bg-red-600' :
+        session.isApproved ? 
+          (isUpcoming ? 'bg-[#4D2C5E] text-white hover:bg-[#3a2152]' : 
+           'bg-[#FF7426] text-white hover:bg-[#E65100]') :
+        'bg-gray-400 text-gray-700 cursor-not-allowed'
+      }`}
+      style={!session.isApproved ? {pointerEvents: 'none'} : {}}
+      onClick={async (e) => {
+        if (isLiveNow && session.isApproved) {
+          e.preventDefault(); // Prevent immediate navigation
+          try {
+            console.log(session)
+            await updateAttendance(session._id); // Update attendance first
+            window.open(session.meetingLink, '_blank'); // Then open the link
+          } catch (error) {
+            console.error('Error updating attendance:', error);
+            // Optionally show error to user
+          }
+        }
+      }}
+    >
+      {isLiveNow ? 'Join Live' : 
+       session.isApproved ? (isUpcoming ? 'Join Soon' : 'Join Now') : 
+       'Pending Approval'}
+    </a>
+  )}
+</div>
               </div>
             </div>
           );

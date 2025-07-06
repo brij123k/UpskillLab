@@ -48,6 +48,8 @@ const StudentClassSchedule = () => {
     }
   };
 
+
+
   const fetchMyFeedbacks = async () => {
     try {
       const response = await getDataHandlerWithToken("getFeedback");
@@ -432,6 +434,21 @@ const ClassCard = ({ session, isLive, isPast = false, now, myFeedbacks = [],open
   };
   const timeRemaining = getTimeRemaining();
 const existingFeedback = myFeedbacks.find(fb => fb.classSessionId === session._id);
+
+  const updateAttendance = async (classId) => {
+      try {
+        const payload = {
+  "isAttended": true
+}
+        const endpoint = ApiConfig.updateStudentAttendance(classId)
+        await postDataHandlerWithToken(endpoint, payload, true);
+        // toast.success('Attendance updated successfully');
+      } catch (error) {
+        // toast.error('Failed to update attendance');
+        console.error('Error updating attendance:', error);
+      }
+    };
+
   return (
     <div className={`bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow duration-200 border ${
       isLive ? 'border-red-200' : 
@@ -492,44 +509,48 @@ const existingFeedback = myFeedbacks.find(fb => fb.classSessionId === session._i
       )}
       
       <div className="mt-6 flex justify-between items-center pr-4">
-        {!isPast ? (
-          <a
-            href={session.meetingLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`inline-block text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium ${
-              session.isApproved && isLive
-                ? 'bg-red-500 hover:bg-red-600'
-                : session.isApproved
-                  ? 'bg-[#4D2C5E] hover:bg-[#3A2152]'
-                  : 'bg-gray-400 cursor-not-allowed'
-            }`}
-            style={!session.isApproved ? {pointerEvents: 'none'} : {}}
-          >
-            {isLive ? 'Join Live Class' : session.isApproved ? 'Join Class' : 'Pending Approval'}
-          </a>
-        ) 
-        : (
-          <button
-           className="text-[#4D2C5E] hover:text-[#FF7426] text-sm font-medium">
-           
-          </button>
-        )}
-        
-        {isLive ? (
-          <div className="flex items-center">
-            <span className="flex h-2 w-2 mr-2">
-              <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-red-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-            </span>
-            <span className="text-xs text-red-500">Live Now</span>
-          </div>
-        ) : isPast ? (
-          <FiBookmark className="text-[#4D2C5E] opacity-30 h-6 w-6" />
-        ) : (
-          <FiLock className="text-gray-400 h-6 w-6" />
-        )}
-      </div>
+  {!isPast ? (
+    <a
+      href={session.meetingLink}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={`inline-block text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium ${
+        session.isApproved && isLive
+          ? 'bg-red-500 hover:bg-red-600'
+          : session.isApproved
+            ? 'bg-[#4D2C5E] hover:bg-[#3A2152]'
+            : 'bg-gray-400 cursor-not-allowed'
+      }`}
+      style={!session.isApproved ? {pointerEvents: 'none'} : {}}
+      onClick={() => {
+        if (isLive && session.isApproved) {
+          updateAttendance(session._id); // Assuming session.id is the classId
+        }
+      }}
+    >
+      {isLive ? 'Join Live Class' : session.isApproved ? 'Join Class' : 'Pending Approval'}
+    </a>
+  ) 
+  : (
+    <button
+      className="text-[#4D2C5E] hover:text-[#FF7426] text-sm font-medium">
+    </button>
+  )}
+  
+  {isLive ? (
+    <div className="flex items-center">
+      <span className="flex h-2 w-2 mr-2">
+        <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-red-400 opacity-75"></span>
+        <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+      </span>
+      <span className="text-xs text-red-500">Live Now</span>
+    </div>
+  ) : isPast ? (
+    <FiBookmark className="text-[#4D2C5E] opacity-30 h-6 w-6" />
+  ) : (
+    <FiLock className="text-gray-400 h-6 w-6" />
+  )}
+</div>
 
       {isPast && (
         <div className="mt-4">

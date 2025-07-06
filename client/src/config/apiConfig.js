@@ -105,6 +105,7 @@ const ApiConfig = {
   account:`${url}/api/payment-status`,
   trends:`${url}/resources`,
   studentAttendance:`${url}/live-classes/attendance`,
+  updateStudentAttendance:(classId)=>`${url}/live-classes/${classId}/attendance`,
   appliedJobs:(email)=>`${url}/applications/applied-jobs/${email}`,
 
   studenttestimonial:`${url}/testimonials`,
