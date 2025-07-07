@@ -772,7 +772,7 @@ const CourseList = () => {
                     </svg>
                   </div>
                 </div>
-<button onClick={() => navigate(`/courseDetails/course/${course.courseCode}`, {
+<button onClick={() => navigate(`/category/course/${course.courseCode}`, {
                     state: {
                       courseCode: course.courseCode
                     }
@@ -799,7 +799,7 @@ const CourseList = () => {
               {/* Action Buttons Section */}
               <div className="px-6 pb-6 pt-0 flex justify-between flex-col sm:flex-row gap-3">
                 <button
-                  onClick={() => navigate(`/courseDetails/course/${course.courseCode}`, {
+                  onClick={() => navigate(`/category/course/${course.courseCode}`, {
                     state: {
                       courseCode: course.courseCode
                     }

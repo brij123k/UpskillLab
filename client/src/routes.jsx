@@ -90,9 +90,9 @@ export const routes = [
   { exact: true, path: "/Career", layout: GuestLayout, component: Career},
   { exact: true, path: "/About", layout: GuestLayout, component: AboutSection},
   // { exact: true, path: "/CourseDetails/:id", layout: GuestLayout, component: CourseDetailsPage},
-  { exact: true, path: "/courseDetails/batch/:id", layout: GuestLayout, component: CourseDetailsPage},
+  { exact: true, path: "/category/batch/:id", layout: GuestLayout, component: CourseDetailsPage},
   {
-    exact: true, path: "/courseDetails/course/:id", layout: GuestLayout, component: CourseDetailsPage},
+    exact: true, path: "/category/course/:id", layout: GuestLayout, component: CourseDetailsPage},
   { exact: true, path: "/Register", layout: Index, component: Register},
   { exact: true, path: "/Login", layout: Index, component: Login},
   { exact: true, path: "/ForgetPassword", layout: Index, component: ForgotPasswordPage},

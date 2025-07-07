@@ -206,7 +206,7 @@ const shareOnSocialMedia = (platform) => {
   if (!referralData || !selectedCourse) return;
   console.log(selectedCourse)
   // Construct the base URL with referral code
-  const shareUrl = `https://upskillab.com/courseDetails/course/${selectedCourse.courseCode}?ref=${referralData.code}`;
+  const shareUrl = `https://upskillab.com/category/course/${selectedCourse.courseCode}?ref=${referralData.code}`;
   
   // Create platform-specific messages with emojis for better engagement
   const platformMessages = {

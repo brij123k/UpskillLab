@@ -135,7 +135,7 @@
 //         <div className="flex justify-between gap-3">
 //           <motion.button
 //             className="text-[#4D2C5E] text-sm font-medium px-4 py-2 rounded-md border-2 border-[#4D2C5E] hover:bg-[#4D2C5E] hover:text-white transition-colors flex-1"
-//             onClick={() => navigate(`/courseDetails/batch/${batchId}`, { 
+//             onClick={() => navigate(`/category/batch/${batchId}`, { 
 //               state: { 
 //                 courseId,
 //                 courseCode,
@@ -387,7 +387,7 @@ const BatchCard = ({
                 ? "text-[#4D2C5E] border-[#4D2C5E] hover:bg-[#4D2C5E] hover:text-white"
                 : "text-gray-500 border-gray-400 hover:bg-gray-100"
             }`}
-            onClick={() => navigate(`/courseDetails/batch/${batchId}`, { 
+            onClick={() => navigate(`/category/batch/${batchId}`, { 
               state: { 
                 courseId,
                 courseCode,
