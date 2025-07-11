@@ -25,7 +25,6 @@ const UpcomingBatches = () => {
       data.map((batch) => {
         let durationText = '';
         const days = batch.durationInDays;
-        
         if (days >= 365) {
           // Convert to years with decimal
           const years = (days / 365).toFixed(1);

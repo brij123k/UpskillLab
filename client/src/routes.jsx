@@ -92,7 +92,7 @@ export const routes = [
   // { exact: true, path: "/CourseDetails/:id", layout: GuestLayout, component: CourseDetailsPage},
   { exact: true, path: "/category/batch/:id", layout: GuestLayout, component: CourseDetailsPage},
   {
-    exact: true, path: "/category/course/:id", layout: GuestLayout, component: CourseDetailsPage},
+    exact: true, path: "/:category/course/:id", layout: GuestLayout, component: CourseDetailsPage},
   { exact: true, path: "/Register", layout: Index, component: Register},
   { exact: true, path: "/Login", layout: Index, component: Login},
   { exact: true, path: "/ForgetPassword", layout: Index, component: ForgotPasswordPage},

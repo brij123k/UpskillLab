@@ -138,6 +138,7 @@ function Header() {
           imageUrl: course.courseImage,
           duration: course.courseDuration,
           courseCode: course.courseCode,
+          category:course.category.categoryName
 
         }));
     },
@@ -183,7 +184,6 @@ function Header() {
     const announcementsHandler = async ()=>{
       try{
         const response = await getDataHandler('getAnnouncements')
-        console.log(response)
 
         const messages = response
         .filter(item=>item.isActive)
@@ -356,11 +356,13 @@ function Header() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative">
                           {(selectedCategory ? selectedCategory.courses : AllCourses.slice(0, 4)).map((course) => (
+                            
                             <div
                               key={course.id}
                               className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group relative"
                               onClick={() => {
-                                navigate(`/category/course/${course.courseCode}`, {
+                                const categoryName = selectedCategory?.name || course.category;
+                                navigate(`/${categoryName}/course/${course.courseCode}`, {
                                   state: { courseId: course.id, courseCode: course.courseCode }
                                 });
                                 setIsCoursesDropdownOpen(false);
@@ -381,6 +383,7 @@ function Header() {
                                 }
                               }}
                             >
+                              {/* {console.log(AllCourses)} */}
                               <div className="flex items-start">
                                 <img
                                   src={course.image || course.imageUrl}
@@ -721,7 +724,7 @@ function Header() {
                       <button
                         key={course.id}
                         onClick={() => {
-                          navigate(`/category/course/${course.courseCode}`, { 
+                          navigate(`/${selectedCategory.name}/course/${course.courseCode}`, { 
                             state: { courseId: course.id, courseCode: course.courseCode } 
                           });
                           toggleDrawer();

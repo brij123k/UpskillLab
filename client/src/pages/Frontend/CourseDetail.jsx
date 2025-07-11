@@ -2408,7 +2408,8 @@ const CourseDetails = () => {
     }, [type, id]);
     
       useEffect(() => {
-<ScrollToTop/>
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+{/* <ScrollToTop/> */}
   }, []);
 
     const fetchCourse = async (courseCode) => {
