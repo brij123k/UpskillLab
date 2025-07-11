@@ -38,6 +38,7 @@
 /* Ensure images have transparent backgrounds */
 .carousel-image {
   background: transparent;
+  
 }
 
 body {

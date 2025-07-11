@@ -11,7 +11,7 @@ import { FiBarChart2,FiArrowRight, FiGlobe } from 'react-icons/fi';
 import ApiConfig from '../../config/apiConfig';
 import { toast } from "react-toastify";
 import AdmissionFormModal from '../../components/Modal/BasicEnrollNowModal';
-
+import ScrollToTop from "../../components/ScrollToTop";
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { NavLink, useLocation } from 'react-router-dom';
 import { getDataHandler } from '../../config/services';
@@ -2406,6 +2406,10 @@ const CourseDetails = () => {
             fetchBtachCourse(id)
         }
     }, [type, id]);
+    
+      useEffect(() => {
+<ScrollToTop/>
+  }, []);
 
     const fetchCourse = async (courseCode) => {
         // Get the endpoint URL by calling the ApiConfig function
@@ -2592,6 +2596,7 @@ const CourseDetails = () => {
             </div>
         );
     }
+
 
 
 

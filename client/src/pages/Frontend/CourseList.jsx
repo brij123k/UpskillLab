@@ -13,6 +13,7 @@ import BatchEnrollmentModal from "../../components/Modal/BatchEnrollmentModal";
 import ApiConfig from "../../config/apiConfig";
 import { toast } from "react-toastify";
 import { Helmet } from 'react-helmet-async';
+import ScrollToTop from "../../components/ScrollToTop";
 import AdmissionFormModal from "../../components/Modal/BasicEnrollNowModal";
 const bannerVariants = {
   hidden: { opacity: 0 },
@@ -772,11 +773,21 @@ const CourseList = () => {
                     </svg>
                   </div>
                 </div>
-<button onClick={() => navigate(`/category/course/${course.courseCode}`, {
-                    state: {
-                      courseCode: course.courseCode
-                    }
-                  })}>
+<button
+  onClick={() => {
+    // Scroll to top first
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Wait a short time, then navigate
+    setTimeout(() => {
+      navigate(`/category/course/${course.courseCode}`, {
+        state: {
+          courseCode: course.courseCode,
+        },
+      });
+    }, 300); // Delay to let scroll finish
+  }}
+>
                 <h3 className="text-xl text-left font-bold text-[#4D2C5E] mb-2">
                   {course.courseName}
                 </h3>

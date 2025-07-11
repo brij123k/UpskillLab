@@ -289,7 +289,9 @@ const StudyMaterials = () => {
                       disabled={isUploading}
                     >
                       <option value="">Select a course</option>
-                      {allCourses.map(course => (
+                      {allCourses
+                      .filter(course => course.active)
+                      .map(course => (
                         <option key={course._id} value={course._id}>
                           {course.courseName}
                         </option>
