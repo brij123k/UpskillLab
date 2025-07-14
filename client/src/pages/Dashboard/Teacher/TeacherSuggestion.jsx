@@ -32,6 +32,7 @@ const TeacherSuggestions = () => {
         
         // Fetch teacher profile
         const profileResponse = await getDataHandlerWithToken('teacherProfile');
+        console.log(profileResponse)
         setTeacherProfile(profileResponse);
         
         // Fetch batches taught by this teacher
@@ -453,16 +454,16 @@ const TeacherSuggestions = () => {
                 disabled={isSubmitting}
               >
                 <option value="">Select suggestion type</option>
-                <option value="curriculum">📚 Curriculum Improvement</option>
-                <option value="teaching">👩‍🏫 Teaching Methodology</option>
-                <option value="assessment">📝 Assessment & Grading</option>
-                <option value="resources">💻 Learning Resources</option>
-                <option value="projects">🛠️ Projects & Assignments</option>
-                <option value="platform">🖥️ Platform Features</option>
-                <option value="career">💼 Career Guidance</option>
-                <option value="community">🤝 Student Community</option>
-                <option value="events">🎓 Events & Workshops</option>
-                <option value="other">✨ Other Suggestions</option>
+                <option value="Curriculum">📚 Curriculum Improvement</option>
+                <option value="Teaching">👩‍🏫 Teaching Methodology</option>
+                <option value="Assessment">📝 Assessment & Grading</option>
+                <option value="Resources">💻 Learning Resources</option>
+                <option value="Projects & Assignments">🛠️ Projects & Assignments</option>
+                <option value="Platform">🖥️ Platform Features</option>
+                <option value="Career">💼 Career Guidance</option>
+                <option value="Community">🤝 Student Community</option>
+                <option value="Events">🎓 Events & Workshops</option>
+                <option value="Other">✨ Other Suggestions</option>
               </select>
             </div>
             <div>
