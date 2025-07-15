@@ -25,10 +25,11 @@ const AboutUpskillab = () => {
 
   return (
     <>
-      <Helmet>
-        <title>About Upskillab | Bridging Skills & Wellbeing</title>
-        <meta name="description" content="Upskillab combines industry-relevant courses with mental wellbeing support for holistic professional and personal development." />
+        <Helmet>
+        <title>About Upskillab: E-Learning in Psychology, Technology, Management & Self-Development</title>
+        <meta name="description" content=" Upskillab offers online courses in psychology, technology, management, and self-development to help you gain the skills needed for success in today’s competitive job market.." />
       </Helmet>
+
 
       <div className="bg-gradient-to-b from-[#FDF8EE] to-white py-12 px-4 sm:px-6 lg:px-8">
         {/* Hero Section */}
