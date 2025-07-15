@@ -3,6 +3,7 @@ import { useEffect, useState, useContext } from 'react';
 import { io } from 'socket.io-client';
 
 const useNotificationService = (id,roles) => {
+  console.log(id,roles)
 //   const { user } = useContext(AuthContext);
   const [socket, setSocket] = useState(null);
   const [notifications, setNotifications] = useState([]);
@@ -10,16 +11,20 @@ const useNotificationService = (id,roles) => {
   // Initialize socket connection
   useEffect(() => {
     const newSocket = io('https://api.upskillab.com', {
-      transports: ['websocket']
+    // const newSocket = io('http://localhost:3000', {
+      transports: ['websocket'],
+      withCredentials: true,
     });
 
     setSocket(newSocket);
 
     // Register user with their roles
+    
     newSocket.emit('register', {
       userId: id,
       roles: roles
     });
+    console.log(id,"5")
 
     // Listen for notifications
     newSocket.on('notification', (notification) => {

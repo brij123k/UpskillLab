@@ -19,7 +19,7 @@ const StudentHeader = () => {
   const notificationRef = useRef(null);
   const navigate = useNavigate();
   const { logout } = useAuth();
-  // const { notifications, setNotifications } = useNotificationService('student', ['student', 'teacherStudent', 'adminStudent']);
+  const { newNotifications, setNewNotifications } = useNotificationService('student', ['student', 'teacherStudent', 'adminStudent']);
   const [loading, setLoading] = useState(true);
   const [profileImage, setProfileImage] = useState(null);
   const [profileId,setProfileId]= useState('')
@@ -49,7 +49,8 @@ const StudentHeader = () => {
       'LIVE_CLASS': 'Live Class',
       'MATERIAL_UPDATE': 'New Material'
     };
-    return typeMap[type] || type.replace('_', ' ');
+    if (!type || typeof type !== 'string') return 'General';
+  return typeMap[type] || type.replace(/_/g, ' ');
   };
 
   // Fetch initial notifications
@@ -62,12 +63,11 @@ const StudentHeader = () => {
       const endpoint = ApiConfig.Notifications('student');
       const endpoint2 = ApiConfig.Notifications('teacherStudent');
       const endpoint3 = ApiConfig.Notifications('adminStudent');
-      const endpoint4= ApiConfig.NotificationsbyId(profile._id)
       const [response, response2, response3,response4 ] = await Promise.all([
         getDataHandlerWithToken(endpoint, null, null, true),
         getDataHandlerWithToken(endpoint2, null, null, true),
         getDataHandlerWithToken(endpoint3, null, null, true),
-        getDataHandlerWithToken(endpoint4, null, null, true)
+        getDataHandlerWithToken('NotificationsbyId')
         
       ]);
       
@@ -273,7 +273,7 @@ const StudentHeader = () => {
                     <span className="w-2 h-2 bg-[#FF7426] rounded-full flex-shrink-0"></span>
                   )}
                   <p className="text-sm font-medium text-gray-800 truncate">
-                    {getTitleByType(notification.type)}
+                    {notification.type?.replace(/_/g, ' ') || 'General'}
                   </p>
                 </div>
                 <p className="text-xs text-gray-600 mt-1 line-clamp-2">{notification.message}</p>
@@ -282,7 +282,7 @@ const StudentHeader = () => {
                     {formatTimeAgo(notification.createdAt)}
                   </p>
                   <span className="px-2 py-0.5 bg-[#FF7426]/10 text-[#FF7426] text-xs rounded-full whitespace-nowrap ml-2">
-                    {notification.type.replace(/_/g, ' ')}
+                    {notification.type?.replace(/_/g, ' ') || 'General'}
                   </span>
                 </div>
               </div>

@@ -47,7 +47,8 @@ const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
       'ANNOUNCEMENT': 'Announcement',
       'FEEDBACK': 'Feedback'
     };
-    return typeMap[type] || type.replace('_', ' ');
+    if (!type || typeof type !== 'string') return 'General';
+  return typeMap[type] || type.replace(/_/g, ' ');
   };
 
   // Fetch initial notifications
@@ -59,13 +60,13 @@ const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
       const endpoint = ApiConfig.Notifications('teacher');
       const endpoint2 = ApiConfig.Notifications('adminTeacher');
       const endpoint3 = ApiConfig.Notifications('teacherStudent');
-       const endpoint4= ApiConfig.NotificationsbyId(profile._id)
        
       const [response, response2, response3,response4] = await Promise.all([
         getDataHandlerWithToken(endpoint, null, null, true),
         getDataHandlerWithToken(endpoint2, null, null, true),
         getDataHandlerWithToken(endpoint3, null, null, true),
-        getDataHandlerWithToken(endpoint4, null, null, true)
+        getDataHandlerWithToken(endpoint4, null, null, true),
+        getDataHandlerWithToken('NotificationsbyId')
       ]);
       
       const allNotifications = [
@@ -253,7 +254,7 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
                     {formatTimeAgo(notification.createdAt)}
                   </p>
                   <span className="px-2 py-0.5 bg-[#FF7426]/10 text-[#FF7426] text-xs rounded-full whitespace-nowrap ml-2">
-                    {notification.type.replace(/_/g, ' ')}
+                    {notification.type?.replace(/_/g, ' ') || 'General'}
                   </span>
                 </div>
               </div>

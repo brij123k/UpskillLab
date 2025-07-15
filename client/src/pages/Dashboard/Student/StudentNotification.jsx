@@ -40,23 +40,21 @@ const StudentNotifications = () => {
       'ANNOUNCEMENT': 'Announcement',
       'FEEDBACK': 'Feedback'
     };
-    return typeMap[type] || type.replace('_', ' ');
+    if (!type || typeof type !== 'string') return 'General';
+  return typeMap[type] || type.replace(/_/g, ' ');
   };
 
   const fetchNotifications = async () => {
     try {
       setLoading(true);
-      const profile = await getDataHandlerWithToken("profile")
-      setProfileId(profile._id)
       const endpoint = ApiConfig.Notifications('student');
       const endpoint2 = ApiConfig.Notifications('teacherStudent');
       const endpoint3 = ApiConfig.Notifications('adminStudent');
-      const endpoint4= ApiConfig.NotificationsbyId(profile._id)
       const [response, response2, response3,response4] = await Promise.all([
         getDataHandlerWithToken(endpoint, null, null, true),
         getDataHandlerWithToken(endpoint2, null, null, true),
         getDataHandlerWithToken(endpoint3, null, null, true),
-        getDataHandlerWithToken(endpoint4, null, null, true)
+        getDataHandlerWithToken('NotificationsbyId')
       ]);
       
       const allNotifications = [
@@ -241,7 +239,7 @@ const StudentNotifications = () => {
                           {getTitleByType(notification.type)}
                         </h3>
                         <span className="px-2 py-0.5 bg-[#FF7426]/10 text-[#FF7426] text-xs rounded-full">
-                          {notification.type.replace('_', ' ')}
+                          {notification.type?.replace(/_/g, ' ') || 'General'}
                         </span>
                       </div>
                       <p className="text-gray-600 mt-1">{notification.message}</p>
