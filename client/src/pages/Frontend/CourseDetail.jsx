@@ -15,6 +15,60 @@ import ScrollToTop from "../../components/ScrollToTop";
 import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { NavLink, useLocation } from 'react-router-dom';
 import { getDataHandler } from '../../config/services';
+import { Helmet } from 'react-helmet-async';
+
+
+
+const seoMetadata = {
+  "certified-ai-ml-practitioner": {
+    title: "Best AI & Machine Learning Courses Online | Upskillab",
+    description: "Learn AI and Machine Learning online with Upskillab. Explore top-rated courses with certification, real-world projects, and expert instructors. Start your AI/ML career today.",
+  },
+  "java-xcelerate-cert": {
+    title: "Java Certification Course Online | Learn Java Programming with Certificate – Upskillab",
+    description: "Enroll in Upskillab’s Java Certification Course online to master core Java programming. Get hands-on training, expert instruction, and an industry-recognized certificate. Ideal for beginners and professionals. Start learning today!",
+  },
+  "code-master-cert": {
+    title: "Full Stack Java Developer Course Online | Web Development Training – Upskillab",
+    description: "Become a certified Full Stack Java Developer with Upskillab’s online course. Learn front-end and back-end web development, Java programming, and build real-world projects. Enroll in the best full stack developer course today.",
+  },
+  "foundation-of-data-science": {
+    title: "Best Data Science Course Online with Certificate in India | Upskillab",
+    description: "Join Upskillab’s Data Science Foundation course – one of the best online data science courses in India. Learn key skills, work on real projects, and earn a certificate. Ideal for beginners looking for a data science course in India.",
+  },
+  "cybershield-cert": {
+    title: "Top Cyber Security Courses Online | Best Cybersecurity Training | Upskillab",
+    description: "Build your cybersecurity career with Upskillab. Enroll in our cyber security certification courses online and master the tools and techniques used by top cybersecurity professionals.",
+  },
+  "mind-therapy-cert": {
+    title: "Best Online Psychology Courses & Certification | Upskillab",
+    description: "Transform your career with Upskillab’s online psychology courses. Enroll today in our certificate course in psychology and earn a psychology certificate online. Build your skills with the best online psychology courses and start your journey toward a rewarding career.",
+  },
+  "mind-path-cert": {
+    title: "Psychology Courses & Certificate Course in Psychology | Mind Path Certification | Upskillab",
+    description: "Enroll in psychology courses at Upskillab. The Mind Path Certification offers a comprehensive certificate course in psychology, focusing on counselling psychology courses and psychotherapy training online. Perfect for anyone pursuing psychotherapy training or looking for online psychology courses in India.",
+  },
+  "mind-crest-cert": {
+    title: "Top Clinical Psychology Courses Online in India | Upskillab",
+    description: "Enroll in the top clinical psychology courses online in India with Upskillab. Gain practical knowledge and skills in mental health, therapy, and psychological assessments from expert instructors. Start your journey to becoming a certified clinical psychologist today.",
+  },
+  "mind-clinix-internship": {
+    title: "Organizational Psychology Internships | Build Expertise in Industrial & Organizational Psychology",
+    description: "Find organizational psychology internships to develop skills in industrial psychology and organizational behavior. Get practical experience in employee engagement, motivation, and workplace efficiency.",
+  },
+  "mind-bridge-pgp": {
+    title: "Post Graduate Internship Programs for Career Development | Apply Now",
+    description: "Enhance your career prospects with post graduate internships. Explore top post graduate internship opportunities that provide industry-specific training, skill development, and networking opportunities to boost your professional growth.",
+  },
+  "pgp-mind-spring": {
+    title: "Post Graduate Program in Child Psychology & Development",
+    description: "Advance your career with our Post Graduate Program in Child Psychology & Development. Learn child behavior, mental health, and development from experts.",
+  },
+};
+
+
+
+
 
 
 const CourseHero = ({ course }) => {
@@ -2604,6 +2658,84 @@ const CourseDetails = () => {
 
     return (
         <div>
+
+    <Helmet>
+      <title>
+        {seoMetadata[id]?.title ||
+          (course?.title
+            ? `${course.title} | Upskillab Online Course`
+            : "Online Course | Upskillab")}
+      </title>
+      <meta
+        name="description"
+        content={
+          seoMetadata[id]?.description ||
+          (course?.shortDescription
+            ? `${course.shortDescription} Learn with Upskillab's expert-led online courses in psychology, technology, management, and self-development.`
+            : "Learn with Upskillab's expert-led online courses in psychology, technology, management, and self-development to gain skills for today's competitive job market.")
+        }
+      />
+      <meta
+        name="keywords"
+        content={
+          course?.tags?.length > 0
+            ? `${course.tags.join(", ")}, online course, upskillab, e-learning`
+            : "online course, upskillab, psychology, technology, management, self-development"
+        }
+      />
+      {/* Open Graph Tags for Social Media */}
+      <meta
+        property="og:title"
+        content={
+          seoMetadata[id]?.title ||
+          (course?.title
+            ? `${course.title} | Upskillab`
+            : "Online Course | Upskillab")
+        }
+      />
+      <meta
+        property="og:description"
+        content={
+          seoMetadata[id]?.description ||
+          (course?.shortDescription
+            ? course.shortDescription
+            : "Join Upskillab to master skills in psychology, technology, management, and self-development.")
+        }
+      />
+      <meta
+        property="og:image"
+        content={course?.imageUrl || "https://upskillab.com/default-image.jpg"}
+      />
+      <meta property="og:url" content={window.location.href} />
+      <meta property="og:type" content="website" />
+      {/* Twitter Card Tags */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta
+        name="twitter:title"
+        content={
+          seoMetadata[id]?.title ||
+          (course?.title
+            ? `${course.title} | Upskillab`
+            : "Online Course | Upskillab")
+        }
+      />
+      <meta
+        name="twitter:description"
+        content={
+          seoMetadata[id]?.description ||
+          (course?.shortDescription
+            ? course.shortDescription
+            : "Join Upskillab to master skills in psychology, technology, management, and self-development.")
+        }
+      />
+      <meta
+        name="twitter:image"
+        content={course?.imageUrl || "https://upskillab.com/default-image.jpg"}
+      />
+      {/* Canonical URL */}
+      <link rel="canonical" href={window.location.href} />
+    </Helmet>
+            
             <CourseHero course={course} />
             <CourseKeyDetails course={course} />
             <ProgramInfoWithEnroll course={course} />
