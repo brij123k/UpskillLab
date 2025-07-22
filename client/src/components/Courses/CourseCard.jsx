@@ -78,13 +78,33 @@ const CourseCard = ({
           <div className="flex justify-between text-sm text-gray-600 mb-3">
             <div className="flex items-center">
               <FiClock className="mr-1.5 text-[#4d2c5e]" />
-              <span>
-                {duration < 1 ? `${Math.round(duration * 24)} hours` :
-                 duration <= 6 ? `${Math.round(duration)} days` :
-                 duration <= 27 ? `${(duration/7).toFixed(1).replace('.0','')} week${duration >= 14 ? 's' : ''}` :
-                 duration <= 364 ? `${(duration/30.44).toFixed(1).replace('.0','')} month${duration >= 60 ? 's' : ''}` :
-                 `${(duration/365).toFixed(1).replace('.0','')} year${duration >= 730 ? 's' : ''}`}
-              </span>
+              <span className="text-sm font-semibold text-gray-700">
+  {(() => {
+    const days = duration;
+
+   if (days < 1) return `${Math.round(days * 24)} hours`;
+
+                    // 1-6 days = show in days
+                    if (days <= 6) return `${Math.round(days)} days`;
+
+                    // 7-27 days = show in weeks
+                    if (days <= 27) {
+                      const weeks = (days / 7).toFixed(1);
+                      return `${weeks.endsWith('.0') ? weeks.split('.')[0] : weeks} week${weeks !== '1' ? 's' : ''}`;
+                    }
+
+                    // 28-364 days = show in months
+                    if (days <= 364) {
+                      const months = (days / 30).toFixed(1); // Average month length
+                      return `${months.endsWith('.0') ? months.split('.')[0] : months} month${months !== '1' ? 's' : ''}`;
+                    }
+
+                    // 365+ days = show in years
+                    const years = (days / 365).toFixed(1);
+                    return `${years.endsWith('.0') ? years.split('.')[0] : years} year${years !== '1' ? 's' : ''}`;
+  })()}
+</span>
+
             </div>
             <motion.div 
   className="flex items-center bg-[#4D2C5E]/10 px-3 py-1 rounded-lg"
