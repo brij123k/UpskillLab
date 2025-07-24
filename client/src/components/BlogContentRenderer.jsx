@@ -585,7 +585,7 @@ const BlogContentRenderer = ({ content }) => {
           classes.push('text-base sm:text-lg font-semibold mb-2 sm:mb-3 mt-2 sm:mt-3');
           break;
         case 'p':
-          classes.push('text-gray-700 text-base sm:text-lg leading-relaxed mb-2 sm:mb-3');
+          classes.push('text-gray-700 text-base sm:text-lg leading-relaxed');
           break;
         case 'div':
           classes.push('mb-3 sm:mb-4');
