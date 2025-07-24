@@ -567,28 +567,28 @@ const BlogContentRenderer = ({ content }) => {
       // Handle all possible tags from blog editor with blog-like styling
       switch (tagName) {
         case 'h1':
-          classes.push('text-4xl sm:text-5xl font-bold mb-6 sm:mb-8 mt-8 sm:mt-10 tracking-tight');
+          classes.push('text-4xl sm:text-5xl font-bold mb-2 sm:mb-4 mt-4 sm:mt-15 tracking-tight');
           break;
         case 'h2':
-          classes.push('text-3xl sm:text-4xl font-semibold mb-5 sm:mb-6 mt-6 sm:mt-8 tracking-tight');
+          classes.push('text-3xl sm:text-4xl font-semibold mb-2 sm:mb-3 mt-3 sm:mt-4 tracking-tight');
           break;
         case 'h3':
-          classes.push('text-2xl sm:text-3xl font-semibold mb-4 sm:mb-5 mt-5 sm:mt-6');
+          classes.push('text-2xl sm:text-3xl font-semibold mb-2 sm:mb-3 mt-2 sm:mt-3');
           break;
         case 'h4':
-          classes.push('text-xl sm:text-2xl font-semibold mb-3 sm:mb-4 mt-4 sm:mt-5');
+          classes.push('text-xl sm:text-2xl font-semibold mb-2 sm:mb-3 mt-3 sm:mt-4');
           break;
         case 'h5':
-          classes.push('text-lg sm:text-xl font-semibold mb-3 sm:mb-4 mt-3 sm:mt-4');
+          classes.push('text-lg sm:text-xl font-semibold mb-2 sm:mb-3 mt-2 sm:mt-3');
           break;
         case 'h6':
           classes.push('text-base sm:text-lg font-semibold mb-2 sm:mb-3 mt-2 sm:mt-3');
           break;
         case 'p':
-          classes.push('text-gray-700 text-base sm:text-lg leading-relaxed mb-6 sm:mb-8');
+          classes.push('text-gray-700 text-base sm:text-lg leading-relaxed mb-2 sm:mb-3');
           break;
         case 'div':
-          classes.push('mb-6 sm:mb-8');
+          classes.push('mb-3 sm:mb-4');
           // Handle indentation for divs
           if (element.getAttribute('data-indent')) {
             const indent = element.getAttribute('data-indent');
@@ -620,7 +620,7 @@ const BlogContentRenderer = ({ content }) => {
           }
           break;
         case 'ul':
-          classes.push('list-disc pl-6 sm:pl-8 mb-6 sm:mb-8 text-gray-700');
+          classes.push('list-disc pl-6 sm:pl-8 mb-3 sm:mb-4 text-gray-700');
           // Handle indentation for lists
           if (element.getAttribute('data-indent')) {
             const indent = element.getAttribute('data-indent');
@@ -632,7 +632,7 @@ const BlogContentRenderer = ({ content }) => {
           }
           break;
         case 'ol':
-          classes.push('list-decimal pl-6 sm:pl-8 mb-6 sm:mb-8 text-gray-700');
+          classes.push('list-decimal pl-6 sm:pl-8 mb-3 sm:mb-4 text-gray-700');
           // Handle indentation for lists
           if (element.getAttribute('data-indent')) {
             const indent = element.getAttribute('data-indent');
@@ -647,7 +647,7 @@ const BlogContentRenderer = ({ content }) => {
           classes.push('text-base sm:text-lg mb-2 sm:mb-3 leading-relaxed');
           break;
         case 'img':
-          classes.push('rounded-xl shadow-lg mb-6 sm:mb-8 mx-auto max-w-full h-auto object-cover');
+          classes.push('rounded-xl shadow-lg mb-3 sm:mb-4 mx-auto max-w-full h-auto object-cover');
           element.setAttribute('loading', 'lazy');
           break;
         case 'a':
@@ -656,7 +656,7 @@ const BlogContentRenderer = ({ content }) => {
           element.setAttribute('rel', 'noopener noreferrer');
           break;
         case 'blockquote':
-          classes.push('border-l-4 border-purple-500 bg-purple-50 p-4 sm:p-6 rounded-lg mb-6 sm:mb-8 text-gray-600 italic text-base sm:text-lg leading-relaxed');
+          classes.push('border-l-4 border-purple-500 bg-purple-50 p-4 sm:p-6 rounded-lg mb-3 sm:mb-4 text-gray-600 italic text-base sm:text-lg leading-relaxed');
           break;
         case 'code':
           // Don't add classes if inside a pre (code block)
@@ -665,10 +665,10 @@ const BlogContentRenderer = ({ content }) => {
           }
           break;
         case 'pre':
-          classes.push('bg-gray-800 text-gray-100 p-4 sm:p-6 rounded-xl mb-6 sm:mb-8 overflow-x-auto text-sm sm:text-base font-mono');
+          classes.push('bg-gray-800 text-gray-100 p-4 sm:p-6 rounded-xl mb-3 sm:mb-4 overflow-x-auto text-sm sm:text-base font-mono');
           break;
         case 'table':
-          classes.push('w-full border-collapse mb-6 sm:mb-8');
+          classes.push('w-full border-collapse mb-3 sm:mb-4');
           break;
         case 'thead':
           classes.push('bg-purple-100');
@@ -680,7 +680,7 @@ const BlogContentRenderer = ({ content }) => {
           classes.push('border border-gray-200 px-4 sm:px-6 py-3 text-gray-700 text-sm sm:text-base');
           break;
         case 'hr':
-          classes.push('border-t border-gray-300 my-6 sm:my-8');
+          classes.push('border-t border-gray-300 my-3 sm:my-4');
           break;
         case 'br':
           classes.push('block');
