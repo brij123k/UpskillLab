@@ -845,564 +845,6 @@ const ProgramInfoWithEnroll = ({ course }) => {
     );
 };
 
-// const TeachingPlan = ({ course }) => {
-//     const batchCode = course.batchId;
-//     const startDate = course.startDate;
-//     const brochure = course.brochure
-//     const courseId = course.title
-//     const ref = useRef(null);
-//     const isInView = useInView(ref, { once: false, amount: 0.1 });
-//     const [expandedSession, setExpandedSession] = useState(null);
-//     const [isDownloading, setIsDownloading] = useState(false);
-//     const [selectedCourse, setSelectedCourse] = useState(null);
-//     const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
-//     const [isModalOpen, setIsModalOpen] = useState(false);
-//     const handleEnrollClick = (course) => {
-//         setSelectedCourse(course);
-//         setIsEnrollModalOpen(true);
-//     };
-
-//     const handleEnrollSubmit = () => {
-//         setIsEnrollModalOpen(false);
-//     };
-//     const toggleSession = (sessionIndex) => {
-//         setExpandedSession(expandedSession === sessionIndex ? null : sessionIndex);
-//     };
-
-//     // const downloadBrochure = () => {
-//     //     if (!course?.brochure) {
-//     //         window.alert("No brochure available for this course");
-//     //         return;
-//     //     }
-
-//     //     const link = document.createElement("a");
-//     //     link.href = course.brochure;
-//     //     link.setAttribute("download", "");
-//     //     link.setAttribute("target", "_blank");
-//     //     document.body.appendChild(link);
-//     //     link.click();
-//     //     document.body.removeChild(link);
-//     // };
-
-//     // Flatten all sessions from all weeks into a single array
-//     const allSessions = course.weeks.flatMap(week => week.sessions);
-
-//     return (
-//         <div ref={ref} className="w-full py-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-//             {/* Floating background elements */}
-//             <motion.div
-//                 animate={{
-//                     y: [0, -40, 0],
-//                     x: [0, 30, 0]
-//                 }}
-//                 transition={{
-//                     duration: 4,
-//                     repeat: Infinity,
-//                     ease: "easeInOut"
-//                 }}
-//                 className="absolute top-1/4 left-0 w-48 h-48 rounded-full bg-[#FF7426]/10 blur-xl"
-//             />
-//             <motion.div
-//                 animate={{
-//                     y: [0, 50, 0],
-//                     x: [0, -20, 0]
-//                 }}
-//                 transition={{
-//                     duration: 3,
-//                     repeat: Infinity,
-//                     ease: "easeInOut",
-//                     delay: 0.1
-//                 }}
-//                 className="absolute bottom-1/3 right-0 w-56 h-56 rounded-full bg-[#4D2C5E]/10 blur-xl"
-//             />
-
-//             <div className="max-w-4xl mx-auto relative z-10">
-//                 {/* Animated header */}
-//                 <motion.div
-//                     initial={{ opacity: 0, y: -30 }}
-//                     animate={isInView ? { opacity: 1, y: 0 } : {}}
-//                     transition={{ duration: 0.15 }}
-//                     className="text-center mb-12"
-//                 >
-//                     <motion.h2
-//                         className="text-4xl font-bold text-[#4D2C5E] mb-4 relative inline-block"
-//                     >
-//                         Course Sessions
-//                         <motion.span
-//                             initial={{ scaleX: 0 }}
-//                             animate={isInView ? { scaleX: 1 } : {}}
-//                             transition={{ delay: 0.1, duration: 0.3 }}
-//                             className="absolute bottom-0 left-0 w-full h-1 bg-[#FF7426] rounded-full"
-//                         />
-//                     </motion.h2>
-//                     <motion.p
-//                         initial={{ opacity: 0 }}
-//                         animate={isInView ? { opacity: 1 } : {}}
-//                         transition={{ delay: 0.15 }}
-//                         className="text-lg text-gray-600 max-w-2xl mx-auto"
-//                     >
-//                         Detailed breakdown of all learning sessions
-//                     </motion.p>
-//                 </motion.div>
-
-//                 {/* Sessions list */}
-//                 <div className="space-y-4">
-//                     {allSessions.map((session, index) => (
-//                         <div key={index} className="overflow-hidden">
-//                             {/* Session Header - Clickable */}
-//                             <motion.div
-//                                 className="flex justify-between items-center p-5 bg-white rounded-xl shadow-lg border border-[#4D2C5E]/10 cursor-pointer group"
-//                                 onClick={() => toggleSession(index)}
-//                                 whileHover={{
-//                                     y: -2,
-//                                     boxShadow: "0 8px 20px rgba(77, 44, 94, 0.1)"
-//                                 }}
-//                                 initial={{ y: 20, opacity: 0 }}
-//                                 animate={isInView ? {
-//                                     y: 0,
-//                                     opacity: 1,
-//                                     transition: {
-//                                         delay: index * 0.1,
-//                                         type: "spring",
-//                                         stiffness: 150,
-//                                         damping: 10
-//                                     }
-//                                 } : {}}
-//                             >
-//                                 <div className="flex items-center gap-3">
-//                                     <motion.span
-//                                         whileHover={{ scale: 1.05 }}
-//                                         className="px-4 py-1.5 bg-[#4D2C5E] text-white rounded-full font-bold shadow-md"
-//                                     >
-//                                         Session {index + 1}
-//                                     </motion.span>
-//                                     <h3 className="text-lg font-bold text-[#4D2C5E]">
-//                                         {session.title.split(':').slice(1).join(':').trim()}
-//                                     </h3>
-//                                 </div>
-//                                 <motion.div
-//                                     animate={{
-//                                         rotate: expandedSession === index ? 180 : 0,
-//                                         color: expandedSession === index ? '#FF7426' : '#4D2C5E'
-//                                     }}
-//                                     transition={{ duration: 0.2 }}
-//                                     className="text-[#4D2C5E] group-hover:text-[#FF7426]"
-//                                 >
-//                                     <svg
-//                                         xmlns="http://www.w3.org/2000/svg"
-//                                         className="h-5 w-5"
-//                                         viewBox="0 0 20 20"
-//                                         fill="currentColor"
-//                                     >
-//                                         <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-//                                     </svg>
-//                                 </motion.div>
-//                             </motion.div>
-
-//                             {/* Session Content - Animated */}
-//                             <AnimatePresence>
-//                                 {expandedSession === index && (
-//                                     <motion.div
-//                                         initial={{ height: 0, opacity: 0 }}
-//                                         animate={{
-//                                             height: "auto",
-//                                             opacity: 1,
-//                                             transition: {
-//                                                 height: { duration: 0.15 },
-//                                                 opacity: { duration: 0.1 }
-//                                             }
-//                                         }}
-//                                         exit={{
-//                                             height: 0,
-//                                             opacity: 0,
-//                                             transition: {
-//                                                 height: { duration: 0.15 },
-//                                                 opacity: { duration: 0.1 }
-//                                             }
-//                                         }}
-//                                         className="bg-white rounded-b-xl shadow-lg border-x border-b border-[#4D2C5E]/10"
-//                                     >
-//                                         <div className="p-5">
-//                                             <div>
-//                                                 <h5 className="text-md font-medium text-[#4D2C5E] mb-3">
-//                                                     Topics Covered:
-//                                                 </h5>
-//                                                 <ul className="space-y-2 pl-5">
-//                                                     {session.topics.map((topic, tIndex) => (
-//                                                         <motion.li
-//                                                             key={tIndex}
-//                                                             className="flex items-start"
-//                                                             initial={{ opacity: 0, x: -10 }}
-//                                                             animate={{
-//                                                                 opacity: 1,
-//                                                                 x: 0,
-//                                                                 transition: {
-//                                                                     delay: tIndex * 0.05,
-//                                                                     type: "spring",
-//                                                                     stiffness: 150
-//                                                                 }
-//                                                             }}
-//                                                             whileHover={{ x: 3 }}
-//                                                         >
-//                                                             <motion.span
-//                                                                 className="w-1.5 h-1.5 bg-[#FF7426] rounded-full mt-2 mr-2 flex-shrink-0"
-//                                                                 animate={{
-//                                                                     scale: [1, 1.1, 1],
-//                                                                     backgroundColor: ['#FF7426', '#4D2C5E', '#FF7426']
-//                                                                 }}
-//                                                                 transition={{
-//                                                                     duration: 3,
-//                                                                     repeat: Infinity,
-//                                                                     delay: tIndex * 0.1
-//                                                                 }}
-//                                                             />
-//                                                             <span className="text-gray-700">
-//                                                                 {topic}
-//                                                             </span>
-//                                                         </motion.li>
-//                                                     ))}
-//                                                 </ul>
-//                                             </div>
-//                                         </div>
-//                                     </motion.div>
-//                                 )}
-//                             </AnimatePresence>
-//                         </div>
-//                     ))}
-//                 </div>
-
-//                 {/* Download Button */}
-//                 <motion.div
-//                     initial={{ opacity: 0, y: 20 }}
-//                     animate={isInView ? { opacity: 1, y: 0 } : {}}
-//                     transition={{ delay: 0.1 }}
-//                     className="text-center mt-12 flex justify-center items-center"
-//                 >
-//                     <motion.button
-//                         type="button"
-//                         whileHover={{ scale: 1.02 }}
-//                         whileTap={{ scale: 0.98 }}
-//                         // onClick={downloadBrochure}
-//                         onClick={() => {
-//                             if (batchCode === "0") {
-//                                 setIsModalOpen(true)
-//                             } else {
-//                                 // Get today's date (normalized to start of day)
-//                                 const today = new Date();
-//                                 today.setHours(0, 0, 0, 0);
-
-//                                 // Get batch start date (ensure it's a valid Date object)
-//                                 const batchStartDate = new Date(startDate || 0);
-
-//                                 if (batchStartDate >= today) {
-//                                     // handleEnrollClick(course);
-//                                     setIsModalOpen(true)
-//                                 } else {
-//                                     setIsModalOpen(true)
-//                                 }
-//                             }
-//                         }}
-//                         disabled={isDownloading}
-//                         className={`flex items-center gap-2 px-5 py-2.5 border-2 rounded-lg transition-all duration-200 ${isDownloading
-//                             ? 'bg-gray-200 border-gray-300 text-gray-500 cursor-wait'
-//                             : 'bg-white border-[#4D2C5E] text-[#4D2C5E] hover:bg-[#4D2C5E]/10 shadow-sm hover:shadow-md cursor-pointer'
-//                             }`}
-//                     >
-//                         {isDownloading ? (
-//                             <>
-//                                 <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-[#4D2C5E]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-//                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-//                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-//                                 </svg>
-//                                 Downloading...
-//                             </>
-//                         ) : (
-//                             <>
-//                                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-//                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-//                                 </svg>
-//                                 Download Brochure
-//                             </>
-//                         )}
-//                     </motion.button>
-//                 </motion.div>
-//             </div>
-//             {selectedCourse && (
-//                 <PurchaseModal
-//                     course={selectedCourse}
-//                     batchCode={batchCode}
-//                     isOpen={isEnrollModalOpen}
-//                     onClose={() => { setIsEnrollModalOpen(false); setSelectedCourse(null) }}
-//                     onEnroll={handleEnrollSubmit}
-//                     topic='Continue the form to download the brochure'
-//                 />
-//             )}
-//             <AdmissionFormModal
-
-//                 isOpen={isModalOpen}
-//                 onClose={() => setIsModalOpen(false)}
-//                 topic='Continue the form to download the brochure'
-//                 brochure={brochure}
-//                 currentCourseName={courseId}
-//             />
-//         </div>
-//     );
-// }
-
-
-
-
-// import { useState, useRef } from 'react';
-// import { motion, AnimatePresence } from 'framer-motion';
-// import { useInView } from 'framer-motion';
-
-// const TeachingPlan = ({ course }) => {
-//   const batchCode = course.batchId;
-//   const startDate = course.startDate;
-//   const brochure = course.brochure;
-//   const courseId = course.title;
-//   const ref = useRef(null);
-//   const isInView = useInView(ref, { once: false, amount: 0.1 });
-//   const [expandedSession, setExpandedSession] = useState(0); // First session open by default
-//   const [isDownloading, setIsDownloading] = useState(false);
-//   const [selectedCourse, setSelectedCourse] = useState(null);
-//   const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-
-//   const handleEnrollClick = (course) => {
-//     setSelectedCourse(course);
-//     setIsEnrollModalOpen(true);
-//   };
-
-//   const handleEnrollSubmit = () => {
-//     setIsEnrollModalOpen(false);
-//   };
-
-//   const toggleSession = (sessionIndex) => {
-//     setExpandedSession(expandedSession === sessionIndex ? null : sessionIndex);
-//   };
-
-//   // const downloadBrochure = () => {
-//   //   if (!course?.brochure) {
-//   //     window.alert("No brochure available for this course");
-//   //     return;
-//   //   }
-//   //   const link = document.createElement("a");
-//   //   link.href = course.brochure;
-//   //   link.setAttribute("download", "");
-//   //   link.setAttribute("target", "_blank");
-//   //   document.body.appendChild(link);
-//   //   link.click();
-//   //   document.body.removeChild(link);
-//   // };
-
-//   // Flatten all sessions from all weeks into a single array
-//   const allSessions = course.weeks.flatMap(week => week.sessions);
-
-//   return (
-//     <div ref={ref} className="w-full py-6 sm:py-8 px-4 sm:px-6 md:px-8 bg-white relative overflow-hidden font-sans antialiased">
-//       <style>
-//         {`
-//           .timeline {
-//             border-left-width: 2px;
-//             border-color: #e5e7eb; /* Tailwind gray-200 */
-//             position: relative;
-//           }
-//           .timeline-dot {
-//             width: 10px;
-//             height: 10px;
-//             background-color: rgb(255, 116, 38); /* Orange accent */
-//             border-radius: 9999px;
-//             position: absolute;
-//             left: -6px;
-//             top: 1.5rem;
-//           }
-//           .accordion-content {
-//             max-height: 0;
-//             opacity: 0;
-//             overflow: hidden;
-//             transition: max-height 0.4s ease, opacity 0.4s ease;
-//           }
-//           .accordion-content[aria-expanded="true"] {
-//             max-height: 1000px;
-//             opacity: 1;
-//             overflow: visible;
-//           }
-//         `}
-//       </style>
-//       <main className="max-w-4xl mx-auto relative z-10">
-//         <motion.h1
-//           initial={{ opacity: 0, y: -20 }}
-//           animate={isInView ? { opacity: 1, y: 0 } : {}}
-//           transition={{ duration: 0.5 }}
-//           className="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight mb-6 sm:mb-8 text-center sm:text-left"
-//           style={{ color: 'rgb(77, 44, 94)' }} /* Purple primary */
-//         >
-//           Course Sessions for <span style={{ color: 'rgb(255, 116, 38)' }}>{courseId}</span> {/* Orange accent */}
-//         </motion.h1>
-
-//         <section className="space-y-4 relative timeline" id="sessions">
-//           {allSessions.map((session, index) => (
-//             <motion.article
-//               key={index}
-//               className="relative bg-white rounded-lg shadow-md p-3 sm:p-4 md:p-6 border border-transparent"
-//               initial={{ y: 20, opacity: 0 }}
-//               animate={isInView ? { y: 0, opacity: 1 } : {}}
-//               transition={{ delay: index * 0.1, type: "spring", stiffness: 150, damping: 10 }}
-//             >
-//               <span className="timeline-dot" style={{ top: `${1.5 + index * 1.5}rem` }}></span>
-//               <header
-//                 className="flex justify-between items-center mb-3 cursor-pointer select-none"
-//                 aria-controls={`content-${index + 1}`}
-//                 aria-expanded={expandedSession === index ? "true" : "false"}
-//                 role="button"
-//                 tabIndex={0}
-//                 id={`header-${index + 1}`}
-//                 onClick={() => toggleSession(index)}
-//                 onKeyDown={(e) => {
-//                   if (e.key === 'Enter' || e.key === ' ') {
-//                     e.preventDefault();
-//                     toggleSession(index);
-//                   }
-//                 }}
-//               >
-//                 <div>
-//                   <h2 className="font-extrabold text-base sm:text-lg md:text-xl leading-tight" style={{ color: 'rgb(77, 44, 94)' }}>
-//                     {session.title.split(':').slice(1).join(':').trim()}
-//                   </h2>
-//                   <p className="text-xs sm:text-sm text-gray-700 mt-1">Session {index + 1}</p>
-//                 </div>
-//                 <motion.button
-//                   aria-label={`Toggle Session ${index + 1}`}
-//                   className="w-7 h-7 rounded-full flex items-center justify-center"
-//                   style={{ backgroundColor: 'rgba(255, 116, 38, 0.1)', color: 'rgb(255, 116, 38)' }} /* Orange accent */
-//                   animate={{ rotate: expandedSession === index ? 180 : 0 }}
-//                   transition={{ duration: 0.2 }}
-//                 >
-//                   <i className={`fas ${expandedSession === index ? 'fa-chevron-up' : 'fa-chevron-down'} text-sm`}></i>
-//                 </motion.button>
-//               </header>
-//               <hr className="border-gray-300 mb-4" />
-//               <AnimatePresence>
-//                 {expandedSession === index && (
-//                   <motion.div
-//                     initial={{ height: 0, opacity: 0 }}
-//                     animate={{ height: "auto", opacity: 1 }}
-//                     exit={{ height: 0, opacity: 0 }}
-//                     transition={{ height: { duration: 0.4 }, opacity: { duration: 0.4 } }}
-//                     className="accordion-content text-gray-800 text-sm sm:text-base leading-relaxed max-w-3xl"
-//                     id={`content-${index + 1}`}
-//                     aria-labelledby={`header-${index + 1}`}
-//                     aria-expanded={expandedSession === index ? "true" : "false"}
-//                   >
-//                     <div className="mb-4">
-//                       <h3 className="font-semibold text-sm sm:text-base mb-2" style={{ color: 'rgb(77, 44, 94)' }}>
-//                         Topics Covered
-//                       </h3>
-//                       <ul className="space-y-2 text-gray-900 text-sm sm:text-base">
-//                         {session.topics.map((topic, tIndex) => (
-//                           <motion.li
-//                             key={tIndex}
-//                             className="flex items-center gap-2"
-//                             initial={{ opacity: 0, x: -10 }}
-//                             animate={{ opacity: 1, x: 0 }}
-//                             transition={{ delay: tIndex * 0.05, type: "spring", stiffness: 150 }}
-//                           >
-//                             <i className="fas fa-check-circle text-sm" style={{ color: 'rgb(77, 44, 94)' }}></i>
-//                             <span>{topic}</span>
-//                           </motion.li>
-//                         ))}
-//                       </ul>
-//                     </div>
-//                   </motion.div>
-//                 )}
-//               </AnimatePresence>
-//             </motion.article>
-//           ))}
-//         </section>
-
-//         <motion.div
-//           initial={{ opacity: 0, y: 20 }}
-//           animate={isInView ? { opacity: 1, y: 0 } : {}}
-//           transition={{ delay: 0.3 }}
-//           className="flex justify-center mt-8"
-//         >
-//           <motion.button
-//             type="button"
-//             whileHover={{ scale: 1.02 }}
-//             whileTap={{ scale: 0.98 }}
-//             onClick={() => {
-//               if (batchCode === "0") {
-//                 setIsModalOpen(true);
-//               } else {
-//                 const today = new Date();
-//                 today.setHours(0, 0, 0, 0);
-//                 const batchStartDate = new Date(startDate || 0);
-//                 if (batchStartDate >= today) {
-//                   setIsModalOpen(true);
-//                 } else {
-//                   setIsModalOpen(true);
-//                 }
-//               }
-//             }}
-//             disabled={isDownloading}
-//             className={`flex items-center gap-2 px-4 py-2 border-2 rounded-lg transition-all duration-200 text-sm sm:text-base ${
-//               isDownloading
-//                 ? 'bg-gray-200 border-gray-300 text-gray-500 cursor-wait'
-//                 : 'bg-white border-[rgb(77,44,94)] text-[rgb(77,44,94)] hover:bg-[rgba(255,116,38,0.1)] shadow-sm hover:shadow-md cursor-pointer'
-//             }`}
-//             style={{ borderColor: 'rgb(77, 44, 94)', color: 'rgb(77, 44, 94)' }}
-//           >
-//             {isDownloading ? (
-//               <>
-//                 <svg className="animate-spin -ml-1 mr-2 h-4 w-4" style={{ color: 'rgb(77, 44, 94)' }} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-//                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-//                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-//                 </svg>
-//                 Downloading...
-//               </>
-//             ) : (
-//               <>
-//                 <i className="fas fa-download text-sm" style={{ color: 'rgb(77, 44, 94)' }}></i>
-//                 Download Brochure
-//               </>
-//             )}
-//           </motion.button>
-//         </motion.div>
-//       </main>
-
-//       {selectedCourse && (
-//         <PurchaseModal
-//           course={selectedCourse}
-//           batchCode={batchCode}
-//           isOpen={isEnrollModalOpen}
-//           onClose={() => {
-//             setIsEnrollModalOpen(false);
-//             setSelectedCourse(null);
-//           }}
-//           onEnroll={handleEnrollSubmit}
-//           topic="Continue the form to download the brochure"
-//         />
-//       )}
-//       <AdmissionFormModal
-//         isOpen={isModalOpen}
-//         onClose={() => setIsModalOpen(false)}
-//         topic="Continue the form to download the brochure"
-//         brochure={brochure}
-//         currentCourseName={courseId}
-//       />
-//     </div>
-//   );
-// };
-
-
-
-
-
-// import { useState, useRef } from 'react';
-// import { motion, AnimatePresence } from 'framer-motion';
-// import { useInView } from 'framer-motion';
-
 const TeachingPlan = ({ course }) => {
   const batchCode = course.batchId;
   const startDate = course.startDate;
@@ -1647,11 +1089,6 @@ const TeachingPlan = ({ course }) => {
     </div>
   );
 };
-
-// export default TeachingPlan;
-
-
-// export default TeachingPlan;
 
 const CareerDevelopmentTrack = ({ course }) => {
     const careerData = course.careerData || [
@@ -2450,12 +1887,12 @@ const CourseDetails = () => {
     const courseCode = location.state?.courseCode;
     const batchId = location.state?.batchId;
     const batchCode = location.state?.batchCode;
-    const { id } = useParams();
+    const { id,category } = useParams();
     const type = window.location.pathname.includes('/batch/') ? 'batch' : 'course';
     const [isModalOpen, setIsModalOpen] = useState(false);
     useEffect(() => {
         if (type === 'course') {
-            fetchCourse(id)
+            fetchCourse(id,category)
         } else if (type === 'batch') {
             fetchBtachCourse(id)
         }
@@ -2466,11 +1903,16 @@ const CourseDetails = () => {
 {/* <ScrollToTop/> */}
   }, []);
 
-    const fetchCourse = async (courseCode) => {
+    const fetchCourse = async (courseCode,category) => {
         // Get the endpoint URL by calling the ApiConfig function
+        console.log(category)
         const endpointUrl = ApiConfig.getCourseByCode(courseCode);
 
         const response = await getDataHandler(endpointUrl, null, null, true); // pass endpointUrl directly
+        console.log(response)
+        if(response.categoryName.toLowerCase()===category){
+
+        
         let custemDataSet = {
             id: response._id,
             batchId: response.batch?._id || "0",
@@ -2494,6 +1936,9 @@ const CourseDetails = () => {
             language: response.language.languageName
         }
         setCourse(custemDataSet);
+        }else{
+          setCourse(null);  
+        }
     };
     const fetchBtachCourse = async (id) => {
         // Get the endpoint URL by calling the ApiConfig function
@@ -2567,10 +2012,10 @@ const CourseDetails = () => {
                     </svg>
                 </div>
                 <h3 className="text-xl font-bold text-[#4D2C5E] mb-1">
-                    No Batch Found
+                    No Couse Found
                 </h3>
                 <p className="text-gray-600">
-                    We couldn't find any available batches for this course.
+                    We couldn't find any available course.
                 </p>
             </motion.div>
         );

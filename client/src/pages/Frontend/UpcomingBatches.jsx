@@ -21,6 +21,7 @@ const UpcomingBatches = () => {
   } = useQuery({
     queryKey: ["upcomingBatches"],
     queryFn: () => getDataHandler("upcomingBatches", { limit: 20 }),
+    
     select: (data) =>
       data.map((batch) => {
         let durationText = '';
@@ -48,7 +49,7 @@ const UpcomingBatches = () => {
       
         // Remove .0 decimal places for cleaner display
         durationText = durationText.replace(/\.0/, '');
-      
+      console.log(batch)
         return {
           id: batch.batchId,
           active: batch.active,
@@ -71,6 +72,7 @@ const UpcomingBatches = () => {
           mode: batch.classMode,
           remainingSeats: batch.remainingSeats,
           totalSeats: batch.totalSeats,
+          categoryName:batch.course.category.categoryName
         };
       })
   });
@@ -238,6 +240,7 @@ const UpcomingBatches = () => {
                   batchId={batch.batchId}
                   batchTime={batch.startTime}
                   duration={batch.duration}
+                  categoryName={batch.categoryName}
                   mode={batch.mode === "LIVE_ONLINE" ? "Online" : "Offline"}
                   onEnroll={() => setEnrollCourse(batch)}
                 />
