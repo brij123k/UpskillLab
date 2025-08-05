@@ -13,7 +13,7 @@
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/CourseList</loc>
+    <loc>https://www.upskillab.com/courselist</loc>
     <lastmod>2025-06-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -31,43 +31,43 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/UpcomingBatches</loc>
+    <loc>https://www.upskillab.com/upcomingbatches</loc>
     <lastmod>2025-06-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/StudentsBlog</loc>
+    <loc>https://www.upskillab.com/blog</loc>
     <lastmod>2025-06-17</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Career</loc>
+    <loc>https://www.upskillab.com/career</loc>
     <lastmod>2025-06-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/PrivacyPolicy</loc>
+    <loc>https://www.upskillab.com/privacypolicy</loc>
     <lastmod>2025-06-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/TermsOfService</loc>
+    <loc>https://www.upskillab.com/termsofservice</loc>
     <lastmod>2025-06-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/RefundPolicy</loc>
+    <loc>https://www.upskillab.com/refundpolicy</loc>
     <lastmod>2025-06-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/TeacherRegistration</loc>
+    <loc>https://www.upskillab.com/teacherregistration</loc>
     <lastmod>2025-06-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -81,92 +81,92 @@
 
   <!-- Course Pages -->
   <url>
-    <loc>https://www.upskillab.com/Technology/course/certified-ai-ml-practitioner</loc>
+    <loc>https://www.upskillab.com/technology/course/certified-ai-ml-practitioner</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Technology/course/java-xcelerate-cert</loc>
+    <loc>https://www.upskillab.com/technology/course/java-xcelerate-cert</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Technology/course/code-master-cert</loc>
+    <loc>https://www.upskillab.com/technology/course/code-master-cert</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Technology/course/foundation-of-data-science</loc>
+    <loc>https://www.upskillab.com/technology/course/foundation-of-data-science</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Technology/course/cybershield-cert</loc>
+    <loc>https://www.upskillab.com/technology/course/cybershield-cert</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Psychology/course/mind-therapy-cert</loc>
+    <loc>https://www.upskillab.com/psychology/course/mind-therapy-cert</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Psychology/course/mind-path-cert</loc>
+    <loc>https://www.upskillab.com/psychology/course/mind-path-cert</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Psychology/course/mind-crest-cert</loc>
+    <loc>https://www.upskillab.com/psychology/course/mind-crest-cert</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Psychology/course/mind-sprout-cert</loc>
+    <loc>https://www.upskillab.com/psychology/course/mind-sprout-cert</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Psychology/course/mind-clinix-internship</loc>
+    <loc>https://www.upskillab.com/psychology/course/mind-clinix-internship</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Psychology/course/mind-mend-internship</loc>
+    <loc>https://www.upskillab.com/psychology/course/mind-mend-internship</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Psychology/course/mind-matrix-internship</loc>
+    <loc>https://www.upskillab.com/psychology/course/mind-matrix-internship</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Psychology/course/mind-bridge-pgp</loc>
+    <loc>https://www.upskillab.com/psychology/course/mind-bridge-pgp</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Psychology/course/pgp-mind-spring</loc>
+    <loc>https://www.upskillab.com/psychology/course/pgp-mind-spring</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Psychology/course/mind-scope-pgp</loc>
+    <loc>https://www.upskillab.com/psychology/course/mind-scope-pgp</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Management/course/data-tool-box-cert</loc>
+    <loc>https://www.upskillab.com/management/course/data-tool-box-cert</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Professional%20Development/course/crt-cert</loc>
+    <loc>https://www.upskillab.com/professional%20Development/course/crt-cert</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://www.upskillab.com/Professional%20Development/course/post-graduation-program-in-sales-marketing-financial-services-pgp</loc>
+    <loc>https://www.upskillab.com/professional%20Development/course/post-graduation-program-in-sales-marketing-financial-services-pgp</loc>
     <lastmod>2025-07-23</lastmod>
     <priority>0.90</priority>
   </url>
@@ -183,3 +183,5 @@
     <priority>0.80</priority>
   </url>
 </urlset>
+
+
