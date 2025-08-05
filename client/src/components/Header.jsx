@@ -451,7 +451,7 @@ function Header() {
                     {/* All Courses Link */}
                     <div className="border-t border-gray-200 bg-gray-50 p-3 sticky bottom-0">
                       <NavLink
-                        to="/courseList"
+                        to="/courselist"
                         className="flex items-center justify-center text-[#FF7426] font-medium hover:underline"
                         onClick={() => setIsCoursesDropdownOpen(false)}
                       >
