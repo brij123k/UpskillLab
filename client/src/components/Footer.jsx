@@ -79,7 +79,7 @@ function Footer() {
                 <li><NavLink to="/About" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">About Us</NavLink></li>
                 <li><NavLink to="/CourseList" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Popular Course</NavLink></li>
                 <li><NavLink to="/upcoming-batches/" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Latest Batches</NavLink></li>
-                <li><NavLink to="/Students-Blog" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Blog</NavLink></li>
+                <li><NavLink to="/blog" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Blog</NavLink></li>
                 <li><button onClick={()=>setShowModal(true)} className="m-auto sm:m-0 text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Payment</button></li>
               </ul>
             </div>
