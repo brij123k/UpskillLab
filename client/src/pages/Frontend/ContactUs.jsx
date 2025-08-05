@@ -401,7 +401,8 @@ const ContactPage = () => {
     {
       icon: <FaPhone />,
       title: "Phone Number",
-      info: "+91-9958958123",
+      info: "+91-9319426464",
+      info: "+91-9319427070",
       description: "Monday to Saturday, 10am to 7pm IST"
     },
     {
