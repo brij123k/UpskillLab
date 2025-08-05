@@ -12,6 +12,7 @@ function CourseList() {
   
   const handelCourses = async () => {
     const res = await getDataHandler('courseDisplay');
+    console.log(res)
     if (res && res.data) {
       const newCourses = res.data
         .filter((course) => course.featured === true && course.active)
@@ -29,6 +30,7 @@ function CourseList() {
           discountedPrice: course.discountedPrice,
           duration: course.courseDuration,
           studentsEnrolled: course.studentsEnrolled,
+          categoryName :course.category.categoryName
         }));
       setCourses(newCourses);
     }

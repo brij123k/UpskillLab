@@ -362,7 +362,7 @@ function Header() {
                               className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group relative"
                               onClick={() => {
                                 const categoryName = selectedCategory?.name || course.category;
-                                navigate(`/${categoryName}/course/${course.courseCode}`, {
+                                navigate(`/${categoryName.toLowerCase()}/course/${course.courseCode}`, {
                                   state: { courseId: course.id, courseCode: course.courseCode }
                                 });
                                 setIsCoursesDropdownOpen(false);
@@ -724,7 +724,7 @@ function Header() {
                       <button
                         key={course.id}
                         onClick={() => {
-                          navigate(`/${selectedCategory.name}/course/${course.courseCode}`, { 
+                          navigate(`/${selectedCategory.name.toLowerCase()}/course/${course.courseCode}`, { 
                             state: { courseId: course.id, courseCode: course.courseCode } 
                           });
                           toggleDrawer();

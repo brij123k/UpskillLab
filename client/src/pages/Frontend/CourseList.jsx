@@ -780,7 +780,7 @@ const CourseList = () => {
 
     // Wait a short time, then navigate
     setTimeout(() => {
-      navigate(`/${course.category.categoryName}/course/${course.courseCode}`, {
+      navigate(`/${course.category.categoryName.toLowerCase()}/course/${course.courseCode}`, {
         state: {
           courseCode: course.courseCode,
         },
@@ -810,7 +810,7 @@ const CourseList = () => {
               {/* Action Buttons Section */}
               <div className="px-6 pb-6 pt-0 flex justify-between flex-col sm:flex-row gap-3">
                 <button
-                  onClick={() => navigate(`/${course.category.categoryName}/course/${course.courseCode}`, {
+                  onClick={() => navigate(`/${course.category.categoryName.toLowerCase()}/course/${course.courseCode}`, {
                     state: {
                       courseCode: course.courseCode
                     }

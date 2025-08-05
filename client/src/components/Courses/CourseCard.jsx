@@ -13,7 +13,8 @@ const CourseCard = ({
   studentsEnrolled, 
   originalPrice, 
   discountedPrice,
-  remainingSheets
+  remainingSheets,
+  categoryName 
 }) => {
   const navigate = useNavigate();
   return (
@@ -134,7 +135,7 @@ const CourseCard = ({
               <span className="text-lg font-bold text-[#FF7426]">₹{discountedPrice}</span>
             </div>
             <button 
-              onClick={() => navigate(`/category/course/${courseCode}`, { state: { courseId, courseCode } })}
+              onClick={() => navigate(`/${categoryName.toLowerCase()}/course/${courseCode}`, { state: { courseId, courseCode } })}
               className="flex items-center justify-center border-1 rounded-2xl border-[#4D2C5E] px-2 py-1 hover:bg-[#4D2C5E] cursor-pointer text-[#4D2C5E] hover:text-[#fff] transition-colors"
             >
               <span className="mr-1 font-normal">View more</span>
