@@ -106,7 +106,8 @@ function Footer() {
                     to="tel:+919958958123"
                     className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block"
                   >
-                    +91-9958958123
+                    +91-9319426464
+                    +91-9319427070
                   </NavLink>
                 </li>
                 <li>
