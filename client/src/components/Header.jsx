@@ -498,7 +498,7 @@ function Header() {
               Blog
             </NavLink>
             <NavLink
-              to="/ContactUs"
+              to="/contactus"
               style={navLinkStyle}
               className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap"
             >
@@ -509,9 +509,9 @@ function Header() {
             {isAuthenticated ? (
               <>
                 <NavLink to={
-                  getUserRole() === 'STUDENT' ? '/Student/Dashboard' :
-                    getUserRole() === 'TEACHER' ? '/Teacher/Dashboard' :
-                      '/Login'
+                  getUserRole() === 'STUDENT' ? '/student/dashboard' :
+                    getUserRole() === 'TEACHER' ? '/teacher/dashboard' :
+                      '/login'
                 }>
                   <motion.button className="bg-[#4D2C5E] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#3A2150] transition-all shadow-sm hover:shadow-md whitespace-nowrap">
                     Dashboard
@@ -553,8 +553,8 @@ function Header() {
             {isAuthenticated ? (
               <>
                 <NavLink to={
-                  getUserRole() === 'STUDENT' ? '/Student/Dashboard' :
-                    getUserRole() === 'TEACHER' ? '/Teacher/Dashboard' :
+                  getUserRole() === 'STUDENT' ? '/student/dashboard' :
+                    getUserRole() === 'TEACHER' ? '/teacher/dashboard' :
                       '/Login'
                 }>
                   <motion.button className="bg-[#4D2C5E] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#3A2150] transition-all shadow-sm hover:shadow-md whitespace-nowrap">
@@ -577,7 +577,7 @@ function Header() {
                 >
                   ENROLL
                 </button>
-                <NavLink to="/Login">
+                <NavLink to="/login">
                   <button className="bg-[#FF7426] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-medium hover:bg-[#E65100] transition-colors whitespace-nowrap">
                     Login
                   </button>
@@ -762,7 +762,7 @@ function Header() {
 
       {/* All Courses Link */}
       <NavLink
-        to="/CourseList"
+        to="/courselist"
         onClick={() => {
           toggleDrawer();
           setIsCoursesDropdownOpen(false);
@@ -777,7 +777,7 @@ function Header() {
 
                     {/* Other Navigation Links */}
                     <NavLink
-                      to="/Success-stories"
+                      to="/success-stories"
                       style={navLinkStyle}
                       className="block px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all"
                       onClick={toggleDrawer}
@@ -793,7 +793,7 @@ function Header() {
                       Upcoming Batches
                     </NavLink>
                     <NavLink
-                      to="/Blog"
+                      to="/blog"
                       style={navLinkStyle}
                       className="block px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all"
                       onClick={toggleDrawer}
@@ -801,7 +801,7 @@ function Header() {
                       Blog
                     </NavLink>
                     <NavLink
-                      to="/ContactUs"
+                      to="/contactus"
                       style={navLinkStyle}
                       className="block px-4 py-3 text-base font-bold hover:bg-[#FFF5EF] rounded-lg transition-all"
                       onClick={toggleDrawer}
