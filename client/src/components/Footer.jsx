@@ -76,8 +76,8 @@ function Footer() {
               <h3 className="text-[#00052E] text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Company</h3>
               <ul className="space-y-2 sm:space-y-3">
                 <li><NavLink to="/" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Home</NavLink></li>
-                <li><NavLink to="/About" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">About Us</NavLink></li>
-                <li><NavLink to="/CourseList" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Popular Course</NavLink></li>
+                <li><NavLink to="/about" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">About Us</NavLink></li>
+                <li><NavLink to="/courselist" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Popular Course</NavLink></li>
                 <li><NavLink to="/upcoming-batches/" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Latest Batches</NavLink></li>
                 <li><NavLink to="/blog" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Blog</NavLink></li>
                 <li><button onClick={()=>setShowModal(true)} className="m-auto sm:m-0 text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Payment</button></li>
@@ -88,12 +88,12 @@ function Footer() {
             <div className="text-center sm:text-left">
               <h3 className="text-[#00052E] text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Support</h3>
               <ul className="space-y-2 sm:space-y-3">
-                <li><a href="/Login" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Login</a></li>
-                <li><NavLink to="/contactUs" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Help Center</NavLink></li>
-                <li><NavLink to="/PrivacyPolicy" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Privacy</NavLink></li>
-                <li><NavLink to="/TermsOfService" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Terms & Conditions</NavLink></li>
-                <li><NavLink to="/RefundPolicy" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Refund Policy</NavLink></li>
-                <li><NavLink to="/Career" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Career</NavLink></li>
+                <li><a href="/login" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Login</a></li>
+                <li><NavLink to="/contactus" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Help Center</NavLink></li>
+                <li><NavLink to="/privacypolicy" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Privacy</NavLink></li>
+                <li><NavLink to="/termsOfservice" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Terms & Conditions</NavLink></li>
+                <li><NavLink to="/refundpolicy" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Refund Policy</NavLink></li>
+                <li><NavLink to="/career" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Career</NavLink></li>
               </ul>
             </div>
 
@@ -135,7 +135,7 @@ function Footer() {
           <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4">
             <NavLink to="/PrivacyPolicy" className="text-[#FF7426] text-sm hover:underline">Privacy Policy</NavLink>
             <span className="hidden sm:block text-[#FF7426]">|</span>
-            <NavLink to="/TermsOfService" className="text-[#FF7426] text-sm hover:underline">Terms & Condition</NavLink>
+            <NavLink to="/termsofservice" className="text-[#FF7426] text-sm hover:underline">Terms & Condition</NavLink>
           </div>
           <p className="text-center text-sm mt-2">© {new Date().getFullYear()} Upskillab.com All rights reserved.</p>
         </div>

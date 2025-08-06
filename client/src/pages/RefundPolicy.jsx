@@ -258,6 +258,7 @@ const RefundPolicy = () => {
   <title>Refund Policy | Upskillab - Learn About Our Refunds</title>
   <meta name="description" content="Understand Upskillab’s refund policy for course enrollments, cancellations, and money-back guarantees." />
   <meta name="keywords" content="upskilllab refund, refund policy, course cancellation, education refund, money-back upskillab" />
+   <link rel="canonical" href="https://upskillab.com/refundpolicy" />
 </Helmet>
     </motion.div>
   );

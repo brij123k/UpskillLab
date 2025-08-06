@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { FaBriefcase, FaUsers, FaHandshake, FaChartLine, FaHeart, FaLightbulb, FaTimes } from 'react-icons/fa';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { getDataHandler, postDataHandler } from '../../config/services';
-
+import { Helmet } from 'react-helmet-async';
 const Careers = () => {
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -845,7 +845,11 @@ const Careers = () => {
           }}
         />
       </div>
+      <Helmet>
+  <link rel="canonical" href="https://upskillab.com/career" />
+</Helmet>
     </motion.div>
+    
   );
 };
 

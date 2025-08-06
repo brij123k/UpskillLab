@@ -200,6 +200,7 @@ const TermsOfService = () => {
   <title>Terms & Conditions | Upskillab - Platform Usage Rules</title>
   <meta name="description" content="Read the terms and conditions of using Upskillab’s educational services. Understand your rights and responsibilities." />
   <meta name="keywords" content="upskilllab terms, upskillab conditions, online education terms, e-learning agreement, user agreement upskillab" />
+    <link rel="canonical" href="https://upskillab.com/termsofservice" />
 </Helmet>
     </motion.div>
   );

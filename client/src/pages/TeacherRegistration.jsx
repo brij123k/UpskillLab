@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FiUser, FiMail, FiPhone, FiBook, FiAward, FiLink2, FiFileText, FiBriefcase } from 'react-icons/fi';
 import { postDataHandler } from '../config/services';
-
+import { Helmet } from 'react-helmet-async';
 const TeacherRegistration = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -367,7 +367,14 @@ const TeacherRegistration = () => {
           </form>
         </div>
       </div>
+           <Helmet>
+        <title>Refund Policy | Upskillab - Learn About Our Refunds</title>
+        <meta name="description" content="Understand Upskillab’s refund policy for course enrollments, cancellations, and money-back guarantees." />
+        <meta name="keywords" content="upskilllab refund, refund policy, course cancellation, education refund, money-back upskillab" />
+         <link rel="canonical" href="https://upskillab.com/teacherregistration.jsx" />
+      </Helmet>
     </div>
+    
   );
 };
 

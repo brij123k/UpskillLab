@@ -259,6 +259,7 @@ const PrivacyPolicy = () => {
   <title>Privacy Policy | Upskillab - Your Data, Your Control</title>
   <meta name="description" content="Learn how Upskillab collects, uses, and protects your personal information while using our learning platform." />
   <meta name="keywords" content="upskilllab privacy policy, data protection, education privacy, online education privacy, upskillab user data" />
+   <link rel="canonical" href="https://upskillab.com/privacypolicy" />
 </Helmet>
     </motion.div>
   );

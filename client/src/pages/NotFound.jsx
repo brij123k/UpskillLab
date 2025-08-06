@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { NavLink } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 const NotFoundPage = () => {
     return (
@@ -162,7 +163,22 @@ const NotFoundPage = () => {
                     }}
                 />
             ))}
+
+            <Helmet>
+              <title>Upcoming Course Batches | Upskillab Online Learning</title>
+              <meta name="description" content="Stay updated with Upskillab's upcoming course batches and enroll in the next session to advance your skills." />
+              <meta name="keywords" content="Upskillab upcoming batches, course schedule, online learning, enrollment dates" />
+              <meta property="og:title" content="Upcoming Course Batches | Upskillab Online Learning" />
+              <meta property="og:description" content="Check out the schedule for Upskillab's upcoming course batches and plan your learning journey." />
+              <meta property="og:url" content="https://upskillab.com/refundpolicy" />
+              <meta property="og:type" content="website" />
+              <meta name="twitter:card" content="summary_large_image" />
+              <meta name="twitter:title" content="Upcoming Course Batches | Upskillab Online Learning" />
+              <meta name="twitter:description" content="Find out when Upskillab's next course batches start and secure your spot today." />
+              <link rel="canonical" href="https://upskillab.com/refundpolicy" />
+            </Helmet>
         </div>
+        
     );
 };
 

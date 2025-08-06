@@ -13,7 +13,7 @@ import { getDataHandler } from '../../config/services';
 import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
 import BlogContentRenderer from '../../components/BlogContentRenderer';
-
+import { Helmet } from 'react-helmet-async';
 const BlogDetailPage = () => {
   const { id } = useParams(); // Get the blog ID from URL params
   const navigate = useNavigate();
@@ -289,7 +289,11 @@ const BlogDetailPage = () => {
       </div>
       <TrainingBanner />
       <FeedbaackBanner />
+          <Helmet>
+        <link rel="canonical" href="https://upskillab.com/blogdetail" />
+      </Helmet>
     </div>
+    
   );
 };
 

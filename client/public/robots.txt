@@ -2,23 +2,23 @@ User-agent: *
 Disallow: /admin/
 Disallow: /private/
 Allow: /public/
-Allow: /CourseList
+Allow: /courselist
 Allow: /about
-Allow: /ContactUs
-Allow: /SuccessStory
-Allow: /UpcomingBatches
-Allow: /StudentsBlog
-Allow: /BlogDetail
-Allow: /Career
-Allow: /PrivacyPolicy
-Allow: /TermsOfService
-Allow: /RefundPolicy
-Allow: /TeacherRegistration
-Allow: /Login
-Allow: /Register
-Allow: /ForgetPassword
-Allow: /ResetPassword
-Allow: /VerifyOTP
+Allow: /contactus
+Allow: /successstory
+Allow: /upcomingbatches
+Allow: /blog
+Allow: /blogdetail
+Allow: /career
+Allow: /privacypolicy
+Allow: /termsOfservice
+Allow: /refundpolicy
+Allow: /teacherregistration
+Allow: /login
+Allow: /register
+Allow: /forgetpassword
+Allow: /resetpassword
+Allow: /verifyOTP
 
 # Teacher Dashboard
 Allow: /dashboard/teacher
@@ -29,4 +29,4 @@ Allow: /dashboard/student
 Allow: /dashboard/student/*
 
 # Sitemap
-Sitemap: https://www.upskillab.com/sitemap.xml
+Sitemap: https://upskillab.com/sitemap.xml
