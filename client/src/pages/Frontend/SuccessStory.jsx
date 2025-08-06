@@ -309,6 +309,7 @@ const SuccessStory = () => {
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Upskillab Success Stories | Transforming Careers Through Learning" />
   <meta name="twitter:description" content="Explore real-life success stories from Upskillab learners who have transformed their careers." />
+   <link rel="canonical" href="https://upskillab.com/success-stories" />
 </Helmet>
 
     </div>

@@ -640,6 +640,7 @@ const ContactPage = () => {
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Contact Upskillab | Get in Touch with Our Team" />
   <meta name="twitter:description" content="Need assistance? Contact Upskillab's support team for help with our online courses." />
+   <link rel="canonical" href="https://upskillab.com/contactus" />
 </Helmet>
 
 

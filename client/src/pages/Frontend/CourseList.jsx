@@ -904,6 +904,7 @@ const CourseList = () => {
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Upskillab Courses | Advance Your Skills Online" />
   <meta name="twitter:description" content="Explore Upskillab's online courses to boost your skills and career prospects." />
+   <link rel="canonical" href="https://upskillab.com/courselist" />
 </Helmet>
 
 

@@ -271,6 +271,7 @@ const UpcomingBatches = () => {
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Upcoming Course Batches | Upskillab Online Learning" />
   <meta name="twitter:description" content="Find out when Upskillab's next course batches start and secure your spot today." />
+  <link rel="canonical" href="https://upskillab.com/upcoming-batches" />
 </Helmet>
 
 

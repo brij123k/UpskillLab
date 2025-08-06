@@ -439,6 +439,7 @@ function Home() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Upskillab | Empowering Your Career Through Online Learning" />
         <meta name="twitter:description" content="Explore Upskillab's online courses to enhance your skills and career opportunities." />
+        <link rel="canonical" href="https://upskillab.com/" />
       </Helmet>
 
 

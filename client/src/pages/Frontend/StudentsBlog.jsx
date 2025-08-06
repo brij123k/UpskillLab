@@ -225,6 +225,7 @@ const StudentsBlog = () => {
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Upskillab Student Blog | Insights and Tips for Online Learners" />
   <meta name="twitter:description" content="Gain valuable insights and tips from Upskillab's student community through our blog." />
+  <link rel="canonical" href="https://upskillab.com/blog" />
 </Helmet>
 
 

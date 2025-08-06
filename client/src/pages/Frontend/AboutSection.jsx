@@ -28,6 +28,7 @@ const AboutUpskillab = () => {
         <Helmet>
         <title>About Upskillab: E-Learning in Psychology, Technology, Management & Self-Development</title>
         <meta name="description" content=" Upskillab offers online courses in psychology, technology, management, and self-development to help you gain the skills needed for success in today’s competitive job market.." />
+        <link rel="canonical" href="https://upskillab.com/About" />
       </Helmet>
 
 
