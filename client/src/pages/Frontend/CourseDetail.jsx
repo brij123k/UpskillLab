@@ -2096,11 +2096,6 @@ const CourseDetails = () => {
             </div>
         );
     }
-
-
-
-
-
     return (
         <div>
 

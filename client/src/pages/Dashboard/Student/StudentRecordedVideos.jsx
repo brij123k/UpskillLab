@@ -17,7 +17,8 @@ const StudentRecordedVideos = () => {
     try {
       setLoading(true);
       const response = await getDataHandlerWithToken('recordedVideos');
-      
+      const Profile = await getDataHandlerWithToken('studentProfile');
+      console.log(Profile)
       if (response && response.videos) {
         setVideos(response.videos);
         
@@ -188,9 +189,13 @@ const StudentRecordedVideos = () => {
                     )}
                   </div>
                   <p className="text-sm text-gray-600 mt-1 flex items-center">
-                    <FiBook className="mr-1" />
-                    {video.courseId?.courseName}
-                  </p>
+  <FiBook className="mr-1" />
+  {video.description
+    ?.split(" ")
+    .slice(0, 10)
+    .join(" ") + (video.description?.split(" ").length > 10 ? "..." : "")}
+</p>
+
                   <div className="flex items-center mt-2 text-sm text-gray-500">
                     <FiClock className="mr-1" />
                     <span>{formatDate(video.createdAt)}</span>

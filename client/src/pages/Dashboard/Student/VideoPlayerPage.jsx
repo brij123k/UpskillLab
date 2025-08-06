@@ -126,26 +126,7 @@ const VideoPlayerPage = () => {
               </button> */}
             </div>
 
-            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-[#4D2C5E] mb-2 flex items-center">
-                  <FiBook className="mr-2" />
-                  Course Information
-                </h3>
-                <p className="text-gray-700">
-                  <span className="font-medium">Course:</span> {video.courseId?.courseName}
-                </p>
-                <p className="text-gray-700 mt-1">
-                  <span className="font-medium">Chapter:</span> {video.chapterId?.name}
-                </p>
-                <p className="text-gray-700 mt-1">
-                  <span className="font-medium">Week:</span> {video.chapterId?.week}
-                </p>
-                <p className="text-gray-700 mt-1">
-                  <span className="font-medium">Session:</span> {video.chapterId?.session}
-                </p>
-              </div>
-
+            <div className="mt-6 grid grid-cols-1 gap-6">
               <div className="bg-gray-50 p-4 rounded-lg">
                 <h3 className="font-semibold text-[#4D2C5E] mb-2">Description</h3>
                 <p className="text-gray-700">
