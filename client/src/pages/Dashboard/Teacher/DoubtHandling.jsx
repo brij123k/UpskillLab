@@ -252,7 +252,7 @@ const TeacherDoubtHandling = () => {
                         {doubt.attachments.map((file, index) => (
                           <a 
                             key={index} 
-                            href={file.url} 
+                            href={file} 
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="group relative block border rounded-lg overflow-hidden hover:shadow-md transition"
@@ -260,7 +260,7 @@ const TeacherDoubtHandling = () => {
                             {file.type === 'image' ? (
                               <div className="aspect-square bg-gray-100">
                                 <img 
-                                  src={file.url} 
+                                  src={file} 
                                   alt={`Attachment ${index + 1}`}
                                   className="w-full h-full object-cover"
                                 />
@@ -311,7 +311,7 @@ const TeacherDoubtHandling = () => {
                             {latestMessage.attachments.map((file, index) => (
                               <a 
                                 key={index} 
-                                href={file.url} 
+                                href={file} 
                                 target="_blank" 
                                 rel="noopener noreferrer"
                                 className="group relative block border rounded-lg overflow-hidden hover:shadow-md transition"
@@ -319,7 +319,7 @@ const TeacherDoubtHandling = () => {
                                 {file.type === 'image' ? (
                                   <div className="aspect-square bg-gray-100">
                                     <img 
-                                      src={file.url} 
+                                      src={file} 
                                       alt={`Attachment ${index + 1}`}
                                       className="w-full h-full object-cover"
                                     />
