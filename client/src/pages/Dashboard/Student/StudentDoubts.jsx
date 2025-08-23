@@ -129,7 +129,7 @@ const StudentDoubts = () => {
     const matchesSearch = doubt.course?.courseName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     doubt.question.toLowerCase().includes(searchQuery.toLowerCase());
     
-    const isMyDoubt = doubt.student._id === '67f91cedbbf1221f681698a9';
+    const isMyDoubt = doubt.student._id === userId;
     console.log(isMyDoubt)
     const hasTeacherReply = doubt.messages?.some(msg => msg.user?._id !== doubt.student);
     
@@ -316,10 +316,10 @@ const StudentDoubts = () => {
           filteredDoubts.map(doubt => {
             const isMyDoubt = doubt.student._id === userId;
             {isMyDoubt,doubt.student,userId}
-            const hasTeacherReply = doubt.messages?.some(msg => msg.user?._id !== doubt.student);
-            const isExpanded = expandedDoubt === doubt._id;
-            const teacherReply = doubt.messages?.find(msg => msg.user?._id !== doubt.student);
+            const hasTeacherReply = doubt.messages?.some(msg => msg.user?._id !== doubt.student._id);
             
+            const isExpanded = expandedDoubt === doubt._id;
+            const teacherReply = doubt.messages?.find(msg => msg.user?._id !== doubt.student._id);      
             return (
               <div key={doubt._id} className="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden transition-all">
                 {/* Doubt Header */}
@@ -388,7 +388,7 @@ const StudentDoubts = () => {
                                 {teacherReply.attachments.map((file, index) => (
                                   <a 
                                     key={index} 
-                                    href={file.url} 
+                                    href={file} 
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     className="group relative block border rounded-lg overflow-hidden hover:shadow-md transition"
@@ -443,7 +443,7 @@ const StudentDoubts = () => {
                           {doubt.attachments.map((file, index) => (
                             <a 
                               key={index} 
-                              href={file.url} 
+                              href={file} 
                               target="_blank" 
                               rel="noopener noreferrer"
                               className="group relative block border rounded-lg overflow-hidden hover:shadow-md transition"
@@ -451,7 +451,7 @@ const StudentDoubts = () => {
                               {file.type === 'image' ? (
                                 <div className="aspect-square bg-gray-100">
                                   <img 
-                                    src={file.url} 
+                                    src={file} 
                                     alt={`Attachment ${index + 1}`}
                                     className="w-full h-full object-cover"
                                   />
