@@ -440,6 +440,15 @@ function Home() {
         <meta name="twitter:title" content="Upskillab | Empowering Your Career Through Online Learning" />
         <meta name="twitter:description" content="Explore Upskillab's online courses to enhance your skills and career opportunities." />
         <link rel="canonical" href="https://upskillab.com/" />
+                <script type="application/ld+json">{`
+          {
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            "name": "Upskillab",
+            "url": "http://192.168.1.67:5173/",
+            "logo": "https://upskillab.com/logo.png"
+          }
+        `}</script>
       </Helmet>
 
 
