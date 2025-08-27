@@ -74,7 +74,19 @@ function Home() {
     }
   };
 
-
+function CoursePage({ course }) {
+  const courseSchema = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": course.title,
+    "description": course.description,
+    "provider": {
+      "@type": "Organization",
+      "name": "Upskillab",
+      "sameAs": "https://upskillab.com"
+    },
+    "url": window.location.href
+  };
 
   const faqs = [
     {
@@ -152,6 +164,22 @@ function Home() {
   ];
   return (
     <>
+          <Helmet>
+        <title>Upskillab | Empowering Your Career Through Online Learning</title>
+        <meta name="description" content="Upskillab offers a variety of online courses to help you upskill and advance your career. Join our community of learners today." />
+        <meta name="keywords" content="upkillab, upskilllab, upskilling, upskill lab, online upskillab, online education upskillab, education upskillab, online learning, career development, education online courses" />
+        <meta property="og:title" content="Upskillab | Empowering Your Career Through Online Learning" />
+        <meta property="og:description" content="Join Upskillab to access a wide range of online courses designed to boost your skills and career prospects." />
+        <meta property="og:url" content="https://upskillab.com" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Upskillab | Empowering Your Career Through Online Learning" />
+        <meta name="twitter:description" content="Explore Upskillab's online courses to enhance your skills and career opportunities." />
+        <link rel="canonical" href="https://upskillab.com/" />
+   <script type="application/ld+json">
+          {JSON.stringify(courseSchema)}
+        </script>
+      </Helmet>
     {/* <ExitIntentModal/>
 {/*
           <!-- Google Tag Manager -->
@@ -428,28 +456,7 @@ function Home() {
       />
 
 
-      <Helmet>
-        <title>Upskillab | Empowering Your Career Through Online Learning</title>
-        <meta name="description" content="Upskillab offers a variety of online courses to help you upskill and advance your career. Join our community of learners today." />
-        <meta name="keywords" content="upkillab, upskilllab, upskilling, upskill lab, online upskillab, online education upskillab, education upskillab, online learning, career development, education online courses" />
-        <meta property="og:title" content="Upskillab | Empowering Your Career Through Online Learning" />
-        <meta property="og:description" content="Join Upskillab to access a wide range of online courses designed to boost your skills and career prospects." />
-        <meta property="og:url" content="https://upskillab.com" />
-        <meta property="og:type" content="website" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Upskillab | Empowering Your Career Through Online Learning" />
-        <meta name="twitter:description" content="Explore Upskillab's online courses to enhance your skills and career opportunities." />
-        <link rel="canonical" href="https://upskillab.com/" />
-                <script type="application/ld+json">{`
-          {
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Upskillab",
-            "url": "https://upskillab.com/",
-            "logo": "https://upskillab.com/logo.png"
-          }
-        `}</script>
-      </Helmet>
+
 
 
 
