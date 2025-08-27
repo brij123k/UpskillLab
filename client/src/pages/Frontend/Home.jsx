@@ -445,7 +445,7 @@ function Home() {
             "@context": "https://schema.org",
             "@type": "Organization",
             "name": "Upskillab",
-            "url": "http://192.168.1.67:5173/",
+            "url": "https://upskillab.com/",
             "logo": "https://upskillab.com/logo.png"
           }
         `}</script>
