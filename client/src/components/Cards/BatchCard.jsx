@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-
+import { NavLink } from "react-router-dom";
 const BatchCard = ({
   onEnroll,
   startDate,
@@ -19,21 +19,21 @@ const BatchCard = ({
   mode,
 }) => {
   const navigate = useNavigate();
-  
+
   // Normalize dates for accurate comparison
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  
+
   const batchDate = new Date(startDate);
   batchDate.setHours(0, 0, 0, 0);
-  
+
   // Determine batch status
   const getBatchStatus = () => {
     if (batchDate < today) return "batch-started";
     if (batchDate.getTime() === today.getTime()) return "starting-today";
     return "upcoming";
   };
-  
+
   const batchStatus = getBatchStatus();
   const isEnrollable = batchStatus === "upcoming";
   const isStartingToday = batchStatus === "starting-today";
@@ -45,11 +45,10 @@ const BatchCard = ({
 
   return (
     <motion.div
-      className={`bg-white rounded-xl overflow-hidden shadow-sm border ${
-        isEnrollable 
-          ? "border-gray-200 cursor-pointer" 
+      className={`bg-white rounded-xl overflow-hidden shadow-sm border ${isEnrollable
+          ? "border-gray-200 cursor-pointer"
           : "border-gray-300 opacity-90"
-      } flex flex-col h-full relative`}
+        } flex flex-col h-full relative`}
       whileHover={{
         y: isEnrollable ? -5 : 0,
         boxShadow: isEnrollable ? "0 8px 20px -5px rgba(0, 0, 0, 0.1)" : "none",
@@ -60,20 +59,18 @@ const BatchCard = ({
     >
       {/* Status ribbon */}
       {batchStatus !== "upcoming" && (
-        <div className={`absolute top-4 right-4 px-3 py-1 rounded-md text-xs font-bold text-white z-10 ${
-          batchStatus === "batch-started" ? "bg-gray-500" : "bg-[#FF7426]"
-        } shadow-md`}>
+        <div className={`absolute top-4 right-4 px-3 py-1 rounded-md text-xs font-bold text-white z-10 ${batchStatus === "batch-started" ? "bg-gray-500" : "bg-[#FF7426]"
+          } shadow-md`}>
           {batchStatus === "batch-started" ? "Batch Started" : "Starting Today"}
         </div>
       )}
 
       {/* Solid color header */}
       <motion.div
-        className={`p-4 border-b ${
-          isEnrollable ? "bg-[#4D2C5E] border-[#3A2250]" : "bg-gray-500 border-gray-600"
-        }`}
-        whileHover={{ 
-          backgroundColor: isEnrollable ? "#3A2250" : "rgb(107 114 128)" 
+        className={`p-4 border-b ${isEnrollable ? "bg-[#4D2C5E] border-[#3A2250]" : "bg-gray-500 border-gray-600"
+          }`}
+        whileHover={{
+          backgroundColor: isEnrollable ? "#3A2250" : "rgb(107 114 128)"
         }}
       >
         <div className="flex justify-between items-start">
@@ -83,27 +80,23 @@ const BatchCard = ({
             whileHover={{ scale: isEnrollable ? 1.03 : 1 }}
           >
             <motion.div
-              className={`rounded-lg w-12 h-12 flex flex-col items-center justify-center shadow-md ${
-                isEnrollable ? "bg-[#FF7426] text-white" : "bg-gray-400 text-gray-700"
-              }`}
+              className={`rounded-lg w-12 h-12 flex flex-col items-center justify-center shadow-md ${isEnrollable ? "bg-[#FF7426] text-white" : "bg-gray-400 text-gray-700"
+                }`}
               whileHover={{ scale: isEnrollable ? 1.1 : 1 }}
             >
               <span className="text-lg font-bold leading-none">{day}</span>
               <span className="text-xs uppercase mt-1">{month}</span>
             </motion.div>
-            <span className={`text-sm ${
-              isEnrollable ? "text-gray-300" : "text-gray-200"
-            }`}>{year}</span>
+            <span className={`text-sm ${isEnrollable ? "text-gray-300" : "text-gray-200"
+              }`}>{year}</span>
           </motion.div>
 
           {/* Price with floating animation */}
           <motion.div className="text-right">
-            <span className={`text-2xl font-bold ${
-              isEnrollable ? "text-white" : "text-gray-100"
-            }`}>₹{price}</span>
-            <p className={`text-xs mt-1 ${
-              isEnrollable ? "text-gray-300" : "text-gray-200"
-            }`}>Total Fee</p>
+            <span className={`text-2xl font-bold ${isEnrollable ? "text-white" : "text-gray-100"
+              }`}>₹{price}</span>
+            <p className={`text-xs mt-1 ${isEnrollable ? "text-gray-300" : "text-gray-200"
+              }`}>Total Fee</p>
           </motion.div>
         </div>
       </motion.div>
@@ -112,9 +105,8 @@ const BatchCard = ({
       <div className="p-4 flex-grow">
         {/* Title with color change animation */}
         <motion.h3
-          className={`text-lg font-bold mb-4 line-clamp-2 ${
-            isEnrollable ? "text-[#4D2C5E] hover:text-[#FF7426]" : "text-gray-600"
-          }`}
+          className={`text-lg font-bold mb-4 line-clamp-2 ${isEnrollable ? "text-[#4D2C5E] hover:text-[#FF7426]" : "text-gray-600"
+            }`}
           whileHover={isEnrollable ? { x: 3 } : {}}
           transition={{ type: "spring" }}
         >
@@ -125,16 +117,14 @@ const BatchCard = ({
         <div className="grid grid-cols-2 gap-3 mb-4">
           {/* Batch Time */}
           <motion.div
-            className={`flex items-center px-3 py-2 rounded-lg border ${
-              isEnrollable 
-                ? "bg-[#FF7426]/10 border-[#FF7426]/20 text-[#FF7426]" 
+            className={`flex items-center px-3 py-2 rounded-lg border ${isEnrollable
+                ? "bg-[#FF7426]/10 border-[#FF7426]/20 text-[#FF7426]"
                 : "bg-gray-200/50 border-gray-300/50 text-gray-600"
-            }`}
+              }`}
             whileHover={{ scale: isEnrollable ? 1.03 : 1 }}
           >
-            <div className={`w-6 h-6 rounded-full mr-2 flex items-center justify-center ${
-              isEnrollable ? "bg-[#FF7426] text-white" : "bg-gray-400 text-gray-200"
-            }`}>
+            <div className={`w-6 h-6 rounded-full mr-2 flex items-center justify-center ${isEnrollable ? "bg-[#FF7426] text-white" : "bg-gray-400 text-gray-200"
+              }`}>
               ⏰
             </div>
             <span className="text-sm">{batchTime}</span>
@@ -142,16 +132,14 @@ const BatchCard = ({
 
           {/* Duration */}
           <motion.div
-            className={`flex items-center px-3 py-2 rounded-lg border ${
-              isEnrollable 
-                ? "bg-[#4D2C5E]/10 border-[#4D2C5E]/20 text-[#4D2C5E]" 
+            className={`flex items-center px-3 py-2 rounded-lg border ${isEnrollable
+                ? "bg-[#4D2C5E]/10 border-[#4D2C5E]/20 text-[#4D2C5E]"
                 : "bg-gray-200/50 border-gray-300/50 text-gray-600"
-            }`}
+              }`}
             whileHover={{ scale: isEnrollable ? 1.03 : 1 }}
           >
-            <div className={`w-6 h-6 rounded-full mr-2 flex items-center justify-center ${
-              isEnrollable ? "bg-[#4D2C5E] text-white" : "bg-gray-400 text-gray-200"
-            }`}>
+            <div className={`w-6 h-6 rounded-full mr-2 flex items-center justify-center ${isEnrollable ? "bg-[#4D2C5E] text-white" : "bg-gray-400 text-gray-200"
+              }`}>
               📆
             </div>
             <span className="text-sm">{duration}</span>
@@ -159,16 +147,14 @@ const BatchCard = ({
 
           {/* Mode */}
           <motion.div
-            className={`flex items-center px-3 py-2 rounded-lg border ${
-              isEnrollable 
-                ? "bg-[#FF7426]/10 border-[#FF7426]/20 text-[#FF7426]" 
+            className={`flex items-center px-3 py-2 rounded-lg border ${isEnrollable
+                ? "bg-[#FF7426]/10 border-[#FF7426]/20 text-[#FF7426]"
                 : "bg-gray-200/50 border-gray-300/50 text-gray-600"
-            }`}
+              }`}
             whileHover={{ scale: isEnrollable ? 1.03 : 1 }}
           >
-            <div className={`w-6 h-6 rounded-full mr-2 flex items-center justify-center ${
-              isEnrollable ? "bg-[#FF7426] text-white" : "bg-gray-400 text-gray-200"
-            }`}>
+            <div className={`w-6 h-6 rounded-full mr-2 flex items-center justify-center ${isEnrollable ? "bg-[#FF7426] text-white" : "bg-gray-400 text-gray-200"
+              }`}>
               🖥️
             </div>
             <span className="text-sm">{mode}</span>
@@ -176,16 +162,14 @@ const BatchCard = ({
 
           {/* Remaining Seats */}
           <motion.div
-            className={`flex items-center px-3 py-2 rounded-lg border ${
-              isEnrollable 
-                ? "bg-[#4D2C5E]/10 border-[#4D2C5E]/20 text-[#4D2C5E]" 
+            className={`flex items-center px-3 py-2 rounded-lg border ${isEnrollable
+                ? "bg-[#4D2C5E]/10 border-[#4D2C5E]/20 text-[#4D2C5E]"
                 : "bg-gray-200/50 border-gray-300/50 text-gray-600"
-            }`}
+              }`}
             whileHover={{ scale: isEnrollable ? 1.03 : 1 }}
           >
-            <div className={`w-6 h-6 rounded-full mr-2 flex items-center justify-center ${
-              isEnrollable ? "bg-[#4D2C5E] text-white" : "bg-gray-400 text-gray-200"
-            }`}>
+            <div className={`w-6 h-6 rounded-full mr-2 flex items-center justify-center ${isEnrollable ? "bg-[#4D2C5E] text-white" : "bg-gray-400 text-gray-200"
+              }`}>
               🔢
             </div>
             <span className="text-sm">
@@ -199,56 +183,60 @@ const BatchCard = ({
       <div className="p-4 border-t border-gray-200">
         <div className="flex justify-between gap-3">
           {/* View Details Button */}
-          <motion.button
-            className={`text-sm font-medium px-4 py-2 rounded-md border-2 transition-colors flex-1 ${
-              isEnrollable
-                ? "text-[#4D2C5E] border-[#4D2C5E] hover:bg-[#4D2C5E] hover:text-white"
-                : "text-gray-500 border-gray-400 hover:bg-gray-100"
-            }`}
-            onClick={() => navigate(`/${categoryName.toLowerCase()}/course/${courseCode}`, { 
-              state: { 
-                courseId,
-                courseCode,
-                batchId,
-                batchCode 
-              } 
-            })}
-            whileHover={{
-              scale: 1.02,
-              boxShadow: isEnrollable 
-                ? "0 2px 8px -1px rgba(77, 44, 94, 0.3)"
-                : "none",
+          <NavLink
+            to={{
+              pathname: `/${categoryName.toLowerCase()}/course/${courseCode}`,
             }}
-            whileTap={{ scale: 0.98 }}
+            state={{
+              courseId,
+              courseCode,
+              batchId,
+              batchCode,
+            }}
+            className="flex-1"
           >
-            View Details
-          </motion.button>
-          
+            <motion.button
+              className={`text-sm font-medium px-4 py-2 rounded-md border-2 transition-colors w-full ${isEnrollable
+                  ? "text-[#4D2C5E] border-[#4D2C5E] hover:bg-[#4D2C5E] hover:text-white"
+                  : "text-gray-500 border-gray-400 hover:bg-gray-100"
+                }`}
+              whileHover={{
+                scale: 1.02,
+                boxShadow: isEnrollable
+                  ? "0 2px 8px -1px rgba(77, 44, 94, 0.3)"
+                  : "none",
+              }}
+              whileTap={{ scale: 0.98 }}
+              type="button"
+            >
+              View Details
+            </motion.button>
+          </NavLink>
+
           {/* Enroll Button */}
           <motion.button
-            className={`text-sm font-medium px-4 py-2 rounded-md transition-colors flex-1 shadow-sm ${
-              isEnrollable
+            className={`text-sm font-medium px-4 py-2 rounded-md transition-colors flex-1 shadow-sm ${isEnrollable
                 ? "bg-[#FF7426] text-white hover:bg-[#E56722]"
                 : isStartingToday
                   ? "bg-gray-400 text-gray-700"
                   : "bg-gray-300 text-gray-600 cursor-not-allowed"
-            }`}
+              }`}
             onClick={isEnrollable ? onEnroll : null}
             whileHover={
               isEnrollable
                 ? {
-                    scale: 1.02,
-                    boxShadow: "0 3px 10px -1px rgba(255, 116, 38, 0.4)",
-                  }
+                  scale: 1.02,
+                  boxShadow: "0 3px 10px -1px rgba(255, 116, 38, 0.4)",
+                }
                 : {}
             }
             whileTap={isEnrollable ? { scale: 0.98 } : {}}
             disabled={!isEnrollable}
           >
-            {isEnrollable 
-              ? "Enroll Now" 
-              : isStartingToday 
-                ? "Starting Today" 
+            {isEnrollable
+              ? "Enroll Now"
+              : isStartingToday
+                ? "Starting Today"
                 : "Batch Started"}
           </motion.button>
         </div>

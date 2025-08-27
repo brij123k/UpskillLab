@@ -36,6 +36,7 @@ const TeacherDoubtHandling = () => {
     fetchDoubts();
   }, []);
 
+  handleclick()
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     if (files.length + attachments.length > 5) {

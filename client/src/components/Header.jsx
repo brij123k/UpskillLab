@@ -18,10 +18,10 @@ function Header() {
   const { isAuthenticated, logout, getUserRole } = useAuth();
   const [hoveredCourse, setHoveredCourse] = useState(null);
   const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 });
-  const [announcements,setAnnouncements]= useState([])
-  
+  const [announcements, setAnnouncements] = useState([])
 
-    const [showExitIntent, setShowExitIntent] = useState(false);
+
+  const [showExitIntent, setShowExitIntent] = useState(false);
   const [mousePosition, setMousePosition] = useState({ y: 0 });
   const [exitIntentTriggered, setExitIntentTriggered] = useState(false);
 
@@ -66,10 +66,10 @@ function Header() {
   const triggerExitIntent = () => {
     // Only trigger once per page view
     if (exitIntentTriggered) return;
-    
+
     setShowExitIntent(true);
     setExitIntentTriggered(true);
-    
+
     // Close automatically after 15 seconds if not closed by user
     setTimeout(() => {
       setShowExitIntent(false);
@@ -80,7 +80,7 @@ function Header() {
     setShowExitIntent(false);
   };
 
-  
+
   // Fetch categories using React Query
   const { data: categoriesData, isLoading: isCategoriesLoading } = useQuery({
     queryKey: ["categories"],
@@ -138,7 +138,7 @@ function Header() {
           imageUrl: course.courseImage,
           duration: course.courseDuration,
           courseCode: course.courseCode,
-          category:course.category.categoryName
+          category: course.category.categoryName
 
         }));
     },
@@ -180,21 +180,21 @@ function Header() {
   //   "📢 Upcoming Webinar: 'AI Career Paths' - May 25th, 5PM IST"
   // ]);
 
-  useEffect(()=>{
-    const announcementsHandler = async ()=>{
-      try{
+  useEffect(() => {
+    const announcementsHandler = async () => {
+      try {
         const response = await getDataHandler('getAnnouncements')
 
         const messages = response
-        .filter(item=>item.isActive)
-        .map(item => item.message);
+          .filter(item => item.isActive)
+          .map(item => item.message);
         setAnnouncements(messages);
-    }catch(err){
-      console.error(err)
+      } catch (err) {
+        console.error(err)
+      }
     }
-    }
-   announcementsHandler()
-  },[])
+    announcementsHandler()
+  }, [])
 
   return (
 
@@ -202,7 +202,7 @@ function Header() {
 
       {/* News Ticker - Add this */}
       <div className="bg-[#4D2C5E] text-white py-2 px-4 overflow-hidden">
-        
+
         <div className="max-w-8xl mx-auto relative">
           <div className="absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-[#4D2C5E] to-transparent z-10"></div>
           <div className="absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-[#4D2C5E] to-transparent z-10"></div>
@@ -250,7 +250,7 @@ function Header() {
           <div className="flex items-center space-x-6 xl:space-x-8 2xl:space-x-10">
             {/* Courses Dropdown */}
             <div className="relative">
-              <button
+              <a
                 onClick={toggleCoursesDropdown}
                 className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap flex items-center"
                 style={
@@ -274,7 +274,7 @@ function Header() {
                     d="M19 9l-7 7-7-7"
                   />
                 </svg>
-              </button>
+              </a>
 
               <AnimatePresence>
                 {isCoursesDropdownOpen && (
@@ -326,8 +326,8 @@ function Header() {
                                 <button
                                   onClick={() => handleCategorySelect(category)}
                                   className={`w-full text-left px-3 py-3 rounded-md text-sm font-medium ${selectedCategory?.id === category.id
-                                      ? "bg-[#FF7426] text-white"
-                                      : "text-gray-700 hover:bg-gray-200"
+                                    ? "bg-[#FF7426] text-white"
+                                    : "text-gray-700 hover:bg-gray-200"
                                     }`}
                                 >
                                   <div className="flex items-center">
@@ -356,24 +356,21 @@ function Header() {
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative">
                           {(selectedCategory ? selectedCategory.courses : AllCourses.slice(0, 4)).map((course) => (
-                            
-                            <div
+                            <NavLink
                               key={course.id}
-                              className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group relative"
-                              onClick={() => {
-                                const categoryName = selectedCategory?.name || course.category;
-                                navigate(`/${categoryName.toLowerCase()}/course/${course.courseCode}`, {
-                                  state: { courseId: course.id, courseCode: course.courseCode }
-                                });
-                                setIsCoursesDropdownOpen(false);
+                              to={{
+                                pathname: `/${(selectedCategory?.name || course.category).toLowerCase()}/course/${course.courseCode}`,
                               }}
+                              state={{ courseId: course.id, courseCode: course.courseCode }}
+                              onClick={() => setIsCoursesDropdownOpen(false)}
+                              className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group relative"
                               onMouseEnter={(e) => {
-                                if (window.innerWidth >= 1024) { // Only show hover effect on desktop
+                                if (window.innerWidth >= 1024) {
                                   setHoveredCourse(course);
                                   const rect = e.currentTarget.getBoundingClientRect();
                                   setHoverPosition({
                                     x: rect.left - rect.width / 2,
-                                    y: rect.top + rect.height
+                                    y: rect.top + rect.height,
                                   });
                                 }
                               }}
@@ -383,7 +380,6 @@ function Header() {
                                 }
                               }}
                             >
-                              {/* {console.log(AllCourses)} */}
                               <div className="flex items-start">
                                 <img
                                   src={course.image || course.imageUrl}
@@ -394,13 +390,13 @@ function Header() {
                                   <h4 className="font-medium text-gray-800 group-hover:text-[#FF7426] truncate">
                                     {course.name || course.title}
                                   </h4>
-                                  {/* Show duration on mobile since we don't have hover */}
                                   <p className="text-xs text-gray-500 lg:hidden mt-1">
-                                    {course.duration || 'Flexible duration'}
+                                    {course.duration || "Flexible duration"}
                                   </p>
                                 </div>
                               </div>
-                            </div>
+                            </NavLink>
+
                           ))}
                         </div>
 
@@ -651,129 +647,123 @@ function Header() {
                 <div className="flex-1 overflow-y-auto">
                   <div className="space-y-2 px-4 pb-4">
                     <div className="mb-4">
-  <button
-    onClick={() => setIsCoursesDropdownOpen(!isCoursesDropdownOpen)}
-    className="w-full flex justify-between items-center px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all"
-  >
-    <span>Courses</span>
-    <svg
-      className={`ml-2 h-5 w-5 transition-transform ${
-        isCoursesDropdownOpen ? "rotate-180" : ""
-      }`}
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M19 9l-7 7-7-7"
-      />
-    </svg>
-  </button>
-
-  {/* Courses Dropdown Content */}
-  {isCoursesDropdownOpen && (
-    <div className="mt-2 pl-4 space-y-2">
-      {/* Categories List with Courses */}
-      <div className="space-y-4">
-        {courseCategories
-          .filter((category) => category.courses.length !== 0)
-          .map((category) => {
-            const isCategoryOpen = selectedCategory?.id === category.id;
-            return (
-              <div key={category.id}>
-                {/* Category Button */}
-                <button
-                  onClick={() => {
-                    if (isCategoryOpen) {
-                      setSelectedCategory(null);
-                    } else {
-                      setSelectedCategory(category);
-                    }
-                  }}
-                  className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium flex justify-between items-center ${
-                    isCategoryOpen
-                      ? "bg-[#FF7426] text-white"
-                      : "text-gray-700 hover:bg-gray-100"
-                  }`}
-                >
-                  <span>{category.name}</span>
-                  <svg
-                    className={`h-4 w-4 transition-transform ${
-                      isCategoryOpen ? "rotate-180" : ""
-                    }`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M19 9l-7 7-7-7"
-                    />
-                  </svg>
-                </button>
-
-                {/* Courses List */}
-                {isCategoryOpen && (
-                  <div className="mt-2 ml-4 space-y-2 overflow-hidden">
-                    {category.courses.map((course) => (
                       <button
-                        key={course.id}
-                        onClick={() => {
-                          navigate(`/${selectedCategory.name.toLowerCase()}/course/${course.courseCode}`, { 
-                            state: { courseId: course.id, courseCode: course.courseCode } 
-                          });
-                          toggleDrawer();
-                          setIsCoursesDropdownOpen(false);
-                        }}
-                        className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100"
+                        onClick={() => setIsCoursesDropdownOpen(!isCoursesDropdownOpen)}
+                        className="w-full flex justify-between items-center px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all"
                       >
-                        <div className="flex items-start">
-                          <img
-                            src={course.image}
-                            alt={course.name}
-                            className="w-8 h-8 object-cover rounded-md mr-2 flex-shrink-0"
+                        <span>Courses</span>
+                        <svg
+                          className={`ml-2 h-5 w-5 transition-transform ${isCoursesDropdownOpen ? "rotate-180" : ""
+                            }`}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M19 9l-7 7-7-7"
                           />
-                          <div className="min-w-0">
-                            {/* Responsive text handling */}
-                            <p className="font-medium text-gray-800 group-hover:text-[#FF7426] break-words line-clamp-2">
-                              {course.name}
-                            </p>
-                            <div className="flex flex-wrap items-center mt-1">
-                              <p className="text-xs text-gray-500 mr-2">
-                                {course.duration}
-                              </p>
-                              
-                            </div>
-                          </div>
-                        </div>
+                        </svg>
                       </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-      </div>
 
-      {/* All Courses Link */}
-      <NavLink
-        to="/courselist"
-        onClick={() => {
-          toggleDrawer();
-          setIsCoursesDropdownOpen(false);
-        }}
-        className="block px-3 py-2 text-sm font-medium text-[#FF7426] hover:underline mt-4"
-      >
-        View All Courses →
-      </NavLink>
-    </div>
-  )}
-</div>
+                      {/* Courses Dropdown Content */}
+                      {isCoursesDropdownOpen && (
+                        <div className="mt-2 pl-4 space-y-2">
+                          {/* Categories List with Courses */}
+                          <div className="space-y-4">
+                            {courseCategories
+                              .filter((category) => category.courses.length !== 0)
+                              .map((category) => {
+                                const isCategoryOpen = selectedCategory?.id === category.id;
+                                return (
+                                  <div key={category.id}>
+                                    {/* Category Button */}
+                                    <button
+                                      onClick={() => {
+                                        if (isCategoryOpen) {
+                                          setSelectedCategory(null);
+                                        } else {
+                                          setSelectedCategory(category);
+                                        }
+                                      }}
+                                      className={`w-full text-left px-3 py-2 rounded-md text-sm font-medium flex justify-between items-center ${isCategoryOpen
+                                        ? "bg-[#FF7426] text-white"
+                                        : "text-gray-700 hover:bg-gray-100"
+                                        }`}
+                                    >
+                                      <span>{category.name}</span>
+                                      <svg
+                                        className={`h-4 w-4 transition-transform ${isCategoryOpen ? "rotate-180" : ""
+                                          }`}
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={2}
+                                          d="M19 9l-7 7-7-7"
+                                        />
+                                      </svg>
+                                    </button>
+
+                                    {/* Courses List */}
+                                    {isCategoryOpen && (
+                                      <div className="mt-2 ml-4 space-y-2 overflow-hidden">
+                                        {category.courses.map((course) => (
+                                          <NavLink
+                                            key={course.id}
+                                            to={{
+                                              pathname: `/${selectedCategory.name.toLowerCase()}/course/${course.courseCode}`,
+                                            }}
+                                            state={{ courseId: course.id, courseCode: course.courseCode }}
+                                            onClick={() => {
+                                              toggleDrawer();
+                                              setIsCoursesDropdownOpen(false);
+                                            }}
+                                            className="block w-full text-left px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-100"
+                                          >
+                                            <div className="flex items-start">
+                                              <img
+                                                src={course.image}
+                                                alt={course.name}
+                                                className="w-8 h-8 object-cover rounded-md mr-2 flex-shrink-0"
+                                              />
+                                              <div className="min-w-0">
+                                                <p className="font-medium text-gray-800 group-hover:text-[#FF7426] break-words line-clamp-2">
+                                                  {course.name}
+                                                </p>
+                                                <div className="flex flex-wrap items-center mt-1">
+                                                  <p className="text-xs text-gray-500 mr-2">{course.duration}</p>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </NavLink>
+                                        ))}
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })}
+                          </div>
+
+                          {/* All Courses Link */}
+                          <NavLink
+                            to="/courselist"
+                            onClick={() => {
+                              toggleDrawer();
+                              setIsCoursesDropdownOpen(false);
+                            }}
+                            className="block px-3 py-2 text-sm font-medium text-[#FF7426] hover:underline mt-4"
+                          >
+                            View All Courses →
+                          </NavLink>
+                        </div>
+                      )}
+                    </div>
 
                     {/* Other Navigation Links */}
                     <NavLink

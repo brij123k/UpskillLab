@@ -235,7 +235,7 @@ const CategoryDropdownFilter = ({
     if (!data?.pages) return [];
     console.log(data.pages)
     return data.pages.flatMap((page) =>
-      page.data.filter((cat)=>cat.active).map((category) => ({
+      page.data.filter((cat) => cat.active).map((category) => ({
         value: category._id,
         label: category.categoryName,
       }))
@@ -360,29 +360,29 @@ const CourseList = () => {
   const handleEnrollClick = async (course) => {
     // setSelectedCourse(course);
     const today = new Date();
-   today.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
     const endpointUrl = ApiConfig.getCourseByCode(course.courseCode);
     const response = await getDataHandler(endpointUrl, null, null, true);
     if (response.batch && new Date(response.batch.startDate) >= today) {
-    let custemDataSet = {
-      id: response.batch._id,
-      batchCode: response.batch.batchCode,
-      batchId: response.batch._id,
-      courseCode: response.courseCode,
-      courseId: response._id,
-      originalPrice: response.originalPrice,
-      price: response.discountedPrice,
-      remainingSeats: response.batch.remainingSeats,
-      startDate: response.batch.startDate,
-      startTime: response.batch.startTime,
-      title: response.courseName,
-      totalSeats: response.totalSeats,
+      let custemDataSet = {
+        id: response.batch._id,
+        batchCode: response.batch.batchCode,
+        batchId: response.batch._id,
+        courseCode: response.courseCode,
+        courseId: response._id,
+        originalPrice: response.originalPrice,
+        price: response.discountedPrice,
+        remainingSeats: response.batch.remainingSeats,
+        startDate: response.batch.startDate,
+        startTime: response.batch.startTime,
+        title: response.courseName,
+        totalSeats: response.totalSeats,
+      }
+      setEnrollCourse(custemDataSet)
     }
-    setEnrollCourse(custemDataSet)
-  }
-  else{
-     setIsModalOpen(true)
-  }
+    else {
+      setIsModalOpen(true)
+    }
     // setIsEnrollModalOpen(true);
   };
 
@@ -479,7 +479,7 @@ const CourseList = () => {
   };
 
   const courses = (coursesData?.data || []).filter(course => course.active === true);
-  
+
   const totalCourses = coursesData?.count || 0;
 
   return (
@@ -524,20 +524,20 @@ const CourseList = () => {
 
               <motion.div className="flex flex-col sm:flex-row gap-4">
                 <a href="#Courses" variants={itemVariants}
-                    className="bg-[#FF7426] hover:bg-[#E65100] text-white font-bold py-3 px-8 rounded-full transition-colors shadow-lg" >
+                  className="bg-[#FF7426] hover:bg-[#E65100] text-white font-bold py-3 px-8 rounded-full transition-colors shadow-lg" >
                   <motion.button
-                    className="text-center w-full" 
+                    className="text-center w-full"
                   >
                     Browse Courses
                   </motion.button>
                 </a>
-                  <motion.button
-                    onClick={() => setIsModalOpen(true)}
-                    variants={itemVariants}
-                    className="bg-white/20 hover:bg-white/30 text-white font-bold py-3 px-8 rounded-full transition-colors border border-white/20"
-                  >
-                    Speak to Advisor
-                  </motion.button>
+                <motion.button
+                  onClick={() => setIsModalOpen(true)}
+                  variants={itemVariants}
+                  className="bg-white/20 hover:bg-white/30 text-white font-bold py-3 px-8 rounded-full transition-colors border border-white/20"
+                >
+                  Speak to Advisor
+                </motion.button>
               </motion.div>
             </motion.div>
 
@@ -683,32 +683,32 @@ const CourseList = () => {
         {/* Courses Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {courses
-          .filter(course => course.active === true)
-          .map((course, index) => (
-          
-            <motion.div
-              key={course._id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.5,
-                delay: index * 0.1,
-              }}
-              whileHover={{
-                y: -8,
-                boxShadow: "0 10px 25px -5px rgba(77, 44, 94, 0.2)",
-              }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all border border-[#4D2C5E]/10 flex flex-col"
-            >
-              {/* Course Image Section */}
-              <div className="relative">
-                <motion.img
-                  src={course.courseImage}
-                  alt={course.courseName}
-                  className="w-full h-48 object-cover"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                />
+            .filter(course => course.active === true)
+            .map((course, index) => (
+
+              <motion.div
+                key={course._id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.1,
+                }}
+                whileHover={{
+                  y: -8,
+                  boxShadow: "0 10px 25px -5px rgba(77, 44, 94, 0.2)",
+                }}
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all border border-[#4D2C5E]/10 flex flex-col"
+              >
+                {/* Course Image Section */}
+                <div className="relative">
+                  <motion.img
+                    src={course.courseImage}
+                    alt={course.courseName}
+                    className="w-full h-48 object-cover"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                  />
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
@@ -718,136 +718,141 @@ const CourseList = () => {
                     <img src={course?.certifierLogo || "/images/Logo.svg"} className="h-7 shadow-2xl" />
 
                   </motion.div>
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  className="absolute bottom-4 right-4 bg-white/90 text-[#FF7426] text-xs font-bold px-2 py-1 rounded"
-                >
-                  {(() => {
-                    const days = course.courseDuration;
-
-                    // Less than 1 day = show in hours
-                    if (days < 1) return `${Math.round(days * 24)} hours`;
-
-                    // 1-6 days = show in days
-                    if (days <= 6) return `${Math.round(days)} days`;
-
-                    // 7-27 days = show in weeks
-                    if (days <= 27) {
-                      const weeks = (days / 7).toFixed(1);
-                      return `${weeks.endsWith('.0') ? weeks.split('.')[0] : weeks} week${weeks !== '1' ? 's' : ''}`;
-                    }
-
-                    // 28-364 days = show in months
-                    if (days <= 364) {
-                      const months = (days / 30).toFixed(1); // Average month length
-                      return `${months.endsWith('.0') ? months.split('.')[0] : months} month${months !== '1' ? 's' : ''}`;
-                    }
-
-                    // 365+ days = show in years
-                    const years = (days / 365).toFixed(1);
-                    return `${years.endsWith('.0') ? years.split('.')[0] : years} year${years !== '1' ? 's' : ''}`;
-                  })()}
-                </motion.div>
-              </div>
-
-              {/* Course Content Section */}
-              <div className="p-6 flex-grow">
-                <div className="flex justify-between items-center mb-3">
-                  <motion.span
-                    whileHover={{ scale: 1.05 }}
-                    className={`text-xs px-2 py-1 rounded-full ${course.courseLevel.code === "BEGINNER"
-                      ? "bg-blue-100 text-blue-800"
-                      : course.courseLevel.code === "INTERMEDIATE"
-                        ? "bg-purple-100 text-purple-800"
-                        : "bg-[#FF7426]/20 text-[#FF7426]"
-                      }`}
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    className="absolute bottom-4 right-4 bg-white/90 text-[#FF7426] text-xs font-bold px-2 py-1 rounded"
                   >
-                    {course.courseLevel.name}
-                  </motion.span>
-                  <div className="flex items-center text-yellow-500">
-                    <span className="text-sm font-bold mr-1">
-                      {course.courseRating}
-                    </span>
-                    <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
+                    {(() => {
+                      const days = course.courseDuration;
+
+                      // Less than 1 day = show in hours
+                      if (days < 1) return `${Math.round(days * 24)} hours`;
+
+                      // 1-6 days = show in days
+                      if (days <= 6) return `${Math.round(days)} days`;
+
+                      // 7-27 days = show in weeks
+                      if (days <= 27) {
+                        const weeks = (days / 7).toFixed(1);
+                        return `${weeks.endsWith('.0') ? weeks.split('.')[0] : weeks} week${weeks !== '1' ? 's' : ''}`;
+                      }
+
+                      // 28-364 days = show in months
+                      if (days <= 364) {
+                        const months = (days / 30).toFixed(1); // Average month length
+                        return `${months.endsWith('.0') ? months.split('.')[0] : months} month${months !== '1' ? 's' : ''}`;
+                      }
+
+                      // 365+ days = show in years
+                      const years = (days / 365).toFixed(1);
+                      return `${years.endsWith('.0') ? years.split('.')[0] : years} year${years !== '1' ? 's' : ''}`;
+                    })()}
+                  </motion.div>
+                </div>
+
+                {/* Course Content Section */}
+                <div className="p-6 flex-grow">
+                  <div className="flex justify-between items-center mb-3">
+                    <motion.span
+                      whileHover={{ scale: 1.05 }}
+                      className={`text-xs px-2 py-1 rounded-full ${course.courseLevel.code === "BEGINNER"
+                        ? "bg-blue-100 text-blue-800"
+                        : course.courseLevel.code === "INTERMEDIATE"
+                          ? "bg-purple-100 text-purple-800"
+                          : "bg-[#FF7426]/20 text-[#FF7426]"
+                        }`}
+                    >
+                      {course.courseLevel.name}
+                    </motion.span>
+                    <div className="flex items-center text-yellow-500">
+                      <span className="text-sm font-bold mr-1">
+                        {course.courseRating}
+                      </span>
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => {
+                      // Scroll to top first
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                  >
+                    <NavLink
+                      to={{
+                        pathname: `/${course.category.categoryName.toLowerCase()}/course/${course.courseCode}`,
+                      }}
+                      state={{ courseCode: course.courseCode }}
+                      className="block w-full text-left"
+                    >
+                      <h3 className="text-xl text-left font-bold text-[#4D2C5E] mb-2">
+                        {course.courseName}
+                      </h3>
+                    </NavLink>
+                  </button>
+                  <p className="text-gray-600 mb-4">
+                    {course.category.categoryName}
+                  </p>
+
+                  <div className="flex items-center justify-end gap-1 mb-4">
+                    <div className="text-sm font-bold line-through text-[#4D2C5E]">
+                      ₹{course.originalPrice}
+                    </div>
+                    <div className="text-md font-bold text-[#4D2C5E]">
+                      ₹{course.discountedPrice}
+                    </div>
+
                   </div>
                 </div>
-<button
-  onClick={() => {
-    // Scroll to top first
-    window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Wait a short time, then navigate
-    setTimeout(() => {
-      navigate(`/${course.category.categoryName.toLowerCase()}/course/${course.courseCode}`, {
-        state: {
-          courseCode: course.courseCode,
-        },
-      });
-    }, 300); // Delay to let scroll finish
-  }}
->
-                <h3 className="text-xl text-left font-bold text-[#4D2C5E] mb-2">
-                  {course.courseName}
-                </h3>
-                </button>
-                <p className="text-gray-600 mb-4">
-                  {course.category.categoryName}
-                </p>
+                {/* Action Buttons Section */}
+                <div className="px-6 pb-6 pt-0 flex justify-between flex-col sm:flex-row gap-3">
+                  <button className="flex-1" 
+                  onClick={() => {
+                      // Scroll to top first
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}>
 
-                <div className="flex items-center justify-end gap-1 mb-4">
-                  <div className="text-sm font-bold line-through text-[#4D2C5E]">
-                    ₹{course.originalPrice}
-                  </div>
-                  <div className="text-md font-bold text-[#4D2C5E]">
-                    ₹{course.discountedPrice}
-                  </div>
+                    <NavLink
+                      to={{
+                        pathname: `/${course.category.categoryName.toLowerCase()}/course/${course.courseCode}`,
+                      }}
+                      state={{ courseCode: course.courseCode }}
+                      className="w-full text-center text-[#4D2C5E] font-medium hover:underline flex items-center justify-center py-2 border border-[#4D2C5E]/30 rounded-lg hover:bg-[#4D2C5E]/5 transition-colors cursor-pointer"
+                    >
+                      View Details
+                      <motion.svg
+                        whileHover={{ x: 5 }}
+                        className="ml-1 h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </motion.svg>
+                    </NavLink>
+                  </button>
 
-                </div>
-              </div>
-
-              {/* Action Buttons Section */}
-              <div className="px-6 pb-6 pt-0 flex justify-between flex-col sm:flex-row gap-3">
-                <button
-                  onClick={() => navigate(`/${course.category.categoryName.toLowerCase()}/course/${course.courseCode}`, {
-                    state: {
-                      courseCode: course.courseCode
-                    }
-                  })}
-                  className="flex-1 text-center text-[#4D2C5E] font-medium hover:underline flex items-center justify-center py-2 border border-[#4D2C5E]/30 rounded-lg hover:bg-[#4D2C5E]/5 transition-colors cursor-pointer"
-                >
-                  View Details
-                  <motion.svg
-                    whileHover={{ x: 5 }}
-                    className="ml-1 h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                  <motion.button
+                    whileHover={{
+                      backgroundColor: "#E65100",
+                      scale: 1.02,
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => handleEnrollClick(course)}
+                    className="flex-1 bg-[#FF7426] text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 5l7 7-7 7"
-                    />
-                  </motion.svg>
-                </button>
-
-                <motion.button
-                  whileHover={{
-                    backgroundColor: "#E65100",
-                    scale: 1.02,
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleEnrollClick(course)}
-                  className="flex-1 bg-[#FF7426] text-white font-bold py-2 px-4 rounded-lg shadow-md hover:shadow-lg transition-all cursor-pointer"
-                >
-                  Enroll Now
-                </motion.button>
-              </div>
-            </motion.div>
-          ))}
+                    Enroll Now
+                  </motion.button>
+                </div>
+              </motion.div>
+            ))}
         </div>
 
         {/* No Results Message */}
@@ -887,25 +892,25 @@ const CourseList = () => {
         />
       )}
 
-<AdmissionFormModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+      <AdmissionFormModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
 
 
       <Helmet>
-  <title>Upskillab Courses | Advance Your Skills Online</title>
-  <meta name="description" content="Browse Upskillab's extensive catalog of online courses to enhance your skills and career growth." />
-  <meta name="keywords" content="Upskillab courses, online courses, skill development, upskilling, education online" />
-  <meta property="og:title" content="Upskillab Courses | Advance Your Skills Online" />
-  <meta property="og:description" content="Discover a variety of online courses at Upskillab designed to help you upskill and achieve your career goals." />
-  <meta property="og:url" content="https://upskillab.com/courses" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Upskillab Courses | Advance Your Skills Online" />
-  <meta name="twitter:description" content="Explore Upskillab's online courses to boost your skills and career prospects." />
-   <link rel="canonical" href="https://upskillab.com/courselist" />
-</Helmet>
+        <title>Upskillab Courses | Advance Your Skills Online</title>
+        <meta name="description" content="Browse Upskillab's extensive catalog of online courses to enhance your skills and career growth." />
+        <meta name="keywords" content="Upskillab courses, online courses, skill development, upskilling, education online" />
+        <meta property="og:title" content="Upskillab Courses | Advance Your Skills Online" />
+        <meta property="og:description" content="Discover a variety of online courses at Upskillab designed to help you upskill and achieve your career goals." />
+        <meta property="og:url" content="https://upskillab.com/courses" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Upskillab Courses | Advance Your Skills Online" />
+        <meta name="twitter:description" content="Explore Upskillab's online courses to boost your skills and career prospects." />
+        <link rel="canonical" href="https://upskillab.com/courselist" />
+      </Helmet>
 
 
     </div>

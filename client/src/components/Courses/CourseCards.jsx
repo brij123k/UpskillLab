@@ -35,13 +35,14 @@ function CourseCards() {
 
           {/* Explore All button - properly aligned */}
           <div className="flex justify-center lg:justify-end mt-12 w-full">
-            
+            <NavLink to="/CourseList">
             <button
-            onClick={()=>navigation("/CourseList")}
+            
             className="bg-[#4d2c5e] hover:bg-[#3a2148] text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300 flex items-center shadow-md hover:shadow-lg cursor-pointer">
               Explore All
               <FiArrowRight className="ml-2 transition-transform group-hover:translate-x-1" />
             </button>
+            </NavLink>
           </div>
         </div>
       </div>

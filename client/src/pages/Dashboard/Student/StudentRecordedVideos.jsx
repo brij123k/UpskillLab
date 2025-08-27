@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FiSearch,FiX, FiVideo, FiDownload, FiClock, FiBook } from 'react-icons/fi';
+import { FiSearch, FiX, FiVideo, FiDownload, FiClock, FiBook } from 'react-icons/fi';
 import { getDataHandlerWithToken } from '../../../config/services';
 import ReactPlayer from 'react-player'; // For video playback
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +21,7 @@ const StudentRecordedVideos = () => {
       console.log(Profile)
       if (response && response.videos) {
         setVideos(response.videos);
-        
+
         // Extract unique courses from videos
         const uniqueCourses = response.videos.reduce((acc, video) => {
           if (!acc.some(course => course._id === video.courseId._id)) {
@@ -46,8 +46,8 @@ const StudentRecordedVideos = () => {
   }, []);
 
   const filteredVideos = videos.filter(video => {
-    const matchesCourse = activeCourse === 'all' || 
-                         (video.courseId && video.courseId._id === activeCourse);
+    const matchesCourse = activeCourse === 'all' ||
+      (video.courseId && video.courseId._id === activeCourse);
     const matchesSearch = video.title.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCourse && matchesSearch;
   });
@@ -89,7 +89,7 @@ const StudentRecordedVideos = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          
+
           <div className="flex space-x-2 overflow-x-auto pb-2 md:pb-0">
             <button
               onClick={() => setActiveCourse('all')}
@@ -116,7 +116,7 @@ const StudentRecordedVideos = () => {
           <div className="bg-white rounded-lg w-full ">
             <div className="p-4 flex justify-between items-center border-b">
               <h3 className="text-lg font-bold">{selectedVideo.title}</h3>
-              <button 
+              <button
                 onClick={() => setSelectedVideo(null)}
                 className="text-gray-500 hover:text-gray-700"
               >
@@ -127,7 +127,7 @@ const StudentRecordedVideos = () => {
               <div className="h-full w-full">
                 <ReactPlayer
                   url={selectedVideo.videoUrl}
-                 
+
                   className="h-[100vh] w-full"
                   controls={true}
                 />
@@ -159,7 +159,7 @@ const StudentRecordedVideos = () => {
             filteredVideos.map(video => (
               <div key={video._id} className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow">
                 <div className="relative">
-                  <div 
+                  <div
                     className="bg-gray-200 h-40 flex items-center justify-center cursor-pointer"
                     onClick={() => navigate(`/Student/videos/${video._id}`)}
                   >
@@ -189,12 +189,12 @@ const StudentRecordedVideos = () => {
                     )}
                   </div>
                   <p className="text-sm text-gray-600 mt-1 flex items-center">
-  <FiBook className="mr-1" />
-  {video.description
-    ?.split(" ")
-    .slice(0, 10)
-    .join(" ") + (video.description?.split(" ").length > 10 ? "..." : "")}
-</p>
+                    <FiBook className="mr-1" />
+                    {video.description
+                      ?.split(" ")
+                      .slice(0, 10)
+                      .join(" ") + (video.description?.split(" ").length > 10 ? "..." : "")}
+                  </p>
 
                   <div className="flex items-center mt-2 text-sm text-gray-500">
                     <FiClock className="mr-1" />
@@ -205,7 +205,7 @@ const StudentRecordedVideos = () => {
                       <FiDownload className="mr-1" />
                       Download
                     </button> */}
-                    <button 
+                    <button
                       className="px-3 py-1 bg-[#4D2C5E] text-white rounded-lg hover:bg-[#3a2152] text-sm"
                       onClick={() => navigate(`/Student/videos/${video._id}`)}
                     >
