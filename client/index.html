@@ -49,94 +49,53 @@
     <!-- ✅ JSON-LD Structured Data -->
 
     <!-- Organization -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Upskillab",
-      "url": "https://upskillab.com/",
-      "logo": "https://upskillab.com/images/Logo.svg",
-      "sameAs": [
-        "https://www.facebook.com/upskillab",
-        "https://www.instagram.com/upskillab",
-        "https://www.linkedin.com/company/upskillab",
-        "https://twitter.com/upskillab"
-      ]
-    }
-    </script>
+    <!-- Organization Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Upskillab",
+  "url": "https://upskillab.com/",
+  "logo": "https://upskillab.com/images/Logo.svg",
+  "sameAs": [
+    "https://www.facebook.com/upskillab",
+    "https://www.instagram.com/upskillab",
+    "https://www.linkedin.com/company/upskillab",
+    "https://twitter.com/upskillab"
+  ]
+}
+</script>
 
-    <!-- Website -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "url": "https://upskillab.com/",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "https://upskillab.com/search?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
+<!-- Website Schema (for sitelinks searchbox) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "url": "https://upskillab.com/",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://upskillab.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
 
-    <!-- Breadcrumb -->
-    <script type="application/ld+json">
+<!-- Breadcrumb Schema -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
     {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "Home",
-          "item": "https://upskillab.com/"
-        }
-      ]
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://upskillab.com/"
     }
-    </script>
+  ]
+}
+</script>
 
-    <!-- Example Courses (repeat for featured ones) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Course",
-      "name": "Full-Stack Web Development Bootcamp",
-      "description": "Learn React, Node.js, databases, and deployment to become a professional full-stack developer.",
-      "provider": {
-        "@type": "Organization",
-        "name": "Upskillab",
-        "sameAs": "https://upskillab.com/"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://upskillab.com/courses/fullstack-web-dev",
-        "priceCurrency": "INR",
-        "price": "4999",
-        "availability": "https://schema.org/InStock"
-      }
-    }
-    </script>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Course",
-      "name": "Digital Marketing Mastery",
-      "description": "Master SEO, Google Ads, social media, and analytics to accelerate your career in digital marketing.",
-      "provider": {
-        "@type": "Organization",
-        "name": "Upskillab",
-        "sameAs": "https://upskillab.com/"
-      },
-      "offers": {
-        "@type": "Offer",
-        "url": "https://upskillab.com/courses/digital-marketing",
-        "priceCurrency": "INR",
-        "price": "3999",
-        "availability": "https://schema.org/InStock"
-      }
-    }
-    </script>
 
   </head>
   <body>
