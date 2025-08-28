@@ -73,21 +73,6 @@ function Home() {
       transition: { duration: 0.8, ease: "easeOut" }
     }
   };
-
-function CoursePage({ course }) {
-  const courseSchema = {
-    "@context": "https://schema.org",
-    "@type": "Course",
-    "name": course.title,
-    "description": course.description,
-    "provider": {
-      "@type": "Organization",
-      "name": "Upskillab",
-      "sameAs": "https://upskillab.com"
-    },
-    "url": window.location.href
-  };
-
   const faqs = [
     {
       question: "What Upskillab wants to give you?",
@@ -176,9 +161,6 @@ function CoursePage({ course }) {
         <meta name="twitter:title" content="Upskillab | Empowering Your Career Through Online Learning" />
         <meta name="twitter:description" content="Explore Upskillab's online courses to enhance your skills and career opportunities." />
         <link rel="canonical" href="https://upskillab.com/" />
-   <script type="application/ld+json">
-          {JSON.stringify(courseSchema)}
-        </script>
       </Helmet>
     {/* <ExitIntentModal/>
 {/*
