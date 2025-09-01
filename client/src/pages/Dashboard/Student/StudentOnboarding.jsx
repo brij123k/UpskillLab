@@ -18,6 +18,7 @@ const StudentOnboarding = () => {
     });
     const [submitting, setSubmitting] = useState(false);
     const [completed, setCompleted] = useState(false);
+    const [imageError, setImageError] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -52,6 +53,19 @@ const StudentOnboarding = () => {
     const handleImageUpload = (e) => {
         const file = e.target.files[0];
         if (file) {
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                setImageError('Please upload an image file');
+                return;
+            }
+            
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                setImageError('Image size should be less than 5MB');
+                return;
+            }
+            
+            setImageError('');
             const reader = new FileReader();
             reader.onloadend = () => {
                 setFormData(prev => ({
@@ -100,8 +114,25 @@ const StudentOnboarding = () => {
     };
 
     const nextStep = async () => {
+        // Validate required fields before proceeding
         if (currentStep === 1) {
+            // Check if image is uploaded
+            if (!formData.profileImageFile && !formData.image) {
+                setImageError('Profile image is required');
+                return;
+            }
+            
+            // Check if name is provided
+            if (!formData.fullName.trim()) {
+                message.error('Please enter your full name');
+                return;
+            }
+            
+            // Save data and proceed to next step
+            const success = await submitProfileData();
+            if (success) {
                 setCurrentStep(prev => prev + 1);
+            }
         } else {
             setCurrentStep(prev => prev + 1);
         }
@@ -118,7 +149,9 @@ const StudentOnboarding = () => {
     }
 
     if (profile?.fullName && profile?.image && !completed) {
-        return <StudentDashboard />;
+        setTimeout(() => {
+                navigate('/student/dashboard');
+            }, 1500);
     }
 
     const steps = [
@@ -185,10 +218,14 @@ const StudentOnboarding = () => {
                                     className="hidden"
                                     onChange={handleImageUpload}
                                     accept="image/*"
+                                    required
                                 />
                             </label>
                         </motion.div>
-                        <p className="text-sm text-gray-500">Click to upload your profile picture</p>
+                        <p className="text-sm text-gray-500">Click to upload your profile picture *</p>
+                        {imageError && (
+                            <p className="text-sm text-red-500 mt-1">{imageError}</p>
+                        )}
                     </div>
 
                     <motion.div
@@ -243,8 +280,8 @@ const StudentOnboarding = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={nextStep}
-                        className="px-6 py-3 bg-gradient-to-r from-[#4D2C5E] to-[#7B4D8D] text-white rounded-lg font-medium flex items-center shadow-md"
-                        disabled={!formData.fullName || submitting}
+                        className="px-6 py-3 bg-gradient-to-r from-[#4D2C5E] to-[#7B4D8D] text-white rounded-lg font-medium flex items-center shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled={submitting}
                     >
                         {submitting ? (
                             <>

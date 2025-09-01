@@ -84,7 +84,7 @@ export const routes = [
   { exact: true, path: "/success-stories", layout: GuestLayout, component: Success},
   { exact: true, path: "/upcoming-batches/", layout: GuestLayout, component: upcomingBatches},
   { exact: true, path: "/blog", layout: GuestLayout, component: StudentsBlog},
-  { exact: true, path: "/blogDetail/:id",layout:GuestLayout,component:BlogDetailPage},
+  { exact: true, path: "/BlogDetail/:id/:slug",layout:GuestLayout,component:BlogDetailPage},
   { exact: true, path: "/contactus", layout: GuestLayout, component: ContactUs},
   { exact: true, path: "/courselist", layout: GuestLayout, component: CourseList},
   { exact: true, path: "/career", layout: GuestLayout, component: Career},
