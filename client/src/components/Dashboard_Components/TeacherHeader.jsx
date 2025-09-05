@@ -78,7 +78,6 @@ const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
       
       // Get top 5 latest notifications
       const latestNotifications = allNotifications.slice(0, 5);
-      console.log(latestNotifications)
       setNotifications(latestNotifications);
     } catch (error) {
       console.error('Error fetching notifications:', error);

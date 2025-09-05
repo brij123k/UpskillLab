@@ -32,7 +32,7 @@ useEffect(() => {
   const checkProfile = async () => {
     try {
       const profileRes = await getDataHandlerWithToken('profile');
-      console.log(profileRes)
+
       if (!profileRes.fullName || !profileRes.image) {
         setProfileComplete(false);
         navigate('/student/onboarding');
@@ -69,8 +69,7 @@ if (!profileComplete) {
           getDataHandlerWithToken(endpoint, null, null, true),
           getDataHandlerWithToken('studentAttendance')
         ]);
-        // console.log(classesRes)
-        // Process data
+
       const courseIds = profileRes.batch.map(batch => batch.course);
 
       if (courseIds.length > 0) {
@@ -107,7 +106,6 @@ if (!profileComplete) {
 
         const now = new Date();
         const allClasses = classesRes.classSessions || [];
-        console.log(allClasses)
         // Today's classes
         const today = allClasses.filter(session => {
           const sessionDate = new Date(session.scheduledDate);
@@ -130,14 +128,13 @@ if (!profileComplete) {
           
           return isBefore(start, now) && isAfter(end, now);
         });
-        console.log(attendanceRes)
+
         // Calculate attendance percentage
         let attendancePercentage = 0;
         if (attendanceRes && attendanceRes.classes && attendanceRes.classes.length > 0) {
           const totalClasses = attendanceRes.classes.length;
           const attendedClasses = attendanceRes.classes.filter(cls => cls.isAttended === true).length;
           attendancePercentage = Math.round((attendedClasses / totalClasses) * 100);
-          console.log(totalClasses,attendedClasses,attendancePercentage)
         }
 
         setTodayClasses(today);
@@ -425,7 +422,6 @@ if (!profileComplete) {
         if (isLiveNow && session.isApproved) {
           e.preventDefault(); // Prevent immediate navigation
           try {
-            console.log(session)
             await updateAttendance(session._id); // Update attendance first
             window.open(session.meetingLink, '_blank'); // Then open the link
           } catch (error) {

@@ -1832,7 +1832,6 @@ const CourseDetails = () => {
         const endpointUrl = ApiConfig.getCourseByCode(courseCode);
 
         const response = await getDataHandler(endpointUrl, null, null, true); // pass endpointUrl directly
-        console.log(response)
         let custemDataSet = {
             id: response._id,
             batchId: response.batch?._id || "0",
@@ -1864,8 +1863,6 @@ const CourseDetails = () => {
         const response = res.batch
         const endpointUrl2 = ApiConfig.getCourseByCode(response.course.courseCode);
         const res2 = await getDataHandler(endpointUrl2, null, null, true);
-        console.log(res2)
-        console.log(response)
         let custemDataSet = {
             id: res2._id,
             batchId: response._id,

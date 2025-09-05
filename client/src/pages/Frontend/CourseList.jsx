@@ -233,7 +233,7 @@ const CategoryDropdownFilter = ({
   // Transform categories data for dropdown
   const categoryOptions = useMemo(() => {
     if (!data?.pages) return [];
-    console.log(data.pages)
+
     return data.pages.flatMap((page) =>
       page.data.filter((cat) => cat.active).map((category) => ({
         value: category._id,

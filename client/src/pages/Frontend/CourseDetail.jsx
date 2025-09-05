@@ -1905,11 +1905,11 @@ const CourseDetails = () => {
 
     const fetchCourse = async (courseCode,category) => {
         // Get the endpoint URL by calling the ApiConfig function
-        console.log(category)
+ 
         const endpointUrl = ApiConfig.getCourseByCode(courseCode);
 
         const response = await getDataHandler(endpointUrl, null, null, true); // pass endpointUrl directly
-        console.log(response)
+
         if(response.categoryName.toLowerCase()===category){
 
         

@@ -123,7 +123,7 @@ const ApiConfig = {
   feedback:`${url}/feedback`,
   feedbackwithId:(id)=>`${url}/feedback/${id}`,
   getFeedback:`${url}/feedback/my-feedbacks`,
-
+  getResult:`${url}/attempts/my-result`
 
 
   

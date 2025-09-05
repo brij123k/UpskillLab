@@ -24,7 +24,6 @@ const TextCarousel = ({ slides, autoPlayVideo = false }) => {
   const getVideoSrc = async () => {
     try {
       const response = await getDataHandler('youtube');
-      console.log(response)
       if (response?.videos?.length > 0) {
         const videoId = response.videos[0].videoId;
         const embedUrl = `${videoId}?autoplay=1&mute=1&rel=0&enablejsapi=1`;

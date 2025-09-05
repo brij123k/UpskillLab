@@ -49,7 +49,7 @@ const UpcomingBatches = () => {
       
         // Remove .0 decimal places for cleaner display
         durationText = durationText.replace(/\.0/, '');
-      console.log(batch)
+
         return {
           id: batch.batchId,
           active: batch.active,

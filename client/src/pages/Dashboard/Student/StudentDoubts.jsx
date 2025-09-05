@@ -130,7 +130,6 @@ const StudentDoubts = () => {
     doubt.question.toLowerCase().includes(searchQuery.toLowerCase());
     
     const isMyDoubt = doubt.student._id === userId;
-    console.log(isMyDoubt)
     const hasTeacherReply = doubt.messages?.some(msg => msg.user?._id !== doubt.student);
     
     const matchesTab = activeTab === 'all' || 

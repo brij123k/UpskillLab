@@ -99,9 +99,7 @@ const StudentJobs = () => {
   //   job.company.toLowerCase().includes(searchQuery.toLowerCase())
   // );
 
-  const toggleSaveJob = (jobId) => {
-    console.log(`Job ${jobId} save status toggled`);
-  };
+
 
   const formatDate = (dateString) => {
     return formatDistanceToNow(new Date(dateString), { addSuffix: true });

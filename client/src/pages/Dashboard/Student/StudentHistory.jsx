@@ -15,27 +15,49 @@ import {
 import { getDataHandlerWithToken } from '../../../config/services';
 import { useNavigate } from 'react-router-dom';
 import generateReceipt from '../../../components/Receipt';
+
 const StudentHistory = () => {
   const [studentData, setStudentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState('courses');
   const [courses, setCourses] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [account, setAccount] = useState(null)
- const navigate = useNavigate()
+  const [account, setAccount] = useState(null);
+  const [results, setResults] = useState([]);
+  const [resultsLoading, setResultsLoading] = useState(false);
+  const navigate = useNavigate();
+
   const fetchStudentHistory = async () => {
     try {
       setLoading(true);
       const response = await getDataHandlerWithToken('studentHistory');
       const courses = await getDataHandlerWithToken('courseDisplay');
       const account = await getDataHandlerWithToken('account');
-     setAccount(account)
+      
+      setAccount(account);
       setCourses(courses.data);
       setStudentData(response.students[0]);
+      
+      // Fetch results if student data is available
+      if (response.students[0] && response.students[0].email) {
+        fetchResults(response.students[0].email);
+      }
     } catch (error) {
       console.error('Error fetching student history:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchResults = async (email) => {
+    try {
+      setResultsLoading(true);
+      const response = await getDataHandlerWithToken('getResult',{email});
+      setResults(response);
+    } catch (error) {
+      console.error('Error fetching results:', error);
+    } finally {
+      setResultsLoading(false);
     }
   };
 
@@ -179,7 +201,7 @@ const StudentHistory = () => {
           </div>
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
             {/* Attendance Card */}
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
               <div className="flex items-center justify-between">
@@ -256,6 +278,27 @@ const StudentHistory = () => {
                 </span>
               </div>
             </div>
+
+            {/* Results Card */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-white/80">Results</p>
+                  <p className="text-2xl font-bold text-white">
+                    {results.length}
+                  </p>
+                </div>
+                <div className="p-3 rounded-full bg-white/10">
+                  <FiAward className="h-6 w-6 text-white" />
+                </div>
+              </div>
+              <div className="flex justify-between text-xs text-white/80 mt-3">
+                <span className="flex items-center">
+                  <span className="w-2 h-2 rounded-full bg-blue-400 mr-1"></span>
+                  {results.length} exams
+                </span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -291,6 +334,16 @@ const StudentHistory = () => {
               {studentData?.orderHistory?.length || 0}
             </span>
           </button>
+          <button
+            onClick={() => setActiveSection('results')}
+            className={`px-6 py-3 rounded-xl whitespace-nowrap flex items-center gap-2 transition-all ${activeSection === 'results' ? 'bg-[#6C63FF] text-white shadow-md' : 'text-gray-700 hover:bg-gray-100'}`}
+          >
+            <FiAward className="w-5 h-5" />
+            Results
+            <span className="bg-white/20 px-2 py-0.5 rounded-full text-xs">
+              {results.length}
+            </span>
+          </button>
         </div>
 
         {/* Courses Section */}
@@ -306,10 +359,9 @@ const StudentHistory = () => {
                     </div>
                     In Progress Courses ({inProgress.length})
                   </h2>
-                  <button
-                  className="text-sm text-[#6C63FF] hover:underline flex items-center">
+                  {/* <button className="text-sm text-[#6C63FF] hover:underline flex items-center">
                     View all <FiChevronRight className="ml-1" />
-                  </button>
+                  </button> */}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {inProgress.map(course => (
@@ -351,9 +403,9 @@ const StudentHistory = () => {
                     </div>
                     Completed Courses ({completed.length})
                   </h2>
-                  <button className="text-sm text-[#6C63FF] hover:underline flex items-center">
+                  {/* <button className="text-sm text-[#6C63FF] hover:underline flex items-center">
                     View all <FiChevronRight className="ml-1" />
-                  </button>
+                  </button> */}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {completed.map(course => (
@@ -404,7 +456,6 @@ const StudentHistory = () => {
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                      {/* <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th> */}
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
@@ -431,20 +482,6 @@ const StudentHistory = () => {
                             </span>
                           )}
                         </td>
-                        {/* <td className="px-6 py-4 whitespace-nowrap">
-                          {session.link ? (
-                            <a 
-                              href={session.link} 
-                              target="_blank" 
-                              rel="noopener noreferrer"
-                              className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium ${session.isUpcoming ? 'bg-[#6C63FF] text-white hover:bg-[#5A52E0]' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}
-                            >
-                              {session.isUpcoming ? 'Join Now' : 'View Recording'}
-                            </a>
-                          ) : (
-                            <span className="text-xs text-gray-400">Not available</span>
-                          )}
-                        </td> */}
                       </tr>
                     ))}
                   </tbody>
@@ -455,143 +492,210 @@ const StudentHistory = () => {
         )}
 
         {/* Order History Section */}
-{activeSection === 'orders' && (
-  <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-    <div className="p-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-        <div>
-          <h2 className="text-xl font-bold text-gray-800 mb-1">Order History</h2>
-          <p className="text-gray-600">All your course purchases and transactions</p>
-        </div>
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FiSearch className="h-5 w-5 text-gray-400" />
-          </div>
-          <input
-            type="text"
-            placeholder="Search orders..."
-            className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6C63FF] focus:border-[#6C63FF] transition-all"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-        </div>
-      </div>
-
-      {/* Total Amount Summary */}
-      <div className="bg-[#6C63FF]/10 p-4 rounded-xl border border-[#6C63FF]/20 mb-6">
-        <div className="flex flex-wrap justify-between gap-4">
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-700">Total Orders</p>
-            <p className="text-xl font-bold text-[#6C63FF]">
-              {account?.payments?.length || 0}
-            </p>
-          </div>
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-700">Completed Orders</p>
-            <p className="text-xl font-bold text-[#6C63FF]">
-              {account?.payments?.filter(p => p.order.status === 'COMPLETED').length || 0}
-            </p>
-          </div>
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-700">Total Amount Paid</p>
-            <p className="text-xl font-bold text-[#6C63FF]">
-              ₹{account?.grandTotal?.toLocaleString('en-IN') || '0'}
-            </p>
-          </div>
-        </div>
-      </div>
-      
-      <div className="overflow-x-auto rounded-lg border border-gray-200">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Batch</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment Date</th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {account?.payments?.filter(payment => 
-              payment.order._id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-              (payment.order.batch?.batchCode?.toLowerCase().includes(searchTerm.toLowerCase())) ||
-              (payment.order.batch?.course?.courseName?.toLowerCase().includes(searchTerm.toLowerCase()))
-            ).map(payment => (
-              <tr key={payment._id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-[#6C63FF]">#{payment.order._id.slice(0, 8)}...</div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="text-sm font-medium text-gray-900">
-                    {payment.order.batch?.course?.courseName || 'Unknown Course'}
+        {activeSection === 'orders' && (
+          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div className="p-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-800 mb-1">Order History</h2>
+                  <p className="text-gray-600">All your course purchases and transactions</p>
+                </div>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FiSearch className="h-5 w-5 text-gray-400" />
                   </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">{payment.order.batch?.batchCode || 'N/A'}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center gap-1 text-sm font-medium">
-                    ₹{payment.order.amountPaid.toLocaleString('en-IN')}
-                    <span className="text-gray-400">/</span>
-                    <span className="text-gray-500">₹{payment.order.totalAmount.toLocaleString('en-IN')}</span>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {payment.order.status === 'COMPLETED' ? (
-                    <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                      Completed
-                    </span>
-                  ) : (
-                    <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                      Pending
-                    </span>
-                  )}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-500">
-                    {new Date(payment.createdAt).toLocaleDateString('en-US', { 
-                      day: 'numeric', 
-                      month: 'short', 
-                      year: 'numeric' 
-                    })}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {payment.order.status === 'COMPLETED' && (
-                    <button 
-                      // onClick={() => generateReceipt({
-                      //   orderId: payment.order._id,
-                      //   courseTitle: payment.order.batch?.course?.courseName || 'Unknown Course',
-                      //   batchId: {
-                      //     batchCode: payment.order.batch?.batchCode || 'N/A',
-                      //     course: payment.order.batch?.course?.courseName || 'Unknown Course'
-                      //   },
-                      //   totalAmount: payment.order.totalAmount,
-                      //   amountPaid: payment.amount,
-                      //   createdAt: payment.createdAt,
-                      //   status: payment.status,
-                      //   user: payment.order.user
-                      // })}
+                  <input
+                    type="text"
+                    placeholder="Search orders..."
+                    className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6C63FF] focus:border-[#6C63FF] transition-all"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                  />
+                </div>
+              </div>
 
-                      onClick={() => generateReceipt(payment)}
+              {/* Total Amount Summary */}
+              <div className="bg-[#6C63FF]/10 p-4 rounded-xl border border-[#6C63FF]/20 mb-6">
+                <div className="flex flex-wrap justify-between gap-4">
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-gray-700">Total Orders</p>
+                    <p className="text-xl font-bold text-[#6C63FF]">
+                      {studentData?.orderHistory?.length || 0}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-gray-700">Completed Orders</p>
+                    <p className="text-xl font-bold text-[#6C63FF]">
+                      {studentData?.orderHistory?.filter(o => o.status === 'COMPLETED').length || 0}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <p className="text-sm font-medium text-gray-700">Total Amount Paid</p>
+                    <p className="text-xl font-bold text-[#6C63FF]">
+                      ₹{studentData?.orderHistory
+                        ?.filter(o => o.status === 'COMPLETED')
+                        .reduce((sum, order) => sum + order.amountPaid, 0)
+                        .toLocaleString('en-IN') || '0'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="overflow-x-auto rounded-lg border border-gray-200">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Batch</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {filteredOrders.map(order => (
+                      <tr key={order.orderId} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-[#6C63FF]">#{order.orderId.slice(0, 8)}...</div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="text-sm font-medium text-gray-900">
+                            {order.courseTitle}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-500">{order.batchId.batchCode}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="flex items-center gap-1 text-sm font-medium">
+                            ₹{order.amountPaid.toLocaleString('en-IN')}
+                            <span className="text-gray-400">/</span>
+                            <span className="text-gray-500">₹{order.totalAmount.toLocaleString('en-IN')}</span>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {order.status === 'COMPLETED' ? (
+                            <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              Completed
+                            </span>
+                          ) : (
+                            <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                              Pending
+                            </span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {order.status === 'COMPLETED' && (
+                            <button 
+                              onClick={() => generateReceipt({
+                                orderId: order.orderId,
+                                courseTitle: order.courseTitle,
+                                batchId: {
+                                  batchCode: order.batchId.batchCode,
+                                  course: order.courseTitle
+                                },
+                                totalAmount: order.totalAmount,
+                                amountPaid: order.amountPaid,
+                                createdAt: new Date().toISOString(),
+                                status: order.status,
+                                user: {
+                                  fullName: studentData.fullName,
+                                  email: studentData.email
+                                }
+                              })}
+                              className="text-sm text-[#6C63FF] hover:text-[#5A52E0] font-medium flex items-center"
+                            >
+                              Download Bill
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        )}
 
-                      className="text-sm text-[#6C63FF] hover:text-[#5A52E0] font-medium flex items-center"
-                    >
-                      Download Bill
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-)}
+        {/* Results Section */}
+        {activeSection === 'results' && (
+          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div className="p-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+                <div>
+                  <h2 className="text-xl font-bold text-gray-800 mb-1">Exam Results</h2>
+                  <p className="text-gray-600">Your performance in all examinations</p>
+                </div>
+              </div>
+
+              {resultsLoading ? (
+                <div className="flex justify-center items-center py-12">
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#6C63FF]"></div>
+                </div>
+              ) : results.length === 0 ? (
+                <div className="text-center py-12">
+                  <FiAward className="mx-auto h-12 w-12 text-gray-400" />
+                  <h3 className="mt-4 text-lg font-medium text-gray-900">No results available</h3>
+                  <p className="mt-2 text-gray-500">You haven't taken any exams yet.</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {results.map(result => (
+                    <div key={result._id} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
+                      <div className="flex justify-between items-start mb-4">
+                        <div>
+                          <h3 className="text-lg font-bold text-gray-800">{result.examId.title}</h3>
+                          <p className="text-sm text-gray-600 mt-1">{result.examId.description}</p>
+                        </div>
+                        <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                          {result.status}
+                        </span>
+                      </div>
+                      
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                          <p className="text-sm text-gray-600">Total Marks</p>
+                          <p className="text-lg font-bold text-gray-800">{result.totalMaxMarks}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">Obtained Marks</p>
+                          <p className="text-lg font-bold text-[#6C63FF]">{result.totalAwardedMarks}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">Percentage</p>
+                          <p className="text-lg font-bold text-gray-800">
+                            {((result.totalAwardedMarks / result.totalMaxMarks) * 100).toFixed(2)}%
+                          </p>
+                        </div>
+                        <div>
+                          <p className="text-sm text-gray-600">Exam Date</p>
+                          <p className="text-sm font-medium text-gray-800">
+                            {new Date(result.examId.startAt).toLocaleDateString('en-US', { 
+                              day: 'numeric', 
+                              month: 'short', 
+                              year: 'numeric' 
+                            })}
+                          </p>
+                        </div>
+                      </div>
+                      
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm text-gray-500">
+                          Published: {new Date(result.updatedAt).toLocaleDateString('en-US')}
+                        </span>
+                        {/* <button className="text-sm text-[#6C63FF] hover:text-[#5A52E0] font-medium">
+                          View Details
+                        </button> */}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -681,12 +785,6 @@ const CourseCard = ({ course, type }) => {
              type === 'progress' ? 'In Progress' : 
              'Upcoming'}
           </span>
-          
-          {/* <button
-          
-          className="text-sm text-[#6C63FF] hover:text-[#5A52E0] font-medium flex items-center">
-            View details <FiChevronRight className="ml-1" />
-          </button> */}
         </div>
       </div>
     </div>

@@ -18,7 +18,6 @@ const StudentRecordedVideos = () => {
       setLoading(true);
       const response = await getDataHandlerWithToken('recordedVideos');
       const Profile = await getDataHandlerWithToken('studentProfile');
-      console.log(Profile)
       if (response && response.videos) {
         setVideos(response.videos);
 

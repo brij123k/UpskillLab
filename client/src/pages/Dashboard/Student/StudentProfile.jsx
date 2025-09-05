@@ -37,7 +37,6 @@ const StudentProfile = () => {
 
       if (response) {
         const { user, student,order, batch } = response;
-        console.log("API Response:", response);
         
         setBatches(batch || []);
         
@@ -115,8 +114,7 @@ const StudentProfile = () => {
 
       // Use FormData handler for the request
       const response = await patchTokenDataHandlerFormData('profile', formData);
-      
-      console.log("Update response:", response);
+
       setIsEditing(false);
       setImageFile(null); // Reset image file after successful upload
       message.success('Profile updated successfully!');
@@ -204,7 +202,6 @@ const StudentProfile = () => {
 
 const shareOnSocialMedia = (platform) => {
   if (!referralData || !selectedCourse) return;
-  console.log(selectedCourse)
   // Construct the base URL with referral code
   const shareUrl = `https://upskillab.com/category/course/${selectedCourse.courseCode}?ref=${referralData.code}`;
   

@@ -107,8 +107,6 @@ const EnrollmentModal = ({ batch, onClose }) => {
         amount: paymentData.discountedPrice,
         couponCode:formData.couponCode,
       });
-      console.log(formData)
-      console.log(response)
 
       setPaymentData(prev => ({
         ...prev,

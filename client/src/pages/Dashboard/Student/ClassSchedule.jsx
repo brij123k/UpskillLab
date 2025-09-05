@@ -53,7 +53,6 @@ const StudentClassSchedule = () => {
   const fetchMyFeedbacks = async () => {
     try {
       const response = await getDataHandlerWithToken("getFeedback");
-      console.log(response)
       setMyFeedbacks(response.feedbacks || []);
     } catch (error) {
       console.error('Error fetching feedbacks:', error);
@@ -176,7 +175,7 @@ const StudentClassSchedule = () => {
       
       if (editingFeedbackId) {
         const endpoint = ApiConfig.feedbackwithId(editingFeedbackId);
-        console.log(endpoint)
+
         response = await patchTokenDataHandler(endpoint, feedbackData, true);
         setMyFeedbacks(prev => 
           prev.map(fb => 

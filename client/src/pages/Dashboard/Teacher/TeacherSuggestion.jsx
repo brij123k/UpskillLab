@@ -35,7 +35,6 @@ const TeacherSuggestions = () => {
 
         // Fetch teacher profile
         const profileResponse = await getDataHandlerWithToken('teacherProfile');
-        console.log(profileResponse)
         setTeacherProfile(profileResponse);
 
         // Fetch batches taught by this teacher

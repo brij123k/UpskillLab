@@ -18,7 +18,6 @@ const VideoPlayerPage = () => {
         setLoading(true);
         const endpoint = ApiConfig.recordedVideosbyid(id)
         const response = await getDataHandlerWithToken(endpoint,null, null, true);
-        console.log(response)
         if (response && response.video) {
           setVideo(response.video);
         } else {

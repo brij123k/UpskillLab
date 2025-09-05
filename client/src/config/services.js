@@ -283,7 +283,6 @@ export const initiateOtpLogin = async (email) => {
 export const verifyOtp = async (attemptId, otpCode) => {
   try {
     const response = await axios.post(ApiConfig.verifyOtp, {otpCode, attemptId});
-    console.log(response)
     if (response?.status === 200 || response?.status === 201) {
       toast.success("Login successful!");
       return response.data; // Contains tokens
@@ -391,7 +390,7 @@ export const uploadFileHandler = async (endPoint, file, additionalData = {}, isU
   if (!initialAuth?.authToken) {
     throw new Error('No authentication token found');
   }
-console.log(file)
+
   const formData = new FormData();
   formData.append("files", file); // 'file' is the field name expected by the backend
 

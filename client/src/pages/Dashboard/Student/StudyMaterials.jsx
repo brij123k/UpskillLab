@@ -28,7 +28,6 @@ const StudyMaterials = () => {
     try {
       const batches = await fetchStudentProfile();
       const courseIds = batches.map(batch => batch.course);
-      console.log(courseIds)
       if (courseIds.length === 0) {
         setStudyMaterials([]);
         return;
@@ -42,7 +41,6 @@ const StudyMaterials = () => {
       });
 
       const materialsResponses = await Promise.all(materialsPromises);
-      console.log(materialsResponses)
       const allMaterials = materialsResponses.flatMap(res => res.studyMaterials || []);
 
       setStudyMaterials(allMaterials);
@@ -86,7 +84,6 @@ const StudyMaterials = () => {
   };
 
   const filteredMaterials = studyMaterials.filter(material => {
-    console.log(material)
     return material.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
            material.course?.courseName.toLowerCase().includes(searchQuery.toLowerCase());
   });

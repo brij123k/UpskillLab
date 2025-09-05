@@ -64,7 +64,6 @@ const TeacherNotifications = () => {
         ...(response3 || []),
         ...(response4 || [])
       ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-      console.log(allNotifications)
       // Extract unique notification types
       const types = [...new Set(allNotifications.map(n => n.type))];
       setNotificationTypes(types);

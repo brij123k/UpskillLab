@@ -311,7 +311,6 @@ const ExamAttempt = () => {
           startTime: new Date(attemptData.startedAt).toISOString(),
           endTime: new Date().toISOString()
         }
-        console.log(monitoringData,2)
       const endpoint = ApiConfig.submitExam(attemptData._id);
       await postDataHandler(endpoint, { answers: submissionAnswers}, true);
       

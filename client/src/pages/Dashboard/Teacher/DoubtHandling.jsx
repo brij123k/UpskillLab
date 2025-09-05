@@ -112,7 +112,6 @@ const TeacherDoubtHandling = () => {
     try {
       let uploadedAttachments = [];
       if (attachments.length > 0) {
-              console.log(attachments)
               const uploadPromises = attachments.map(file => 
                 uploadFileHandler('uploadFiles', file.file, {
                   category: 'doubt-attachment',
@@ -128,8 +127,6 @@ const TeacherDoubtHandling = () => {
       };
 
       const endpoint = ApiConfig.doubtsResponse(doubtId);
-
-      console.log(endpoint)
       await postDataHandlerWithToken(endpoint, data, true);
       
       toast.success("Reply submitted successfully");
