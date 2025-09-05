@@ -28,7 +28,7 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
 const TeacherRegistration = lazy(() => import("./pages/TeacherRegistration"));
-
+const ExamAttempt = lazy(()=> import('./pages/examAttemptPage'))
 
 
 
@@ -102,6 +102,7 @@ export const routes = [
   { exact: true, path: "/TermsOfService", layout: Index, component: TermsOfService},
   { exact: true, path: "/privacypolicy", layout: Index, component: PrivacyPolicy},
   { exact: true, path: "/RefundPolicy", layout: Index, component: RefundPolicy},
+  { exact: true, path: "/examAttempt/:examId", layout: Index, component: ExamAttempt},
   { exact: true, path: "/teacher/register", layout: Index, component: TeacherRegistration},
   { exact: true, path: "*", component: NotFoundPage },
 

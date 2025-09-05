@@ -1,7 +1,5 @@
 import React, { useState, useEffect,useMemo  } from 'react';
 import { motion } from 'framer-motion';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 import StudentFeedBack from '../../components/Cards/StudentFeedBack';
 import TrainingBanner from '../../components/banners/TrainingBanner';
 import FeedbaackBanner from '../../components/banners/FeedbackBanner';

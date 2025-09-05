@@ -59,8 +59,8 @@ const makeRequest = async (method, endPointOrUrl, config) => {
   }
 };
 
-export const postDataHandler = async (endPoint, data) => {
-  return makeRequest("POST", endPoint, { data });
+export const postDataHandler = async (endPoint, data, isUrl=false) => {
+  return makeRequest("POST", endPoint, { data,isUrl });
 };
 
 export const postDataHandlerWithToken = async (endPoint, data,isUrl=false) => {
