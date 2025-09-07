@@ -585,7 +585,7 @@ const StudentHistory = () => {
                             </span>
                           )}
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
+                        {/* <td className="px-6 py-4 whitespace-nowrap">
                           {order.status === 'COMPLETED' && (
                             <button 
                               onClick={() => generateReceipt({
@@ -609,7 +609,7 @@ const StudentHistory = () => {
                               Download Bill
                             </button>
                           )}
-                        </td>
+                        </td> */}
                       </tr>
                     ))}
                   </tbody>
