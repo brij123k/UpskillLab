@@ -54,11 +54,6 @@ const ApiConfig = {
   // courseDetails
   getCourseByCode: (code) => `${url}/course/code/${code}`,
 
-  examCheck: (examId) => `${url}/exams/${examId}/student`,
-  startExam: (examId) => `${url}/attempts/start/${examId}`,
-  getExamPaper:(examId)=> `${url}/questions/exam/${examId}/student`,
-  submitExam: (submissionId) => `${url}/attempts/${submissionId}/submit`,
-  monitoringLog:(submissionId)=> `${url}/monitoring-logs/${submissionId}`,
   // payments
   batchRegistration: `${url}/registration/batch`,
   manualRegister: `${url}/registration/no-batch`,
@@ -123,9 +118,14 @@ const ApiConfig = {
   feedback:`${url}/feedback`,
   feedbackwithId:(id)=>`${url}/feedback/${id}`,
   getFeedback:`${url}/feedback/my-feedbacks`,
-  getResult:`${url}/attempts/my-result`
+  getResult:`${url}/attempts/my-result`,
 
-
+  getExams:`${url}/exams/my/exams`,
+  examCheck: (examId) => `${url}/exams/${examId}/student`,
+  startExam: (examId) => `${url}/attempts/start/${examId}`,
+  getExamPaper:(examId)=> `${url}/questions/exam/${examId}/student`,
+  submitExam: (submissionId) => `${url}/attempts/${submissionId}/submit`,
+  monitoringLog:(submissionId)=> `${url}/monitoring-logs/${submissionId}`,
   
 };
 

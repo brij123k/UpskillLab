@@ -391,6 +391,15 @@ const StudentHeader = () => {
                     <FiTrendingUp className="mr-2" />
                     Trends
                   </NavLink>
+
+                  <NavLink
+                    to="/Student/Exam"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    onClick={() => setIsProfileDropdownOpen(false)}
+                  >
+                    <FiTrendingUp className="mr-2" />
+                    Exams
+                  </NavLink>
                   
                   <NavLink
                     to="/Student/History"
@@ -549,6 +558,15 @@ const StudentHeader = () => {
               >
                 <FiTrendingUp className="inline mr-3" />
                 Trends
+              </NavLink>
+
+              <NavLink
+                to="/Student/Exam"
+                className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <FiTrendingUp className="inline mr-3" />
+                Exams
               </NavLink>
 
               <NavLink

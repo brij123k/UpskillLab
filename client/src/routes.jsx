@@ -28,7 +28,6 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
 const TeacherRegistration = lazy(() => import("./pages/TeacherRegistration"));
-const ExamAttempt = lazy(()=> import('./pages/examAttemptPage'))
 
 
 
@@ -60,6 +59,8 @@ const StudentTrends= lazy(()=> import("./pages/Dashboard/Student/StudentTrends")
 const StudentDoubts= lazy(()=> import("./pages/Dashboard/Student/StudentDoubts"))
 const StudentTestimonial= lazy(()=> import("./pages/Dashboard/Student/StudentTestimonial"))
 const StudentBlogs= lazy(()=> import("./pages/Dashboard/Student/StudentBlogs"))
+const StudentExamDashboard = lazy(()=> import('./pages/Dashboard/Student/StudentExamDashboard'))
+const ExamAttempt = lazy(()=> import('./pages/Dashboard/Student/StudentExam'))
 
 
 const TeacherProtectedLayout = ({ children }) => (
@@ -102,7 +103,7 @@ export const routes = [
   { exact: true, path: "/TermsOfService", layout: Index, component: TermsOfService},
   { exact: true, path: "/privacypolicy", layout: Index, component: PrivacyPolicy},
   { exact: true, path: "/RefundPolicy", layout: Index, component: RefundPolicy},
-  { exact: true, path: "/examAttempt/:examId", layout: Index, component: ExamAttempt},
+  // { exact: true, path: "/examAttempt/:examId", layout: Index, component: ExamAttempt},
   { exact: true, path: "/teacher/register", layout: Index, component: TeacherRegistration},
   { exact: true, path: "*", component: NotFoundPage },
 
@@ -134,4 +135,7 @@ export const routes = [
   { exact: true, path:"/Student/Trends", layout:StudentProtectedLayout, component:StudentTrends},
   { exact: true, path:"/Student/Testimonial", layout:StudentProtectedLayout, component:StudentTestimonial},
   { exact: true, path:"/Student/Blogs", layout:StudentProtectedLayout, component:StudentBlogs},
+  { exact: true, path: "/Student/Exam", layout: StudentProtectedLayout, component: StudentExamDashboard},
+  { exact: true, path: "/Student/exam/:examId", layout: StudentProtectedLayout, component: ExamAttempt},
+
 ];
