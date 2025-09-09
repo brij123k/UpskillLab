@@ -91,8 +91,9 @@ export const postDataHandlerWithTokenFormData = async (endPoint, data,isUrl=fals
 };
 
 
-export const putDataHandler = async (endPoint, data) => {
-  return makeRequest("PUT", endPoint, { data });
+export const putDataHandler = async (endPoint, data,isUrl=false) => {
+  console.log(endPoint, data, "5")
+  return makeRequest("PUT", endPoint, { data,isUrl });
 };
 
 export const putDataHandlerWithToken = async (endPoint, data, params, isUrl=false) => {

@@ -65,10 +65,21 @@ const ApiConfig = {
   blogById: (id) => `${url}/blogs/${id}`, // For single blog operations
 
   //youtube
-  youtube: `${url}/youtube-videos?all=1`, // Base endpoint for all youtube operations
+  youtube: `${url}/youtube-videos?all=1`,
 
+  getExamById:(examid) => `${url}/pcat/exams/${examid}`,
+  getExam:`${url}/pcat/exams/ongoing/exam`,
+  getUpcommingExam:`${url}/pcat/exams/upcomming/exam`,
+  getExamStatus:(examId)=>`${url}/pcat-results/${examId}/stats`,
 
+  registeruser:`${url}/pcat-users/register`,
+  varifyOTP:`${url}/pcat-users/verify-otp`,
+
+  getQuestionByExamId: (examId) => `${url}/pcat/questions/exam/${examId}`,
+  updateAnser: (submissionId) => `${url}/pcat-submissions/${submissionId}`,
   // teacher panel
+
+  getResultById:(resultId) => `${url}/pcat-results/${resultId}`,
 
   teacherProfile:`${url}/teachers/me`,
   studyMaterial:`${url}/study-materials`,

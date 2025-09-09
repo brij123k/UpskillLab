@@ -28,8 +28,9 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
 const TeacherRegistration = lazy(() => import("./pages/TeacherRegistration"));
-
-
+const PCATExamPortal = lazy(()=> import("./pages/Frontend/PCATExamPortal"))
+const PCATExamPage = lazy(()=> import("./pages/Frontend/PCATExamPage"))
+const PCATResultPage = lazy(()=> import("./pages/Frontend/PCATResultPage"))
 
 // Teacher Pannel lazyImport 
 const TeacherDashboard= lazy(()=> import("./pages/Dashboard/Teacher/TeacherDashboard"))
@@ -92,6 +93,9 @@ export const routes = [
   { exact: true, path: "/about", layout: GuestLayout, component: AboutSection},
   // { exact: true, path: "/CourseDetails/:id", layout: GuestLayout, component: CourseDetailsPage},
   { exact: true, path: "/category/batch/:id", layout: GuestLayout, component: CourseDetailsPage},
+  {exact: true, path:"/PCATExamPortal",layout: GuestLayout, component: PCATExamPortal},
+  {exact: true, path:"/exam/:examId",layout: Index, component: PCATExamPage},
+  {exact: true, path:"/PCAT/result",layout: Index, component: PCATResultPage},
   {
     exact: true, path: "/:category/course/:id", layout: GuestLayout, component: CourseDetailsPage},
   { exact: true, path: "/register", layout: Index, component: Register},

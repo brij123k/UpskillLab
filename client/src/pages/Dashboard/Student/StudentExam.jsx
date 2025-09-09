@@ -207,12 +207,6 @@ const StudentExam = () => {
   // Submit monitoring log
   const submitMonitoringLog = async () => {
     try {
-        console.log(attemptData)
-        console.log(attemptData.submission.email)
-        console.log(tabSwitchCount)
-        console.log(permissionGranted)
-        console.log(new Date(attemptData.submission.startedAt).toISOString())
-        console.log(new Date().toISOString())
       const monitoringData = {
         email: attemptData.submission.email,
         tabSwitchCount,

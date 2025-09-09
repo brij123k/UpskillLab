@@ -81,6 +81,7 @@ function Footer() {
                 <li><NavLink to="/upcoming-batches/" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Latest Batches</NavLink></li>
                 <li><NavLink to="/blog" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Blog</NavLink></li>
                 <li><button onClick={()=>setShowModal(true)} className="m-auto sm:m-0 text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Payment</button></li>
+                <li><NavLink to="/PCATExamPortal" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">PCAT Exams</NavLink></li>
               </ul>
             </div>
 
@@ -94,6 +95,7 @@ function Footer() {
                 <li><NavLink to="/termsOfservice" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Terms & Conditions</NavLink></li>
                 <li><NavLink to="/refundpolicy" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Refund Policy</NavLink></li>
                 <li><NavLink to="/career" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Career</NavLink></li>
+                <li><NavLink to="/PCAT/result" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">PCAT Result</NavLink></li>
               </ul>
             </div>
 

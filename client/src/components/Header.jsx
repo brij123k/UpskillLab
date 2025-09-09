@@ -494,6 +494,13 @@ function Header() {
               Blog
             </NavLink>
             <NavLink
+              to="/PCATExamPortal"
+              style={navLinkStyle}
+              className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap"
+            >
+              PCAT
+            </NavLink>
+            <NavLink
               to="/contactus"
               style={navLinkStyle}
               className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap"
@@ -790,6 +797,17 @@ function Header() {
                     >
                       Blog
                     </NavLink>
+
+                    <NavLink
+                      to="/PCATExamPortal"
+                      style={navLinkStyle}
+                      className="block px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all"
+                      onClick={toggleDrawer}
+                    >
+                      PCAT
+                    </NavLink>
+
+
                     <NavLink
                       to="/contactus"
                       style={navLinkStyle}
