@@ -540,131 +540,167 @@ const PCATExamPortal = () => {
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.5 }}
-    className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-8 border border-gray-100 overflow-hidden"
+    className="bg-gradient-to-br from-white to-gray-50 rounded-3xl shadow-2xl p-8 mb-8 border border-gray-100/50 overflow-hidden relative"
   >
+    {/* Decorative elements */}
+    <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-[#FF7426]/5 to-[#FF9142]/10 rounded-full -translate-y-20 translate-x-20"></div>
+    <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-br from-[#4D2C5E]/5 to-[#3A2152]/10 rounded-full -translate-x-16 translate-y-16"></div>
+    
     {/* Header with status and marks */}
-    <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-      <div className="flex items-center gap-2">
-        <div className={`px-4 py-1.5 rounded-full text-sm font-medium flex items-center ${
+    <div className="flex flex-wrap items-center justify-between gap-4 mb-8 relative z-10">
+      <div className="flex items-center gap-3">
+        <div className={`px-5 py-2 rounded-full text-sm font-semibold flex items-center backdrop-blur-sm border ${
           examData.status === 'ongoing' 
-            ? 'bg-green-100 text-green-800' 
+            ? 'bg-green-50/80 text-green-700 border-green-200/60 shadow-sm' 
             : examData.status === 'upcoming'
-            ? 'bg-blue-100 text-blue-800'
-            : 'bg-purple-100 text-purple-800'
+            ? 'bg-blue-50/80 text-blue-700 border-blue-200/60 shadow-sm'
+            : 'bg-purple-50/80 text-purple-700 border-purple-200/60 shadow-sm'
         }`}>
           {examData.status === 'ongoing' ? (
             <>
-              <div className="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></div>
+              <div className="w-2.5 h-2.5 bg-green-500 rounded-full mr-2.5 animate-pulse"></div>
               Live - Ongoing
             </>
           ) : (
             <>
-              <FiClock className="h-4 w-4 mr-1.5" />
+              <FiClock className="h-4 w-4 mr-2" />
               Upcoming
             </>
           )}
         </div>
         
-        <div className="px-3 py-1.5 rounded-full bg-gradient-to-r from-purple-500 to-indigo-500 text-white text-sm font-medium flex items-center">
-          <FiAward className="h-4 w-4 mr-1.5" />
+        <div className="px-4 py-2 rounded-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-sm font-semibold flex items-center shadow-lg">
+          <FiAward className="h-4 w-4 mr-2" />
           {examData.totalMarks} Marks
         </div>
       </div>
       
       {/* Timer for upcoming exams */}
       {examData.status === 'upcoming' && (
-        <div className="bg-orange-50 text-orange-800 px-4 py-1.5 rounded-full text-sm font-medium flex items-center">
-          <FiClock className="h-4 w-4 mr-1.5" />
+        <div className="bg-gradient-to-r from-amber-50 to-orange-50 text-amber-700 px-4 py-2 rounded-full text-sm font-semibold flex items-center border border-amber-200/60 shadow-sm">
+          <FiClock className="h-4 w-4 mr-2" />
           Starts in {getTimeUntilStart(examData.startDate, examData.startTime)}
         </div>
       )}
     </div>
     
-    <div className="flex flex-col lg:flex-row gap-8">
+    <div className="flex flex-col lg:flex-row gap-10 relative z-10">
       {/* Exam Details */}
       <div className="flex-1">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#4D2C5E] mb-3">{examData.title}</h2>
-        <p className="text-gray-600 mb-6 text-lg leading-relaxed">{examData.description}</p>
+        <div className="mb-2">
+          <span className="inline-block bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white text-xs font-semibold px-3 py-1 rounded-full">
+            PCAT EXAMINATION
+          </span>
+        </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-          <div className="flex items-center p-3 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 shadow-sm">
-            <div className="bg-gradient-to-br from-[#4D2C5E] to-[#3A2152] p-2 rounded-lg shadow-sm mr-3 text-white">
+        <h2 className="text-3xl md:text-4xl font-bold text-[#4D2C5E] mb-4 leading-tight">
+          {examData.title}
+        </h2>
+        
+        <p className="text-gray-600 mb-8 text-lg leading-relaxed font-light">
+          {examData.description}
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="flex items-center p-5 bg-white/80 rounded-2xl border border-gray-100/60 shadow-sm hover:shadow-md transition-all backdrop-blur-sm">
+            <div className="bg-gradient-to-br from-[#4D2C5E] to-[#3A2152] p-3 rounded-xl shadow-lg mr-4 text-white flex-shrink-0">
               <FiClock className="h-5 w-5" />
             </div>
             <div>
-              <p className="font-medium text-gray-500">Duration</p>
-              <p className="text-lg font-semibold text-[#4D2C5E]">{examData.durationMinutes} minutes</p>
+              <p className="font-medium text-gray-500 text-xs uppercase tracking-wider mb-1">Duration</p>
+              <p className="text-xl font-bold text-[#4D2C5E]">{examData.durationMinutes} minutes</p>
             </div>
           </div>
           
-          <div className="flex items-center p-3 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 shadow-sm">
-            <div className="bg-gradient-to-br from-[#4D2C5E] to-[#3A2152] p-2 rounded-lg shadow-sm mr-3 text-white">
+          <div className="flex items-center p-5 bg-white/80 rounded-2xl border border-gray-100/60 shadow-sm hover:shadow-md transition-all backdrop-blur-sm">
+            <div className="bg-gradient-to-br from-[#4D2C5E] to-[#3A2152] p-3 rounded-xl shadow-lg mr-4 text-white flex-shrink-0">
               <FiCalendar className="h-5 w-5" />
             </div>
             <div>
-              <p className="font-medium text-gray-500">Start Time</p>
-              <p className="text-lg font-semibold text-[#4D2C5E]">
+              <p className="font-medium text-gray-500 text-xs uppercase tracking-wider mb-1">Start Time</p>
+              <p className="text-xl font-bold text-[#4D2C5E]">
                 {formatDate(examData.startDate)} at {examData.startTime}
               </p>
             </div>
           </div>
           
-          <div className="flex items-center p-3 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 shadow-sm">
-            <div className="bg-gradient-to-br from-[#4D2C5E] to-[#3A2152] p-2 rounded-lg shadow-sm mr-3 text-white">
+          <div className="flex items-center p-5 bg-white/80 rounded-2xl border border-gray-100/60 shadow-sm hover:shadow-md transition-all backdrop-blur-sm">
+            <div className="bg-gradient-to-br from-[#4D2C5E] to-[#3A2152] p-3 rounded-xl shadow-lg mr-4 text-white flex-shrink-0">
               <FiCalendar className="h-5 w-5" />
             </div>
             <div>
-              <p className="font-medium text-gray-500">End Time</p>
-              <p className="text-lg font-semibold text-[#4D2C5E]">
+              <p className="font-medium text-gray-500 text-xs uppercase tracking-wider mb-1">End Time</p>
+              <p className="text-xl font-bold text-[#4D2C5E]">
                 {formatDate(examData.endDate)} at {examData.endTime}
               </p>
             </div>
           </div>
           
-          <div className="flex items-center p-3 bg-gradient-to-br from-gray-50 to-white rounded-xl border border-gray-100 shadow-sm">
-            <div className="bg-gradient-to-br from-[#4D2C5E] to-[#3A2152] p-2 rounded-lg shadow-sm mr-3 text-white">
+          <div className="flex items-center p-5 bg-white/80 rounded-2xl border border-gray-100/60 shadow-sm hover:shadow-md transition-all backdrop-blur-sm">
+            <div className="bg-gradient-to-br from-[#4D2C5E] to-[#3A2152] p-3 rounded-xl shadow-lg mr-4 text-white flex-shrink-0">
               <FiBookOpen className="h-5 w-5" />
             </div>
             <div>
-              <p className="font-medium text-gray-500">Exam Type</p>
-              <p className="text-lg font-semibold text-[#4D2C5E]">PCAT Assessment</p>
+              <p className="font-medium text-gray-500 text-xs uppercase tracking-wider mb-1">Exam Type</p>
+              <p className="text-xl font-bold text-[#4D2C5E]">Assessment</p>
             </div>
           </div>
         </div>
       </div>
       
       {/* Visual element - decorative exam illustration */}
-      <div className="hidden lg:flex items-center justify-center w-1/4">
+      <div className="hidden lg:flex items-center justify-center w-1/3">
         <div className="relative">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-100 to-indigo-100 rounded-full blur-xl opacity-70"></div>
-          <div className="relative bg-white p-6 rounded-2xl shadow-lg border border-gray-100">
-            <div className="w-24 h-24 bg-gradient-to-br from-[#4D2C5E] to-[#3A2152] rounded-full flex items-center justify-center text-white">
-              <FiBookOpen className="h-12 w-12" />
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-100/40 to-indigo-100/40 rounded-full blur-2xl"></div>
+          <div className="relative bg-white/80 p-8 rounded-3xl border border-gray-100/60 shadow-xl backdrop-blur-sm">
+            <div className="w-32 h-32 bg-gradient-to-br from-[#4D2C5E] to-[#3A2152] rounded-3xl flex items-center justify-center text-white shadow-2xl">
+              <FiBookOpen className="h-14 w-14" />
             </div>
+            {/* <div className="mt-6 text-center">
+              <div className="inline-flex items-center bg-gradient-to-r from-[#FF7426] to-[#FF9142] text-white px-4 py-2 rounded-full text-sm font-semibold">
+                <FiAward className="h-4 w-4 mr-1.5" />
+                Scholarship Exam
+              </div>
+            </div> */}
           </div>
         </div>
       </div>
     </div>
     
-    {/* Action Buttons - Removed Register button */}
-    <div className="mt-8 pt-6 border-t border-gray-100">
+    {/* Action Buttons */}
+    <div className="mt-10 pt-8 border-t border-gray-200/50 relative z-10">
       {examData.status === 'ongoing' ? (
-        <div className="flex flex-col sm:flex-row gap-4">
+        <div className="flex justify-center">
           <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ 
+              scale: 1.02,
+              boxShadow: "0 20px 40px -10px rgba(255, 116, 38, 0.3)"
+            }}
+            whileTap={{ scale: 0.98 }}
             onClick={() => setShowLoginModal(true)}
-            className="flex-1 cursor-pointer bg-gradient-to-r from-[#FF7426] to-[#FF9142] text-white py-4 px-6 rounded-xl hover:shadow-lg transition-all font-medium flex items-center justify-center text-lg shadow-md"
+            className="relative bg-gradient-to-r from-[#FF7426] to-[#FF9142] text-white py-5 px-12 rounded-2xl hover:shadow-2xl transition-all duration-300 font-bold text-lg shadow-xl group overflow-hidden"
           >
-            <FiLock className="mr-3 h-5 w-5" />
-            Attempt Exam Now
+            {/* Shine effect */}
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/30 to-transparent"></div>
+            
+            <span className="relative flex items-center justify-center">
+              <FiLock className="mr-3 h-6 w-6" />
+              Attempt Exam Now
+            </span>
           </motion.button>
         </div>
       ) : (
-        <div className="text-center py-4">
-          <div className="inline-flex items-center bg-blue-50 text-blue-700 px-6 py-3 rounded-full text-lg border border-blue-100">
-            <FiClock className="mr-3 h-5 w-5" />
-            Registration opens {formatDate(examData.startDate)} at {examData.startTime}
+        <div className="text-center">
+          <div className="inline-flex items-center bg-white/90 px-8 py-4 rounded-2xl border border-gray-200/60 shadow-lg backdrop-blur-sm">
+            <div className="bg-blue-100 p-2.5 rounded-full mr-4">
+              <FiClock className="h-6 w-6 text-blue-600" />
+            </div>
+            <div className="text-left">
+              <p className="font-semibold text-blue-800">Registration opens soon</p>
+              <p className="text-sm text-blue-600">
+                {formatDate(examData.startDate)} at {examData.startTime}
+              </p>
+            </div>
           </div>
         </div>
       )}
