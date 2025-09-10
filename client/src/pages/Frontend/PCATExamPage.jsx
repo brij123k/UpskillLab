@@ -589,8 +589,8 @@ const PCATExamPage = () => {
                 <h4 className="font-medium text-blue-800 mb-2">What happens next?</h4>
                 <ul className="text-blue-700 text-sm list-disc list-inside space-y-1">
                   <li>Your exam will be evaluated by our team</li>
-                  <li>Results will be sent to your email within 7-10 days</li>
-                  <li>You will receive a Result ID to check your results anytime</li>
+                  <li>Results will be sent to your email within 24 to 72 Hours</li>
+                  <li>You will receive a Enroll ID to check your results anytime</li>
                   <li>If you qualify, you'll be eligible for PCAT Scholarships</li>
                 </ul>
               </div>
