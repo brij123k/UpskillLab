@@ -1747,6 +1747,27 @@ const FAQSection = ({ course }) => {
                     className="grid grid-cols-1 md:grid-cols-2 gap-6"
                 >
                     {faqs.map((faq, index) => (
+                        <>
+                        <Helmet>
+                            <script type="application/ld+json">
+          {`
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "${faq.question}",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "${faq.answer}"
+            }
+          }
+        ]
+      }
+    `}
+        </script>
+                        </Helmet>
                         <motion.div
                             key={index}
                             variants={itemVariants}
@@ -1817,6 +1838,7 @@ const FAQSection = ({ course }) => {
                                 </button>
                             </motion.div>
                         </motion.div>
+                        </>
                     ))}
                 </motion.div>
 
