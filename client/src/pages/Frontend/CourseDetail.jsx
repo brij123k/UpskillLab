@@ -1824,6 +1824,7 @@ const FAQSection = ({ course }) => {
     {JSON.stringify({
       "@context": "https://schema.org",
       "@type": "FAQPage",
+      "name": "FAQ",
       "mainEntity": faqs.map(faq => ({
         "@type": "Question",
         "name": faq.question,

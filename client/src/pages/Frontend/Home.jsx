@@ -186,6 +186,7 @@ function Home() {
       {
         "@context": "https://schema.org",
         "@type": "FAQPage",
+        "name": "FAQ",
         "mainEntity": [
           {
             "@type": "Question",
