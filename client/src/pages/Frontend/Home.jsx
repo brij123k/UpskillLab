@@ -149,20 +149,139 @@ function Home() {
   ];
   return (
     <>
-          <Helmet>
+      <Helmet>
         <title>Upskillab | Empowering Your Career Through Online Learning</title>
-        <meta name="description" content="Upskillab offers a variety of online courses to help you upskill and advance your career. Join our community of learners today." />
-        <meta name="keywords" content="upkillab, upskilllab, upskilling, upskill lab, online upskillab, online education upskillab, education upskillab, online learning, career development, education online courses" />
-        <meta property="og:title" content="Upskillab | Empowering Your Career Through Online Learning" />
-        <meta property="og:description" content="Join Upskillab to access a wide range of online courses designed to boost your skills and career prospects." />
+        <meta
+          name="description"
+          content="Upskillab offers a variety of online courses to help you upskill and advance your career. Join our community of learners today."
+        />
+        <meta
+          name="keywords"
+          content="upkillab, upskilllab, upskilling, upskill lab, online upskillab, online education upskillab, education upskillab, online learning, career development, education online courses"
+        />
+        <meta
+          property="og:title"
+          content="Upskillab | Empowering Your Career Through Online Learning"
+        />
+        <meta
+          property="og:description"
+          content="Join Upskillab to access a wide range of online courses designed to boost your skills and career prospects."
+        />
         <meta property="og:url" content="https://upskillab.com" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Upskillab | Empowering Your Career Through Online Learning" />
-        <meta name="twitter:description" content="Explore Upskillab's online courses to enhance your skills and career opportunities." />
+        <meta
+          name="twitter:title"
+          content="Upskillab | Empowering Your Career Through Online Learning"
+        />
+        <meta
+          name="twitter:description"
+          content="Explore Upskillab's online courses to enhance your skills and career opportunities."
+        />
         <link rel="canonical" href="https://upskillab.com/" />
+
+        {/* ✅ FAQ Schema JSON-LD */}
+        <script type="application/ld+json">
+          {`
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What does Upskillab want to empower you with?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Upskillab wants to empower you with industry-ready skills, personalized mentorship, and mental wellness support—so you don't just grow in your career, but thrive as a whole individual."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What makes Upskillab different from other platforms?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Unlike other platforms, Upskillab combines technical upskilling with holistic guidance, mental wellness support, post-course career assistance, and personalized mentorship."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What kind of certification do I get after completing a course?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Upon successful completion, you will receive an industry-recognized certificate, which can be verified and added to your professional profile."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Do your programs provide a job guarantee?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Certain programs come with a Job Guarantee or Guaranteed Interview Calls post successful completion, depending on the course structure and eligibility."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the Career Mentorship Program?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It's a personalized mentorship initiative where learners receive 1-on-1 guidance from certified career counselors to plan, pivot, or grow their careers with confidence."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is Helping Hand (Connect+)?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Helping Hand (Connect+) is our 1-year post-course career support system, ensuring learners have access to networking, job referrals, guidance, and additional resources even after course completion."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are mental wellbeing sessions included?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. We provide monthly mental wellbeing sessions and free psychological counseling, because we believe in nurturing both the mind and career."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "What is the format of your courses?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Courses are delivered through live instructor-led sessions, recorded video lectures, hands-on projects & case studies, and peer & mentor interaction forums."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Are Upskillab programs flexible for working professionals?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Absolutely. All our programs are designed with flexibility in mind for students, working professionals, and career switchers."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How do I enroll in a program?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can enroll directly through our website or connect with our academic advisors for free counseling before choosing the right program."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Is there financial assistance or EMI option available?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Yes. We offer flexible EMI options and financial aid for eligible candidates. Please speak with our counselors for detailed options."
+            }
+          }
+        ]
+      }
+    `}
+        </script>
       </Helmet>
-    {/* <ExitIntentModal/>
+
+      {/* <ExitIntentModal/>
 {/*
           <!-- Google Tag Manager -->
       <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -357,7 +476,7 @@ function Home() {
       <SuccessTestimonial />
       <CertificationSlider />
       <EducationBanner />
-      <TeacherSlider/>
+      <TeacherSlider />
       <div className='pb-4'>
         <AdmissionForm />
       </div>

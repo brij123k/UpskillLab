@@ -46,5 +46,37 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+        <!-- ✅ JSON-LD Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Upskillab",
+      "alternateName": "Online Upskilling Courses",
+      "url": "https://upskillab.com/",
+      "logo": "https://upskillab.com/images/Logo.png",
+      "sameAs": [
+        "https://www.facebook.com/upskillab/",
+        "https://www.instagram.com/upskillab_",
+        "https://www.linkedin.com/company/upskill-now-upskillab"
+      ],
+      "contactPoint": [
+        {
+          "@type": "ContactPoint",
+          "contactType": "Customer Support",
+          "telephone": "+91-9319426464",
+          "email": "info@upskillab.com",
+          "url": "https://upskillab.com/contact"
+        },
+        {
+          "@type": "ContactPoint",
+          "contactType": "Customer Support",
+          "telephone": "+91-9319427070",
+          "email": "info@upskillab.com",
+          "url": "https://upskillab.com/contact"
+        }
+      ]
+    }
+    </script>
   </body>
 </html>
