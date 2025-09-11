@@ -1748,7 +1748,7 @@ const FAQSection = ({ course }) => {
                 >
                     {faqs.map((faq, index) => (
                         <>
-                        <Helmet>
+                        {/* <Helmet>
                             <script type="application/ld+json">
           {`
       {
@@ -1766,7 +1766,7 @@ const FAQSection = ({ course }) => {
         ]
       }
     `}
-        </script>
+        </script> */}
                         </Helmet>
                         <motion.div
                             key={index}
