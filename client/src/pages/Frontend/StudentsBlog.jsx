@@ -49,7 +49,7 @@ const BlogCard = ({
  const navigate = useNavigate();
   const handleClick = () => {
     const slug = slugify(title, { lower: true, strict: true });
-  navigate(`/BlogDetail/${id}/${slug}`, { state: { id } });
+  navigate(`/BlogDetail/${slug}`, { state: { slug } });
   }
   // Estimate read time (assuming 200 words per minute)
   const wordCount = content.split(/\s+/).length;

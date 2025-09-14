@@ -63,7 +63,7 @@ const ApiConfig = {
   //blog
   blogs: `${url}/blogs`, // Base endpoint for all blog operations
   blogById: (id) => `${url}/blogs/${id}`, // For single blog operations
-
+  blogbyBlogTitle: (slug)=>`${url}/blogs/blog/${slug}`,
   //youtube
   youtube: `${url}/youtube-videos?all=1`,
 

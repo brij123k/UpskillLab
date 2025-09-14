@@ -15,7 +15,7 @@ import { useLocation } from 'react-router-dom';
 import BlogContentRenderer from '../../components/BlogContentRenderer';
 import { Helmet } from 'react-helmet-async';
 const BlogDetailPage = () => {
-  const { id } = useParams(); // Get the blog ID from URL params
+  const { slug } = useParams(); // Get the blog slug from URL params
   const navigate = useNavigate();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -25,7 +25,7 @@ const BlogDetailPage = () => {
     const fetchBlog = async () => {
       try {
         setLoading(true);
-        const endpointUrl = ApiConfig.blogById(id);
+        const endpointUrl = ApiConfig.blogbyBlogTitle(slug);
         const response = await getDataHandler(endpointUrl, null, null, true);
         if (response.blog) {
           setBlog(response.blog);
@@ -41,13 +41,13 @@ const BlogDetailPage = () => {
       }
     };
 
-    if (id) {
+    if (slug) {
       fetchBlog();
     } else {
-      setError('No blog ID provided');
+      setError('No blog slug provsluged');
       setLoading(false);
     }
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (
