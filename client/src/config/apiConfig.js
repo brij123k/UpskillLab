@@ -77,6 +77,8 @@ const ApiConfig = {
 
   getQuestionByExamId: (examId) => `${url}/pcat/questions/exam/${examId}`,
   updateAnser: (submissionId) => `${url}/pcat-submissions/${submissionId}`,
+
+  postQuery: `${url}/queries`,
   // teacher panel
 
   getResultById:(resultId) => `${url}/pcat-results/${resultId}`,

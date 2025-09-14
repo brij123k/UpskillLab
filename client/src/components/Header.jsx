@@ -7,6 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getDataHandler } from "../config/services";
 import { useAuth } from "../context/AuthContext";
 import ExitIntentModalData from "./CustomInputs/ExitIntentModalData";
+import Chatbot from "./Chatbot";
 
 
 function Header() {
@@ -872,6 +873,8 @@ function Header() {
           <ExitIntentModalData onClose={handleCloseExitIntent} />
         )}
       </AnimatePresence>
+
+      <Chatbot/>
     </header>
   );
 }
