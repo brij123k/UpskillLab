@@ -139,7 +139,7 @@ const Chatbot = () => {
     setIsSubmitting(true);
     try {
       const response = await postDataHandler('postQuery', data);
-      if (response && response.status === 200) {
+      if (response) {
         console.log('Data sent successfully:', response.data);
         return true;
       }
