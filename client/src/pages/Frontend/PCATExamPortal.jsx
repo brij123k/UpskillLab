@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiClock,FiTarget,FiUsers , FiUser,FiCalendar,FiActivity , FiMail, FiPhone, FiLock, FiBookOpen, FiAward, FiAlertCircle, FiCheckCircle, FiInfo } from 'react-icons/fi';
+import { FiClock,FiTarget,FiUsers , FiHelpCircle,FiChevronUp,FiChevronDown ,FiCalendar,FiActivity , FiMail, FiPhone, FiLock, FiBookOpen, FiAward, FiAlertCircle, FiCheckCircle, FiInfo } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getDataHandler, postDataHandler } from '../../config/services';
 import ApiConfig from '../../config/apiConfig';
+import FAQSection from '../../components/PCATFAQ';
 const PCATExamPortal = () => {
   const [examData, setExamData] = useState(null);
   const [examStats, setExamStats] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [activeIndex,setActiveIndex] = useState(0)
   const [registrationForm, setRegistrationForm] = useState({
     name: '',
     email: '',
@@ -469,65 +471,73 @@ const PCATExamPortal = () => {
   </div>
 
   {/* Why Upskillab Section */}
-<div className="bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6 md:p-8 rounded-2xl mb-6 md:mb-8 shadow-sm">
-  <div className="flex items-center mb-4 sm:mb-6">
-    <div className="bg-[#4D2C5E] p-2.5 sm:p-3 rounded-full mr-3 sm:mr-4 flex-shrink-0">
-      <FiAward className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+<div className="bg-gradient-to-br from-gray-50 to-gray-100 p-6 md:p-8 rounded-2xl mb-8 shadow-sm">
+  <div className="flex items-center mb-6">
+    <div className="bg-[#4D2C5E] p-3 rounded-full mr-4 flex-shrink-0">
+      <FiAward className="h-5 w-5 text-white" />
     </div>
-    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#4D2C5E] leading-tight">
+    <h3 className="text-xl md:text-2xl font-bold text-[#4D2C5E] leading-tight">
       Why Choose Upskillab for Your Psychology Career?
     </h3>
   </div>
   
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-    <ul className="space-y-3 sm:space-y-4">
-      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <ul className="space-y-4">
+      <li className="flex items-start p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
         <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
-          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+          <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
         </div>
-        <span className="text-sm sm:text-base text-gray-700">
+        <span className="text-base text-gray-700">
           Industry-Recognized Certifications: Upskillab's psychology programs provide you with certifications valued by leading employers and institutions.
         </span>
       </li>
-      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <li className="flex items-start p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
         <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
-          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+          <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
         </div>
-        <span className="text-sm sm:text-base text-gray-700">
+        <span className="text-base text-gray-700">
           Real-World, Hands-On Practice: Gain practical experience through in-depth case studies and real scenarios to build true professional confidence.
         </span>
       </li>
-    </ul>
-    <ul className="space-y-3 sm:space-y-4">
-      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <li className="flex items-start p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
         <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
-          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+          <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
         </div>
-        <span className="text-sm sm:text-base text-gray-700">
+        <span className="text-base text-gray-700">
           1:1 Mentorship and Career Pathways: Benefit from personalized mentorship and clear career guidance tailored to your goals.
         </span>
       </li>
-      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+    </ul>
+    <ul className="space-y-4">
+      <li className="flex items-start p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
         <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
-          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+          <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
         </div>
-        <span className="text-sm sm:text-base text-gray-700">
+        <span className="text-base text-gray-700">
+          Flexible Learning Options: Access our programs through both online and hybrid models designed to fit your schedule and learning preferences.
+        </span>
+      </li>
+      <li className="flex items-start p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
+          <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
+        </div>
+        <span className="text-base text-gray-700">
           Empathy + Skill Focus: Upskillab emphasizes both empathy and practical skills, ensuring you're more than just book-smart.
         </span>
       </li>
-      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <li className="flex items-start p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
         <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
-          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+          <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
         </div>
-        <span className="text-sm sm:text-base text-gray-700">
+        <span className="text-base text-gray-700">
           Beyond Teaching—We Transform: At Upskillab, we don't just teach theory; we mentor, train, and inspire you to become the psychology professional you're truly meant to be.
         </span>
       </li>
     </ul>
   </div>
   
-  <div className="mt-6 sm:mt-8 p-4 sm:p-5 bg-white rounded-xl border-l-4 border-[#4D2C5E] shadow-sm">
-    <p className="text-gray-700 font-medium text-sm sm:text-base md:text-lg italic">
+  <div className="mt-8 p-5 bg-white rounded-xl border-l-4 border-[#4D2C5E] shadow-sm">
+    <p className="text-gray-700 font-medium text-lg italic">
       We don't just teach. We mentor, train, and transform—so you become the professional you're meant to be.
     </p>
   </div>
@@ -736,6 +746,10 @@ const PCATExamPortal = () => {
     </div>
   </motion.div>
 )}
+
+
+<FAQSection/>
+
 
         {/* Registration Modal */}
 <AnimatePresence>
@@ -1191,6 +1205,8 @@ const PCATExamPortal = () => {
     </motion.div>
   )}
 </AnimatePresence>
+
+
       </div>
     </div>
   );
