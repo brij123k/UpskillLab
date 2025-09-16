@@ -290,7 +290,7 @@ const BlogDetailPage = () => {
       <TrainingBanner />
       <FeedbaackBanner />
           <Helmet>
-        <link rel="canonical" href="https://upskillab.com/blogdetail" />
+        <link rel="canonical" href="https://upskillab.com/blog" />
       </Helmet>
     </div>
     

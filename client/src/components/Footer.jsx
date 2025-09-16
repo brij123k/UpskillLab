@@ -78,10 +78,11 @@ function Footer() {
                 <li><NavLink to="/" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Home</NavLink></li>
                 <li><NavLink to="/about" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">About Us</NavLink></li>
                 <li><NavLink to="/courselist" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Popular Course</NavLink></li>
-                <li><NavLink to="/upcoming-batches/" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Latest Batches</NavLink></li>
+                {/* <li><NavLink to="/upcoming-batches/" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Latest Batches</NavLink></li> */}
                 <li><NavLink to="/blog" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Blog</NavLink></li>
                 <li><button onClick={()=>setShowModal(true)} className="m-auto sm:m-0 text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Payment</button></li>
                 <li><NavLink to="/PCATExamPortal" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">PCAT Exams</NavLink></li>
+                <li><NavLink to="/PCAT/result" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">PCAT Result</NavLink></li>
               </ul>
             </div>
 
@@ -92,10 +93,10 @@ function Footer() {
                 <li><a href="/login" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Login</a></li>
                 <li><NavLink to="/contactus" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Help Center</NavLink></li>
                 <li><NavLink to="/privacypolicy" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Privacy</NavLink></li>
+                <li><NavLink to="/whyus" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Why Upskillab</NavLink></li>
                 <li><NavLink to="/termsOfservice" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Terms & Conditions</NavLink></li>
                 <li><NavLink to="/refundpolicy" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Refund Policy</NavLink></li>
                 <li><NavLink to="/career" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Career</NavLink></li>
-                <li><NavLink to="/PCAT/result" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">PCAT Result</NavLink></li>
               </ul>
             </div>
 

@@ -27,6 +27,7 @@ const CourseDetailsPage = lazy(() => import("./pages/Frontend/CourseDetail"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
+const whyUpskillab = lazy(() => import("./pages/whyUpskillab"));
 const TeacherRegistration = lazy(() => import("./pages/TeacherRegistration"));
 const PCATExamPortal = lazy(()=> import("./pages/Frontend/PCATExamPortal"))
 const PCATExamPage = lazy(()=> import("./pages/Frontend/PCATExamPage"))
@@ -86,10 +87,11 @@ export const routes = [
   { exact: true, path: "/success-stories", layout: GuestLayout, component: Success},
   { exact: true, path: "/upcoming-batches/", layout: GuestLayout, component: upcomingBatches},
   { exact: true, path: "/blog", layout: GuestLayout, component: StudentsBlog},
-  { exact: true, path: "/BlogDetail/:slug",layout:GuestLayout,component:BlogDetailPage},
+  { exact: true, path: "/blog/:slug",layout:GuestLayout,component:BlogDetailPage},
   { exact: true, path: "/contactus", layout: GuestLayout, component: ContactUs},
   { exact: true, path: "/courselist", layout: GuestLayout, component: CourseList},
   { exact: true, path: "/career", layout: GuestLayout, component: Career},
+  { exact: true, path: "/whyus", layout: GuestLayout, component: whyUpskillab},
   { exact: true, path: "/about", layout: GuestLayout, component: AboutSection},
   // { exact: true, path: "/CourseDetails/:id", layout: GuestLayout, component: CourseDetailsPage},
   { exact: true, path: "/category/batch/:id", layout: GuestLayout, component: CourseDetailsPage},
