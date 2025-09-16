@@ -177,8 +177,11 @@ const PCATExamPortal = () => {
     <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#4D2C5E] mb-3 md:mb-4">
       Psychology Career Admission Test (PCAT)
     </h1>
-    <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-2">
+    {/* <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-2">
       Your Journey in Psychology Begins Here. Take the First Step with PCAT.
+    </p> */}
+     <p className="text-base sm:text-lg text-gray-600 max-w-3xl mx-auto px-2">
+      Take the First Step Toward a Successful Psychology Career with the PCAT Exam.
     </p>
   </div>
 
@@ -283,9 +286,9 @@ const PCATExamPortal = () => {
     <div className="flex items-start">
       <div className="mr-3 text-xl sm:text-2xl text-blue-500">💡</div>
       <div>
-        <h3 className="text-base sm:text-lg font-semibold text-blue-800 mb-2">What is PCAT</h3>
+        <h3 className="text-base sm:text-lg font-semibold text-blue-800 mb-2">What is the PCAT (Psychology Career Admission Test)?</h3>
         <p className="text-sm sm:text-base text-gray-700">
-          Every year in India, over 20 crore people struggle with psychological stress—from anxiety and depression to career confusion and emotional struggles. Yet, our country faces a critical shortage of trained, empathetic professionals. According to WHO, India has only 0.75 psychologists per 100,000 people, compared to the global average of 3.
+          The PCAT (Psychology Career Admission Test) is a national-level exam designed for students seeking a career in psychology and mental health services in India. Every year, over 20 crore Indians face psychological challenges such as anxiety, depression, career confusion, and emotional difficulties. Unfortunately, India has a shortage of qualified psychologists—according to the WHO, there are only 0.75 psychologists per 100,000 people in India, compared to the global average of 3.
         </p>
       </div>
     </div>
@@ -297,14 +300,7 @@ const PCATExamPortal = () => {
       <div className="mr-3 text-xl sm:text-2xl text-purple-600">👉</div>
       <div>
         <p className="text-sm sm:text-base text-gray-700 mb-2">
-          This gap cannot be filled by just more graduates or degrees. What India truly needs are empathetic, skilled, and responsible professionals who can listen, guide, and heal.
-        </p>
-        <p className="text-sm sm:text-base text-gray-700 mb-2">
-          At Upskillab, we believe psychology is not just a subject—it's a responsibility. And that responsibility must be entrusted only to those who are serious, committed, and emotionally aware.
-        
-        </p>
-        <p className='text-sm sm:text-base text-gray-700'>
-          That's why, before you join our professional psychology programs, we invite you to take the Psychology Career Admission Test (PCAT)—a carefully designed tool to identify learners who have the passion and sincerity to create real impact.
+          The PCAT exam aims to identify and nurture future psychologists who can address these mental health issues. By qualifying for the PCAT, students take the first step toward a rewarding psychology career, helping bridge the gap in mental health services in India.
         </p>
       </div>
     </div>
@@ -312,76 +308,109 @@ const PCATExamPortal = () => {
 
   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-6 md:mb-8">
     {/* Why PCAT Matters */}
-    <div className="bg-purple-50 p-4 sm:p-5 rounded-xl">
-      <div className="flex items-center mb-3 sm:mb-4">
-        <div className="bg-[#4D2C5E] p-2 rounded-full mr-3">
-          <FiTarget className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-        </div>
-        <h3 className="text-lg sm:text-xl font-semibold text-[#4D2C5E]">Why PCAT Matters</h3>
-      </div>
-      <ul className="space-y-2 sm:space-y-3">
-        <li className="flex items-start">
-          <div className="bg-white p-1 rounded-full mr-2 sm:mr-3 mt-1">
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#4D2C5E] rounded-full"></div>
-          </div>
-          <span className="text-sm sm:text-base">90% of students in India never receive timely counseling for their careers or mental health.</span>
-        </li>
-        <li className="flex items-start">
-          <div className="bg-white p-1 rounded-full mr-2 sm:mr-3 mt-1">
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#4D2C5E] rounded-full"></div>
-          </div>
-          <span className="text-sm sm:text-base">The demand for psychology professionals is expected to grow by 40% in the next 5 years.</span>
-        </li>
-        <li className="flex items-start">
-          <div className="bg-white p-1 rounded-full mr-2 sm:mr-3 mt-1">
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#4D2C5E] rounded-full"></div>
-          </div>
-          <span className="text-sm sm:text-base">Without empathy and real skill, degrees are just paper. Lives can only be changed by professionals who care.</span>
-        </li>
-        <li className="flex items-start">
-          <div className="bg-white p-1 rounded-full mr-2 sm:mr-3 mt-1">
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#4D2C5E] rounded-full"></div>
-          </div>
-          <span className="text-sm sm:text-base">At Upskillab, we don't believe in creating lakhs of psychology graduates. We believe in creating thousands of empathetic, skilled professionals who can truly transform lives.</span>
-        </li>
-      </ul>
+  <div className="bg-gradient-to-br from-purple-50 to-indigo-50 p-5 sm:p-6 md:p-7 rounded-2xl shadow-sm">
+  <div className="flex items-center mb-4 sm:mb-5 md:mb-6">
+    <div className="bg-[#4D2C5E] p-2.5 sm:p-3 rounded-full mr-3 sm:mr-4 flex-shrink-0">
+      <FiTarget className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
     </div>
+    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#4D2C5E]">
+      Why PCAT Matters for Psychology Careers in India
+    </h3>
+  </div>
+  
+  <div className="mb-5 sm:mb-6 bg-white p-4 sm:p-5 rounded-xl border-l-4 border-[#4D2C5E]">
+    <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
+      Did you know that <span className="font-semibold text-[#4D2C5E]">90% of students in India</span> never receive timely counseling for their careers or mental health? With the demand for psychology professionals projected to grow by <span className="font-semibold text-[#4D2C5E]">40% in the next 5 years</span>, the need for qualified experts is more critical than ever.
+    </p>
+    <p className="mt-3 text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed">
+      A Psychology degree is more than a certificate—it's about making a real impact. At Upskillab, we believe the PCAT (Psychology Career Admission Test) is the first step in training not just graduates, but thousands of empathetic, highly skilled psychologists capable of transforming lives across India.
+    </p>
+  </div>
+  
+  {/* <ul className="space-y-3 sm:space-y-4">
+    <li className="flex items-start p-3 sm:p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
+        <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+      </div>
+      <span className="text-sm sm:text-base md:text-lg text-gray-700">
+        <span className="font-semibold text-[#4D2C5E]">90% of students in India</span> never receive timely counseling for their careers or mental health.
+      </span>
+    </li>
+    <li className="flex items-start p-3 sm:p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
+        <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+      </div>
+      <span className="text-sm sm:text-base md:text-lg text-gray-700">
+        The demand for psychology professionals is expected to grow by <span className="font-semibold text-[#4D2C5E]">40% in the next 5 years</span>.
+      </span>
+    </li>
+    <li className="flex items-start p-3 sm:p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
+        <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+      </div>
+      <span className="text-sm sm:text-base md:text-lg text-gray-700">
+        Without empathy and real skill, degrees are just paper. Lives can only be changed by professionals who care.
+      </span>
+    </li>
+    <li className="flex items-start p-3 sm:p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+      <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
+        <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+      </div>
+      <span className="text-sm sm:text-base md:text-lg text-gray-700">
+        At Upskillab, we don't believe in creating lakhs of psychology graduates. We believe in creating thousands of empathetic, skilled professionals who can truly transform lives.
+      </span>
+    </li>
+  </ul> */}
+  
+  <div className="mt-5 sm:mt-6 p-4 sm:p-5 bg-[#4D2C5E] rounded-xl text-white">
+    <p className="text-sm sm:text-base md:text-lg font-medium italic">
+      Empathy, practical skills, and expert guidance are at the heart of our mission. The PCAT exam ensures only the most dedicated and compassionate students become the psychology professionals India needs, helping to bridge the country's enormous gap in mental health support and career counseling.
+    </p>
+  </div>
+</div>
 
     {/* Exam Details */}
-    <div className="bg-green-50 p-4 sm:p-5 rounded-xl">
-      <div className="flex items-center mb-3 sm:mb-4">
-        <div className="bg-green-600 p-2 rounded-full mr-3">
-          <FiClock className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-        </div>
-        <h3 className="text-lg sm:text-xl font-semibold text-green-800">Exam Details</h3>
-      </div>
-      <div className="space-y-3 sm:space-y-4">
-        <div className="flex justify-between items-center border-b border-green-200 pb-2">
-          <span className="text-sm sm:text-base text-gray-600">Duration:</span>
-          <span className="text-sm sm:text-base font-semibold">20–30 minutes</span>
-        </div>
-        <div className="flex justify-between items-center border-b border-green-200 pb-2">
-          <span className="text-sm sm:text-base text-gray-600">Mode:</span>
-          <span className="text-sm sm:text-base font-semibold">Online | Objective + Short Answers</span>
-        </div>
-        <div className="flex justify-between items-center border-b border-green-200 pb-2">
-          <span className="text-sm sm:text-base text-gray-600">Result:</span>
-          <span className="text-sm sm:text-base font-semibold">Shared within 24 to 72 hours</span>
-        </div>
-        <div className="pt-2">
-          <p className="text-sm text-gray-700">
-            PCAT is not about judging you—it's about preparing you. It ensures that only those who are ready to walk this path with empathy and responsibility move forward.
-          </p>
-        </div>
-      </div>
+    <div className="bg-gradient-to-br from-green-50 to-green-100 p-5 sm:p-6 md:p-7 rounded-2xl shadow-sm">
+  <div className="flex items-center mb-4 sm:mb-5 md:mb-6">
+    <div className="bg-green-600 p-2.5 sm:p-3 rounded-full mr-3 sm:mr-4 flex-shrink-0">
+      <FiClock className="h-4 w-4 sm:h-5 sm:w-5 md:h-6 md:w-6 text-white" />
     </div>
+    <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-green-800">Exam Details</h3>
+  </div>
+  
+  <div className="space-y-4 sm:space-y-5">
+    <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center border-b border-green-200 pb-3 sm:pb-4 gap-2 xs:gap-0">
+      <span className="text-base sm:text-lg text-gray-700 font-medium">Duration:</span>
+      <span className="text-base sm:text-lg font-semibold text-green-800 bg-green-50 px-3 py-1 rounded-lg">20–30 minutes</span>
+    </div>
+    
+    <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center border-b border-green-200 pb-3 sm:pb-4 gap-2 xs:gap-0">
+      <span className="text-base sm:text-lg text-gray-700 font-medium">Mode:</span>
+      <span className="text-base sm:text-lg font-semibold text-green-800 bg-green-50 px-3 py-1 rounded-lg text-right">Online (Objective & Short Answer)</span>
+    </div>
+    
+    <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center border-b border-green-200 pb-3 sm:pb-4 gap-2 xs:gap-0">
+      <span className="text-base sm:text-lg text-gray-700 font-medium">Result:</span>
+      <span className="text-base sm:text-lg font-semibold text-green-800 bg-green-50 px-3 py-1 rounded-lg">Within 24–72 hours</span>
+    </div>
+    
+    <div className="pt-3 sm:pt-4">
+      <p className="text-sm sm:text-base md:text-lg text-gray-700 leading-relaxed bg-white p-4 sm:p-5 rounded-xl border-l-4 border-green-500">
+        The PCAT exam isn't about judgment—it's about preparation. This unique test is designed to ensure only those truly equipped with empathy and responsibility move forward in their psychology careers. PCAT helps you discover your readiness for this meaningful path, focusing on skills and values that matter most in the field of psychology.
+      </p>
+    </div>
+  </div>
+</div>
   </div>
 
   {/* Why PCAT Section */}
   <div className="bg-gradient-to-r from-[#4D2C5E] to-[#6D3B8F] text-white rounded-xl p-5 sm:p-6 mb-6 md:mb-8">
-    <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-center">Why Take PCAT?</h3>
+    <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 text-center">Why Take the PCAT with Upskillab?</h3>
     <p className="text-center text-sm sm:text-base mb-3 sm:mb-4">
-      That's why, before you join our professional psychology programs, we invite you to take the Psychology Career Admission Test (PCAT)—a carefully designed tool to identify learners who have the passion and sincerity to create real impact.
+      Before enrolling in our professional psychology programs at Upskillab, we encourage you to take the Psychology Career Admission Test (PCAT). This thoughtfully crafted exam from Upskillab is designed to identify students who have both the knowledge and the sincere passion required to create real change in the field of psychology.
+    </p>
+    <p className="text-center text-sm sm:text-base mb-3 sm:mb-4">
+      By taking the Upskillab PCAT exam, you demonstrate your readiness to pursue a truly meaningful psychology career—one built on empathy, sincerity, and a genuine desire to make a lasting impact on mental health and counseling in India.
     </p>
   </div>
 
@@ -440,52 +469,69 @@ const PCATExamPortal = () => {
   </div>
 
   {/* Why Upskillab Section */}
-  <div className="bg-gray-50 p-4 sm:p-6 rounded-xl mb-6 md:mb-8">
-    <div className="flex items-center mb-3 sm:mb-4">
-      <div className="bg-[#4D2C5E] p-2 rounded-full mr-3">
-        <FiAward className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
-      </div>
-      <h3 className="text-lg sm:text-xl font-semibold text-[#4D2C5E]">Why Upskillab?</h3>
+<div className="bg-gradient-to-br from-gray-50 to-gray-100 p-4 sm:p-6 md:p-8 rounded-2xl mb-6 md:mb-8 shadow-sm">
+  <div className="flex items-center mb-4 sm:mb-6">
+    <div className="bg-[#4D2C5E] p-2.5 sm:p-3 rounded-full mr-3 sm:mr-4 flex-shrink-0">
+      <FiAward className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
     </div>
-    
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
-      <ul className="space-y-2 sm:space-y-3">
-        <li className="flex items-start">
-          <div className="bg-white p-1 rounded-full mr-2 sm:mr-3 mt-1">
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#4D2C5E] rounded-full"></div>
-          </div>
-          <span className="text-sm sm:text-base">Industry-recognised certifications</span>
-        </li>
-        <li className="flex items-start">
-          <div className="bg-white p-1 rounded-full mr-2 sm:mr-3 mt-1">
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#4D2C5E] rounded-full"></div>
-          </div>
-          <span className="text-sm sm:text-base">Hands-on practice with case studies</span>
-        </li>
-      </ul>
-      <ul className="space-y-2 sm:space-y-3">
-        <li className="flex items-start">
-          <div className="bg-white p-1 rounded-full mr-2 sm:mr-3 mt-1">
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#4D2C5E] rounded-full"></div>
-          </div>
-          <span className="text-sm sm:text-base">1:1 Mentorship & career pathways</span>
-        </li>
-        <li className="flex items-start">
-          <div className="bg-white p-1 rounded-full mr-2 sm:mr-3 mt-1">
-            <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-[#4D2C5E] rounded-full"></div>
-          </div>
-          <span className="text-sm sm:text-base">Focus on empathy + skill, not just theory</span>
-        </li>
-      </ul>
-    </div>
-    
-    <div className="mt-3 sm:mt-4 p-3 sm:p-4 bg-white rounded-lg">
-      <p className="text-gray-700 font-medium text-sm sm:text-base">
-        We don't just teach. We mentor, train, and transform—so you become the professional you're meant to be.
-      </p>
-    </div>
+    <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#4D2C5E] leading-tight">
+      Why Choose Upskillab for Your Psychology Career?
+    </h3>
   </div>
-
+  
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+    <ul className="space-y-3 sm:space-y-4">
+      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
+          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+        </div>
+        <span className="text-sm sm:text-base text-gray-700">
+          Industry-Recognized Certifications: Upskillab's psychology programs provide you with certifications valued by leading employers and institutions.
+        </span>
+      </li>
+      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
+          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+        </div>
+        <span className="text-sm sm:text-base text-gray-700">
+          Real-World, Hands-On Practice: Gain practical experience through in-depth case studies and real scenarios to build true professional confidence.
+        </span>
+      </li>
+    </ul>
+    <ul className="space-y-3 sm:space-y-4">
+      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
+          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+        </div>
+        <span className="text-sm sm:text-base text-gray-700">
+          1:1 Mentorship and Career Pathways: Benefit from personalized mentorship and clear career guidance tailored to your goals.
+        </span>
+      </li>
+      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
+          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+        </div>
+        <span className="text-sm sm:text-base text-gray-700">
+          Empathy + Skill Focus: Upskillab emphasizes both empathy and practical skills, ensuring you're more than just book-smart.
+        </span>
+      </li>
+      <li className="flex items-start p-3 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow">
+        <div className="bg-[#4D2C5E] p-1.5 rounded-full mr-3 mt-0.5 flex-shrink-0">
+          <div className="w-2 h-2 sm:w-2.5 sm:h-2.5 bg-white rounded-full"></div>
+        </div>
+        <span className="text-sm sm:text-base text-gray-700">
+          Beyond Teaching—We Transform: At Upskillab, we don't just teach theory; we mentor, train, and inspire you to become the psychology professional you're truly meant to be.
+        </span>
+      </li>
+    </ul>
+  </div>
+  
+  <div className="mt-6 sm:mt-8 p-4 sm:p-5 bg-white rounded-xl border-l-4 border-[#4D2C5E] shadow-sm">
+    <p className="text-gray-700 font-medium text-sm sm:text-base md:text-lg italic">
+      We don't just teach. We mentor, train, and transform—so you become the professional you're meant to be.
+    </p>
+  </div>
+</div>
   {/* Final Message */}
   <div className="bg-gradient-to-r from-[#f9f0ff] to-[#e6d4f7] p-4 sm:p-6 rounded-xl mb-6 md:mb-8">
     <div className="text-center">
