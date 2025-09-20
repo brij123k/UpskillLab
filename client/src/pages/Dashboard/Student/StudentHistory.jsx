@@ -65,11 +65,7 @@ const StudentHistory = () => {
     fetchStudentHistory();
   }, []);
 
-  const calculateAttendance = () => {
-    if (!studentData?.attendanceHistory?.length) return 0;
-    const attended = studentData.attendanceHistory.filter(c => c.isAttended).length;
-    return Math.round((attended / studentData.attendanceHistory.length) * 100);
-  };
+
 
   const categorizeCourses = () => {
     if (!studentData?.orderHistory) return { completed: [], inProgress: [], upcoming: [] };
@@ -119,34 +115,53 @@ const StudentHistory = () => {
       }, { completed: [], inProgress: [], upcoming: [] });
   };
 
-  const getAttendanceHistory = () => {
-    if (!studentData?.attendanceHistory) return [];
-    
-    return studentData.attendanceHistory.map(session => {
-      const sessionDate = new Date(session.scheduledDate);
-      const now = new Date();
-      let status;
-      
-      if (session.isAttended) {
-        status = 'attended';
-      } else if (now > sessionDate) {
-        status = 'missed';
-      } else {
-        status = 'upcoming';
-      }
-      
-      return {
-        id: session.classId,
-        title: `Class Session`,
-        status,
-        date: session.scheduledDate,
-        formattedDate: sessionDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
-        time: session.scheduledStartTime,
-        link: session.meetingLink,
-        isUpcoming: status === 'upcoming'
-      };
-    });
-  };
+const getAttendanceHistory = () => {
+  if (!studentData?.attendanceHistory) return [];
+
+  return studentData.attendanceHistory.map(session => {
+    const now = new Date();
+
+    // Extract only date (no time) from scheduledDate
+    const sessionDate = new Date(session.scheduledDate);
+    const currentDate = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
+
+    // Parse session start time (HH:mm)
+    const [hours, minutes] = session.scheduledStartTime.split(":").map(Number);
+
+    // Create a Date object for full session datetime
+    const sessionDateTime = new Date(sessionDate);
+    sessionDateTime.setHours(hours, minutes, 0, 0);
+
+    let status;
+    if (session.isAttended) {
+      status = "attended";
+    } else if (now > sessionDateTime) {
+      status = "missed";
+    } else {
+      status = "upcoming";
+    }
+
+    return {
+      id: session.classId,
+      title: `Class Session`,
+      status,
+      date: session.scheduledDate,
+      formattedDate: sessionDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      }),
+      time: session.scheduledStartTime,
+      link: session.meetingLink,
+      isUpcoming: status === "upcoming"
+    };
+  });
+};
+
 
   const filterOrders = () => {
     if (!studentData?.orderHistory) return [];
@@ -159,7 +174,22 @@ const StudentHistory = () => {
 
   const { completed, inProgress, upcoming } = categorizeCourses();
   const attendanceHistory = getAttendanceHistory();
+  console.log(attendanceHistory)
   const filteredOrders = filterOrders();
+
+
+const calculateAttendance = () => {
+  if (!attendanceHistory?.length) return "0.00";
+
+  const attended = attendanceHistory.filter(c => c.status === "attended").length;
+  const total = attendanceHistory.filter(c => c.status !== "upcoming").length;
+
+  if (total === 0) return "0.00";
+
+  return ((attended / total) * 100).toFixed(2); // always returns string like "75.00"
+};
+
+
 
   if (loading) {
     return (
@@ -437,11 +467,11 @@ const StudentHistory = () => {
                     <div className="space-y-2">
                       <p className="text-sm font-medium text-gray-700 flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-green-500"></span>
-                        Attended: {studentData?.attendanceHistory?.filter(c => c.isAttended).length || 0}
+                        Attended: {attendanceHistory?.filter(c => c.status=="attended").length || 0}
                       </p>
                       <p className="text-sm font-medium text-gray-700 flex items-center gap-2">
                         <span className="w-2 h-2 rounded-full bg-red-500"></span>
-                        Missed: {studentData?.attendanceHistory?.filter(c => !c.isAttended).length || 0}
+                        Missed: {attendanceHistory?.filter(c => c.status=="missed").length || 0}
                       </p>
                     </div>
                   </div>
@@ -459,7 +489,12 @@ const StudentHistory = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {attendanceHistory.map(session => (
+                    {[...attendanceHistory]
+  .sort((a, b) => {
+    const dateA = new Date(`${a.formattedDate}`);
+    const dateB = new Date(`${b.formattedDate}`);
+    return dateB - dateA; // latest first
+  }).map(session => (
                       <tr key={session.id} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm font-medium text-gray-900">{session.formattedDate}</div>

@@ -131,11 +131,26 @@ if (!profileComplete) {
 
         // Calculate attendance percentage
         let attendancePercentage = 0;
-        if (attendanceRes && attendanceRes.classes && attendanceRes.classes.length > 0) {
-          const totalClasses = attendanceRes.classes.length;
-          const attendedClasses = attendanceRes.classes.filter(cls => cls.isAttended === true).length;
-          attendancePercentage = Math.round((attendedClasses / totalClasses) * 100);
-        }
+
+if (attendanceRes?.classes?.length > 0) {
+  const now = new Date();
+
+  // keep only past classes (date+time <= now)
+  const pastClasses = attendanceRes.classes.filter(cls => {
+    const sessionDate = new Date(cls.scheduledDate);
+    const [hours, minutes] = cls.scheduledStartTime.split(":").map(Number);
+
+    sessionDate.setHours(hours, minutes, 0, 0); // attach start time
+
+    return sessionDate <= now; // only past or ongoing classes
+  });
+
+  const totalClasses = pastClasses.length;
+  const attendedClasses = pastClasses.filter(cls => cls.isAttended === true).length;
+
+  attendancePercentage = totalClasses === 0 ? 0 : Math.round((attendedClasses / totalClasses) * 100);
+}
+
 
         setTodayClasses(today);
         setLiveClasses(live);
