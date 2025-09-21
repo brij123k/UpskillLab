@@ -119,7 +119,7 @@ const PCATExamPortal = () => {
     } catch (error) {
       console.error('Login error:', error);
       console.log(error)
-      toast.error(error?.message+ " wait for Result" || 'OTP verification failed. Please try again.');
+      toast.error(error?.message|| 'OTP verification failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
