@@ -13,6 +13,13 @@ const Success = lazy(() => import("./pages/Frontend/SuccessStory"));
 const upcomingBatches = lazy(() => import("./pages/Frontend/UpcomingBatches"));
 const StudentsBlog = lazy(() => import("./pages/Frontend/StudentsBlog"));
 const BlogDetailPage = lazy(()=>import("./pages/Frontend/BlogDetail"))
+const EbooksPage = lazy(() => import("./pages/Frontend/EbooksPage"));
+const EbookViewer = lazy(() => import("./pages/Frontend/EbookViewer"));
+const NewsLetterPage = lazy(() => import("./pages/Frontend/NewsLetterPage"));
+const NewsDetailPage = lazy(() => import("./pages/Frontend/NewsDetailPage"));
+
+
+
 const ContactUs = lazy(() => import("./pages/Frontend/ContactUs"));
 const CourseList = lazy(() => import("./pages/Frontend/CourseList"));
 const Career = lazy(() => import("./pages/Frontend/Career"));
@@ -88,6 +95,10 @@ export const routes = [
   { exact: true, path: "/upcoming-batches/", layout: GuestLayout, component: upcomingBatches},
   { exact: true, path: "/blog", layout: GuestLayout, component: StudentsBlog},
   { exact: true, path: "/blog/:slug",layout:GuestLayout,component:BlogDetailPage},
+  { exact: true, path: "/ebooks", layout: GuestLayout, component: EbooksPage},
+  { exact: true, path: "/ebooks/:slug", layout: GuestLayout, component: EbookViewer},
+  { exact: true, path: "/newsletter", layout: GuestLayout, component: NewsLetterPage},
+  { exact: true, path: "/newsletter/:slug", layout: GuestLayout, component: NewsDetailPage},
   { exact: true, path: "/contactus", layout: GuestLayout, component: ContactUs},
   { exact: true, path: "/courselist", layout: GuestLayout, component: CourseList},
   { exact: true, path: "/career", layout: GuestLayout, component: Career},

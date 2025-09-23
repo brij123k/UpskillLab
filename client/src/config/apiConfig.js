@@ -64,6 +64,16 @@ const ApiConfig = {
   blogs: `${url}/blogs`, // Base endpoint for all blog operations
   blogById: (id) => `${url}/blogs/${id}`, // For single blog operations
   blogbyBlogTitle: (slug)=>`${url}/blogs/blog/${slug}`,
+
+  // Ebooks
+  ebooks:`${url}/ebooks/public`,
+  ebooksbyslug:(slug)=>`${url}/ebooks/public/${slug}`,
+  ebooksUser:`${url}/ebook-access-logs`,
+
+  // newslatters
+  subscriber:`${url}/subscribers`,
+  getnews:`${url}/news/public`,
+  newsbyslug:(slug)=>`${url}/news/public/${slug}`,
   //youtube
   youtube: `${url}/youtube-videos?all=1`,
 
