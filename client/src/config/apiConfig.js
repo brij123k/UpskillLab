@@ -74,6 +74,11 @@ const ApiConfig = {
   subscriber:`${url}/subscribers`,
   getnews:`${url}/news/public`,
   newsbyslug:(slug)=>`${url}/news/public/${slug}`,
+
+  medicalExam:`${url}/medical-exams`,
+  attemptExam:`${url}/medical-exams/attempt`,
+  getMedicalQuestions:(examid)=>`${url}/medical-exams/${examid}/questions`,
+  submitMedicalExam:`${url}/medical-exams/submit`,
   //youtube
   youtube: `${url}/youtube-videos?all=1`,
 

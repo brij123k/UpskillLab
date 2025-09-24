@@ -199,7 +199,50 @@ const NewsCard = React.memo(({ newsItem, onNewsClick }) => {
     </motion.div>
   );
 });
-
+const FeaturedNewsCard = ({ newsItem, onNewsClick }) => {
+  return (
+    <motion.div 
+      className="bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer group"
+      whileHover={{ y: -5 }}
+      transition={{ duration: 0.3 }}
+      onClick={() => onNewsClick(newsItem)}
+    >
+      <div className="relative overflow-hidden">
+        <img 
+          src={newsItem.image || "/images/news-placeholder.jpg"} 
+          alt={newsItem.title}
+          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        <div className="absolute top-4 left-4 bg-[#FF7426] text-white px-3 py-1 rounded-full text-sm font-semibold">
+          Featured
+        </div>
+      </div>
+      
+      <div className="p-6">
+        <div className="flex items-center text-gray-500 text-sm mb-3">
+          <span>{new Date(newsItem.createdAt).toLocaleDateString()}</span>
+          <span className="mx-2">•</span>
+          <span>{newsItem.category || "General"}</span>
+        </div>
+        
+        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2">
+          {newsItem.title}
+        </h3>
+        
+        <p className="text-gray-600 mb-4 line-clamp-3">
+          {newsItem.summary || newsItem.content?.substring(0, 150)}...
+        </p>
+        
+        <button className="text-[#4D2C5E] font-semibold hover:text-[#FF7426] transition-colors flex items-center">
+          Read Full Newsletter
+          <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+    </motion.div>
+  );
+};
 const NewsLetterPage = () => {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -295,124 +338,276 @@ const NewsLetterPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      <Helmet>
-        <title>News & Updates | Upskillab - Stay Informed</title>
-        <meta name="description" content="Stay updated with the latest news, articles, and updates from Upskillab. Subscribe to our newsletter for regular updates." />
-        <meta name="keywords" content="news, updates, newsletter, education news, Upskillab news" />
-      </Helmet>
+  <Helmet>
+    <title>Upskillab Learning Newsletter - Technology, Psychology, Management & Professional Growth</title>
+    <meta name="description" content="Subscribe to Upskillab's free newsletter for insights in technology, psychology, management, and professional development. Learn, grow, and stay ahead." />
+    <meta name="keywords" content="newsletter, technology, psychology, management, professional growth, Upskillab, learning insights" />
+  </Helmet>
 
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] py-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto text-center">
-          <motion.h1
-            className="text-4xl md:text-5xl font-bold text-white mb-4"
-            initial={{ y: -20 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            News & <span className="text-[#FF7426]">Updates</span>
-          </motion.h1>
-          
-          <motion.p
-            className="text-lg text-white/90 max-w-3xl mx-auto mb-8"
-            initial={{ y: 20 }}
-            animate={{ y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            Stay informed with the latest news, insights, and updates from the world of education and technology
-          </motion.p>
+  {/* Hero Section */}
+ <section className="relative bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] py-12 sm:py-16 lg:py-20 xl:py-24 px-4 xs:px-6 sm:px-8 lg:px-12">
+  <div className="max-w-4xl sm:max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto text-center">
+    {/* Main Heading - Fully Responsive */}
+    <motion.h1
+      className="text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-7xl 2xl:text-7xl font-bold text-white mb-4 sm:mb-5 lg:mb-6 xl:mb-7 leading-tight sm:leading-snug lg:leading-normal"
+      initial={{ y: -20 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      Upskillab Learning{" "}
+      <span className="text-[#FF7426] block sm:inline-block mt-1 sm:mt-0">
+        Newsletter
+      </span>
+    </motion.h1>
+    
+    {/* Tagline - Responsive */}
+    <motion.p
+      className="text-base sm:text-lg md:text-xl lg:text-2xl xl:text-2xl text-white/90 max-w-xs xs:max-w-sm sm:max-w-2xl md:max-w-3xl lg:max-w-4xl mx-auto mb-4 sm:mb-5 lg:mb-6 xl:mb-7 leading-relaxed sm:leading-loose"
+      initial={{ y: 20 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+    >
+      Technology, Psychology, Management & Professional Growth
+    </motion.p>
 
-          <motion.button
-            onClick={() => setShowSubscribeForm(true)}
-            className="bg-white text-[#4D2C5E] px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-lg"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            📧 Subscribe to Newsletter
-          </motion.button>
-        </div>
-      </section>
+    {/* Description - Responsive */}
+    <motion.p
+      className="text-sm xs:text-base sm:text-lg md:text-lg lg:text-xl xl:text-xl text-white/80 max-w-xs xs:max-w-sm sm:max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto mb-6 sm:mb-7 lg:mb-8 xl:mb-9 leading-relaxed"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0.4 }}
+    >
+      Subscribe to Upskillab's free newsletter for insights in technology, psychology, management, and professional development. Learn, grow, and stay ahead.
+    </motion.p>
 
-      {/* Main Content */}
-      <main className="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
-        {loading ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-xl shadow-lg p-6 animate-pulse">
-                <div className="h-48 bg-gray-300 rounded-lg mb-4"></div>
-                <div className="h-6 bg-gray-300 rounded mb-3"></div>
-                <div className="h-4 bg-gray-300 rounded mb-2"></div>
-                <div className="h-4 bg-gray-300 rounded w-3/4"></div>
-              </div>
-            ))}
+    {/* CTA Button - Fully Responsive */}
+    <motion.button
+      onClick={() => setShowSubscribeForm(true)}
+      className="bg-[#FF7426] text-white px-6 py-3 xs:px-8 xs:py-3 sm:px-9 sm:py-3 md:px-10 md:py-4 lg:px-12 lg:py-4 xl:px-14 xl:py-5 rounded-full font-semibold hover:bg-[#FF8C42] transition-all shadow-2xl hover:shadow-3xl text-sm xs:text-base sm:text-lg md:text-xl lg:text-xl xl:text-xl whitespace-nowrap"
+      whileHover={{ 
+        scale: 1.05, 
+        boxShadow: "0 25px 50px rgba(255, 116, 38, 0.4)" 
+      }}
+      whileTap={{ scale: 0.95 }}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0.6 }}
+    >
+      <span className="flex items-center justify-center">
+        <span className="mr-2 text-base sm:text-lg md:text-xl">📧</span>
+        Subscribe to Newsletter
+      </span>
+    </motion.button>
+
+    {/* Optional: Additional responsive elements */}
+    {/* <motion.div 
+      className="mt-6 sm:mt-8 lg:mt-10 flex justify-center space-x-4"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0.8 }}
+    >
+      <div className="flex items-center text-white/70 text-xs sm:text-sm">
+        <span className="w-2 h-2 bg-green-400 rounded-full mr-2"></span>
+        Join 10,000+ subscribers
+      </div>
+      <div className="flex items-center text-white/70 text-xs sm:text-sm">
+        <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
+        Free forever
+      </div>
+    </motion.div> */}
+  </div>
+
+  {/* Background Decoration - Responsive */}
+  <div className="absolute bottom-0 left-0 right-0 h-8 sm:h-12 lg:h-16 bg-gradient-to-t from-gray-50/10 to-transparent"></div>
+</section>
+
+  {/* Highlighted Insights Section */}
+  <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    {/* <div className="text-center mb-12">
+      <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+        Highlighted Insights
+      </h2>
+      <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+        Discover Upskillab's latest featured Newsletter - an in-depth resource packed with expert insights, practical strategies, and real-world examples.
+      </p>
+    </div> */}
+
+    {loading ? (
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {[...Array(2)].map((_, i) => (
+          <div key={i} className="bg-white rounded-2xl shadow-xl p-8 animate-pulse">
+            <div className="h-64 bg-gray-300 rounded-xl mb-6"></div>
+            <div className="h-8 bg-gray-300 rounded mb-4"></div>
+            <div className="h-4 bg-gray-300 rounded mb-2"></div>
+            <div className="h-4 bg-gray-300 rounded w-3/4"></div>
           </div>
-        ) : error ? (
-          <div className="text-center py-12">
-            <div className="text-red-500 text-lg mb-4">⚠️ {error}</div>
-            <button 
-              onClick={() => window.location.reload()}
-              className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg hover:bg-[#5a3a6e] transition-colors"
-            >
-              Try Again
-            </button>
-          </div>
-        ) : news.length === 0 ? (
-          <div className="text-center py-12">
-            <div className="text-gray-500 text-lg mb-4">No news available at the moment.</div>
-            <button 
-              onClick={() => setShowSubscribeForm(true)}
-              className="bg-[#FF7426] text-white px-6 py-3 rounded-lg hover:bg-[#FF8C42] transition-colors"
-            >
-              Subscribe for Updates
-            </button>
-          </div>
-        ) : (
-          <motion.div 
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.8 }}
+        ))}
+      </div>
+    ) : news.length > 0 ? (
+      <motion.div 
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      >
+        {news.map((newsItem) => (
+          <NewsCard 
+            key={newsItem._id} 
+            newsItem={newsItem} 
+            onNewsClick={handleNewsClick}
+          />
+        ))}
+      </motion.div>
+    ) : (
+      <div className="text-center py-12 bg-white rounded-2xl shadow-lg">
+        <div className="text-6xl mb-4">📰</div>
+        <h3 className="text-2xl font-bold text-gray-800 mb-2">Featured Insights Coming Soon</h3>
+        <p className="text-gray-600 mb-6">Stay tuned for our latest featured newsletters packed with expert insights.</p>
+        <button 
+          onClick={() => setShowSubscribeForm(true)}
+          className="bg-[#4D2C5E] text-white px-8 py-3 rounded-lg hover:bg-[#5a3a6e] transition-colors"
+        >
+          Get Notified
+        </button>
+      </div>
+    )}
+  </section>
+
+  {/* Why Subscribe Section */}
+  <section className="bg-white py-16 px-4 sm:px-6 lg:px-8">
+    <div className="max-w-7xl mx-auto">
+      <div className="text-center mb-12">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          Why Subscribe to the Upskillab Newsletter?
+        </h2>
+        <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          Join thousands of learners who trust Upskillab to fuel their growth. Subscribe now and get the tools, insights, and knowledge to build your future — one email at a time.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        {[
+          {
+            icon: "💡",
+            title: "Expert Insights",
+            description: "Stay updated with the latest trends in Technology, Management, Psychology, and Professional Growth."
+          },
+          {
+            icon: "🚀",
+            title: "Actionable Tips",
+            description: "Practical strategies you can apply immediately to level up your skills."
+          },
+          {
+            icon: "📚",
+            title: "Exclusive Resources",
+            description: "Free guides, templates, checklists, and learning materials."
+          },
+          {
+            icon: "⏰",
+            title: "Early Access & Updates",
+            description: "Be the first to know about new courses, workshops, and events."
+          }
+        ].map((benefit, index) => (
+          <motion.div
+            key={index}
+            className="bg-gradient-to-br from-gray-50 to-white p-6 rounded-xl shadow-lg border border-gray-100"
+            whileHover={{ y: -5, shadow: "0 20px 40px rgba(0,0,0,0.1)" }}
+            transition={{ duration: 0.3 }}
           >
-            {news.map((newsItem) => (
-              <NewsCard 
-                key={newsItem._id} 
-                newsItem={newsItem} 
-                onNewsClick={handleNewsClick}
-              />
-            ))}
+            <div className="text-4xl mb-4">{benefit.icon}</div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">{benefit.title}</h3>
+            <p className="text-gray-600 leading-relaxed">{benefit.description}</p>
           </motion.div>
-        )}
-      </main>
-
-      {/* Subscription CTA Section */}
-      <section className="bg-gray-800 text-white py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Never Miss an Update</h2>
-          <p className="text-gray-300 mb-6">
-            Subscribe to our newsletter and be the first to know about new courses, events, and educational insights.
-          </p>
-          <button
-            onClick={() => setShowSubscribeForm(true)}
-            className="bg-[#FF7426] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#FF8C42] transition-all"
-          >
-            Subscribe Now
-          </button>
-        </div>
-      </section>
-
-      {/* Subscription Form Modal */}
-      <SubscribeForm
-        showForm={showSubscribeForm}
-        subscribeData={subscribeData}
-        subscribeLoading={subscribeLoading}
-        onInputChange={handleSubscribeChange}
-        onSubmit={handleSubscribe}
-        onClose={handleCloseModal}
-      />
+        ))}
+      </div>
     </div>
+  </section>
+
+  {/* Testimonials Section */}
+  {/* <section className="bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] py-16 px-4 sm:px-6 lg:px-8">
+    <div className="max-w-6xl mx-auto text-center">
+      <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+        See What Our Subscribers Are Saying
+      </h2>
+      <p className="text-lg text-white/80 mb-12">
+        Real stories from our learners — hear how Upskillab's newsletter has helped them grow, stay informed, and level up their skills.
+      </p>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[
+          {
+            name: "Priya Sharma",
+            role: "Software Developer",
+            testimonial: "The insights on technology trends have been invaluable for my career growth. Every newsletter is packed with actionable advice!",
+            avatar: "👩‍💻"
+          },
+          {
+            name: "Rahul Verma",
+            role: "Project Manager",
+            testimonial: "The management psychology sections have transformed how I lead my team. Highly recommended for professionals!",
+            avatar: "👨‍💼"
+          },
+          {
+            name: "Anita Patel",
+            role: "HR Professional",
+            testimonial: "The professional growth tips helped me advance in my career. The newsletter is like having a personal mentor.",
+            avatar: "👩‍🎓"
+          }
+        ].map((testimonial, index) => (
+          <motion.div
+            key={index}
+            className="bg-white/10 backdrop-blur-lg p-6 rounded-2xl border border-white/20"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+          >
+            <div className="text-4xl mb-4">{testimonial.avatar}</div>
+            <p className="text-white/90 italic mb-4">"{testimonial.testimonial}"</p>
+            <div>
+              <div className="text-white font-semibold">{testimonial.name}</div>
+              <div className="text-white/70 text-sm">{testimonial.role}</div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section> */}
+  {/* Final CTA Section */}
+  <section className="bg-gradient-to-r from-[#FF7426] to-[#FF8C42] py-16 px-4 sm:px-6 lg:px-8">
+    <div className="max-w-4xl mx-auto text-center">
+      <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+        Ready to Level Up Your Skills?
+      </h2>
+      <p className="text-white/90 text-lg mb-8">
+        Join thousands of professionals who are already growing with Upskillab's newsletter
+      </p>
+      <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <button
+          onClick={() => setShowSubscribeForm(true)}
+          className="bg-white text-[#FF7426] px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-all shadow-2xl text-lg"
+        >
+          Subscribe Now
+        </button>
+        <button
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white/10 transition-all"
+        >
+          Browse All Newsletters
+        </button>
+      </div>
+    </div>
+  </section>
+
+  {/* Subscription Form Modal */}
+  <SubscribeForm
+    showForm={showSubscribeForm}
+    subscribeData={subscribeData}
+    subscribeLoading={subscribeLoading}
+    onInputChange={handleSubscribeChange}
+    onSubmit={handleSubscribe}
+    onClose={handleCloseModal}
+  />
+</div>
   );
 };
 

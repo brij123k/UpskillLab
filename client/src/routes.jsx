@@ -17,6 +17,8 @@ const EbooksPage = lazy(() => import("./pages/Frontend/EbooksPage"));
 const EbookViewer = lazy(() => import("./pages/Frontend/EbookViewer"));
 const NewsLetterPage = lazy(() => import("./pages/Frontend/NewsLetterPage"));
 const NewsDetailPage = lazy(() => import("./pages/Frontend/NewsDetailPage"));
+const MedicalExamsPage = lazy(() => import("./pages/Frontend/MedicalExamsPage"));
+const ExamAttemptPage = lazy(() => import("./pages/Frontend/ExamAttemptPage"));
 
 
 
@@ -99,6 +101,8 @@ export const routes = [
   { exact: true, path: "/ebooks/:slug", layout: GuestLayout, component: EbookViewer},
   { exact: true, path: "/newsletter", layout: GuestLayout, component: NewsLetterPage},
   { exact: true, path: "/newsletter/:slug", layout: GuestLayout, component: NewsDetailPage},
+  { exact: true, path: "/medical-exams", layout: GuestLayout, component: MedicalExamsPage},
+  { exact: true, path: "/medical-exams/:slug", layout: GuestLayout, component: ExamAttemptPage},
   { exact: true, path: "/contactus", layout: GuestLayout, component: ContactUs},
   { exact: true, path: "/courselist", layout: GuestLayout, component: CourseList},
   { exact: true, path: "/career", layout: GuestLayout, component: Career},

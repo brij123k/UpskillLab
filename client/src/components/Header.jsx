@@ -20,7 +20,7 @@ function Header() {
   const [hoveredCourse, setHoveredCourse] = useState(null);
   const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 });
   const [announcements, setAnnouncements] = useState([])
-
+const [isResourcesDropdownOpen, setIsResourcesDropdownOpen] = useState(false);
 
   const [showExitIntent, setShowExitIntent] = useState(false);
   const [mousePosition, setMousePosition] = useState({ y: 0 });
@@ -487,13 +487,120 @@ function Header() {
             >
               Upcoming Batches
             </NavLink>
-            <NavLink
+            {/* <NavLink
               to="/blog"
               style={navLinkStyle}
               className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap"
             >
               Blog
-            </NavLink>
+            </NavLink> */}
+            {/* Resources Dropdown */}
+<div className="relative">
+  <a
+    onClick={() => setIsResourcesDropdownOpen(!isResourcesDropdownOpen)}
+    className="text-sm lg:text-xs xl:text-sm transition-colors whitespace-nowrap flex items-center"
+    style={
+      window.location.pathname === "/medical-exams" || 
+      window.location.pathname === "/blog" || 
+      window.location.pathname === "/ebooks" ||
+      window.location.pathname === "/newsletter" 
+        ? { color: "#FF7426", fontWeight: "600" }
+        : {}
+    }
+  >
+    Resources
+    <svg
+      className={`ml-1 h-4 w-4 transition-transform ${isResourcesDropdownOpen ? "rotate-180" : ""}`}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+    </svg>
+  </a>
+
+  <AnimatePresence>
+    {isResourcesDropdownOpen && (
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 10 }}
+        transition={{ duration: 0.2 }}
+        className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50"
+        onMouseLeave={() => {
+          if (window.innerWidth >= 1024) {
+            setIsResourcesDropdownOpen(false);
+          }
+        }}
+      >
+        {/* Close button for mobile */}
+        <button
+          onClick={() => setIsResourcesDropdownOpen(false)}
+          className="lg:hidden absolute top-2 right-2 text-gray-500 hover:text-[#FF7426] p-1 z-10"
+        >
+          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div className="py-2">
+
+          <NavLink
+            to="/medical-exams"
+            onClick={() => setIsResourcesDropdownOpen(false)}
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#FF7426] transition-colors"
+            style={({ isActive }) => ({
+              color: isActive ? "#FF7426" : "#374151",
+              fontWeight: isActive ? "600" : "400",
+              backgroundColor: isActive ? "#FFF5EF" : "transparent"
+            })}
+          >
+            Medical Exams
+          </NavLink>
+
+
+          <NavLink
+            to="/blog"
+            onClick={() => setIsResourcesDropdownOpen(false)}
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#FF7426] transition-colors"
+            style={({ isActive }) => ({
+              color: isActive ? "#FF7426" : "#374151",
+              fontWeight: isActive ? "600" : "400",
+              backgroundColor: isActive ? "#FFF5EF" : "transparent"
+            })}
+          >
+            Blog
+          </NavLink>
+          <NavLink
+            to="/ebooks"
+            onClick={() => setIsResourcesDropdownOpen(false)}
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#FF7426] transition-colors"
+            style={({ isActive }) => ({
+              color: isActive ? "#FF7426" : "#374151",
+              fontWeight: isActive ? "600" : "400",
+              backgroundColor: isActive ? "#FFF5EF" : "transparent"
+            })}
+          >
+            Ebooks
+          </NavLink>
+          
+          <NavLink
+            to="/newsletter"
+            onClick={() => setIsResourcesDropdownOpen(false)}
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#FF7426] transition-colors"
+            style={({ isActive }) => ({
+              color: isActive ? "#FF7426" : "#374151",
+              fontWeight: isActive ? "600" : "400",
+              backgroundColor: isActive ? "#FFF5EF" : "transparent"
+            })}
+          >
+            Newsletter
+          </NavLink>
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+</div>
             <NavLink
               to="/PCATExamPortal"
               style={navLinkStyle}
@@ -798,14 +905,87 @@ function Header() {
                     >
                       Upcoming Batches
                     </NavLink>
-                    <NavLink
-                      to="/blog"
-                      style={navLinkStyle}
-                      className="block px-4 py-3 text-base font-medium hover:bg-[#FFF5EF] rounded-lg transition-all"
-                      onClick={toggleDrawer}
-                    >
-                      Blog
-                    </NavLink>
+                    <div className="mb-4">
+  <button
+    onClick={() => setIsResourcesDropdownOpen(!isResourcesDropdownOpen)}
+    className="w-full flex justify-between items-center px-4 py-3 text-sm font-medium hover:bg-[#FFF5EF] rounded-lg transition-all"
+  >
+    <span>Resources</span>
+    <svg
+      className={`ml-2 h-5 w-5 transition-transform ${isResourcesDropdownOpen ? "rotate-180" : ""}`}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+
+  {/* Resources Dropdown Content */}
+  {isResourcesDropdownOpen && (
+    <div className="mt-2 pl-4 space-y-2">
+      <NavLink
+        to="/medical-exams"
+        onClick={() => {
+          toggleDrawer();
+          setIsResourcesDropdownOpen(false);
+        }}
+        className="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+        style={({ isActive }) => ({
+          color: isActive ? "#FF7426" : "#374151",
+          fontWeight: isActive ? "600" : "400",
+        })}
+      >
+        Medical Exams
+      </NavLink>
+
+      <NavLink
+        to="/blog"
+        onClick={() => {
+          toggleDrawer();
+          setIsResourcesDropdownOpen(false);
+        }}
+        className="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+        style={({ isActive }) => ({
+          color: isActive ? "#FF7426" : "#374151",
+          fontWeight: isActive ? "600" : "400",
+        })}
+      >
+        Blog
+      </NavLink>
+      
+      <NavLink
+        to="/ebooks"
+        onClick={() => {
+          toggleDrawer();
+          setIsResourcesDropdownOpen(false);
+        }}
+        className="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+        style={({ isActive }) => ({
+          color: isActive ? "#FF7426" : "#374151",
+          fontWeight: isActive ? "600" : "400",
+        })}
+      >
+        Ebooks
+      </NavLink>
+      
+      <NavLink
+        to="/newsletter"
+        onClick={() => {
+          toggleDrawer();
+          setIsResourcesDropdownOpen(false);
+        }}
+        className="block px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-md"
+        style={({ isActive }) => ({
+          color: isActive ? "#FF7426" : "#374151",
+          fontWeight: isActive ? "600" : "400",
+        })}
+      >
+        Newsletter
+      </NavLink>
+    </div>
+  )}
+</div>
 
                     <NavLink
                       to="/PCATExamPortal"
