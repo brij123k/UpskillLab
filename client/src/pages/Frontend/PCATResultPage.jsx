@@ -255,10 +255,10 @@ const PCATResultPage = () => {
                 Important Information
               </h4>
               <ul className="text-blue-700 text-sm list-disc list-inside space-y-1">
-                <li>This is your official PCAT exam result</li>
-                <li>Keep your Enroll Number safe for future reference</li>
-                <li>Scholarship eligibility will be communicated separately via email</li>
-                <li>Contact support if you have any questions about your results</li>
+                <li>This document contains your official PCAT exam results</li>
+                <li>Please keep your enrollment number secure for future reference.</li>
+                <li>Details regarding scholarship eligibility will be sent to you separately via email.</li>
+                <li>If you have any questions about your results, don't hesitate to contact our support team.</li>
               </ul>
             </div>
           </motion.div>

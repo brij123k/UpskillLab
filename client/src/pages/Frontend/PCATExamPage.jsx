@@ -588,18 +588,18 @@ const PCATExamPage = () => {
               <div className="bg-blue-50 p-4 rounded-lg mb-6 text-left">
                 <h4 className="font-medium text-blue-800 mb-2">What happens next?</h4>
                 <ul className="text-blue-700 text-sm list-disc list-inside space-y-1">
-                  <li>Your exam will be evaluated by our team</li>
-                  <li>Results will be sent to your email within 24 to 72 Hours</li>
-                  <li>You will receive a Enroll ID to check your results anytime</li>
-                  <li>If you qualify, you'll be eligible for PCAT Scholarships</li>
+                  <li>Our team will evaluate your exam.</li>
+                  <li>Your results will be sent to your email within 24 to 72 hours.</li>
+                  <li>You will receive an Enrollment ID, which you can use to access your results anytime.</li>
+                  <li>If you qualify, you will become eligible for PCAT Scholarships.</li>
                 </ul>
               </div>
               
               <button
-                onClick={() => navigate('/PCATExamPortal')}
+                onClick={() => navigate('/courselist')}
                 className="bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white py-2.5 px-6 rounded-lg hover:opacity-90 transition-all font-medium"
               >
-                Return to Exam Portal
+                Close button and redirect to courses
               </button>
             </motion.div>
           </motion.div>
