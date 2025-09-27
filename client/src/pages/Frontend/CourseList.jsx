@@ -814,11 +814,8 @@ const CourseList = () => {
                       window.scrollTo({ top: 0, behavior: "smooth" });
                     }}>
 
-                    <NavLink
-                      to={{
-                        pathname: `/${course.category.categoryName.toLowerCase()}/course/${course.courseCode}`,
-                      }}
-                      state={{ courseCode: course.courseCode }}
+                    <a
+                      href={`/${course.category.categoryName.toLowerCase()}/course/${course.courseCode}`}
                       className="w-full text-center text-[#4D2C5E] font-medium hover:underline flex items-center justify-center py-2 border border-[#4D2C5E]/30 rounded-lg hover:bg-[#4D2C5E]/5 transition-colors cursor-pointer"
                     >
                       View Details
@@ -836,7 +833,7 @@ const CourseList = () => {
                           d="M9 5l7 7-7 7"
                         />
                       </motion.svg>
-                    </NavLink>
+                    </a>
                   </button>
 
                   <motion.button
