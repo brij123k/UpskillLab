@@ -278,7 +278,7 @@ const LoginPage = () => {
                                         className="w-full text-[#4D2C5E] py-2 px-4 rounded-lg font-medium hover:underline transition-colors flex items-center justify-center gap-2"
                                         disabled={isLoading}
                                     >
-                                        <FaArrowLeft /> Back to email
+                                        <FaArrowLeft /> Change Email
                                     </button>
                                 </div>
                             </motion.div>

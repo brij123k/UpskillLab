@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiClock, FiCheckCircle, FiArrowLeft, FiArrowRight, FiSave, FiLogOut, FiAlertCircle } from 'react-icons/fi';
+import { FiClock, FiCheckCircle, FiArrowLeft, FiArrowRight, FiSave, FiAlertCircle, FiCamera, FiVideo } from 'react-icons/fi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -20,9 +20,11 @@ const PCATExamPage = () => {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [globalTimeLeft, setGlobalTimeLeft] = useState(0);
   const [userData, setUserData] = useState(null);
-  const [showExitConfirm, setShowExitConfirm] = useState(false);
+  const [tabSwitchCount, setTabSwitchCount] = useState(0);
+  const [isMonitoring, setIsMonitoring] = useState(false);
   
   const globalTimerRef = useRef(null);
+  const mediaStreamRef = useRef(null);
 
   // Check authentication on component mount
   useEffect(() => {
@@ -50,8 +52,6 @@ const PCATExamPage = () => {
       if (savedAnswers) {
         setAnswers(JSON.parse(savedAnswers));
       }
-      
-      // Load saved question index if any
       const savedIndex = localStorage.getItem(`pcatCurrentIndex_${examId}`);
       if (savedIndex) {
         setCurrentQuestionIndex(parseInt(savedIndex));
@@ -70,10 +70,67 @@ const PCATExamPage = () => {
     }
   }, [userData]);
 
+  // Request camera and microphone access
+  const requestMediaAccess = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: true
+      });
+      
+      mediaStreamRef.current = stream;
+      setIsMonitoring(true);
+      toast.success('Camera and microphone access granted');
+      
+      // Stop the stream after getting access (we just needed permission)
+      stream.getTracks().forEach(track => track.stop());
+      
+    } catch (error) {
+      console.error('Error accessing media devices:', error);
+      toast.warning('Camera/microphone access is required for exam monitoring');
+    }
+  };
+
+  // Monitor tab switches
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        // User switched tabs or minimized window
+        const newCount = tabSwitchCount + 1;
+        setTabSwitchCount(newCount);
+        
+        if (newCount === 1) {
+          toast.warning('Please do not switch tabs during the exam. This is your first warning.');
+        } else if (newCount === 2) {
+          toast.error('Second warning! Continued tab switching may result in exam termination.');
+        }
+        else if (newCount === 3) {
+          toast.error('Third warning! Continued tab switching may result in exam termination.');
+        }
+        else if (newCount === 4) {
+          toast.error('Last warning! Continued tab switching may result in exam termination.');
+        }
+        else if (newCount >= 5) {
+          toast.error('Multiple tab switches detected. Submitting exam automatically.');
+          handleAutoSubmit();
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, [tabSwitchCount]);
+
   // Fetch exam data and questions
   const fetchExamData = async () => {
     try {
       setIsLoading(true);
+      
+      // Request media access when exam starts
+      await requestMediaAccess();
       
       // Get exam details
       const endpoint = ApiConfig.getExamById(examId);
@@ -145,21 +202,57 @@ const PCATExamPage = () => {
     }
   };
 
-  // Handle answer selection
+  // Handle answer selection for objective questions (checkbox behavior but single selection)
   const handleAnswerChange = (questionId, type, value, optionId = null) => {
-    const newAnswers = {
-      ...answers,
-      [questionId]: {
-        type,
-        ...(type === 'OBJECTIVE' ? { selectedOptionId: optionId } : { answerText: value }),
-        maxMarks: questions.find(q => q._id === questionId)?.marks || 5
+    let newAnswer;
+    
+    if (type === 'OBJECTIVE') {
+      // For objective questions, toggle selection (checkbox behavior)
+      const currentAnswer = answers[questionId];
+      if (currentAnswer && currentAnswer.selectedOptionId === optionId) {
+        // If clicking the same option, deselect it
+        newAnswer = null;
+      } else {
+        // Select new option (only one option can be selected)
+        newAnswer = {
+          type,
+          selectedOptionId: optionId,
+          maxMarks: questions.find(q => q._id === questionId)?.marks || 5
+        };
       }
-    };
+    } else {
+      // For subjective questions, update text
+      newAnswer = {
+        type,
+        answerText: value,
+        maxMarks: questions.find(q => q._id === questionId)?.marks || 5
+      };
+    }
+    
+    const newAnswers = newAnswer 
+      ? { ...answers, [questionId]: newAnswer }
+      : { ...answers };
+    
+    // Remove the key if answer is null (deselected)
+    if (!newAnswer) {
+      delete newAnswers[questionId];
+    }
     
     setAnswers(newAnswers);
     
     // Save to localStorage
     localStorage.setItem(`pcatAnswers_${examId}`, JSON.stringify(newAnswers));
+  };
+
+  // Calculate attempted questions count
+  const getAttemptedCount = () => {
+    return Object.keys(answers).length;
+  };
+
+  // Calculate progress percentage based on attempted questions
+  const getProgressPercentage = () => {
+    if (questions.length === 0) return 0;
+    return (getAttemptedCount() / questions.length) * 100;
   };
 
   // Handle next question
@@ -236,6 +329,11 @@ const PCATExamPage = () => {
         clearInterval(globalTimerRef.current);
       }
       
+      // Stop media monitoring
+      if (mediaStreamRef.current) {
+        mediaStreamRef.current.getTracks().forEach(track => track.stop());
+      }
+      
       // Prepare answers (includes all questions, answered and unanswered)
       const submissionAnswers = prepareSubmissionAnswers();
       console.log(submissionAnswers)
@@ -244,7 +342,9 @@ const PCATExamPage = () => {
       // Submit to API
       await putDataHandler(endpoint, {
         answers: submissionAnswers,
-        status: 'submitted'
+        status: 'submitted',
+        tabSwitchCount: tabSwitchCount,
+        monitoringEnabled: isMonitoring
       }, true);
       
       // Clear localStorage
@@ -283,32 +383,14 @@ const PCATExamPage = () => {
     await submitExam();
   };
 
-  // Exit exam with confirmation
-  const handleExitExam = () => {
-    setShowExitConfirm(true);
-  };
-
-  // Confirm exit and save progress
-  const confirmExit = () => {
-    // Save current progress before exiting
-    localStorage.setItem(`pcatAnswers_${examId}`, JSON.stringify(answers));
-    localStorage.setItem(`pcatCurrentIndex_${examId}`, currentQuestionIndex.toString());
-    
-    setShowExitConfirm(false);
-    navigate('/PCATExamPortal');
-    toast.info('Your progress has been saved. You can resume later.');
-  };
-
-  // Cancel exit
-  const cancelExit = () => {
-    setShowExitConfirm(false);
-  };
-
-  // Clean up timer on unmount
+  // Clean up timer and media streams on unmount
   useEffect(() => {
     return () => {
       if (globalTimerRef.current) {
         clearInterval(globalTimerRef.current);
+      }
+      if (mediaStreamRef.current) {
+        mediaStreamRef.current.getTracks().forEach(track => track.stop());
       }
     };
   }, []);
@@ -322,8 +404,9 @@ const PCATExamPage = () => {
   }
 
   const currentQuestion = questions[currentQuestionIndex];
-  const answeredCount = Object.keys(answers).length;
+  const attemptedCount = getAttemptedCount();
   const totalQuestions = questions.length;
+  const progressPercentage = getProgressPercentage();
 
   return (
     <div className="min-h-screen bg-[#fdf8ee]">
@@ -337,11 +420,35 @@ const PCATExamPage = () => {
             </div>
             
             <div className="flex items-center gap-4">
+              {/* Monitoring Status */}
+              <div className={`py-2 px-4 rounded-lg flex items-center ${
+                isMonitoring ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+              }`}>
+                {isMonitoring ? (
+                  <>
+                    <FiCamera className="mr-2 h-5 w-5" />
+                    <span className="font-bold">Monitoring: Active</span>
+                  </>
+                ) : (
+                  <>
+                    <FiAlertCircle className="mr-2 h-5 w-5" />
+                    <span className="font-bold">Monitoring: Inactive</span>
+                  </>
+                )}
+              </div>
+              
+              {/* Tab Switch Counter */}
+              <div className="bg-yellow-100 text-yellow-800 py-2 px-4 rounded-lg flex items-center">
+                <FiAlertCircle className="mr-2 h-5 w-5" />
+                <span className="font-bold">Tab Switches: </span>
+                <span className="ml-1">{tabSwitchCount}/5</span>
+              </div>
+              
               {/* Answered counter */}
               <div className="bg-blue-100 text-blue-800 py-2 px-4 rounded-lg flex items-center">
                 <FiCheckCircle className="mr-2 h-5 w-5" />
-                <span className="font-bold">Answered: </span>
-                <span className="ml-1">{answeredCount}/{totalQuestions}</span>
+                <span className="font-bold">Attempted: </span>
+                <span className="ml-1">{attemptedCount}/{totalQuestions}</span>
               </div>
               
               {/* Global Timer */}
@@ -350,30 +457,22 @@ const PCATExamPage = () => {
                 <span className="font-bold">Time Left: </span>
                 <span className="ml-1">{formatTime(globalTimeLeft)}</span>
               </div>
-              
-              <button
-                onClick={handleExitExam}
-                className="bg-gray-100 text-gray-700 py-2 px-4 rounded-lg hover:bg-gray-200 transition-colors font-medium flex items-center"
-              >
-                <FiLogOut className="mr-2 h-5 w-5" />
-                Exit
-              </button>
             </div>
           </div>
         </div>
       </div>
       
-      {/* Progress Bar */}
+      {/* Progress Bar - Based on attempted questions */}
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="w-full bg-gray-200 rounded-full h-2.5">
           <div 
-            className="bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] h-2.5 rounded-full" 
-            style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
+            className="bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] h-2.5 rounded-full transition-all duration-300" 
+            style={{ width: `${progressPercentage}%` }}
           ></div>
         </div>
         <div className="flex justify-between text-sm text-gray-600 mt-1">
           <span>Question {currentQuestionIndex + 1} of {questions.length}</span>
-          <span>{Math.round(((currentQuestionIndex + 1) / questions.length) * 100)}% Complete</span>
+          <span>{Math.round(progressPercentage)}% Complete ({attemptedCount} attempted)</span>
         </div>
       </div>
       
@@ -410,7 +509,7 @@ const PCATExamPage = () => {
               </div>
             </div>
             
-            {/* Objective Question Options */}
+            {/* Objective Question Options - Checkbox style but single selection */}
             {currentQuestion.type === 'OBJECTIVE' && (
               <div className="space-y-3">
                 {currentQuestion.options.map((option, index) => (
@@ -429,19 +528,25 @@ const PCATExamPage = () => {
                     )}
                   >
                     <div className="flex items-center">
-                      <div className={`w-6 h-6 rounded-full border flex items-center justify-center mr-3 ${
+                      {/* Checkbox style indicator */}
+                      <div className={`w-6 h-6 rounded border flex items-center justify-center mr-3 ${
                         answers[currentQuestion._id]?.selectedOptionId === option._id
                           ? 'border-[#4D2C5E] bg-[#4D2C5E]'
-                          : 'border-gray-300'
+                          : 'border-gray-300 bg-white'
                       }`}>
                         {answers[currentQuestion._id]?.selectedOptionId === option._id && (
-                          <FiCheckCircle className="h-4 w-4 text-white" />
+                          <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" />
+                          </svg>
                         )}
                       </div>
                       <span className="text-gray-800">{option.text}</span>
                     </div>
                   </div>
                 ))}
+                {/* <div className="text-sm text-gray-500 mt-2">
+                  Click to select/deselect your answer. Only one option can be selected.
+                </div> */}
               </div>
             )}
             
@@ -515,50 +620,6 @@ const PCATExamPage = () => {
         )}
       </div>
       
-      {/* Exit Confirmation Modal */}
-      <AnimatePresence>
-        {showExitConfirm && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-          >
-            <motion.div
-              initial={{ scale: 0.95, y: 20, opacity: 0 }}
-              animate={{ scale: 1, y: 0, opacity: 1 }}
-              exit={{ scale: 0.95, y: 20, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 400 }}
-              className="bg-white rounded-xl shadow-xl w-full max-w-md p-6 border border-gray-100 text-center"
-            >
-              <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <FiAlertCircle className="h-8 w-8 text-yellow-600" />
-              </div>
-              
-              <h3 className="text-xl font-bold text-[#4D2C5E] mb-2">Exit Exam?</h3>
-              <p className="text-gray-600 mb-6">
-                Your progress will be saved. You can resume this exam later from where you left off.
-              </p>
-              
-              <div className="flex justify-center gap-4">
-                <button
-                  onClick={cancelExit}
-                  className="bg-gray-100 text-gray-700 py-2 px-6 rounded-lg hover:bg-gray-200 transition-colors font-medium"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={confirmExit}
-                  className="bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white py-2 px-6 rounded-lg hover:opacity-90 transition-all font-medium"
-                >
-                  Exit Exam
-                </button>
-              </div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      
       {/* Success Modal */}
       <AnimatePresence>
         {showSuccessModal && (
@@ -591,7 +652,7 @@ const PCATExamPage = () => {
                   <li>Our team will evaluate your exam.</li>
                   <li>Your results will be sent to your email within 24 to 72 hours.</li>
                   <li>You will receive an Enrollment ID, which you can use to access your results anytime.</li>
-                  <li>If you qualify, you will become eligible for PCAT Scholarships.</li>
+                  <li>If you qualify, you will become eligible for PCAT Scholarships.</li>
                 </ul>
               </div>
               
@@ -599,7 +660,7 @@ const PCATExamPage = () => {
                 onClick={() => navigate('/courselist')}
                 className="bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white py-2.5 px-6 rounded-lg hover:opacity-90 transition-all font-medium"
               >
-                Close button and redirect to courses
+                Close button and redirect to courses
               </button>
             </motion.div>
           </motion.div>

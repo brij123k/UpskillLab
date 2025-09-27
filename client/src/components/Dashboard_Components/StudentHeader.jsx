@@ -214,13 +214,13 @@ const StudentHeader = () => {
           </NavLink>
 
           <NavLink
-            to="/Student/Doubts"
+            to="/Student/recorded-videos"
             className={({ isActive }) => 
               `flex items-center ${isActive ? 'text-[#4D2C5E] font-semibold' : 'text-gray-700 hover:text-[#4D2C5E]'}`
             }
           >
-            <FiMessageSquare className="mr-1" />
-            Doubts
+            <FiVideo className="mr-1" />
+            Recorded Videos
           </NavLink>
         </div>
 
@@ -357,12 +357,12 @@ const StudentHeader = () => {
                   </NavLink>
                   
                   <NavLink
-                    to="/student/recorded-videos"
+                    to="/student/doubts"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                     onClick={() => setIsProfileDropdownOpen(false)}
                   >
-                    <FiVideo className="mr-2" />
-                    Recorded Videos
+                    <FiMessageSquare className="mr-2" />
+                    Doubts
                   </NavLink>
 
                   <NavLink
@@ -453,7 +453,7 @@ const StudentHeader = () => {
         <div className="lg:hidden fixed inset-0 z-40 bg-[#00000060] bg-opacity-50">
           <div className="bg-white w-4/5 float-right h-full overflow-y-auto">
             <div className="flex justify-between items-center p-4 border-b border-gray-200">
-              <img src="/images/student-logo.png" alt="Logo" className="h-8" />
+              <img src="/images/Logo.png" alt="Logo" className="h-8" />
               <button onClick={() => setIsMenuOpen(false)} className="text-gray-700">
                 <FiX className="h-6 w-6" />
               </button>
@@ -488,12 +488,13 @@ const StudentHeader = () => {
               </NavLink>
 
               <NavLink
-                to="/Student/Doubts"
+                to="/Student/recorded-videos"
                 className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <FiMessageSquare className="inline mr-3" />
-                Doubts
+                
+                <FiVideo className="inline mr-3" />
+                Recorded Videos
               </NavLink>
 
               <NavLink
@@ -524,12 +525,12 @@ const StudentHeader = () => {
               </NavLink>
 
               <NavLink
-                to="/student/recorded-videos"
+                to="/student/Doubts"
                 className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <FiVideo className="inline mr-3" />
-                Recorded Videos
+                <FiMessageSquare className="inline mr-3" />
+                Doubts
               </NavLink>
 
 
