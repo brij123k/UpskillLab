@@ -41,16 +41,18 @@ const PCATExamPortal = () => {
           const endpoint = ApiConfig.getExamStatus(ongoingResponse._id)
           const statsResponse = await getDataHandler(endpoint, null, null, true);
           setExamStats(statsResponse);
-        } else {
-          // If no ongoing exam, try to get upcoming exam
+        }
+      } catch (error) {
+        try {
           const upcomingResponse = await getDataHandler('getUpcommingExam');
           if (upcomingResponse && upcomingResponse._id) {
             setExamData(upcomingResponse);
           }
         }
-      } catch (error) {
-        console.error('Error fetching exam data:', error);
+        catch{
+console.error('Error fetching exam data:', error);
         toast.error('Failed to load exam information');
+        }
       } finally {
         setIsLoading(false);
       }
@@ -59,6 +61,29 @@ const PCATExamPortal = () => {
     fetchExamData();
   }, []);
 
+  // Add this function anywhere in your component, preferably with other helper functions
+const getTimeUntilStart = (startDate, startTime) => {
+  const now = new Date();
+  const [hours, minutes] = startTime.split(':');
+  const startDateTime = new Date(startDate);
+  startDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+  
+  const diffMs = startDateTime - now;
+  
+  if (diffMs <= 0) return 'Now';
+  
+  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const hoursRemaining = Math.floor((diffMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutesRemaining = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
+  
+  if (days > 0) {
+    return `${days}d ${hoursRemaining}h`;
+  } else if (hoursRemaining > 0) {
+    return `${hoursRemaining}h ${minutesRemaining}m`;
+  } else {
+    return `${minutesRemaining}m`;
+  }
+};
   // Handle registration form submission
   const handleRegistrationSubmit = async (e) => {
     e.preventDefault();
