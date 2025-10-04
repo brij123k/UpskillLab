@@ -5,7 +5,7 @@ const ApiConfig = {
   uploadFiles: `${url}/file`,
   // Auth
   // login: `${url}/auth/login`,
-  otpLogin: `${url}/auth/otp-login`,         // New endpoint for initiating OTP
+  otpLogin: `${url}/auth/otp-login`,         
   verifyOtp: `${url}/auth/otp/enter`, 
   getUserDetails: `${url}/auth/details`,
   refreshToken:`${url}/auth/refresh`,

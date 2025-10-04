@@ -304,8 +304,9 @@ const MedicalExamsPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Helmet>
         <title>Medical Exams | Upskillab - Professional Assessment Tests</title>
-        <meta name="description" content="Take professional medical exams and assessments to evaluate your knowledge and skills in healthcare fields." />
+        <meta name="description" content="est your medical knowledge with our comprehensive assessment exams. Designed for healthcare professionals and students to evaluate their expertise." />
         <meta name="keywords" content="medical exams, healthcare assessments, medical tests, professional exams" />
+        <link rel="canonical" href="https://upskillab.com/medical-exams" />
       </Helmet>
 
       {/* Hero Banner */}

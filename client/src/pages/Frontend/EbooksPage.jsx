@@ -282,6 +282,7 @@ const EbooksPage = () => {
         <title>Free eBooks | Upskillab - Download Educational Resources</title>
         <meta name="description" content="Download free educational eBooks from Upskillab. Enhance your skills with our collection of expert-curated resources." />
         <meta name="keywords" content="free ebooks, educational resources, online learning, Upskillab eBooks" />
+      <link rel="canonical" href="https://upskillab.com/ebooks" />
       </Helmet>
 
       {/* Header Section */}

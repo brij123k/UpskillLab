@@ -107,6 +107,7 @@ const EbookViewer = () => {
       <Helmet>
         <title>{ebook.title} | Upskillab eBook</title>
         <meta name="description" content={`Read "${ebook.title}" - Free educational eBook from Upskillab`} />
+      <link rel="canonical" href={`https://upskillab.com/ebooks/${ebook.slug}`} />
       </Helmet>
 
       {/* Simple Header */}

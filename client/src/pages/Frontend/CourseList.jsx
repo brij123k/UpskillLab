@@ -435,6 +435,7 @@ const CourseList = () => {
   useEffect(() => {
     if (location.state?.category) {
       const { categoryId, title } = location.state.category;
+      console.log(categoryId, title,"2",location.state.category)
       setFilters(prev => ({
         ...prev,
         category: [{ value: categoryId, label: title }]

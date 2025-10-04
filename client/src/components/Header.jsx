@@ -26,7 +26,10 @@ const [isResourcesDropdownOpen, setIsResourcesDropdownOpen] = useState(false);
   const [mousePosition, setMousePosition] = useState({ y: 0 });
   const [exitIntentTriggered, setExitIntentTriggered] = useState(false);
 
-
+const handleCategoryClick = (category) => {
+  console.log(category)
+  navigate(`/CourseList/`, { state: { category } });
+};
   useEffect(() => {
     const handleMouseMove = (e) => {
       setMousePosition({ y: e.clientY });
@@ -166,20 +169,6 @@ const [isResourcesDropdownOpen, setIsResourcesDropdownOpen] = useState(false);
     color: isActive ? "#FF7426" : "#374151",
     fontWeight: isActive ? "600" : "400",
   });
-  // const [announcements, setAnnouncements] = useState([
-  //   "🚀 New Python Bootcamp starting June 15th!",
-  //   "🎉 50% Scholarship for first 10 enrollments this week",
-  //   "⭐ Student of the Month: Rohan Sharma (Data Science)",
-  //   "📢 Upcoming Webinar: 'AI Career Paths' - May 25th, 5PM IST",
-  //   "🚀 New Python Bootcamp starting June 15th!",
-  //   "🎉 50% Scholarship for first 10 enrollments this week",
-  //   "⭐ Student of the Month: Rohan Sharma (Data Science)",
-  //   "📢 Upcoming Webinar: 'AI Career Paths' - May 25th, 5PM IST",
-  //   "🚀 New Python Bootcamp starting June 15th!",
-  //   "🎉 50% Scholarship for first 10 enrollments this week",
-  //   "⭐ Student of the Month: Rohan Sharma (Data Science)",
-  //   "📢 Upcoming Webinar: 'AI Career Paths' - May 25th, 5PM IST"
-  // ]);
 
   useEffect(() => {
     const announcementsHandler = async () => {
@@ -250,20 +239,307 @@ const [isResourcesDropdownOpen, setIsResourcesDropdownOpen] = useState(false);
         <div className="hidden lg:flex items-center">
           <div className="flex items-center space-x-6 xl:space-x-8 2xl:space-x-10">
             {/* Courses Dropdown */}
-            <div className="relative">
-              <a
-                onClick={toggleCoursesDropdown}
-                className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap flex items-center"
-                style={
-                  window.location.pathname === "/courses"
-                    ? { color: "#FF7426", fontWeight: "600" }
-                    : {}
-                }
+           <div className="relative">
+      <a
+        onClick={toggleCoursesDropdown}
+        className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap flex items-center cursor-pointer"
+        style={
+          window.location.pathname === "/courses"
+            ? { color: "#FF7426", fontWeight: "600" }
+            : {}
+        }
+      >
+        Courses
+        <svg
+          className={`ml-1 h-4 w-4 transition-transform ${
+            isCoursesDropdownOpen ? "rotate-180" : ""
+          }`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M19 9l-7 7-7-7"
+          />
+        </svg>
+      </a>
+
+      <AnimatePresence>
+        {isCoursesDropdownOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.2 }}
+            className="absolute -left-1/2 mt-2 w-screen max-w-[95vw] sm:max-w-[90vw] md:max-w-[85vw] lg:w-[900px] xl:w-[1000px] bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50"
+            onMouseLeave={() => {
+              if (window.innerWidth >= 1024) {
+                setIsCoursesDropdownOpen(false);
+              }
+            }}
+          >
+            {/* Close button for mobile */}
+            <button
+              onClick={() => setIsCoursesDropdownOpen(false)}
+              className="lg:hidden absolute top-4 right-4 text-gray-500 hover:text-[#FF7426] p-1 z-10 bg-white rounded-full shadow-sm"
+              aria-label="Close menu"
+            >
+              <svg
+                className="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                Courses
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+
+            <div className="max-h-[80vh] lg:max-h-[70vh] overflow-auto p-6">
+              {/* Group categories by their parent/main category */}
+              {(() => {
+                // Group categories by parent category
+                const groupedCategories = {};
+                
+                courseCategories
+                  .filter((category) => category.courses.length !== 0)
+                  .forEach((category) => {
+                    const parentCategory = category.parentCategory || 
+                      category.name.split(' - ')[0] || 
+                      category.name.split(' > ')[0] || 
+                      'Other';
+                    
+                    if (!groupedCategories[parentCategory]) {
+                      groupedCategories[parentCategory] = [];
+                    }
+                    groupedCategories[parentCategory].push(category);
+                  });
+
+                // Convert to array and split into two columns
+                const parentCategories = Object.entries(groupedCategories);
+                const midPoint = Math.ceil(parentCategories.length / 2);
+                const leftColumn = parentCategories.slice(0, midPoint);
+                const rightColumn = parentCategories.slice(midPoint);
+
+                return (
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  {/* Left Column */}
+  <div className="space-y-6">
+    {leftColumn.map(([parentName, categories]) => (
+      <div key={parentName} className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+        {/* Parent Category Header */}
+        <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
+          <h2 className="text-lg font-bold text-gray-900 flex items-center">
+            <span className="w-2 h-6 bg-gradient-to-b from-[#FF7426] to-orange-400 rounded-full mr-3"></span>
+            {parentName}
+          </h2>
+          <span className="text-xs bg-gradient-to-r from-[#FF7426] to-orange-400 text-white px-2 py-1 rounded-full font-medium">
+            {categories.reduce((total, cat) => total + cat.courses.length, 0)} courses
+          </span>
+        </div>
+
+        {/* Categories with Courses */}
+        <div className="space-y-4">
+          {categories.map((category) => (
+            <div key={category.id} className="group">
+              {/* Category Header */}
+              <NavLink 
+  to="/CourseList" 
+  state={{ 
+    category: { categoryId: category.id, title: category.name } 
+  }}
+
+                onClick={() => setIsCoursesDropdownOpen(false)}
+                className="block mb-2"
+              >
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-gray-800 group-hover:text-[#FF7426] transition-colors text-sm flex items-center">
+                    <svg className="w-4 h-4 mr-2 text-gray-400 group-hover:text-[#FF7426] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    {category.name.replace(`${parentName} - `, '').replace(`${parentName} > `, '')}
+                  </h3>
+                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                    {category.courses.length}
+                  </span>
+                </div>
+              </NavLink>
+
+              {/* Courses List */}
+              <div className="space-y-1.5 ml-6">
+                {category.courses.slice(0, 4).map((course) => (
+                  <NavLink
+                    key={course.id}
+                    to={{
+                      pathname: `/${category.name.toLowerCase()}/course/${course.courseCode}`,
+                    }}
+                    state={{ courseId: course.id, courseCode: course.courseCode }}
+                    onClick={() => setIsCoursesDropdownOpen(false)}
+                    className="flex items-center p-2 rounded-lg hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-25 transition-all group/course border border-transparent hover:border-orange-100"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm text-gray-700 group-hover/course:text-[#FF7426] transition-colors truncate font-medium">
+                        {course.name || course.title}
+                      </h4>
+                      {course.duration && (
+                        <div className="flex items-center mt-1">
+                          <svg className="w-3 h-3 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <p className="text-xs text-gray-500">{course.duration}</p>
+                        </div>
+                      )}
+                    </div>
+                    <svg className="w-4 h-4 text-gray-300 group-hover/course:text-[#FF7426] transition-colors flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </NavLink>
+                ))}
+                
+                {/* Show More Link */}
+                {category.courses.length > 4 && (
+                  <NavLink 
+  to="/CourseList" 
+  state={{ 
+    category: { categoryId: category.id, title: category.name } 
+  }}
+
+                    onClick={() => setIsCoursesDropdownOpen(false)}
+                    className="flex items-center text-xs text-[#FF7426] font-medium hover:underline mt-2 ml-2 group/more"
+                  >
+                    <span>+{category.courses.length - 4} more courses</span>
+                    <svg className="w-3 h-3 ml-1 group-hover/more:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </NavLink>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {/* Right Column */}
+  <div className="space-y-6">
+    {rightColumn.map(([parentName, categories]) => (
+      <div key={parentName} className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
+        {/* Parent Category Header */}
+        <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
+          <h2 className="text-lg font-bold text-gray-900 flex items-center">
+            <span className="w-2 h-6 bg-gradient-to-b from-[#FF7426] to-orange-400 rounded-full mr-3"></span>
+            {parentName}
+          </h2>
+          <span className="text-xs bg-gradient-to-b from-[#FF7426] to-orange-400 text-white px-2 py-1 rounded-full font-medium">
+            {categories.reduce((total, cat) => total + cat.courses.length, 0)} courses
+          </span>
+        </div>
+
+        {/* Categories with Courses */}
+        <div className="space-y-4">
+          {categories.map((category) => (
+            <div key={category.id} className="group">
+              {/* Category Header */}
+              <NavLink 
+  to="/CourseList" 
+  state={{ 
+    category: { categoryId: category.id, title: category.name } 
+  }}
+
+                onClick={() => setIsCoursesDropdownOpen(false)}
+                className="block mb-2"
+              >
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold text-gray-800 group-hover:text-[#FF7426] transition-colors text-sm flex items-center">
+                    <svg className="w-4 h-4 mr-2 text-gray-400 group-hover:text-[#FF7426] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                    {category.name.replace(`${parentName} - `, '').replace(`${parentName} > `, '')}
+                  </h3>
+                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                    {category.courses.length}s
+                  </span>
+                </div>
+              </NavLink>
+
+              {/* Courses List */}
+              <div className="space-y-1.5 ml-6">
+                {category.courses.slice(0, 4).map((course) => (
+                  <NavLink
+                    key={course.id}
+                    to={{
+                      pathname: `/${category.name.toLowerCase()}/course/${course.courseCode}`,
+                    }}
+                    state={{ courseId: course.id, courseCode: course.courseCode }}
+                    onClick={() => setIsCoursesDropdownOpen(false)}
+                    className="flex items-center p-2 rounded-lg hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-25 transition-all group/course border border-transparent hover:border-orange-100"
+                  >
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm text-gray-700 group-hover/course:text-[#FF7426] transition-colors truncate font-medium">
+                        {course.name || course.title}
+                      </h4>
+                      {course.duration && (
+                        <div className="flex items-center mt-1">
+                          <svg className="w-3 h-3 text-gray-400 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          <p className="text-xs text-gray-500">{course.duration}</p>
+                        </div>
+                      )}
+                    </div>
+                    <svg className="w-4 h-4 text-gray-300 group-hover/course:text-[#FF7426] transition-colors flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </NavLink>
+                ))}
+                
+                {/* Show More Link */}
+                {category.courses.length > 4 && (
+                  <NavLink 
+  to="/CourseList" 
+  state={{ 
+    category: { categoryId: category.id, title: category.name } 
+  }}
+
+                    onClick={() => setIsCoursesDropdownOpen(false)}
+                    className="flex items-center text-xs text-[#FF7426] font-medium hover:underline mt-2 ml-2 group/more"
+                  >
+                    <span>+{category.courses.length - 4} more courses</span>
+                    <svg className="w-3 h-3 ml-1 group-hover/more:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </NavLink>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+                );
+              })()}
+            </div>
+
+            {/* All Courses Link */}
+            <div className="border-t border-gray-200 bg-gray-50 p-4">
+              <NavLink
+                to="/courselist"
+                className="flex items-center justify-center text-[#FF7426] font-medium hover:underline text-sm sm:text-base"
+                onClick={() => setIsCoursesDropdownOpen(false)}
+              >
+                Browse All Courses
                 <svg
-                  className={`ml-1 h-4 w-4 transition-transform ${isCoursesDropdownOpen ? "rotate-180" : ""
-                    }`}
+                  className="ml-2 h-4 w-4"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -272,206 +548,15 @@ const [isResourcesDropdownOpen, setIsResourcesDropdownOpen] = useState(false);
                     strokeLinecap="round"
                     strokeLinejoin="round"
                     strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
+                    d="M9 5l7 7-7 7"
                   />
                 </svg>
-              </a>
-
-              <AnimatePresence>
-                {isCoursesDropdownOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 10 }}
-                    transition={{ duration: 0.2 }}
-                    className="absolute left-0 mt-2 w-full lg:w-[700px] bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50"
-                    onMouseLeave={() => {
-                      if (window.innerWidth >= 1024) { // Only auto-close on desktop
-                        setIsCoursesDropdownOpen(false);
-                      }
-                    }}
-                  >
-                    {/* Close button for mobile */}
-                    <button
-                      onClick={() => setIsCoursesDropdownOpen(false)}
-                      className="lg:hidden absolute top-4 right-4 text-gray-500 hover:text-[#FF7426] p-1 z-10"
-                    >
-                      <svg
-                        className="h-6 w-6"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M6 18L18 6M6 6l12 12"
-                        />
-                      </svg>
-                    </button>
-
-                    <div className="flex flex-col lg:flex-row h-full max-h-[80vh] lg:max-h-[70vh] overflow-auto">
-                      {/* Categories List */}
-                      <div className="w-full lg:w-1/3 border-b lg:border-b-0 lg:border-r border-gray-200 bg-gray-50">
-                        <div className="p-4 sticky top-0 bg-gray-50 z-10">
-                          <h3 className="text-lg font-semibold text-gray-800 mb-3">
-                            Categories
-                          </h3>
-                        </div>
-                        <ul className="space-y-1 px-4 pb-4">
-                          {courseCategories
-                            .filter((category) => category.courses.length !== 0)
-                            .map((category) => (
-                              <li key={category.id}>
-                                <button
-                                  onClick={() => handleCategorySelect(category)}
-                                  className={`w-full text-left px-3 py-3 rounded-md text-sm font-medium ${selectedCategory?.id === category.id
-                                    ? "bg-[#FF7426] text-white"
-                                    : "text-gray-700 hover:bg-gray-200"
-                                    }`}
-                                >
-                                  <div className="flex items-center">
-                                    <span className="truncate">
-                                      {category.name}
-                                    </span>
-                                    <span className="ml-auto text-xs bg-white text-gray-700 px-2 py-0.5 rounded-full">
-                                      {category.courses.length}
-                                    </span>
-                                  </div>
-                                </button>
-                              </li>
-                            ))}
-                        </ul>
-                      </div>
-
-                      {/* Courses List */}
-                      <div className="w-full lg:w-2/3 p-4">
-                        <div className="flex items-center justify-between mb-4">
-                          <h3 className="text-lg font-semibold text-gray-800">
-                            {selectedCategory
-                              ? selectedCategory.name + " Courses"
-                              : "Featured Courses"}
-                          </h3>
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 relative">
-                          {(selectedCategory ? selectedCategory.courses : AllCourses.slice(0, 4)).map((course) => (
-                            <NavLink
-                              key={course.id}
-                              to={{
-                                pathname: `/${(selectedCategory?.name || course.category).toLowerCase()}/course/${course.courseCode}`,
-                              }}
-                              state={{ courseId: course.id, courseCode: course.courseCode }}
-                              onClick={() => setIsCoursesDropdownOpen(false)}
-                              className="border border-gray-200 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer group relative"
-                              onMouseEnter={(e) => {
-                                if (window.innerWidth >= 1024) {
-                                  setHoveredCourse(course);
-                                  const rect = e.currentTarget.getBoundingClientRect();
-                                  setHoverPosition({
-                                    x: rect.left - rect.width / 2,
-                                    y: rect.top + rect.height,
-                                  });
-                                }
-                              }}
-                              onMouseLeave={() => {
-                                if (window.innerWidth >= 1024) {
-                                  setHoveredCourse(null);
-                                }
-                              }}
-                            >
-                              <div className="flex items-start">
-                                <img
-                                  src={course.image || course.imageUrl}
-                                  alt={course.name || course.title}
-                                  className="w-12 h-12 object-cover rounded-md mr-3 flex-shrink-0"
-                                />
-                                <div className="min-w-0">
-                                  <h4 className="font-medium text-gray-800 group-hover:text-[#FF7426] truncate">
-                                    {course.name || course.title}
-                                  </h4>
-                                  <p className="text-xs text-gray-500 lg:hidden mt-1">
-                                    {course.duration || "Flexible duration"}
-                                  </p>
-                                </div>
-                              </div>
-                            </NavLink>
-
-                          ))}
-                        </div>
-
-                        {/* Hover card - Desktop only */}
-                        <AnimatePresence>
-                          {hoveredCourse && window.innerWidth >= 1024 && (
-                            <motion.div
-                              initial={{ opacity: 0, scale: 0.9 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.9 }}
-                              transition={{ duration: 0.2 }}
-                              style={{
-                                position: "fixed",
-                                left: `${hoverPosition.x}px`,
-                                top: `${hoverPosition.y}px`,
-                                transform: "translate(-50%, -50%)",
-                                width: "300px",
-                                backgroundColor: "white",
-                                borderRadius: "12px",
-                                boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)",
-                                padding: "20px",
-                                zIndex: 100,
-                                pointerEvents: "none",
-                                display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                              }}
-                            >
-                              <img
-                                src={hoveredCourse.image || hoveredCourse.imageUrl}
-                                alt={hoveredCourse.name || hoveredCourse.title}
-                                className="w-full h-40 object-cover rounded-lg mb-3"
-                              />
-                              <h4 className="text-lg font-semibold text-center text-gray-800">
-                                {hoveredCourse.name || hoveredCourse.title}
-                              </h4>
-                              {/* {hoveredCourse.duration && (
-                  <p className="text-sm text-gray-600 mt-2">
-                    Duration: {hoveredCourse.duration} Days
-                  </p>
-                )} */}
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    </div>
-
-                    {/* All Courses Link */}
-                    <div className="border-t border-gray-200 bg-gray-50 p-3 sticky bottom-0">
-                      <NavLink
-                        to="/courselist"
-                        className="flex items-center justify-center text-[#FF7426] font-medium hover:underline"
-                        onClick={() => setIsCoursesDropdownOpen(false)}
-                      >
-                        View All Courses
-                        <svg
-                          className="ml-2 h-4 w-4"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M9 5l7 7-7 7"
-                          />
-                        </svg>
-                      </NavLink>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              </NavLink>
             </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
 
             <NavLink
               to="/success-stories"
@@ -487,14 +572,6 @@ const [isResourcesDropdownOpen, setIsResourcesDropdownOpen] = useState(false);
             >
               Upcoming Batches
             </NavLink>
-            {/* <NavLink
-              to="/blog"
-              style={navLinkStyle}
-              className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap"
-            >
-              Blog
-            </NavLink> */}
-            {/* Resources Dropdown */}
 <div className="relative">
   <a
     onClick={() => setIsResourcesDropdownOpen(!isResourcesDropdownOpen)}

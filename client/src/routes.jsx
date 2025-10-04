@@ -113,8 +113,7 @@ export const routes = [
   {exact: true, path:"/PCATExamPortal",layout: GuestLayout, component: PCATExamPortal},
   {exact: true, path:"/exam/:examId",layout: Index, component: PCATExamPage},
   {exact: true, path:"/PCAT/result",layout: Index, component: PCATResultPage},
-  {
-    exact: true, path: "/:category/course/:id", layout: GuestLayout, component: CourseDetailsPage},
+  {exact: true, path: "/:category/course/:id", layout: GuestLayout, component: CourseDetailsPage},
   { exact: true, path: "/register", layout: Index, component: Register},
   { exact: true, path: "/login", layout: Index, component: Login},
   { exact: true, path: "/forgetPassword", layout: Index, component: ForgotPasswordPage},

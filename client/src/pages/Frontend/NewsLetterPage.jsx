@@ -342,7 +342,8 @@ const NewsLetterPage = () => {
     <title>Upskillab Learning Newsletter - Technology, Psychology, Management & Professional Growth</title>
     <meta name="description" content="Subscribe to Upskillab's free newsletter for insights in technology, psychology, management, and professional development. Learn, grow, and stay ahead." />
     <meta name="keywords" content="newsletter, technology, psychology, management, professional growth, Upskillab, learning insights" />
-  </Helmet>
+  <link rel="canonical" href={`https://upskillab.com/newsletter`} />
+  \</Helmet>
 
   {/* Hero Section */}
  <section className="relative bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] py-12 sm:py-16 lg:py-20 xl:py-24 px-4 xs:px-6 sm:px-8 lg:px-12">

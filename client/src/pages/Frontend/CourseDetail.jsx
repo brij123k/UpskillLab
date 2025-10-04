@@ -676,7 +676,7 @@ const ProgramInfoWithEnroll = ({ course }) => {
                             <motion.h3
                                 className="text-4xl md:text-5xl font-bold text-[#4D2C5E] mb-4 relative inline-block"
                             >
-                                <span className="text-[rgb(255,116,38)]">Program</span> Details
+                                <span className="text-[rgb(255,116,38)]">{course.tags[course.tags.length-1]}</span> Details
                                 <motion.span
                                     initial={{ scaleX: 0 }}
                                     animate={useInView ? { scaleX: 1 } : {}}
@@ -1418,7 +1418,7 @@ const PricingSection = ({ course }) => {
                     >
                         <div>
                             <h2 className="text-3xl md:text-4xl font-bold text-[#4D2C5E] mb-4">
-                                Program Investment
+                                {course.tags[course.tags.length-1]} Investment
                             </h2>
                             <div className="w-20 h-1 bg-orange-500 rounded-full" />
                         </div>
@@ -1735,7 +1735,7 @@ const FAQSection = ({ course }) => {
                     />
 
                     <p className="text-lg text-[#4D2C5E]/80 max-w-2xl mx-auto">
-                        {course?.faqSubtitle || "Everything you need to know about the program."}
+                        {course?.faqSubtitle || `Everything you need to know about the ${course.tags[course.tags.length-1]}`}
                     </p>
                 </motion.div>
 

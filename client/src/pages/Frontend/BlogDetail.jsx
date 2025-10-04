@@ -290,7 +290,17 @@ const BlogDetailPage = () => {
       <TrainingBanner />
       <FeedbaackBanner />
           <Helmet>
-        <link rel="canonical" href="https://upskillab.com/blog" />
+              <title>{blog.title}</title>
+  <meta name="description" content="Explore articles, tips, and insights from Upskillab students to enhance your online learning experience." />
+  <meta name="keywords" content="Upskillab blog, student insights, online learning tips, education articles" />
+  <meta property="og:title" content="Upskillab Student Blog | Insights and Tips for Online Learners" />
+  <meta property="og:description" content="Read blog posts from Upskillab students sharing their experiences and advice on online learning." />
+  <meta property="og:url" content="https://upskillab.com/student-blog" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Upskillab Student Blog | Insights and Tips for Online Learners" />
+  <meta name="twitter:description" content="Gain valuable insights and tips from Upskillab's student community through our blog." />
+        <link rel="canonical" href={`https://upskillab.com/blog/${slug}`} />
       </Helmet>
     </div>
     

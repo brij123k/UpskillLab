@@ -136,6 +136,7 @@ const NewsDetailPage = () => {
       <Helmet>
         <title>{news.title} | Upskillab News</title>
         <meta name="description" content={news.description} />
+        <link rel="canonical" href={`https://upskillab.com/newsletter/${news.slug}`} />
         <meta property="og:title" content={news.title} />
         <meta property="og:description" content={news.description} />
         <meta property="og:image" content={news.thumbnail} />
@@ -148,7 +149,7 @@ const NewsDetailPage = () => {
         <div className="max-w-full mx-auto">
           <div className="flex items-center justify-between mb-4">
             <button
-              onClick={() => navigate('/news')}
+              onClick={() => navigate('/newsletter')}
               className="flex items-center text-white/80 hover:text-white transition-colors text-sm sm:text-base"
             >
               <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

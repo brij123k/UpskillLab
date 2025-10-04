@@ -202,47 +202,52 @@ const PCATExamPage = () => {
     }
   };
 
-  // Handle answer selection for objective questions (checkbox behavior but single selection)
-  const handleAnswerChange = (questionId, type, value, optionId = null) => {
-    let newAnswer;
-    
-    if (type === 'OBJECTIVE') {
-      // For objective questions, toggle selection (checkbox behavior)
-      const currentAnswer = answers[questionId];
-      if (currentAnswer && currentAnswer.selectedOptionId === optionId) {
-        // If clicking the same option, deselect it
-        newAnswer = null;
-      } else {
-        // Select new option (only one option can be selected)
-        newAnswer = {
-          type,
-          selectedOptionId: optionId,
-          maxMarks: questions.find(q => q._id === questionId)?.marks || 5
-        };
-      }
+// Handle answer selection for objective questions (checkbox behavior but single selection)
+const handleAnswerChange = (questionId, type, value, optionId = null) => {
+  let newAnswer;
+  
+  if (type === 'OBJECTIVE') {
+    // For objective questions, toggle selection (checkbox behavior)
+    const currentAnswer = answers[questionId];
+    if (currentAnswer && currentAnswer.selectedOptionId === optionId) {
+      // If clicking the same option, deselect it
+      newAnswer = null;
     } else {
-      // For subjective questions, update text
+      // Select new option (only one option can be selected)
+      newAnswer = {
+        type,
+        selectedOptionId: optionId,
+        maxMarks: questions.find(q => q._id === questionId)?.marks || 5
+      };
+    }
+  } else {
+    // For subjective questions, only create answer if there's text content
+    // Remove answer if text is empty or only whitespace
+    if (value.trim() === '') {
+      newAnswer = null;
+    } else {
       newAnswer = {
         type,
         answerText: value,
         maxMarks: questions.find(q => q._id === questionId)?.marks || 5
       };
     }
-    
-    const newAnswers = newAnswer 
-      ? { ...answers, [questionId]: newAnswer }
-      : { ...answers };
-    
-    // Remove the key if answer is null (deselected)
-    if (!newAnswer) {
-      delete newAnswers[questionId];
-    }
-    
-    setAnswers(newAnswers);
-    
-    // Save to localStorage
-    localStorage.setItem(`pcatAnswers_${examId}`, JSON.stringify(newAnswers));
-  };
+  }
+  
+  const newAnswers = newAnswer 
+    ? { ...answers, [questionId]: newAnswer }
+    : { ...answers };
+  
+  // Remove the key if answer is null (deselected or empty subjective)
+  if (!newAnswer) {
+    delete newAnswers[questionId];
+  }
+  
+  setAnswers(newAnswers);
+  
+  // Save to localStorage
+  localStorage.setItem(`pcatAnswers_${examId}`, JSON.stringify(newAnswers));
+};
 
   // Calculate attempted questions count
   const getAttemptedCount = () => {
@@ -660,7 +665,7 @@ const PCATExamPage = () => {
                 onClick={() => navigate('/courselist')}
                 className="bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white py-2.5 px-6 rounded-lg hover:opacity-90 transition-all font-medium"
               >
-                Close button and redirect to courses
+                Close
               </button>
             </motion.div>
           </motion.div>
