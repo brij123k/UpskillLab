@@ -291,7 +291,7 @@ const BlogDetailPage = () => {
       <FeedbaackBanner />
           <Helmet>
               <title>{blog.title}</title>
-  <meta name="description" content="Explore articles, tips, and insights from Upskillab students to enhance your online learning experience." />
+  <meta name="description" content={blog.des} />
   <meta name="keywords" content="Upskillab blog, student insights, online learning tips, education articles" />
   <meta property="og:title" content="Upskillab Student Blog | Insights and Tips for Online Learners" />
   <meta property="og:description" content="Read blog posts from Upskillab students sharing their experiences and advice on online learning." />
