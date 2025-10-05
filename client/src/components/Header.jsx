@@ -632,7 +632,7 @@ const handleCategoryClick = (category) => {
               backgroundColor: isActive ? "#FFF5EF" : "transparent"
             })}
           >
-            Medical Exams
+            Self Test
           </NavLink>
 
 
@@ -1013,7 +1013,7 @@ const handleCategoryClick = (category) => {
           fontWeight: isActive ? "600" : "400",
         })}
       >
-        Medical Exams
+        Self Test
       </NavLink>
 
       <NavLink

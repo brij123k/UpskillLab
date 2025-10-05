@@ -196,7 +196,7 @@ const MedicalExamsPage = () => {
 
   const navigate = useNavigate();
 
-  // Fetch medical exams
+  // Fetch Self Test
   useEffect(() => {
     const fetchExams = async () => {
       try {
@@ -209,7 +209,7 @@ const MedicalExamsPage = () => {
         }
       } catch (err) {
         setError(err.message);
-        toast.error('Failed to load medical exams');
+        toast.error('Failed to load Self Test');
       } finally {
         setLoading(false);
       }
@@ -303,9 +303,9 @@ const MedicalExamsPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Helmet>
-        <title>Medical Exams | Upskillab - Professional Assessment Tests</title>
+        <title>Self Test | Upskillab - Professional Assessment Tests</title>
         <meta name="description" content="est your medical knowledge with our comprehensive assessment exams. Designed for healthcare professionals and students to evaluate their expertise." />
-        <meta name="keywords" content="medical exams, healthcare assessments, medical tests, professional exams" />
+        <meta name="keywords" content="Self Test, healthcare assessments, medical tests, professional exams" />
         <link rel="canonical" href="https://upskillab.com/medical-exams" />
       </Helmet>
 
@@ -329,13 +329,13 @@ const MedicalExamsPage = () => {
           </motion.h1>
           
           <motion.p
-            className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto mb-8"
+            className="text-lg text-justify sm:text-center sm:text-xl text-white/90 max-w-3xl mx-auto mb-8"
             initial={{ y: 30 }}
             animate={{ y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            Test your medical knowledge with our comprehensive assessment exams. 
-            Designed for healthcare professionals and students to evaluate their expertise.
+            Our self-tests are designed to help you gain a deeper understanding of yourself. Are you more outgoing or introverted? Do you have narcissistic tendencies? Is perfectionism holding you back? Uncover the answers to these questions and many others with Upskillab.
+
           </motion.p>
 
           <motion.div
@@ -382,10 +382,10 @@ const MedicalExamsPage = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Available <span className="text-[#FF7426]">Exams</span>
+              Explore <span className="text-[#FF7426]">who you truly are!</span>
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Choose from our carefully curated medical exams to test your knowledge and skills in various healthcare domains.
+              Choose from our carefully curated Self Test to test your knowledge and skills in various healthcare domains.
             </p>
           </motion.div>
 
@@ -444,7 +444,7 @@ const MedicalExamsPage = () => {
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl sm:text-4xl font-bold mb-4">Ready to Test Your Knowledge?</h2>
           <p className="text-gray-300 text-lg mb-6">
-            Join thousands of healthcare professionals who have enhanced their skills through our medical exams.
+            Join thousands of healthcare professionals who have enhanced their skills through our Self Test.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
