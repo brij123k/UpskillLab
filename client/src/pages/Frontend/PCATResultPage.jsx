@@ -224,7 +224,7 @@ const PCATResultPage = () => {
                 <div className="text-center">
                   <div className="bg-white/10 p-3 rounded-lg backdrop-blur-sm">
                     <FiAward className="h-6 w-6 mx-auto mb-2" />
-                    <p className="text-2xl font-bold">{resultData.scholarship}</p>
+                    <p className="text-xl font-bold">{resultData.scholarship}</p>
                     <p className="text-xs opacity-80">scholarship</p>
                   </div>
                 </div>
