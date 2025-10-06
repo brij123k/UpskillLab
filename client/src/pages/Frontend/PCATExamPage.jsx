@@ -655,7 +655,7 @@ const handleAnswerChange = (questionId, type, value, optionId = null) => {
                 <h4 className="font-medium text-blue-800 mb-2">What happens next?</h4>
                 <ul className="text-blue-700 text-sm list-disc list-inside space-y-1">
                   <li>Our team will evaluate your exam.</li>
-                  <li>Your results will be sent to your email within 24 to 72 hours.</li>
+                  <li>Your results will be sent to your email within 24 to 48 hours.</li>
                   <li>You will receive an Enrollment ID, which you can use to access your results anytime.</li>
                   <li>If you qualify, you will become eligible for PCAT Scholarships.</li>
                 </ul>

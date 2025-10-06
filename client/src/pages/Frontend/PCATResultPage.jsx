@@ -25,7 +25,7 @@ const PCATResultPage = () => {
       setIsLoading(true);
       setError(null);
       
-      const endpoint = ApiConfig.getResultById(resultId);
+      const endpoint = ApiConfig.getResultById(resultId.toLowerCase());
       const response = await getDataHandler(endpoint, null, null, true);
       
       setResultData(response);
