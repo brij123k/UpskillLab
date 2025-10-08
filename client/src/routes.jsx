@@ -24,6 +24,7 @@ const ExamAttemptPage = lazy(() => import("./pages/Frontend/ExamAttemptPage"));
 
 const ContactUs = lazy(() => import("./pages/Frontend/ContactUs"));
 const CourseList = lazy(() => import("./pages/Frontend/CourseList"));
+const CategoryCourses = lazy(() => import("./pages/Frontend/CategoryCourses"));
 const Career = lazy(() => import("./pages/Frontend/Career"));
 const AboutSection = lazy(() => import("./pages/Frontend/AboutSection"));
 const Register = lazy(() => import("./pages/Auth/Register"));
@@ -105,6 +106,7 @@ export const routes = [
   { exact: true, path: "/medical-exams/:slug", layout: GuestLayout, component: ExamAttemptPage},
   { exact: true, path: "/contactus", layout: GuestLayout, component: ContactUs},
   { exact: true, path: "/courselist", layout: GuestLayout, component: CourseList},
+  { exact: true, path: "/category/:categoryName", layout: GuestLayout, component: CategoryCourses},
   { exact: true, path: "/career", layout: GuestLayout, component: Career},
   { exact: true, path: "/whyus", layout: GuestLayout, component: whyUpskillab},
   { exact: true, path: "/about", layout: GuestLayout, component: AboutSection},
@@ -117,7 +119,6 @@ export const routes = [
   { exact: true, path: "/register", layout: Index, component: Register},
   { exact: true, path: "/login", layout: Index, component: Login},
   { exact: true, path: "/forgetPassword", layout: Index, component: ForgotPasswordPage},
-  // { exact: true, path: "/ResetPassword/:token", layout: Index, component: ResetPasswordPage},
   { exact: true, path: "/ResetPassword", layout: Index, component: ResetPasswordPage},
   { exact: true, path: "/VerifyOTP", layout: Index, component: VerifyOTPPage},
   { exact: true, path: "/TermsOfService", layout: Index, component: TermsOfService},

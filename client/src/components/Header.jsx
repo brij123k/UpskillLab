@@ -334,40 +334,27 @@ const handleCategoryClick = (category) => {
   <div className="space-y-6">
     {leftColumn.map(([parentName, categories]) => (
       <div key={parentName} className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
-        {/* Parent Category Header */}
-        <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
-          <h2 className="text-lg font-bold text-gray-900 flex items-center">
-            <span className="w-2 h-6 bg-gradient-to-b from-[#FF7426] to-orange-400 rounded-full mr-3"></span>
-            {parentName}
-          </h2>
-          <span className="text-xs bg-gradient-to-r from-[#FF7426] to-orange-400 text-white px-2 py-1 rounded-full font-medium">
-            {categories.reduce((total, cat) => total + cat.courses.length, 0)} courses
-          </span>
-        </div>
-
         {/* Categories with Courses */}
         <div className="space-y-4">
           {categories.map((category) => (
             <div key={category.id} className="group">
               {/* Category Header */}
-              <NavLink 
-  to="/CourseList" 
-  state={{ 
-    category: { categoryId: category.id, title: category.name } 
-  }}
+                                <NavLink 
+  to={`/category/${category.name.toLowerCase()}`} 
 
                 onClick={() => setIsCoursesDropdownOpen(false)}
                 className="block mb-2"
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-gray-800 group-hover:text-[#FF7426] transition-colors text-sm flex items-center">
+                  <h3 className="text-lg font-bold text-gray-900 flex items-center">
+                   <span className="w-2 h-6 bg-gradient-to-b from-[#FF7426] to-orange-400 rounded-full mr-3"></span>
                     <svg className="w-4 h-4 mr-2 text-gray-400 group-hover:text-[#FF7426] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                     {category.name.replace(`${parentName} - `, '').replace(`${parentName} > `, '')}
                   </h3>
-                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-                    {category.courses.length}
+                  <span className="text-xs bg-gradient-to-r from-[#FF7426] to-orange-400 text-white px-2 py-1 rounded-full font-medium">
+                    {category.courses.length} courses
                   </span>
                 </div>
               </NavLink>
@@ -405,11 +392,8 @@ const handleCategoryClick = (category) => {
                 
                 {/* Show More Link */}
                 {category.courses.length > 4 && (
-                  <NavLink 
-  to="/CourseList" 
-  state={{ 
-    category: { categoryId: category.id, title: category.name } 
-  }}
+                                    <NavLink 
+  to={`/category/${category.name.toLowerCase()}`} 
 
                     onClick={() => setIsCoursesDropdownOpen(false)}
                     className="flex items-center text-xs text-[#FF7426] font-medium hover:underline mt-2 ml-2 group/more"
@@ -433,7 +417,7 @@ const handleCategoryClick = (category) => {
     {rightColumn.map(([parentName, categories]) => (
       <div key={parentName} className="bg-gradient-to-br from-gray-50 to-white rounded-xl p-5 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-300">
         {/* Parent Category Header */}
-        <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
+        {/* <div className="flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
           <h2 className="text-lg font-bold text-gray-900 flex items-center">
             <span className="w-2 h-6 bg-gradient-to-b from-[#FF7426] to-orange-400 rounded-full mr-3"></span>
             {parentName}
@@ -441,31 +425,29 @@ const handleCategoryClick = (category) => {
           <span className="text-xs bg-gradient-to-b from-[#FF7426] to-orange-400 text-white px-2 py-1 rounded-full font-medium">
             {categories.reduce((total, cat) => total + cat.courses.length, 0)} courses
           </span>
-        </div>
+        </div> */}
 
         {/* Categories with Courses */}
         <div className="space-y-4">
           {categories.map((category) => (
             <div key={category.id} className="group">
               {/* Category Header */}
-              <NavLink 
-  to="/CourseList" 
-  state={{ 
-    category: { categoryId: category.id, title: category.name } 
-  }}
+                                 <NavLink 
+  to={`/category/${category.name.toLowerCase()}`} 
 
                 onClick={() => setIsCoursesDropdownOpen(false)}
                 className="block mb-2"
               >
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-gray-800 group-hover:text-[#FF7426] transition-colors text-sm flex items-center">
+                  <h3 className="text-lg font-bold text-gray-900 flex items-center">
+                   <span className="w-2 h-6 bg-gradient-to-b from-[#FF7426] to-orange-400 rounded-full mr-3"></span>
                     <svg className="w-4 h-4 mr-2 text-gray-400 group-hover:text-[#FF7426] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                     </svg>
                     {category.name.replace(`${parentName} - `, '').replace(`${parentName} > `, '')}
                   </h3>
-                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
-                    {category.courses.length}s
+                  <span className="text-xs bg-gradient-to-r from-[#FF7426] to-orange-400 text-white px-2 py-1 rounded-full font-medium">
+                    {category.courses.length} courses
                   </span>
                 </div>
               </NavLink>
@@ -504,10 +486,7 @@ const handleCategoryClick = (category) => {
                 {/* Show More Link */}
                 {category.courses.length > 4 && (
                   <NavLink 
-  to="/CourseList" 
-  state={{ 
-    category: { categoryId: category.id, title: category.name } 
-  }}
+  to={`/category/${category.name.toLowerCase()}`} 
 
                     onClick={() => setIsCoursesDropdownOpen(false)}
                     className="flex items-center text-xs text-[#FF7426] font-medium hover:underline mt-2 ml-2 group/more"

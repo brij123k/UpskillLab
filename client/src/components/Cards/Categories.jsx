@@ -19,7 +19,7 @@ const CategoryCarousel = () => {
 const navigate = useNavigate();
 const handleCategoryClick = (category) => {
   console.log(category)
-  navigate(`/CourseList/`, { state: { category } });
+  navigate(`/category/${category.title.toLowerCase()}`);
 };
 const colorPalette = ['#FF7426', '#4D2C5E'];
 const [categories, setCategories] = useState([]);
