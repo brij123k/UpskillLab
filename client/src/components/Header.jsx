@@ -556,7 +556,7 @@ const handleCategoryClick = (category) => {
     onClick={() => setIsResourcesDropdownOpen(!isResourcesDropdownOpen)}
     className="text-sm lg:text-xs xl:text-sm transition-colors whitespace-nowrap flex items-center"
     style={
-      window.location.pathname === "/medical-exams" || 
+      window.location.pathname === "/self-test" || 
       window.location.pathname === "/blog" || 
       window.location.pathname === "/ebooks" ||
       window.location.pathname === "/newsletter" 
@@ -602,7 +602,7 @@ const handleCategoryClick = (category) => {
         <div className="py-2">
 
           <NavLink
-            to="/medical-exams"
+            to="/self-test"
             onClick={() => setIsResourcesDropdownOpen(false)}
             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-[#FF7426] transition-colors"
             style={({ isActive }) => ({
@@ -981,7 +981,7 @@ const handleCategoryClick = (category) => {
   {isResourcesDropdownOpen && (
     <div className="mt-2 pl-4 space-y-2">
       <NavLink
-        to="/medical-exams"
+        to="/self-test"
         onClick={() => {
           toggleDrawer();
           setIsResourcesDropdownOpen(false);

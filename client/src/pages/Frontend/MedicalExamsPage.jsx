@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { getDataHandler, postDataHandler } from '../../config/services';
 
-// Move RegistrationModal component outside to prevent re-renders
 const RegistrationModal = React.memo(({ 
   showRegistrationModal, 
   selectedExam, 
@@ -272,7 +271,7 @@ const MedicalExamsPage = () => {
         
         // Redirect to exam page after short delay
         setTimeout(() => {
-          navigate(`/medical-exams/${examSlug}`, { 
+          navigate(`/self-test/${examSlug}`, { 
             state: { 
               exam: selectedExam,
               attempt: attemptData
@@ -304,9 +303,9 @@ const MedicalExamsPage = () => {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <Helmet>
         <title>Self Test | Upskillab - Professional Assessment Tests</title>
-        <meta name="description" content="est your medical knowledge with our comprehensive assessment exams. Designed for healthcare professionals and students to evaluate their expertise." />
+        <meta name="description" content="Test your self knowledge with our comprehensive assessment exams. Designed for healthcare professionals and students to evaluate their expertise." />
         <meta name="keywords" content="Self Test, healthcare assessments, medical tests, professional exams" />
-        <link rel="canonical" href="https://upskillab.com/medical-exams" />
+        <link rel="canonical" href="https://upskillab.com/self-test" />
       </Helmet>
 
       {/* Hero Banner */}
@@ -325,7 +324,7 @@ const MedicalExamsPage = () => {
             animate={{ y: 0 }}
             transition={{ duration: 0.6 }}
           >
-            Medical <span className="text-[#FF7426]">Exams</span>
+            Self <span className="text-[#FF7426]">Test</span>
           </motion.h1>
           
           <motion.p

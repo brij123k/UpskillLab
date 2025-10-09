@@ -31,7 +31,7 @@ const ExamAttemptPage = () => {
         
         if (!attemptData) {
           toast.error('No exam attempt found. Please register first.');
-          navigate('/medical-exams');
+          navigate('/self-test');
           return;
         }
         setAttempt(attemptData);
@@ -44,7 +44,7 @@ const ExamAttemptPage = () => {
       } catch (error) {
         console.error('Error loading exam data:', error);
         toast.error('Failed to load exam data');
-        navigate('/medical-exams');
+        navigate('/self-test');
       }
     };
 
@@ -315,7 +315,7 @@ const ExamAttemptPage = () => {
       transition={{ duration: 0.6, delay: 0.6 }}
     >
       <motion.button
-        onClick={() => navigate('/medical-exams')}
+        onClick={() => navigate('/self-test')}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="group relative overflow-hidden bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] text-white px-8 py-4 rounded-2xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
