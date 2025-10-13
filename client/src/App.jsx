@@ -1,4 +1,4 @@
-import React, { Suspense, Fragment } from "react";
+import React, { Suspense, Fragment, useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PageLoading from "./components/PageLoading";
 import { routes } from "./routes";
@@ -12,10 +12,18 @@ import ScrollToTop from "./components/ScrollToTop";
 const queryClient = new QueryClient();
 
 const App = () => {
+  const [showLoader, setShowLoader] = useState(true);
+
+  // 👇 Add this effect to keep loader for at least 25 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => setShowLoader(false), 25000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-      <ScrollToTop/>
+        <ScrollToTop />
         <AuthProvider>
           <ToastContainer
             position="top-right"
@@ -29,10 +37,14 @@ const App = () => {
             pauseOnHover
             theme="colored"
           />
-        
-          <Suspense fallback={<PageLoading />}>
-            <RenderRoutes data={routes} />
-          </Suspense>
+
+          {showLoader ? (
+            <PageLoading />
+          ) : (
+            <Suspense fallback={<PageLoading />}>
+              <RenderRoutes data={routes} />
+            </Suspense>
+          )}
         </AuthProvider>
       </Router>
     </QueryClientProvider>
@@ -43,32 +55,28 @@ export default App;
 
 function RenderRoutes({ data }) {
   return (
-    <div>
-      <Routes>
-      {/* <ScrollToTop /> */}
-        {data.map((route, i) => {
-          const Component = route.component;
-          const Layout = route.layout || Fragment;
-          const RouteElement = (
-            <Route
-              key={i}
-              path={route.path}
-              element={
-                <Layout>
-                  {route.protected ? (
-                    <AuthGuard>
-                      <Component />
-                    </AuthGuard>
-                  ) : (
+    <Routes>
+      {data.map((route, i) => {
+        const Component = route.component;
+        const Layout = route.layout || Fragment;
+        return (
+          <Route
+            key={i}
+            path={route.path}
+            element={
+              <Layout>
+                {route.protected ? (
+                  <AuthGuard>
                     <Component />
-                  )}
-                </Layout>
-              }
-            />
-          );
-          return RouteElement;
-        })}
-      </Routes>
-    </div>
+                  </AuthGuard>
+                ) : (
+                  <Component />
+                )}
+              </Layout>
+            }
+          />
+        );
+      })}
+    </Routes>
   );
 }
