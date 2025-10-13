@@ -16,7 +16,7 @@ const App = () => {
 
   // 👇 Add this effect to keep loader for at least 25 seconds
   useEffect(() => {
-    const timer = setTimeout(() => setShowLoader(false), 25000);
+    const timer = setTimeout(() => setShowLoader(false), 15000);
     return () => clearTimeout(timer);
   }, []);
 
