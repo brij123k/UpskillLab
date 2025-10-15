@@ -19,8 +19,8 @@ const StudentRecordedVideos = () => {
       const response = await getDataHandlerWithToken('recordedVideos');
       const Profile = await getDataHandlerWithToken('studentProfile');
       if (response && response.videos) {
-        // setVideos(response.videos);
-        setVideos([]);
+        setVideos(response.videos);
+        // setVideos([]);
 
         // Extract unique courses from videos
         const uniqueCourses = response.videos.reduce((acc, video) => {
