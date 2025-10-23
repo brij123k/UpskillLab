@@ -61,26 +61,31 @@ const Chatbot = () => {
   };
 
   // Send data to backend
-  const sendQueryToBackend = async (data) => {
-    setIsSubmitting(true);
-    try {
-      const queryData = {
-        name: data.name,
-        email: data.email,
-        phone: data.phone,
-        courseName: data.courseName || data.question || 'General Inquiry',
-        message: data.question ? `Question: ${data.question}` : `Interested in: ${data.courseName}`
-      };
-      
-      const response = await postDataHandler('postQuery', queryData);
-      return response ? true : false;
-    } catch (error) {
-      console.error('Error sending query:', error);
-      return false;
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+// Send data to backend - ADD DEBUG LOG
+const sendQueryToBackend = async (data) => {
+  console.log('Form data being sent to backend:', data);
+  console.log('Phone number value:', data.phone);
+  
+  setIsSubmitting(true);
+  try {
+    const queryData = {
+      name: data.name,
+      email: data.email,
+      phone: data.phone,
+      courseName: data.question ? `Question: ${data.question}` : `Interested in: ${data.courseName}`
+    };
+
+    console.log('Final query data:', queryData);
+    
+    const response = await postDataHandler('postQuery', queryData);
+    return response ? true : false;
+  } catch (error) {
+    console.error('Error sending query:', error);
+    return false;
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   // Initialize chat
   useEffect(() => {
@@ -121,42 +126,47 @@ const Chatbot = () => {
   };
 
   // Handle welcome step choices
-  const handleWelcomeChoice = (choice) => {
-    addUserMessage(choice);
-    
-    setTimeout(() => {
-      switch(choice) {
-        case 'Explore Courses':
-          fetchCourses();
-          addBotMessage("Please pick an area you're interested in:", []);
-          setCurrentStep('loadingCourses');
-          break;
-        
-        case 'Talk to a Counsellor':
-          addBotMessage("I'd be happy to connect you with a counsellor! Please share your details:", []);
-          setCurrentStep('leadCapture');
-          setFormData(prev => ({ ...prev, courseName: 'Counsellor Consultation' }));
-          break;
-        
-        case 'Ask a Question':
-          addBotMessage("Sure, type your question below or choose a topic:", 
-            ['Fees', 'Placement Support', 'Certification', 'Mode of Learning', 'Other Question']);
-          setCurrentStep('faq');
-          break;
-        
-        default:
-          handleFreeTextInput(choice);
-      }
-    }, 500);
-  };
+const handleWelcomeChoice = (choice) => {
+  addUserMessage(choice);
+
+  // Remove buttons from welcome message
+  setMessages(prev => prev.map(msg => 
+    msg.id === 1 ? { ...msg, buttons: [] } : msg
+  ));
+
+  setTimeout(() => {
+    switch (choice) {
+      case 'Explore Courses':
+        fetchCourses();
+        addBotMessage("Please pick an area you're interested in:", []);
+        setCurrentStep('loadingCourses');
+        break;
+
+      case 'Talk to a Counsellor':
+        addBotMessage("I'd be happy to connect you with a counsellor! Please share your details:", []);
+        setCurrentStep('leadCapture');
+        setFormData(prev => ({ ...prev, courseName: 'Counsellor Consultation' }));
+        break;
+
+      case 'Ask a Question':
+        addBotMessage("Sure, type your question below or choose a topic:",
+          ['Fees', 'Placement Support', 'Certification', 'Mode of Learning', 'Other Question']);
+        setCurrentStep('faq');
+        break;
+
+      default:
+        handleFreeTextInput(choice);
+    }
+  }, 500);
+};
 
   // Handle course selection
   const handleCourseSelection = (courseTitle) => {
     addUserMessage(courseTitle);
     setFormData(prev => ({ ...prev, courseName: courseTitle }));
-    
+
     setTimeout(() => {
-      addBotMessage(`Great choice! 🎉 Drop your Name, Email and Phone below and we'll send you the brochure + connect you to a counsellor instantly.`, []);
+      addBotMessage(`Great choice! 🎉 Drop your Name, Email and Phone below and we'll connect you to a counsellor instantly.`, []);
       setCurrentStep('leadCapture');
     }, 500);
   };
@@ -165,15 +175,15 @@ const Chatbot = () => {
   const handleFAQSelection = (faqType, userText = '') => {
     const question = userText || faqType;
     addUserMessage(question);
-    
+
     setTimeout(() => {
       let response = faqResponses.other;
-      
+
       if (faqType.includes('Fee') || faqType.includes('Price')) response = faqResponses.fees;
       else if (faqType.includes('Placement') || faqType.includes('Job')) response = faqResponses.placement;
       else if (faqType.includes('Certif')) response = faqResponses.certification;
       else if (faqType.includes('Learn') || faqType.includes('Mode')) response = faqResponses.learning;
-      
+
       addBotMessage(`${response} Would you like me to send full details? Please share your name, email and phone.`, []);
       setCurrentStep('leadCapture');
       setFormData(prev => ({ ...prev, question }));
@@ -183,10 +193,10 @@ const Chatbot = () => {
   // Handle free text input
   const handleFreeTextInput = (text) => {
     addUserMessage(text);
-    
+
     setTimeout(() => {
       // Check if it's a course-related query
-      const matchedCourse = courses.find(course => 
+      const matchedCourse = courses.find(course =>
         text.toLowerCase().includes(course.title.toLowerCase()) ||
         course.title.toLowerCase().includes(text.toLowerCase())
       );
@@ -204,37 +214,46 @@ const Chatbot = () => {
   const handleFormFieldSubmit = () => {
     if (!userInput.trim()) return;
 
-    addUserMessage(userInput);
+    const currentInput = userInput; // Store the value before clearing
+    addUserMessage(currentInput);
 
     // Update form data based on active field
     setFormData(prev => ({
       ...prev,
-      [activeField]: userInput
+      [activeField]: currentInput
     }));
 
-    setUserInput('');
+    setUserInput(''); // Clear input after storing the value
 
     setTimeout(() => {
-      // Move to next field or submit
+      // Move to next field or submit using the stored value
       if (activeField === 'name') {
         setActiveField('email');
         addBotMessage("Great! Now please share your email address:", []);
       } else if (activeField === 'email') {
-        // Validate email
+        // Validate email using the stored value
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(userInput)) {
+        if (!emailRegex.test(currentInput)) {
           addBotMessage("Please enter a valid email address (e.g., name@example.com):", []);
+          setActiveField('email'); // Stay on email field
           return;
         }
         setActiveField('phone');
         addBotMessage("Thank you! Now please share your phone number:", []);
       } else if (activeField === 'phone') {
-        // Validate phone
+        // Validate phone using the stored value
         const phoneRegex = /^[\+]?[0-9]{10,15}$/;
-        if (!phoneRegex.test(userInput.replace(/\s/g, ''))) {
+        if (!phoneRegex.test(currentInput.replace(/\s/g, ''))) {
           addBotMessage("Please enter a valid phone number (10-15 digits):", []);
+          setActiveField('phone'); // Stay on phone field
           return;
         }
+
+        // Update form data with the validated phone number
+        setFormData(prev => ({
+          ...prev,
+          phone: currentInput
+        }));
 
         // All fields filled, submit the form
         handleFormSubmit();
@@ -243,28 +262,36 @@ const Chatbot = () => {
   };
 
   // Handle final form submission
-  const handleFormSubmit = async () => {
-    setIsSubmitting(true);
+// Handle final form submission - FIXED VERSION
+const handleFormSubmit = async () => {
+  setIsSubmitting(true);
+
+  // Use a callback to get the latest formData state
+  setFormData(prevFormData => {
+    const submitData = async () => {
+      const success = await sendQueryToBackend(prevFormData);
+      
+      setTimeout(() => {
+        if (success) {
+          addBotMessage(`✅ Thanks ${prevFormData.name}! We'll reach you`);
+          setCurrentStep('confirmation');
+        } else {
+          addBotMessage("Thank you for your information! There was a temporary issue, but our team will still reach out to you shortly.", []);
+          setCurrentStep('completed');
+        }
+        setIsSubmitting(false);
+      }, 1000);
+    };
     
-    const success = await sendQueryToBackend(formData);
-    
-    setTimeout(() => {
-      if (success) {
-        addBotMessage(`✅ Thanks ${formData.name}! Brochure sent. Want to:`, 
-          ['Book a Free Demo', 'Talk to a Counsellor Now']);
-        setCurrentStep('confirmation');
-      } else {
-        addBotMessage("Thank you for your information! There was a temporary issue, but our team will still reach out to you shortly.", []);
-        setCurrentStep('completed');
-      }
-      setIsSubmitting(false);
-    }, 1000);
-  };
+    submitData();
+    return prevFormData; // Return unchanged state
+  });
+};
 
   // Handle confirmation step choices
   const handleConfirmationChoice = (choice) => {
     addUserMessage(choice);
-    
+
     setTimeout(() => {
       addBotMessage("Perfect! Our team will contact you shortly to arrange this. Thank you for choosing Upskillab! 🎉", []);
       setCurrentStep('completed');
@@ -275,23 +302,23 @@ const Chatbot = () => {
   const handleSendMessage = () => {
     if (!userInput.trim()) return;
 
-    switch(currentStep) {
+    switch (currentStep) {
       case 'welcome':
         handleWelcomeChoice(userInput);
         break;
-      
+
       case 'faq':
         handleFAQSelection(userInput);
         break;
-      
+
       case 'leadCapture':
         handleFormFieldSubmit();
         break;
-      
+
       case 'confirmation':
         handleConfirmationChoice(userInput);
         break;
-      
+
       default:
         handleFreeTextInput(userInput);
     }
@@ -300,12 +327,36 @@ const Chatbot = () => {
   };
 
   // Handle button clicks
-  const handleButtonClick = (buttonText) => {
-    setUserInput(buttonText);
-    setTimeout(() => {
-      handleSendMessage();
-    }, 100);
-  };
+const handleButtonClick = (buttonText) => {
+  console.log(buttonText);
+
+  // Remove buttons from the current message
+  setMessages(prev => prev.map(msg => 
+    msg.buttons ? { ...msg, buttons: [] } : msg
+  ));
+
+  // For button clicks, directly process without using userInput state
+  switch (currentStep) {
+    case 'welcome':
+      handleWelcomeChoice(buttonText);
+      break;
+
+    case 'faq':
+      handleFAQSelection(buttonText);
+      break;
+
+    case 'selectCourse':
+      handleCourseSelection(buttonText);
+      break;
+
+    case 'confirmation':
+      handleConfirmationChoice(buttonText);
+      break;
+
+    default:
+      handleFreeTextInput(buttonText);
+  }
+};
 
   // Handle key press
   const handleKeyPress = (e) => {
@@ -384,11 +435,10 @@ const Chatbot = () => {
                     className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                   >
                     <div
-                      className={`max-w-[85%] p-2 sm:p-3 rounded-lg ${
-                        message.sender === 'user'
+                      className={`max-w-[85%] p-2 sm:p-3 rounded-lg ${message.sender === 'user'
                           ? 'bg-[#4D2C5E] text-white rounded-br-none'
                           : 'bg-white text-gray-800 border border-gray-200 rounded-bl-none'
-                      }`}
+                        }`}
                     >
                       <p className="text-xs sm:text-sm break-words">
                         {message.text}
@@ -445,48 +495,48 @@ const Chatbot = () => {
                   </div>
                 </div>
               )}
-              
+
               <div ref={messagesEndRef} />
             </div>
           </div>
 
           {/* Input Area */}
-          {(currentStep === 'welcome' || currentStep === 'faq' || currentStep === 'selectCourse' || 
+          {(currentStep === 'welcome' || currentStep === 'faq' || currentStep === 'selectCourse' ||
             currentStep === 'leadCapture' || currentStep === 'confirmation') && (
-            <div className="p-2 sm:p-3 border-t border-gray-200 bg-white">
-              <div className="flex space-x-2">
-                <input
-                  type="text"
-                  value={userInput}
-                  onChange={(e) => setUserInput(e.target.value)}
-                  onKeyPress={handleKeyPress}
-                  placeholder={
-                    currentStep === 'leadCapture' 
-                      ? activeField === 'name' ? 'Your name...' 
-                        : activeField === 'email' ? 'Your email...' 
-                        : 'Your phone number...'
-                      : 'Type your message...'
-                  }
-                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7426]"
-                  disabled={isSubmitting || isLoading}
-                />
-                <button
-                  onClick={handleSendMessage}
-                  disabled={!userInput.trim() || isSubmitting || isLoading}
-                  className="bg-[#FF7426] text-white p-2 rounded-lg hover:bg-[#ff7626de] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
-                >
-                  {isSubmitting ? (
-                    <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                  ) : (
-                    <FiSend className="h-4 w-4" />
-                  )}
-                </button>
+              <div className="p-2 sm:p-3 border-t border-gray-200 bg-white">
+                <div className="flex space-x-2">
+                  <input
+                    type="text"
+                    value={userInput}
+                    onChange={(e) => setUserInput(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder={
+                      currentStep === 'leadCapture'
+                        ? activeField === 'name' ? 'Your name...'
+                          : activeField === 'email' ? 'Your email...'
+                            : 'Your phone number...'
+                        : 'Type your message...'
+                    }
+                    className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[#FF7426]"
+                    disabled={isSubmitting || isLoading}
+                  />
+                  <button
+                    onClick={handleSendMessage}
+                    disabled={!userInput.trim() || isSubmitting || isLoading}
+                    className="bg-[#FF7426] text-white p-2 rounded-lg hover:bg-[#ff7626de] disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors flex items-center justify-center"
+                  >
+                    {isSubmitting ? (
+                      <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                    ) : (
+                      <FiSend className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
         </div>
       )}
     </div>

@@ -9,6 +9,7 @@ const Index = ({ children }) => {
   return (<>{children}</>)
 }
 const Home = lazy(() => import("./pages/Frontend/Home"));
+const LandingPage = lazy(() => import("./pages/promotionalPages/LandingPage"));
 const Success = lazy(() => import("./pages/Frontend/SuccessStory"));
 const upcomingBatches = lazy(() => import("./pages/Frontend/UpcomingBatches"));
 const StudentsBlog = lazy(() => import("./pages/Frontend/StudentsBlog"));
@@ -94,6 +95,7 @@ const StudentProtectedLayout = ({ children }) => (
 
 export const routes = [
   { exact: true, path: "/", layout: GuestLayout, component: Home },
+  { exact: true, path: "/landing", layout: GuestLayout, component: LandingPage },
   { exact: true, path: "/success-stories", layout: GuestLayout, component: Success},
   { exact: true, path: "/upcoming-batches/", layout: GuestLayout, component: upcomingBatches},
   { exact: true, path: "/blog", layout: GuestLayout, component: StudentsBlog},
