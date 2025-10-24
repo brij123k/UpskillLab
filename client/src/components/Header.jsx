@@ -67,12 +67,24 @@ const handleCategoryClick = (category) => {
     return () => clearTimeout(timer);
   }, [exitIntentTriggered]);
 
-  const triggerExitIntent = () => {
+  const triggerExitIntent = async () => {
     // Only trigger once per page view
     if (exitIntentTriggered) return;
-
-    setShowExitIntent(true);
-    setExitIntentTriggered(true);
+try {
+      const res = await fetch('https://api.upskillab.com/api/marketing-prompt');
+      const data = await res.json();
+      if(data.length>0){
+      setShowExitIntent(true);
+      setExitIntentTriggered(true);
+      }else{
+        setShowExitIntent(false);
+        setExitIntentTriggered(false);
+      }
+      } catch (error) {
+        console.error(error)
+      } 
+    // setShowExitIntent(true);
+    // setExitIntentTriggered(true);
 
     // Close automatically after 15 seconds if not closed by user
     setTimeout(() => {
