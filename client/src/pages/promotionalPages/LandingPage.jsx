@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
 import { FaHourglassHalf,FaGraduationCap,FaGift,FaScroll,FaUserMd,FaTools,FaChartLine,FaMoneyBillWave,FaCalendarAlt  } from "react-icons/fa";
+import PramotianalModal from '../../components/Modal/pramotianalModal';
 const LandingPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <div className="min-h-screen  bg-gradient-to-br from-gray-50 to-gray-100">
       <Helmet>
@@ -199,7 +201,8 @@ const LandingPage = () => {
         transition={{ duration: 0.8, delay: 1 }}
       >
         <motion.button
-          className="group relative bg-gradient-to-r from-[#FF7426] to-[#FF8C42] text-white px-12 py-6 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden"
+        onClick={() => setIsModalOpen(true)}
+          className="group relative bg-gradient-to-r from-[#FF7426] to-[#FF8C42] text-white p-6 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden"
           whileHover={{ 
             scale: 1.05,
             background: "linear-gradient(45deg, #FF7426, #FF8C42, #FF7426)",
@@ -225,7 +228,7 @@ const LandingPage = () => {
           />
           
           <span className="relative cursor-pointer z-10 flex items-center justify-center gap-1">
-           <FaGraduationCap className='text-[#4D2C5E]'/> REGISTER FREE NOW & Get Your E-Certificate!
+           <FaGraduationCap className='text-[#4D2C5E] hidden sm:flex'/> REGISTER FREE NOW & Get Your E-Certificate!
           </span>
         </motion.button>
 
@@ -523,17 +526,23 @@ const LandingPage = () => {
       </motion.div>
 
             <motion.button
+            onClick={() => setIsModalOpen(true)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="bg-gradient-to-r flex justify-center items-center gap-2 mx-auto cursor-pointer from-[#FF7426] to-[#FF8C42] text-white px-8 sm:px-12 py-4 sm:py-5 rounded-2xl font-bold text-lg sm:text-xl shadow-2xl hover:shadow-3xl transition-all duration-300"
             >
-              <FaGraduationCap/> YES! I Want the FREE Certificate and Access
+              <FaGraduationCap className='hidden sm:flex'/> YES! I Want the FREE Certificate and Access
             </motion.button>
 
             <p className="text-white/80 mt-4 text-sm">Secure your spot before it's gone!</p>
           </motion.div>
         </div>
       </section>
+      <PramotianalModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        subjectName="Habits & Nutrition Psychology Bootcamp"
+      />
     </div>
   );
 };
