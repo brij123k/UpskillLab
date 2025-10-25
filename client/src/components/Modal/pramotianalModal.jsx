@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaTimes, FaUser, FaEnvelope, FaPhone, FaGraduationCap, FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
 import { toast } from "react-toastify";
 import { postDataHandler } from '../../config/services';
-
+import { useNavigate } from 'react-router-dom';
 const PramotianalModal = ({ isOpen, onClose, subjectName = "Habits & Nutrition Psychology Bootcamp" }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -14,7 +14,7 @@ const PramotianalModal = ({ isOpen, onClose, subjectName = "Habits & Nutrition P
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [apiMessage, setApiMessage] = useState({ type: '', text: '' }); // 'success' or 'error'
-
+const navigate = useNavigate(); 
   // Handle input changes
   const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
@@ -79,7 +79,12 @@ const PramotianalModal = ({ isOpen, onClose, subjectName = "Habits & Nutrition P
           type: 'success', 
           text: response.message || 'Registration successful! We will contact you soon.' 
         });
-        
+          navigate('/thank-you', { 
+    state: { 
+      subjectName: "Habits & Nutrition Psychology Bootcamp",
+      userName: formData.name // Optional: Personalize with user's name
+    }
+  });
         // Also show toast for good measure
         toast.success(response.message || 'Registration successful!');
         
@@ -93,7 +98,7 @@ const PramotianalModal = ({ isOpen, onClose, subjectName = "Habits & Nutrition P
             subject: subjectName
           });
           setApiMessage({ type: '', text: '' });
-        }, 2000);
+        });
         
       } else {
         // Show inline error message
