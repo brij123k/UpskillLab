@@ -13,7 +13,7 @@ const ThankYouPage = () => {
   const userName = location.state?.userName;
 
   // WhatsApp group link - update this with your actual link
-  const whatsappGroupLink = "https://chat.whatsapp.com/YOUR_ACTUAL_GROUP_LINK";
+  const whatsappGroupLink = "https://chat.whatsapp.com/FCOV9ZvsXbF4oe5nZE9bi1?mode=wwt";
 
   useEffect(() => {
       if(!subjectName || !userName){
