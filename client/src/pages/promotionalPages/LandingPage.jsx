@@ -383,38 +383,55 @@ const LandingPage = () => {
               Learn from counselling psychologists with combined 10+ years of experience
             </p>
 
-            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-              {/* Expert 1 */}
-              <div className="text-center">
-                <div className="w-32 h-32 bg-gradient-to-br from-[#4D2C5E] to-[#7B4B9E] rounded-full mx-auto mb-6 flex items-center justify-center text-white text-4xl font-bold">
-                  SY
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Simran Yadav</h3>
-                <p className="text-[#4D2C5E] font-semibold mb-4">Counselling Psychologist</p>
-                <p className="text-gray-600">3+ years of experience</p>
-              </div>
-
+           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+  {/* Expert 1 */}
   <div className="text-center">
-    <div className="w-32 h-32 bg-gradient-to-br from-[#FF7426] to-[#FF8C42] rounded-full mx-auto mb-6 flex items-center justify-center text-white text-4xl font-bold">
-                  A
-                </div>
-               
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Arunima</h3>
-                <p className="text-[#FF7426] font-semibold mb-4">Senior Nutrition Consultant</p>
-                <p className="text-gray-600">7+ years of experience</p>
-              </div>
+    <motion.img 
+      className="w-32 h-32 rounded-full mx-auto mb-6 object-cover shadow-lg border-2 border-[#4D2C5E]" 
+      src="/images/Simran.png" 
+      alt="Simran Yadav"
+      initial={{ opacity: 0, scale: 0.8 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: true }}
+    />
+    <h3 className="text-xl font-bold text-gray-900 mb-2">Simran Yadav</h3>
+    <p className="text-[#4D2C5E] font-semibold mb-4">Counselling Psychologist</p>
+    <p className="text-gray-600">3+ years of experience</p>
+  </div>
 
+  {/* Expert 2 */}
+  <div className="text-center">
+    <motion.img 
+      className="w-32 h-32 rounded-full mx-auto mb-6 object-cover shadow-lg border-2 border-[#FF7426]" 
+      src="/images/Arunima.png" 
+      alt="Arunima"
+      initial={{ opacity: 0, scale: 0.8 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6, delay: 0.1 }}
+      viewport={{ once: true }}
+    />
+    <h3 className="text-xl font-bold text-gray-900 mb-2">Arunima</h3>
+    <p className="text-[#FF7426] font-semibold mb-4">Senior Nutrition Consultant</p>
+    <p className="text-gray-600">7+ years of experience</p>
+  </div>
 
-              {/* Expert 2 */}
-              <div className="text-center">
-                <div className="w-32 h-32 bg-gradient-to-br from-[#4D2C5E] to-[#7B4B9E] rounded-full mx-auto mb-6 flex items-center justify-center text-white text-4xl font-bold">
-                  N
-                </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Nishi</h3>
-                <p className="text-[#4D2C5E] font-semibold mb-4">Counselling Psychologist</p>
-                <p className="text-gray-600">7+ years of experience</p>
-              </div>
-            </div>
+  {/* Expert 3 */}
+  <div className="text-center">
+    <motion.img 
+      className="w-32 h-32 rounded-full mx-auto mb-6 object-cover shadow-lg border-2 border-[#4D2C5E]" 
+      src="/images/Nishi.png" 
+      alt="Nishi"
+      initial={{ opacity: 0, scale: 0.8 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.6, delay: 0.2 }}
+      viewport={{ once: true }}
+    />
+    <h3 className="text-xl font-bold text-gray-900 mb-2">Nishi</h3>
+    <p className="text-[#4D2C5E] font-semibold mb-4">Counselling Psychologist</p>
+    <p className="text-gray-600">7+ years of experience</p>
+  </div>
+</div>
           </motion.div>
         </div>
       </section>
