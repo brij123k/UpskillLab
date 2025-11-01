@@ -542,7 +542,7 @@ const LandingPage = () => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         subjectName="Habits & Nutrition Psychology Bootcamp"
-        where="postPramotional"
+        where="postpramotionBootcamp"
       />
     </div>
   );

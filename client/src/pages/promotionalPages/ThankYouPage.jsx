@@ -96,7 +96,7 @@ const ThankYouPage = () => {
                   <FaWhatsapp />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">
-                  Join Our Community
+                  Join exclusive Bootcamp group
                 </h3>
                 <p className="text-gray-600">
                   Get real-time updates and connect with fellow participants

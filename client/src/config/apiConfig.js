@@ -1,5 +1,5 @@
-const url = "https://api.upskillab.com";
-// const url = "http://localhost:3000"
+// const url = "https://api.upskillab.com";
+const url = "http://localhost:3000"
 const ApiConfig = {
   url,
   uploadFiles: `${url}/file`,
@@ -95,6 +95,7 @@ const ApiConfig = {
 
   postQuery: `${url}/queries`,
   postPramotional:`${url}/pramotion`,
+  postpramotionBootcamp:`${url}/pramotionBootcamp`,
   // teacher panel
 
   getResultById:(resultId) => `${url}/pcat-results/${resultId}`,

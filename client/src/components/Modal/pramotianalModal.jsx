@@ -4,7 +4,7 @@ import { FaTimes, FaUser, FaEnvelope, FaPhone, FaGraduationCap, FaCheckCircle, F
 import { toast } from "react-toastify";
 import { postDataHandler } from '../../config/services';
 import { useNavigate } from 'react-router-dom';
-const PramotianalModal = ({ isOpen, onClose, subjectName = "Habits & Nutrition Psychology Bootcamp" }) => {
+const PramotianalModal = ({ isOpen, onClose, subjectName = "Habits & Nutrition Psychology Bootcamp",where="postPramotional" }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -71,7 +71,7 @@ const navigate = useNavigate();
     setApiMessage({ type: '', text: '' }); // Clear previous messages
     
     try {
-      const response = await postDataHandler('postPramotional', formData);
+      const response = await postDataHandler(where, formData);
       
       if (response.success) {
         // Show inline success message
