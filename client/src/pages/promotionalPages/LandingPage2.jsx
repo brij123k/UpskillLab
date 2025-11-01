@@ -152,7 +152,7 @@ const LandingPage = () => {
       >
         {[
           {
-            text: "100% Free for a limited time",
+            text: "100% Free",
             emoji: <FaGift className='text-[#FF7426]'/>,
             delay: 0
           },
@@ -368,7 +368,7 @@ const LandingPage = () => {
       </section>
 
       {/* Experts Section */}
-      <section id="experts" className="py-16 sm:py-20 bg-white px-4 sm:px-6 lg:px-8">
+ <section id="experts" className="py-16 sm:py-20 bg-white px-4 sm:px-6 lg:px-8">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -383,7 +383,7 @@ const LandingPage = () => {
               Learn from counselling psychologists with combined 10+ years of experience
             </p>
 
-            <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
               {/* Expert 1 */}
               <div className="text-center">
                 <div className="w-32 h-32 bg-gradient-to-br from-[#4D2C5E] to-[#7B4B9E] rounded-full mx-auto mb-6 flex items-center justify-center text-white text-4xl font-bold">
@@ -391,17 +391,28 @@ const LandingPage = () => {
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Simran Yadav</h3>
                 <p className="text-[#4D2C5E] font-semibold mb-4">Counselling Psychologist</p>
-                <p className="text-gray-600">Specialized in habit formation and behavioral psychology with 6+ years of clinical experience.</p>
+                <p className="text-gray-600">3+ years of experience</p>
               </div>
+
+  <div className="text-center">
+    <div className="w-32 h-32 bg-gradient-to-br from-[#FF7426] to-[#FF8C42] rounded-full mx-auto mb-6 flex items-center justify-center text-white text-4xl font-bold">
+                  A
+                </div>
+               
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Arunima</h3>
+                <p className="text-[#FF7426] font-semibold mb-4">Senior Nutrition Consultant</p>
+                <p className="text-gray-600">7+ years of experience</p>
+              </div>
+
 
               {/* Expert 2 */}
               <div className="text-center">
-                <div className="w-32 h-32 bg-gradient-to-br from-[#FF7426] to-[#FF8C42] rounded-full mx-auto mb-6 flex items-center justify-center text-white text-4xl font-bold">
+                <div className="w-32 h-32 bg-gradient-to-br from-[#4D2C5E] to-[#7B4B9E] rounded-full mx-auto mb-6 flex items-center justify-center text-white text-4xl font-bold">
                   N
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Nishi</h3>
-                <p className="text-[#FF7426] font-semibold mb-4">Counselling Psychologist</p>
-                <p className="text-gray-600">Expert in nutrition psychology and emotional eating with 4+ years of therapeutic practice.</p>
+                <p className=" text-[#4D2C5E]  font-semibold mb-4">Counselling Psychologist</p>
+                <p className="text-gray-600">7+ years of experience</p>
               </div>
             </div>
           </motion.div>
@@ -441,7 +452,7 @@ const LandingPage = () => {
                 {
                   icon: <FaGift/>,
                   title: "Free Expert Training",
-                  description: "Free access to 2 full days of live expert training worth $500+"
+                  description: "Free access to 2 full days of live expert training worth ₹500"
                 }
               ].map((feature, index) => (
                 <motion.div
@@ -497,7 +508,7 @@ const LandingPage = () => {
             </motion.div>
             <h3 className="text-xl font-bold text-white mb-3">Dates & Time</h3>
             <div className="space-y-2">
-              <p className="text-white/90 text-lg font-semibold">25th & 26th October, 2025</p>
+              <p className="text-white/90 text-lg font-semibold">8th & 9th October, 2025</p>
               <p className="text-white/80">7:00 PM Onwards (IST)</p>
             </div>
           </div>
