@@ -1,5 +1,5 @@
-// const url = "https://api.upskillab.com";
-const url = "http://localhost:3000"
+const url = "https://api.upskillab.com";
+// const url = "http://localhost:3000"
 const ApiConfig = {
   url,
   uploadFiles: `${url}/file`,
