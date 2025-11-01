@@ -133,12 +133,12 @@ const ThankYouPage = () => {
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="text-center p-4 bg-white rounded-lg">
                 <p className="text-sm text-gray-600 mb-1">Bootcamp Starts</p>
-                <p className="font-bold text-gray-900">8th October, 2025</p>
+                <p className="font-bold text-gray-900">8th November, 2025</p>
                 <p className="text-sm text-gray-600">7:00 PM IST</p>
               </div>
               <div className="text-center p-4 bg-white rounded-lg">
                 <p className="text-sm text-gray-600 mb-1">Bootcamp Ends</p>
-                <p className="font-bold text-gray-900">9th October, 2025</p>
+                <p className="font-bold text-gray-900">9th November, 2025</p>
                 <p className="text-sm text-gray-600">9:00 PM IST</p>
               </div>
             </div>

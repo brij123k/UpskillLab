@@ -508,7 +508,7 @@ const LandingPage = () => {
             </motion.div>
             <h3 className="text-xl font-bold text-white mb-3">Dates & Time</h3>
             <div className="space-y-2">
-              <p className="text-white/90 text-lg font-semibold">8th & 9th October, 2025</p>
+              <p className="text-white/90 text-lg font-semibold">8th & 9th November, 2025</p>
               <p className="text-white/80">7:00 PM Onwards (IST)</p>
             </div>
           </div>
