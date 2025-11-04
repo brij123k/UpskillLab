@@ -94,8 +94,10 @@ const ApiConfig = {
   updateAnser: (submissionId) => `${url}/pcat-submissions/${submissionId}`,
 
   postQuery: `${url}/queries`,
+  getBootCamp:`${url}/bootcamp`,
   postPramotional:`${url}/pramotion`,
   postpramotionBootcamp:`${url}/pramotionBootcamp`,
+
   // teacher panel
 
   getResultById:(resultId) => `${url}/pcat-results/${resultId}`,
