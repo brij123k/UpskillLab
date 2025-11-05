@@ -123,7 +123,7 @@ function Footer() {
                 </li>
                 <li className="text-[#606060] text-sm sm:text-base">
                   Upskillab<br />
-                  Trivision Partners private Limited<br/>
+                  Trivision Partners Private Limited<br/>
                   H-187, Lohia Rd, H Block, Sector 63<br />
                   Noida, Uttar Pradesh 201301
                 </li>
