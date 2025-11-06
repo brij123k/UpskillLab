@@ -7,6 +7,7 @@ import { NavLink } from 'react-router-dom';
 
 
 const TextCarousel = ({ slides, autoPlayVideo = false }) => {
+  console.log(slides)
   const [demoVideoUrl, setDemoVideoUrl] = useState(null);
   const {
     isVideoModalOpen,
@@ -208,7 +209,26 @@ const slideVariants = {
               </motion.p>
 
               <div className="flex flex-col sm:flex-row gap-4 w-full">
-                <a href="#AdmissionForm" className="w-full sm:w-auto">
+                {slides[currentIndex]?.bootCampUrl?(
+                  <a href={slides[currentIndex]?.bootCampUrl} title={slides[currentIndex]?.bootCampUrl} className="w-full sm:w-auto">
+                  <motion.button
+                    custom={2}
+                    initial="hidden"
+                    animate="visible"
+                    variants={textVariants}
+                    whileHover={{
+                      scale: 1.05,
+                      backgroundColor: '#4D2C5E',
+                      color: 'white',
+                    }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-transparent border-2 border-[#4D2C5E] text-[#4D2C5E] px-6 py-3 rounded-lg w-full sm:w-fit shadow-md hover:shadow-lg"
+                  >
+                    Join Bootcamp
+                  </motion.button>
+                </a>
+                ):(
+                  <a href="#AdmissionForm" className="w-full sm:w-auto">
                   <motion.button
                     custom={2}
                     initial="hidden"
@@ -225,37 +245,49 @@ const slideVariants = {
                     Get In Touch
                   </motion.button>
                 </a>
-
-               {demoVideoUrl? (<motion.button
-                  onClick={() => openVideoModal(demoVideoUrl)}
-                  custom={2}
-                  initial="hidden"
-                  animate="visible"
-                  variants={textVariants}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg w-full sm:w-fit shadow-md hover:shadow-lg"
-                >
-                  Watch Demo
-                </motion.button>
-):(
-  <>
-  <NavLink to={"/CourseList"}>
+                )}
+                
+{slides[currentIndex]?.youtubeUrl ? (
   <motion.button
-                  custom={2}
-                  initial="hidden"
-                  animate="visible"
-                  variants={textVariants}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg w-full sm:w-fit shadow-md hover:shadow-lg"
-                >
-                  View Courses
+    onClick={() => openVideoModal(slides[currentIndex]?.youtubeUrl)}
+    custom={2}
+    initial="hidden"
+    animate="visible"
+    variants={textVariants}
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg w-full sm:w-fit shadow-md hover:shadow-lg"
+  >
+    Watch video
   </motion.button>
+) : demoVideoUrl ? (
+  <motion.button
+    onClick={() => openVideoModal(demoVideoUrl)}
+    custom={2}
+    initial="hidden"
+    animate="visible"
+    variants={textVariants}
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg w-full sm:w-fit shadow-md hover:shadow-lg"
+  >
+    Watch Demo
+  </motion.button>
+) : (
+  <NavLink to={"/CourseList"}>
+    <motion.button
+      custom={2}
+      initial="hidden"
+      animate="visible"
+      variants={textVariants}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className="bg-[#4D2C5E] text-white px-6 py-3 rounded-lg w-full sm:w-fit shadow-md hover:shadow-lg"
+    >
+      View Courses
+    </motion.button>
   </NavLink>
-  </>
-)
-}
+)}
               </div>
             </div>
 
@@ -347,13 +379,15 @@ const CarouselContainer = () => {
       }
 
       const newBanners = res.banners
-        .filter((item) => item.active)
+        // .filter((item) => item.active)
         .map((item, index) => ({
           id: index + 1,
           heading: item.title || 'Default Heading',
           image: item.imageUrl || 'default-image.png',
           description: item.description || 'Default description',
           subheading: item.subtitle || 'Default Subheading',
+          youtubeUrl: item?.youtubeUrl,
+          bootCampUrl: item?.bootCampUrl,
         }));
 
       setCarouselSlides(newBanners);
