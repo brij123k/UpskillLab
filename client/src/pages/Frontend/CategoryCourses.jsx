@@ -491,7 +491,8 @@ const CategoryCourses = () => {
                 variants={itemVariants}
                 className="text-xl max-w-2xl text-white/90"
               >
-                {categoryInfo?.description || `Explore our specialized ${categoryInfo?.categoryName} courses designed to advance your career`}
+                {categoryInfo?.description || `Explore our specialized ${categoryInfo?.categoryName}designed to help you upskill, stay ahead, and thrive in today’s digital world. Learn online with Upskillab and master the skills that matter most.
+`}
               </motion.p>
 
               <motion.div className="flex flex-col sm:flex-row gap-4">
