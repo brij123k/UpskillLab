@@ -486,12 +486,19 @@ const CategoryCourses = () => {
                   Courses
                 </span>
               </motion.h1>
+<motion.h1
+  variants={itemVariants}
+  className="text-3xl font-semibold text-white drop-shadow-[0_2px_4px_rgba(0,0,0,0.2)] mb-4"
+>
+  Advance Your Career with {categoryInfo?.categoryName} Courses at Upskillab
+</motion.h1>
 
               <motion.p
                 variants={itemVariants}
                 className="text-xl max-w-2xl text-white/90"
               >
-                {categoryInfo?.description || `Explore our specialized ${categoryInfo?.categoryName} courses designed to advance your career`}
+                {categoryInfo?.description || `Explore our specialized ${categoryInfo?.categoryName} designed to help you upskill, stay ahead, and thrive in today’s digital world. Learn online with Upskillab and master the skills that matter most.
+`}
               </motion.p>
 
               <motion.div className="flex flex-col sm:flex-row gap-4">
