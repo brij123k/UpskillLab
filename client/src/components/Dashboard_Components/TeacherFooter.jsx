@@ -180,11 +180,6 @@ function TeacherFooter() {
       {/* Copyright Section - Matches header style */}
       <div className="w-full border-t border-gray-200 bg-[#F8F9FA]">
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4">
-            <NavLink to="/teacher/privacy" className="text-[#FF7426] text-sm hover:underline">Privacy Policy</NavLink>
-            <span className="hidden sm:block text-[#FF7426]">|</span>
-            <NavLink to="/teacher/terms" className="text-[#FF7426] text-sm hover:underline">Terms & Conditions</NavLink>
-          </div>
           <p className="text-center text-sm mt-2">© {new Date().getFullYear()} Upskillab.com. All rights reserved.</p>
         </div>
       </div>

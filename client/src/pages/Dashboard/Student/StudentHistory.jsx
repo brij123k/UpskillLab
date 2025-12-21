@@ -37,7 +37,7 @@ const StudentHistory = () => {
       setAccount(account);
       setCourses(courses.data);
       setStudentData(response.students[0]);
-      
+      console.log(response)
       // Fetch results if student data is available
       if (response.students[0] && response.students[0].email) {
         fetchResults(response.students[0].email);
@@ -174,7 +174,7 @@ const getAttendanceHistory = () => {
 
   const { completed, inProgress, upcoming } = categorizeCourses();
   const attendanceHistory = getAttendanceHistory();
-  console.log(attendanceHistory)
+  // console.log(attendanceHistory)
   const filteredOrders = filterOrders();
 
 
@@ -620,11 +620,12 @@ const calculateAttendance = () => {
                             </span>
                           )}
                         </td>
-                        {/* <td className="px-6 py-4 whitespace-nowrap">
+                        <td className="px-6 py-4 whitespace-nowrap">
                           {order.status === 'COMPLETED' && (
                             <button 
                               onClick={() => generateReceipt({
                                 orderId: order.orderId,
+                                serialNumber:order.serialNumber,
                                 courseTitle: order.courseTitle,
                                 batchId: {
                                   batchCode: order.batchId.batchCode,
@@ -633,18 +634,22 @@ const calculateAttendance = () => {
                                 totalAmount: order.totalAmount,
                                 amountPaid: order.amountPaid,
                                 createdAt: new Date().toISOString(),
+                                paymentDate:order.createdAt,
+                                mode:order.mode,
                                 status: order.status,
                                 user: {
                                   fullName: studentData.fullName,
-                                  email: studentData.email
+                                  email: studentData.email,
+                                  mobileNumber: studentData.mobileNumber
                                 }
                               })}
+                              // onClick={()=>generateReceipt(order)}
                               className="text-sm text-[#6C63FF] hover:text-[#5A52E0] font-medium flex items-center"
                             >
                               Download Bill
                             </button>
                           )}
-                        </td> */}
+                        </td>
                       </tr>
                     ))}
                   </tbody>

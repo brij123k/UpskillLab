@@ -118,8 +118,8 @@ const PDFReceipt = ({ order }) => (
         <View style={styles.tableRow}>
           <View style={[styles.tableCol, styles.col20]}><Text>Receipt</Text></View>
           <View style={[styles.tableCol, styles.col15]}><Text>{order.receiptNumber || '712'}</Text></View>
-          <View style={[styles.tableCol, styles.col15]}><Text>Batch</Text></View>
-          <View style={[styles.tableCol, styles.col15]}><Text>{order.batchNumber || '2'}</Text></View>
+          <View style={[styles.tableCol, styles.col15]}><Text>Batch: {order.batchNumber || '2'}</Text></View>
+          <View style={[styles.tableCol, styles.col15]}><Text></Text></View>
           <View style={[styles.tableCol, styles.col15]}><Text>Date {order.date || '25 Apr 2025'}</Text></View>
         </View>
 
@@ -183,7 +183,7 @@ const PDFReceipt = ({ order }) => (
           <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
           <View style={[styles.tableCol, styles.col35]}><Text>{order.transactionId || '511163572037'}</Text></View>
           <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
-          <View style={[styles.tableCol, styles.col20]}><Text>UPI</Text></View>
+          <View style={[styles.tableCol, styles.col20]}><Text>{order.mode}</Text></View>
           <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
           <View style={[styles.tableCol, styles.col20, styles.textRight]}><Text>{order.amountPaid || '1'}</Text></View>
         </View>
@@ -198,13 +198,13 @@ const PDFReceipt = ({ order }) => (
         </View>
 
         {/* Amount in Words Row */}
-        <View style={styles.tableRow}>
+        {/* <View style={styles.tableRow}>
           <View style={[styles.tableCol, styles.col100, { flexDirection: 'row' }]}>
             <Text style={[styles.bold, { marginRight: 5 }]}>Paid Amount in Words:</Text>
             <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
             <Text>{order.amountInWords || 'One Rupee Only'}</Text>
           </View>
-        </View>
+        </View> */}
 
         {/* Footer Row */}
         <View style={styles.lastTableRow}>
@@ -252,22 +252,23 @@ const generateReceiptPDF = async (orderData) => {
 
     return `${amount} Rupees Only`;
   };
-
+console.log(orderData)
   const formattedData = {
-    receiptNumber: orderData._id?.slice(-3) || '712',
-    batchNumber: orderData.order?.batch?.batchCode || '2',
+    receiptNumber: orderData.serialNumber || '712',
+    batchNumber: orderData.batchId?.batchCode || '2',
     date: orderData.createdAt ? formatDate(orderData.createdAt) : '25 Apr 2025',
-    studentName: orderData.order?.user?.student?.fullName || 'Harshit Sinha',
-    contactNumber: orderData.order?.user?.mobileNumber || '8881043033',
-    email: orderData.order?.user?.email || 'sinha.sg111@gmail.com',
-    courseName: orderData.order?.batch?.course?.courseName || 'Post Graduate Program in Counselling Psychology',
-    courseFee: orderData.order?.totalAmount?.toLocaleString('en-IN') || '74,999',
-    totalPaid: orderData.order?.amountPaid?.toLocaleString('en-IN') || '1',
-    feeDue: orderData.order ? (orderData.order.totalAmount - orderData.order.amountPaid).toLocaleString('en-IN') : '74,998',
-    paymentDate: orderData.createdAt ? formatDate(orderData.createdAt) : '21 Apr 2025',
-    transactionId: orderData.transactionId || '511163572037',
-    amountPaid: orderData.order?.amountPaid?.toLocaleString('en-IN') || '1',
-    amountInWords: amountInWords(orderData.order?.amountPaid || 1)
+    studentName: orderData.user?.fullName || 'Harshit Sinha',
+    contactNumber: orderData?.user?.mobileNumber || '8881043033',
+    email: orderData.user?.email || 'sinha.sg111@gmail.com',
+    courseName: orderData?.courseTitle || 'Post Graduate Program in Counselling Psychology',
+    courseFee: orderData?.totalAmount?.toLocaleString('en-IN') || '74,999',
+    totalPaid: orderData?.amountPaid?.toLocaleString('en-IN') || '1',
+    feeDue: orderData ? (orderData.totalAmount - orderData.amountPaid).toLocaleString('en-IN') : '74,998',
+    paymentDate: orderData.paymentDate ? formatDate(orderData.paymentDate) : '21 Apr 2025',
+    mode:orderData.mode || "Cash",
+    transactionId: orderData.orderId || '511163572037',
+    amountPaid: orderData?.amountPaid?.toLocaleString('en-IN') || '1',
+    amountInWords: amountInWords(orderData?.amountPaid || 1)
   };
 
   // Generate the PDF blob
