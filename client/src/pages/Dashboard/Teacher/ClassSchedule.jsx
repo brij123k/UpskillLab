@@ -25,6 +25,9 @@ const ClassSchedule = () => {
   const [showAttendanceModal, setShowAttendanceModal] = useState(false);
   const [selectedSessionAttendance, setSelectedSessionAttendance] = useState([]);
   const [selectedSessionDetails, setSelectedSessionDetails] = useState(null);
+  const [batchStudents, setBatchStudents] = useState([]);
+  const [isLoadingStudents, setIsLoadingStudents] = useState(false);
+  const [currentSessionBatchId, setCurrentSessionBatchId] = useState([]);
 
   const fetchClassSessions = async () => {
     try {
@@ -54,42 +57,149 @@ const ClassSchedule = () => {
     }
   };
 
-  const fetchAttendance = async (sessionId) => {
+  const fetchBatchStudents = async (batchIds) => {
+
+    // Ensure batchIds is an array
+    const batchIdArray = Array.isArray(batchIds) ? batchIds : [batchIds];
+
+    // If there are no batch IDs, return empty array
+    if (batchIdArray.length === 0) {
+      setBatchStudents([]);
+      setIsLoadingStudents(false);
+      return;
+    }
+
     try {
-      // setIsLoading(true);
+      setIsLoadingStudents(true);
+
+      // Array to store all promises for batch requests
+      const batchRequests = batchIdArray.map(batchId => {
+        const endpoint = ApiConfig.getAllUserByBatchId(batchId);
+        return getDataHandlerWithToken(endpoint, null, null, true)
+          .catch(error => {
+            console.error(`Error fetching batch ${batchId}:`, error);
+            // Return empty array for failed requests
+            return [];
+          });
+      });
+
+      // Wait for all batch requests to complete
+      const allResponses = await Promise.all(batchRequests);
+
+      // Combine all students from all batches and extract unique students
+      const allStudents = allResponses.flat(); // Flatten array of arrays
+
+      const uniqueStudents = allStudents.reduce((unique, order) => {
+        // Validate the order structure
+        if (order && order.user && order.user._id && order.user.userType === 'STUDENT') {
+          // Check if student already exists in unique array
+          const exists = unique.find(s => s.userId === order.user._id);
+          if (!exists) {
+            unique.push({
+              userId: order.user._id,
+              name: order.name || order.user.username || 'Unknown Student',
+              email: order.user.email || 'No email',
+              mobileNumber: order.user.mobileNumber || 'No phone',
+              orderId: order._id,
+              batchId: order.batch?._id // Keep track of which batch they belong to
+            });
+          }
+        } else {
+          console.warn('Invalid order structure:', order);
+        }
+        return unique;
+      }, []);
+
+      setBatchStudents(uniqueStudents);
+    } catch (error) {
+      toast.error('Failed to load batch students');
+      console.error('Error fetching batch students:', error);
+      setBatchStudents([]);
+    } finally {
+      setIsLoadingStudents(false);
+    }
+  };
+  const fetchAttendance = async (sessionId, sessionBatchIds) => {
+    try {
+      setIsLoadingStudents(true);
+
+      // Store batch ID(s)
+      setCurrentSessionBatchId(sessionBatchIds);
+      // Fetch batch students first - pass the batchId array
+      await fetchBatchStudents(sessionBatchIds);
+
+      // Then fetch attendance data
       const endpoint = ApiConfig.studentClassAttendance(sessionId);
       const response = await getDataHandlerWithToken(endpoint, null, null, true);
-      setSelectedSessionAttendance(response.students || []);
+
+      const attendanceData = response.students || [];
+      setSelectedSessionAttendance(attendanceData);
+
       setSelectedSessionDetails({
         _id: response._id,
         meetingLink: response.meetingLink,
         scheduledDate: response.scheduledDate,
         scheduledStartTime: response.scheduledStartTime,
-        totalAttended: response.totalAttended
+        totalAttended: response.totalAttended,
+        batchIds: sessionBatchIds, // Store as array
+        sessionId: sessionId
       });
     } catch (error) {
       toast.error('Failed to load attendance data');
       console.error('Error fetching attendance:', error);
       setSelectedSessionAttendance([]);
       setSelectedSessionDetails(null);
-    } 
+    } finally {
+      setIsLoadingStudents(false);
+    }
   };
 
   const updateAttendance = async (userId, isAttended) => {
     try {
       const payload = {
-        sessionId: selectedSessionDetails._id,
+        classId: selectedSessionDetails._id,
         userId,
         isAttended
       };
-      await postDataHandlerWithToken('updateStudentAttendance', payload);
-      toast.success('Attendance updated successfully');
+      // Use the correct endpoint for marking attendance
+      await postDataHandlerWithToken("markPresent", payload);
+      toast.success(`Marked ${isAttended ? 'present' : 'absent'} successfully`);
+
       // Refresh attendance data
-      fetchAttendance(selectedSessionDetails._id);
+      await fetchAttendance(selectedSessionDetails._id, selectedSessionDetails.batchIds);
     } catch (error) {
       toast.error('Failed to update attendance');
       console.error('Error updating attendance:', error);
     }
+  };
+
+  const toggleAttendance = async (student) => {
+    const currentAttendance = selectedSessionAttendance.find(
+      a => a.userId === student.userId
+    );
+
+    const newAttendanceStatus = !(currentAttendance?.isAttended || false);
+    await updateAttendance(student.userId, newAttendanceStatus);
+  };
+
+  const getStudentAttendanceStatus = (studentId) => {
+    const attendanceRecord = selectedSessionAttendance.find(
+      a => a.userId === studentId
+    );
+    return attendanceRecord?.isAttended || false;
+  };
+
+  const getAllStudentsWithAttendance = () => {
+    if (batchStudents.length === 0) return [];
+
+    return batchStudents.map(student => {
+      const isPresent = getStudentAttendanceStatus(student.userId);
+      return {
+        ...student,
+        isPresent,
+        hasAttendanceRecord: selectedSessionAttendance.some(a => a.userId === student.userId)
+      };
+    });
   };
 
   useEffect(() => {
@@ -321,11 +431,10 @@ const ClassSchedule = () => {
                       href={session.meetingLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`inline-block text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium ${
-                        session.isApproved
+                      className={`inline-block text-white px-4 py-2 rounded-lg transition-colors duration-200 text-sm font-medium ${session.isApproved
                           ? 'bg-[#4D2C5E] hover:bg-[#3A2152]'
                           : 'bg-gray-400 cursor-not-allowed'
-                      }`}
+                        }`}
                       style={!session.isApproved ? { pointerEvents: 'none' } : {}}
                     >
                       {session.isApproved ? 'Join Class' : 'Pending Approval'}
@@ -368,6 +477,12 @@ const ClassSchedule = () => {
                       <FiClock className="mr-2 h-4 w-4" />
                       {formatTime(session.scheduledStartTime)}
                     </div>
+                    {/* {session.batchIds && (
+                      <div className="flex items-center text-gray-600 text-sm">
+                        <FiUsers className="mr-2 h-4 w-4" />
+                        Batch: {session.batchIds[0] || session.batchId._id}
+                      </div>
+                    )} */}
                   </div>
                   {session.description && (
                     <p className="mt-4 text-gray-600 text-sm line-clamp-2">{session.description}</p>
@@ -376,7 +491,11 @@ const ClassSchedule = () => {
                     <button
                       onClick={() => {
                         setShowAttendanceModal(true);
-                        fetchAttendance(session._id);
+                        // Pass the batchId array from the session
+                        const batchIds = session.batchId ?
+                          (Array.isArray(session.batchId) ? session.batchId : [session.batchId._id]) :
+                          [];
+                        fetchAttendance(session._id, session.batchIds);
                       }}
                       className="text-[#4D2C5E] hover:text-[#FF7426] text-sm font-medium"
                     >
@@ -541,89 +660,129 @@ const ClassSchedule = () => {
           </div>
         )}
 
-       {showAttendanceModal && (
-  <div className="fixed inset-0 bg-[#00000080] flex items-center justify-center z-50 p-4">
-    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
-      <div className="p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold text-[#4D2C5E]">Attendance Details</h2>
-          <button
-            onClick={() => setShowAttendanceModal(false)}
-            className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
-          >
-            <FiX className="h-6 w-6" />
-          </button>
-        </div>
+        {showAttendanceModal && (
+          <div className="fixed inset-0 bg-[#00000080] flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex justify-between items-center mb-6">
+                  <h2 className="text-2xl font-bold text-[#4D2C5E]">Attendance Details</h2>
+                  <button
+                    onClick={() => {
+                      setShowAttendanceModal(false);
+                      setBatchStudents([]);
+                      setSelectedSessionAttendance([]);
+                      setSelectedSessionDetails(null);
+                    }}
+                    className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                  >
+                    <FiX className="h-6 w-6" />
+                  </button>
+                </div>
 
-        {selectedSessionDetails && (
-          <div className="mb-6 p-4 bg-gray-50 rounded-lg">
-            <h3 className="text-lg font-semibold text-[#4D2C5E] mb-2">Class Details</h3>
-            <div className="space-y-2">
-              <div className="flex items-center text-gray-600 text-sm">
-                <FiCalendar className="mr-2 h-4 w-4 text-[#4D2C5E]" />
-                {formatDate(selectedSessionDetails.scheduledDate)}
-              </div>
-              <div className="flex items-center text-gray-600 text-sm">
-                <FiClock className="mr-2 h-4 w-4 text-[#4D2C5E]" />
-                {formatTime(selectedSessionDetails.scheduledStartTime)}
-              </div>
-              <div className="flex items-center text-gray-600 text-sm">
-                <FiVideo className="mr-2 h-4 w-4 text-[#4D2C5E]" />
-                <a href={selectedSessionDetails.meetingLink} target="_blank" rel="noopener noreferrer" className="text-[#4D2C5E] hover:underline">
-                  Meeting Link
-                </a>
-              </div>
-              <div className="flex items-center text-gray-600 text-sm">
-                <FiUsers className="mr-2 h-4 w-4 text-[#4D2C5E]" />
-                Total Attended: {selectedSessionDetails.totalAttended}
+                {selectedSessionDetails && (
+                  <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                    <h3 className="text-lg font-semibold text-[#4D2C5E] mb-2">Class Details</h3>
+                    <div className="space-y-2">
+                      <div className="flex items-center text-gray-600 text-sm">
+                        <FiCalendar className="mr-2 h-4 w-4 text-[#4D2C5E]" />
+                        {formatDate(selectedSessionDetails.scheduledDate)}
+                      </div>
+                      <div className="flex items-center text-gray-600 text-sm">
+                        <FiClock className="mr-2 h-4 w-4 text-[#4D2C5E]" />
+                        {formatTime(selectedSessionDetails.scheduledStartTime)}
+                      </div>
+                      <div className="flex items-center text-gray-600 text-sm">
+                        <FiVideo className="mr-2 h-4 w-4 text-[#4D2C5E]" />
+                        <a href={selectedSessionDetails.meetingLink} target="_blank" rel="noopener noreferrer" className="text-[#4D2C5E] hover:underline">
+                          Meeting Link
+                        </a>
+                      </div>
+                      <div className="flex items-center text-gray-600 text-sm">
+                        <FiUsers className="mr-2 h-4 w-4 text-[#4D2C5E]" />
+                        Total Attended: {selectedSessionDetails.totalAttended} / {batchStudents.length}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {isLoadingStudents ? (
+                  <div className="flex justify-center items-center h-32">
+                    <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#4D2C5E]"></div>
+                  </div>
+                ) : batchStudents.length > 0 ? (
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center mb-4">
+                      <h3 className="text-lg font-semibold text-[#4D2C5E]">
+                        Students ({batchStudents.length})
+                      </h3>
+                      <div className="text-sm text-gray-600">
+                        Click on status to mark attendance
+                      </div>
+                    </div>
+
+                    {getAllStudentsWithAttendance().map((student) => (
+                      <div
+                        key={student.userId}
+                        className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                      >
+                        <div className="flex items-center flex-1">
+                          <FiUsers className="h-5 w-5 text-[#4D2C5E] mr-3" />
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-800">{student.name}</div>
+                            <div className="text-sm text-gray-500">{student.email}</div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center space-x-3">
+                          
+                          {student.isPresent?(
+                            <button
+                            className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 bg-green-100 text-green-800 hover:bg-green-200`}
+                          >
+                            Present
+                          </button>
+                          ):(
+                            <button
+                            onClick={() => toggleAttendance(student)}
+                            className={`px-4 cursor-pointer py-1.5 rounded-lg text-sm font-medium transition-colors duration-200 bg-red-100 text-red-800 hover:bg-red-200`}
+                          >
+                            Mark Attendence
+                          </button>
+                          )
+                          }
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-500 py-8">
+                    No students found in this batch.
+                  </div>
+                )}
+
+                <div className="mt-6 pt-6 border-t border-gray-200 flex justify-between items-center">
+                  <div className="text-sm text-gray-600">
+                    Showing {batchStudents.length} students in batch
+                  </div>
+                  <div className="flex space-x-3">
+                    <button
+                      onClick={() => {
+                        setShowAttendanceModal(false);
+                        setBatchStudents([]);
+                        setSelectedSessionAttendance([]);
+                        setSelectedSessionDetails(null);
+                      }}
+                      className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                    >
+                      Close
+                    </button>
+                   
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         )}
-
-        {isLoading ? (
-          <div className="flex justify-center items-center h-32">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#4D2C5E]"></div>
-          </div>
-        ) : selectedSessionAttendance.length > 0 ? (
-          <div className="space-y-4">
-            {selectedSessionAttendance.map((attendee, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
-              >
-                <div className="flex items-center">
-                  <FiUsers className="h-5 w-5 text-[#4D2C5E] mr-3" />
-                  <span className="text-gray-700">{attendee.name || 'Unknown'}</span>
-                </div>
-                <span
-                  className={`text-sm font-medium ${
-                    attendee.isAttended ? 'text-green-600' : 'text-red-600'
-                  }`}
-                >
-                  {attendee.isAttended ? 'Present' : 'Absent'}
-                </span>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center text-gray-500 py-8">
-            No attendance recorded for this class.
-          </div>
-        )}
-
-        <div className="mt-6 flex justify-end">
-          <button
-            onClick={() => setShowAttendanceModal(false)}
-            className="px-5 py-2.5 border border-gray-200 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors duration-200"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-)}
       </div>
     </div>
   );

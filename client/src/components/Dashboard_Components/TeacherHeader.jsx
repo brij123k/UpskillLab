@@ -5,12 +5,12 @@ import {
   FiTrendingUp, FiVideo, FiBell, FiUser, 
   FiLogOut, FiSend, FiMenu, FiX, FiChevronRight
 } from "react-icons/fi";
-
 import { FaChalkboardTeacher} from "react-icons/fa";
 import { useAuth } from '../../context/AuthContext';
 import ApiConfig from "../../config/apiConfig";
 import useNotificationService from "../../config/notificationService";
 import { getDataHandlerWithToken, patchTokenDataHandler } from "../../config/services";
+import { toast } from "react-toastify";
 function TeacherHeader() {
   const {logout} = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -65,7 +65,7 @@ const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
         getDataHandlerWithToken(endpoint, null, null, true),
         getDataHandlerWithToken(endpoint2, null, null, true),
         getDataHandlerWithToken(endpoint3, null, null, true),
-        getDataHandlerWithToken(endpoint4, null, null, true),
+        // getDataHandlerWithToken(endpoint4, null, null, true),
         getDataHandlerWithToken('NotificationsbyId')
       ]);
       

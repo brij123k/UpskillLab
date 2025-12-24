@@ -111,6 +111,8 @@ const ApiConfig = {
   teacherSugegstionsget:`${url}/suggestions/teacher`,
   // Schedule
   ClassSchedule:`${url}/Class-Schedule/teacher`,
+  getAllUserByBatchId:(batchId)=>`${url}/orders/order/${batchId}`,
+  markPresent:`${url}/attendance`,
   doubtsResponse:(id)=>`${url}/doubts/${id}/message`,
   Notifications:(role)=>`${url}/notifications/role/${role}`,
   NotificationsbyId:`${url}/notifications/user`,
