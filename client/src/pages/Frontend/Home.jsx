@@ -21,6 +21,7 @@ import { NavLink } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import AdmissionFormModal from '../../components/Modal/BasicEnrollNowModal';
 import TeacherSlider from '../../components/TeacherSlider';
+import VideoTestimonial from '../../components/VideoTestimonial';
 // import ExitIntentModal from "../../components/ExitIntentModal"
 function Home() {
   const controls = useAnimation();
@@ -474,6 +475,7 @@ function Home() {
       <div className=''>
         <ScrollableCategories />
       </div>
+      <VideoTestimonial/>
       <SuccessTestimonial />
       <CertificationSlider />
       <EducationBanner />

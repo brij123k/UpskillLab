@@ -17,25 +17,34 @@ export const AuthProvider = ({ children }) => {
 
   const tokenRefreshTimeoutRef = useRef(null);
 
-  useEffect(() => {
-    const initializeAuth = async () => {
-      if (auth?.authToken) {
-        try {
-          await fetchUserDetails();
-          setupTokenRefresh();
-        } catch (error) {
-          console.error('Initialization failed:', error);
-          logout();
-        }
-      }
-      setLoading(false);
-    };
-    initializeAuth();
+ useEffect(() => {
+  const initializeAuth = async () => {
+    try {
+      // 1️⃣ Read token if admin opened via URL
+      readAuthFromUrl();
 
-    return () => {
-      clearTimeout(tokenRefreshTimeoutRef.current);
-    };
-  }, []);
+      // 2️⃣ Normal session-based auth
+      const stored = sessionStorage.getItem('auth');
+      if (stored) {
+        setAuth(JSON.parse(stored));
+        await fetchUserDetails();
+        setupTokenRefresh();
+        setIsAuthenticated(true);
+      }
+    } catch (error) {
+      console.error('Auth init failed:', error);
+      logout();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  initializeAuth();
+
+  return () => {
+    clearTimeout(tokenRefreshTimeoutRef.current);
+  };
+}, []);
 
   const fetchUserDetails = async () => {
     try {
@@ -123,6 +132,31 @@ export const AuthProvider = ({ children }) => {
       throw error;
     }
   };
+
+  const readAuthFromUrl = () => {
+  const params = new URLSearchParams(window.location.search);
+
+  const token = params.get('token');
+  const refreshToken = params.get('refreshToken');
+
+  if (token && refreshToken) {
+    const newAuth = {
+      authToken: token,
+      refreshToken,
+      // optional: backend should validate token anyway
+      authTokenExpiryDate: null,
+    };
+
+    sessionStorage.setItem('auth', JSON.stringify(newAuth));
+    setAuth(newAuth);
+    setIsAuthenticated(true);
+
+    // Remove tokens from URL (VERY IMPORTANT)
+    params.delete('token');
+    params.delete('refreshToken');
+    window.history.replaceState({}, '', window.location.pathname);
+  }
+};
 
   const logout = () => {
     setAuth(null);

@@ -29,7 +29,7 @@ const ApiConfig = {
   
   // Testimonials
   testimonial: `${url}/testimonials`,
-  
+  videoTestimonials:`${url}/video-testimonials`,
   // Languages
   languages: `${url}/languages`,
   
