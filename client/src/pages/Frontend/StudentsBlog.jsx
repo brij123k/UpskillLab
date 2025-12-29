@@ -35,6 +35,7 @@ const TruncatedHTML = ({ html, maxLength = 150 }) => {
 const BlogCard = ({
   id,
   title,
+  slug,
   content,
   category,
   image,
@@ -48,7 +49,7 @@ const BlogCard = ({
   });
  const navigate = useNavigate();
   const handleClick = () => {
-    const slug = slugify(title, { lower: true, strict: true });
+    // const slug = slugify(title, { lower: true, strict: true });
   navigate(`/blog/${slug}`, { state: { slug } });
   }
   // Estimate read time (assuming 200 words per minute)
@@ -197,6 +198,7 @@ const StudentsBlog = () => {
                 key={blog._id}
                 id={blog._id}
                 title={blog.title}
+                slug={blog.slug}
                 content={blog.description}
                 category={blog.tag}
                 image={blog.image}
