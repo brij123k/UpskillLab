@@ -342,7 +342,7 @@ const getCourses = async () => {
                   </div>
 
                   {/* Description */}
-                  <p className="text-xs text-gray-600 mb-3 line-clamp-2 h-10">
+                  <p className="text-xs text-gray-600 mb-3 line-clamp-2 h-15">
                     {video.description || 'No description available'}
                   </p>
 
