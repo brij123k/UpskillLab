@@ -40,7 +40,7 @@ const TeacherSuggestions = () => {
         // Fetch batches taught by this teacher
         const batchesResponse = await getDataHandlerWithToken('upcomingBatches');
         setBatches(batchesResponse || []);
-
+        
         // Fetch teacher's suggestions
         const suggestionsResponse = await getDataHandlerWithToken('teacherSugegstionsget');
         setSuggestions(suggestionsResponse.suggestions || []);

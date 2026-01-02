@@ -108,6 +108,9 @@ const ApiConfig = {
   studyMaterialByTeacher:(id)=>`${url}/study-materials/teacher/${id}`,
   studentClassAttendance:(id)=>`${url}/live-classes/${id}/attendance/teacher`,
   teacherSugegstions:`${url}/suggestions`,
+  teacherAssignment:`${url}/assignments`,
+  updateTeacherAssignment:(id)=>`${url}/assignments/${id}`,
+  assignmentSubmissions:(id)=>`${url}/assignments/${id}/submissions`,
   teacherSugegstionsget:`${url}/suggestions/teacher`,
   // Schedule
   ClassSchedule:`${url}/Class-Schedule/teacher`,
@@ -137,6 +140,7 @@ const ApiConfig = {
   studentHistory:`${url}/student-info`,
   account:`${url}/api/payment-status`,
   trends:`${url}/resources`,
+  submitAssignments:`${url}/assignments/submit`,
   studentAttendance:`${url}/live-classes/attendance`,
   updateStudentAttendance:(classId)=>`${url}/live-classes/${classId}/attendance`,
   appliedJobs:(email)=>`${url}/applications/applied-jobs/${email}`,

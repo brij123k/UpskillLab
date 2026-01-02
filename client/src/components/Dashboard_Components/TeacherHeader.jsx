@@ -334,6 +334,13 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
                     Teacher Suggestions
                   </NavLink>
                   <NavLink
+                    to="/Teacher/Assignments"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                  >
+                    <FaChalkboardTeacher className="mr-2" />
+                    Teacher Assignments
+                  </NavLink>
+                  <NavLink
                     to="/Teacher/Notifications"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                   >
