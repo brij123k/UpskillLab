@@ -18,7 +18,7 @@ function TeacherHeader() {
 const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isNotificationDropdownOpen, setIsNotificationDropdownOpen] = useState(false);
   const navigate = useNavigate();
-  
+
   const [loading, setLoading] = useState(true);
   const [profileId,setProfileId]= useState('')
   const notificationRef = useRef(null);
