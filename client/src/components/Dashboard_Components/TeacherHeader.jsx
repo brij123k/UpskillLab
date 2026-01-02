@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { 
   FiHome, FiUpload, FiCalendar, FiMessageSquare, 
   FiTrendingUp, FiVideo, FiBell, FiUser, 
-  FiLogOut, FiSend, FiMenu, FiX, FiChevronRight
+  FiLogOut, FiSend, FiMenu, FiX, FiChevronRight,FiFileText 
 } from "react-icons/fi";
 import { FaChalkboardTeacher} from "react-icons/fa";
 import { useAuth } from '../../context/AuthContext';
@@ -337,7 +337,7 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
                     to="/Teacher/Assignments"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                   >
-                    <FaChalkboardTeacher className="mr-2" />
+                    <FiFileText  className="mr-2" />
                     Teacher Assignments
                   </NavLink>
                   <NavLink
@@ -437,6 +437,16 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
               
                 <FaChalkboardTeacher className="inline mr-2" />
                     Teacher Suggestions
+              </NavLink>
+
+              <NavLink
+                to="/Teacher/Assignments"
+                className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
+                onClick={() => setIsMenuOpen(false)}
+              >
+              
+                <FiFileText className="inline mr-2" />
+                    Teacher Assignments
               </NavLink>
 
               <NavLink
