@@ -30,6 +30,8 @@ const StudentClassSchedule = () => {
     teacherId: '',
     classSessionId: '',
     rating: 5,
+     expectation: '',
+  comfortLevel: '',
     message: ''
   });
   const [myFeedbacks, setMyFeedbacks] = useState([]);
@@ -133,33 +135,37 @@ const StudentClassSchedule = () => {
   };
 
 
-  const openFeedbackModal = (session) => {
-    setSelectedSession(session);
-    
-    const existingFeedback = myFeedbacks.find(
-      fb => fb.classSessionId === session._id
-    );
-    
-    if (existingFeedback) {
-      setFeedbackData({
-        teacherId: session.teacherId?._id || '',
-        classSessionId: session._id,
-        rating: existingFeedback.rating,
-        message: existingFeedback.message
-      });
-      setEditingFeedbackId(existingFeedback._id);
-    } else {
-      setFeedbackData({
-        teacherId: session.teacherId?._id || '',
-        classSessionId: session._id,
-        rating: 5,
-        message: ''
-      });
-      setEditingFeedbackId(null);
-    }
-    
-    setFeedbackModalOpen(true);
-  };
+const openFeedbackModal = (session) => {
+  setSelectedSession(session);
+  
+  const existingFeedback = myFeedbacks.find(
+    fb => fb.classSessionId === session._id
+  );
+  
+  if (existingFeedback) {
+    setFeedbackData({
+      teacherId: session.teacherId?._id || '',
+      classSessionId: session._id,
+      rating: existingFeedback.rating || 5,
+      expectation: existingFeedback.expectation || '',
+      comfortLevel: existingFeedback.comfortLevel || '',
+      message: existingFeedback.message || ''
+    });
+    setEditingFeedbackId(existingFeedback._id);
+  } else {
+    setFeedbackData({
+      teacherId: session.teacherId?._id || '',
+      classSessionId: session._id,
+      rating: 5,
+      expectation: '',
+      comfortLevel: '',
+      message: ''
+    });
+    setEditingFeedbackId(null);
+  }
+  
+  setFeedbackModalOpen(true);
+};
 
   const handleFeedbackChange = (e) => {
     const { name, value } = e.target;
@@ -169,31 +175,36 @@ const StudentClassSchedule = () => {
     }));
   };
 
-  const submitFeedback = async () => {
-    try {
-      let response;
-      
-      if (editingFeedbackId) {
-        const endpoint = ApiConfig.feedbackwithId(editingFeedbackId);
+const submitFeedback = async () => {
+  // Validate required fields
+  if (!feedbackData.expectation || !feedbackData.comfortLevel) {
+    toast.error('Please answer all required questions');
+    return;
+  }
 
-        response = await patchTokenDataHandler(endpoint, feedbackData, true);
-        setMyFeedbacks(prev => 
-          prev.map(fb => 
-            fb._id === editingFeedbackId ? { ...fb, ...feedbackData } : fb
-          )
-        );
-      } else {
-        response = await postDataHandlerWithToken("feedback",feedbackData);
-        setMyFeedbacks(prev => [...prev, response.feedback]);
-      }
-      
-      setFeedbackModalOpen(false);
-      toast.success('Feedback submitted successfully');
-    } catch (error) {
-      console.error('Error submitting feedback:', error);
-      toast.error('Failed to submit feedback');
+  try {
+    let response;
+    
+    if (editingFeedbackId) {
+      const endpoint = ApiConfig.feedbackwithId(editingFeedbackId);
+      response = await patchTokenDataHandler(endpoint, feedbackData, true);
+      setMyFeedbacks(prev => 
+        prev.map(fb => 
+          fb._id === editingFeedbackId ? { ...fb, ...feedbackData } : fb
+        )
+      );
+    } else {
+      response = await postDataHandlerWithToken("feedback", feedbackData);
+      setMyFeedbacks(prev => [...prev, response.feedback]);
     }
-  };
+    
+    setFeedbackModalOpen(false);
+    toast.success('Feedback submitted successfully');
+  } catch (error) {
+    console.error('Error submitting feedback:', error);
+    toast.error(error.message || 'Failed to submit feedback');
+  }
+};
 
 
 
@@ -331,80 +342,160 @@ const StudentClassSchedule = () => {
 
 
         {/* Feedback Modal */}
-      {feedbackModalOpen && selectedSession && (
-        <div className="fixed inset-0 bg-[#00000081] bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
-            <div className="flex justify-between items-center border-b p-4">
-              <h3 className="text-xl font-bold text-[#4D2C5E]">
-                {editingFeedbackId ? 'Edit Feedback' : 'Submit Feedback'}
-              </h3>
-              <button 
-                onClick={() => setFeedbackModalOpen(false)}
-                className="text-gray-500 hover:text-gray-700"
-              >
-                <FiX className="h-6 w-6" />
-              </button>
-            </div>
-            
-            <div className="p-4">
-              <div className="mb-4">
-                <h4 className="font-medium text-gray-800 mb-1">Class: {selectedSession.title}</h4>
-                <p className="text-sm text-gray-600">
-                  Teacher: {selectedSession.teacherId?.name || 'Unknown'}
-                </p>
-                <p className="text-sm text-gray-600">
-                  Date: {format(new Date(selectedSession.scheduledDate), 'MMM d, yyyy')}
-                </p>
-              </div>
-              
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Rating</label>
-                <div className="flex items-center">
-                  {[1, 2, 3, 4, 5].map(star => (
-                    <button
-                      key={star}
-                      type="button"
-                      onClick={() => setFeedbackData(prev => ({ ...prev, rating: star }))}
-                      className="focus:outline-none"
-                    >
-                      <FiStar
-                        className={`h-6 w-6 ${star <= feedbackData.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`}
-                      />
-                    </button>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Feedback Message</label>
-                <textarea
-                  name="message"
-                  value={feedbackData.message}
-                  onChange={handleFeedbackChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]"
-                  rows="4"
-                  placeholder="Share your experience about this class..."
-                ></textarea>
-              </div>
-            </div>
-            
-            <div className="flex justify-end space-x-3 p-4 border-t">
+     {/* Feedback Modal */}
+{feedbackModalOpen && selectedSession && (
+  <div className="fixed inset-0 bg-[#00000081] bg-opacity-50 flex items-center justify-center z-50 p-4">
+    <div className="bg-white rounded-xl shadow-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
+      <div className="flex justify-between items-center border-b p-4 sticky top-0 bg-white">
+        <h3 className="text-xl font-bold text-[#4D2C5E]">
+          {editingFeedbackId ? 'Edit Class Feedback' : 'Submit Class Feedback'}
+        </h3>
+        <button 
+          onClick={() => setFeedbackModalOpen(false)}
+          className="text-gray-500 hover:text-gray-700"
+        >
+          <FiX className="h-6 w-6" />
+        </button>
+      </div>
+      
+      <div className="p-4 space-y-6">
+        {/* Class Info */}
+        <div className="bg-gray-50 p-3 rounded-lg">
+          <h4 className="font-medium text-gray-800 mb-1">{selectedSession.title}</h4>
+          <p className="text-sm text-gray-600">
+            Teacher: {selectedSession.teacherId?.name || 'Unknown'}
+          </p>
+          <p className="text-sm text-gray-600">
+            Date: {format(new Date(selectedSession.scheduledDate), 'MMM d, yyyy')}
+          </p>
+        </div>
+        
+        {/* Question 1: Rating */}
+        <div>
+          <label className="block text-gray-700 mb-3 font-medium">
+            How would you rate your today's class?*
+          </label>
+          <div className="flex items-center justify-between max-w-xs">
+            {[1, 2, 3, 4, 5].map(star => (
               <button
-                onClick={() => setFeedbackModalOpen(false)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100"
+                key={star}
+                type="button"
+                onClick={() => setFeedbackData(prev => ({ ...prev, rating: star }))}
+                className="flex flex-col items-center focus:outline-none group"
               >
-                Cancel
+                <FiStar
+                  className={`h-10 w-10 mb-1 ${star <= feedbackData.rating 
+                    ? 'text-yellow-500 fill-yellow-500' 
+                    : 'text-gray-300 group-hover:text-yellow-400'}`}
+                />
+                <span className="text-xs text-gray-600">{star}</span>
               </button>
-              <button
-                onClick={submitFeedback}
-                className="px-4 py-2 bg-[#4D2C5E] text-white rounded-lg hover:bg-[#3a2152]"
-              >
-                {editingFeedbackId ? 'Update Feedback' : 'Submit Feedback'}
-              </button>
-            </div>
+            ))}
           </div>
         </div>
-      )}
+        
+        {/* Question 2: Expectations */}
+        <div>
+          <label className="block text-gray-700 mb-3 font-medium">
+            Did the session meet your expectations?*
+          </label>
+          <div className="space-y-2">
+            {[
+              { value: 'yes', label: 'Yes' },
+              { value: 'somewhat', label: 'Somewhat' },
+              { value: 'no', label: 'No' }
+            ].map(option => (
+              <div key={option.value} className="flex items-center">
+                <input
+                  type="radio"
+                  id={`expectation-${option.value}`}
+                  name="expectation"
+                  value={option.value}
+                  checked={feedbackData.expectation === option.value}
+                  onChange={handleFeedbackChange}
+                  className="h-4 w-4 text-[#4D2C5E] border-gray-300 focus:ring-[#4D2C5E]"
+                  required
+                />
+                <label 
+                  htmlFor={`expectation-${option.value}`}
+                  className="ml-2 text-gray-700"
+                >
+                  {option.label}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Question 3: Comfort Level */}
+        <div>
+          <label className="block text-gray-700 mb-3 font-medium">
+            How comfortable did you feel interacting during the session?*
+          </label>
+          <div className="space-y-2">
+            {[
+              { value: 'very_comfortable', label: 'Very comfortable' },
+              { value: 'neutral', label: 'Neutral' },
+              { value: 'slightly_hesitant', label: 'Slightly hesitant' },
+              { value: 'did_not_participate', label: 'Didn\'t participate' }
+            ].map(option => (
+              <div key={option.value} className="flex items-center">
+                <input
+                  type="radio"
+                  id={`comfort-${option.value}`}
+                  name="comfortLevel"
+                  value={option.value}
+                  checked={feedbackData.comfortLevel === option.value}
+                  onChange={handleFeedbackChange}
+                  className="h-4 w-4 text-[#4D2C5E] border-gray-300 focus:ring-[#4D2C5E]"
+                  required
+                />
+                <label 
+                  htmlFor={`comfort-${option.value}`}
+                  className="ml-2 text-gray-700"
+                >
+                  {option.label}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Question 4: Message */}
+        <div>
+          <label className="block text-gray-700 mb-3 font-medium">
+            Any message or feedback for your faculty/mentor?
+          </label>
+          <textarea
+            name="message"
+            value={feedbackData.message}
+            onChange={handleFeedbackChange}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]"
+            rows="4"
+            placeholder="Share your detailed feedback, suggestions, or appreciation..."
+          ></textarea>
+          <p className="mt-1 text-sm text-gray-500">Optional but appreciated</p>
+        </div>
+      </div>
+      
+      <div className="flex justify-end space-x-3 p-4 border-t sticky bottom-0 bg-white">
+        <button
+          onClick={() => setFeedbackModalOpen(false)}
+          className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+  onClick={submitFeedback}
+  className="px-4 py-2 bg-[#4D2C5E] text-white rounded-lg hover:bg-[#3a2152] transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+  disabled={!feedbackData.expectation || !feedbackData.comfortLevel}
+>
+  {editingFeedbackId ? 'Update Feedback' : 'Submit Feedback'}
+</button>
+      </div>
+    </div>
+  </div>
+)}
 
       </div>
     </div>
@@ -554,30 +645,48 @@ const existingFeedback = myFeedbacks.find(fb => fb.classSessionId === session._i
       {isPast && (
         <div className="mt-4">
           {existingFeedback ? (
-            <div className="bg-gray-50 p-3 rounded-lg">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="flex items-center">
-                    {[...Array(5)].map((_, i) => (
-                      <FiStar
-                        key={i}
-                        className={`h-4 w-4 ${i < existingFeedback.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`}
-                      />
-                    ))}
-                  </div>
-                  {existingFeedback.message && (
-                    <p className="mt-1 text-sm text-gray-600">{existingFeedback.message}</p>
-                  )}
-                </div>
-                <button
-                  onClick={() => openFeedbackModal(session)}
-                  className="text-[#4D2C5E] hover:text-[#FF7426] p-2"
-                  title="Edit feedback"
-                >
-                  <FiEdit2 />
-                </button>
-              </div>
+             <div className="bg-gray-50 p-3 rounded-lg">
+    <div className="flex items-center justify-between mb-2">
+      <div>
+        <div className="flex items-center">
+          {[...Array(5)].map((_, i) => (
+            <FiStar
+              key={i}
+              className={`h-4 w-4 ${i < existingFeedback.rating ? 'text-yellow-500 fill-yellow-500' : 'text-gray-300'}`}
+            />
+          ))}
+        </div>
+        <div className="mt-1 text-xs text-gray-600 space-y-1">
+          {existingFeedback.expectation && (
+            <div>
+              <span className="font-medium">Expectations: </span>
+              {existingFeedback.expectation === 'yes' ? 'Yes' : 
+               existingFeedback.expectation === 'somewhat' ? 'Somewhat' : 'No'}
             </div>
+          )}
+          {existingFeedback.comfortLevel && (
+            <div>
+              <span className="font-medium">Comfort Level: </span>
+              {existingFeedback.comfortLevel === 'very_comfortable' ? 'Very comfortable' :
+               existingFeedback.comfortLevel === 'neutral' ? 'Neutral' :
+               existingFeedback.comfortLevel === 'slightly_hesitant' ? 'Slightly hesitant' :
+               'Didn\'t participate'}
+            </div>
+          )}
+        </div>
+      </div>
+      <button
+        onClick={() => openFeedbackModal(session)}
+        className="text-[#4D2C5E] hover:text-[#FF7426] p-2"
+        title="Edit feedback"
+      >
+        <FiEdit2 />
+      </button>
+    </div>
+    {existingFeedback.message && (
+      <p className="mt-2 text-sm text-gray-600 border-t pt-2">{existingFeedback.message}</p>
+    )}
+  </div>
           ) : (
             <button
               onClick={() => openFeedbackModal(session)}
