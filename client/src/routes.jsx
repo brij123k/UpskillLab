@@ -78,6 +78,7 @@ const StudentBlogs= lazy(()=> import("./pages/Dashboard/Student/StudentBlogs"))
 const StudentExamDashboard = lazy(()=> import('./pages/Dashboard/Student/StudentExamDashboard'))
 const ExamAttempt = lazy(()=> import('./pages/Dashboard/Student/StudentExam'))
 const StudentAssignments = lazy(()=> import('./pages/Dashboard/Student/StudentAssignments'))
+const StudentCounseling = lazy(()=> import('./pages/Dashboard/Student/StudentCounseling'))
 
 
 const TeacherProtectedLayout = ({ children }) => (
@@ -167,6 +168,7 @@ export const routes = [
   { exact: true, path:"/Student/Blogs", layout:StudentProtectedLayout, component:StudentBlogs},
   { exact: true, path: "/Student/Exam", layout: StudentProtectedLayout, component: StudentExamDashboard},
   { exact: true, path: "/Student/Assignments", layout: StudentProtectedLayout, component: StudentAssignments},
+  { exact: true, path: "/Student/Counseling", layout: StudentProtectedLayout, component: StudentCounseling},
   { exact: true, path: "/Student/exam/:examId", layout: StudentProtectedLayout, component: ExamAttempt},
 
 ];

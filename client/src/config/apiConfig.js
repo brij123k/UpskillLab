@@ -1,5 +1,5 @@
-// const url = "https://api.upskillab.com";
-const url = "http://localhost:3000"
+const url = "https://api.upskillab.com";
+// const url = "http://localhost:3000"
 const ApiConfig = {
   url,
   uploadFiles: `${url}/file`,
@@ -157,6 +157,9 @@ const ApiConfig = {
   feedbackwithId:(id)=>`${url}/feedback/${id}`,
   getFeedback:`${url}/feedback/my-feedbacks`,
   getResult:`${url}/attempts/my-result`,
+
+  bookCounseling:`{$url}/counselling/book`,
+  myCounseling:`{$url}/counselling/my`,
 
   getExams:`${url}/exams/my/exams`,
   examCheck: (examId) => `${url}/exams/${examId}/student`,
