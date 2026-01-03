@@ -3,7 +3,8 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { 
   FiHome, FiBook, FiCalendar, FiVideo, FiStar,FiFileText,
   FiMessageSquare, FiTrendingUp, FiBriefcase, 
-  FiBell, FiUser, FiLogOut, FiClock, FiMenu, FiX, FiChevronRight
+  FiBell, FiUser, FiLogOut, FiClock, FiMenu, FiX, FiChevronRight,
+  FiUserCheck
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import ApiConfig from '../../config/apiConfig';
@@ -402,6 +403,15 @@ const StudentHeader = () => {
                   </NavLink>
 
                   <NavLink
+                    to="/Student/Counseling"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    onClick={() => setIsProfileDropdownOpen(false)}
+                  >
+                    <FiUserCheck  className="mr-2" />
+                    Book Counselling
+                  </NavLink>
+
+                  <NavLink
                     to="/Student/Exam"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                     onClick={() => setIsProfileDropdownOpen(false)}
@@ -576,6 +586,15 @@ const StudentHeader = () => {
               >
                 <FiFileText  className="inline mr-3" />
                 Assignments
+              </NavLink>
+
+              <NavLink
+                to="/Student/Counseling"
+                className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <FiUserCheck  className="inline mr-3" />
+                Book Counselling
               </NavLink>
 
               <NavLink
