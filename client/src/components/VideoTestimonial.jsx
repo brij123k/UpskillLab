@@ -113,9 +113,7 @@ const VideoTestimonialGallery = () => {
 
   if (testimonials.length === 0) {
     return (
-      <div className="text-center py-12">
-        <div className="text-gray-500 text-lg mb-2">No video testimonials available</div>
-        <p className="text-gray-400">Check back soon for student testimonials</p>
+      <div className="text-center">
       </div>
     );
   }
