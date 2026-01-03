@@ -62,6 +62,7 @@ const StudentCounseling = () => {
     try {
       setIsLoading(true);
       const response = await getDataHandlerWithToken('myCounseling');
+      console.log(response)
       setCounselings(response || []);
       setFilteredCounselings(response || []);
     } catch (error) {
@@ -237,7 +238,7 @@ const StudentCounseling = () => {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-[#4D2C5E] tracking-tight">My Counseling Sessions</h1>
+            <h1 className="text-2xl md:text-3xl font-bold text-[#4D2C5E] tracking-tight">Book Counseling Sessions</h1>
             <p className="text-gray-500">Book and manage one-on-one counseling sessions</p>
           </div>
           <motion.button
@@ -264,7 +265,6 @@ const StudentCounseling = () => {
                 <h3 className="text-sm font-medium text-blue-800">Monthly Booking Limit</h3>
                 <p className="text-sm text-blue-700 mt-1">
                   You can book only one counseling session per month. You already have an active booking for {formatMonthYear(currentMonth, currentYear)}. 
-                  If you need to cancel your current booking, you can do so and book a new session for the same month.
                 </p>
               </div>
             </div>
@@ -521,7 +521,7 @@ const StudentCounseling = () => {
                         </button>
 
                         {/* Join Session Button (for scheduled/confirmed sessions) */}
-                        {['scheduled', 'confirmed'].includes(counseling.status) && counseling.scheduledAt && (
+                        {/* {['scheduled', 'confirmed'].includes(counseling.status) && counseling.scheduledAt && (
                           <button
                             onClick={() => {
                               // This would open the video call interface
@@ -532,7 +532,7 @@ const StudentCounseling = () => {
                             <FiVideo className="mr-1 h-4 w-4" />
                             Join Session
                           </button>
-                        )}
+                        )} */}
 
                         
                       </div>
@@ -810,6 +810,15 @@ const StudentCounseling = () => {
                               {getStatusText(selectedCounseling.status)}
                             </span>
                           </div>
+                          {selectedCounseling.reason && selectedCounseling.status=='cancelled'?(
+                          <div className="flex justify-between">
+                            <span className="text-sm text-gray-600">Cancel Reason:</span>
+                            <span className={`text-sm font-medium `}>
+                              {selectedCounseling.reason}
+                            </span>
+                          </div>
+                          ):(<div className="flex justify-between">
+                          </div>)}
                           <div className="flex justify-between">
                             <span className="text-sm text-gray-600">Last Updated:</span>
                             <span className="text-sm font-medium text-gray-900">
@@ -821,13 +830,11 @@ const StudentCounseling = () => {
                     </div>
 
                     {/* Actions */}
-                    <div className="border-t border-gray-200 pt-6">
+                    {/* <div className="border-t border-gray-200 pt-6">
                       <div className="flex justify-between">
-                        {/* Join Button (for scheduled/confirmed sessions) */}
                         {['scheduled', 'confirmed'].includes(selectedCounseling.status) && selectedCounseling.scheduledAt && (
                           <button
                             onClick={() => {
-                              // This would open the video call interface
                               toast.info('Joining counseling session...');
                               setShowDetailsModal(false);
                             }}
@@ -838,7 +845,7 @@ const StudentCounseling = () => {
                           </button>
                         )}
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </motion.div>

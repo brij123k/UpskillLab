@@ -158,8 +158,8 @@ const ApiConfig = {
   getFeedback:`${url}/feedback/my-feedbacks`,
   getResult:`${url}/attempts/my-result`,
 
-  bookCounseling:`{$url}/counselling/book`,
-  myCounseling:`{$url}/counselling/my`,
+  bookCounseling:`${url}/counselling/book`,
+  myCounseling:`${url}/counselling/my`,
 
   getExams:`${url}/exams/my/exams`,
   examCheck: (examId) => `${url}/exams/${examId}/student`,
