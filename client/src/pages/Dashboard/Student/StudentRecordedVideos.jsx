@@ -343,8 +343,13 @@ const getCourses = async () => {
 
                   {/* Description */}
                   <p className="text-xs text-gray-600 mb-3 line-clamp-2 h-15">
-                    {video.description || 'No description available'}
-                  </p>
+  {video.description 
+    ? (video.description.length > 150 
+        ? `${video.description.substring(0, 150)}...` 
+        : video.description)
+    : 'No description available'
+  }
+</p>
 
                   {/* Course Information */}
                   <div className="mb-2">

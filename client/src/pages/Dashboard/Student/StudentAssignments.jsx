@@ -848,67 +848,74 @@ const handleViewAssignment = async (assignment) => {
                       </div>
 
                       {/* File Upload */}
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Upload Your Solution (PDF only, max 5MB)
-                        </label>
-                        
-                        <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-[#4D2C5E] transition-colors duration-200">
-                          <div className="space-y-2 text-center">
-                            {file ? (
-                              <div className="flex flex-col items-center">
-                                <FiFile className="h-12 w-12 text-green-500" />
-                                <p className="text-sm text-gray-900 font-medium mt-2">{fileName}</p>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setFile(null);
-                                    setFileName('');
-                                  }}
-                                  className="mt-2 text-sm text-red-600 hover:text-red-800"
-                                  disabled={isUploading || isSubmitting}
-                                >
-                                  Remove File
-                                </button>
-                              </div>
-                            ) : (
-                              <>
-                                <FiUpload className="mx-auto h-12 w-12 text-gray-400" />
-                                <div className="flex text-sm text-gray-600">
-                                  <label className="relative cursor-pointer rounded-md font-medium text-[#4D2C5E] hover:text-[#3A2152] focus-within:outline-none">
-                                    <span>Upload a file</span>
-                                    <input
-                                      type="file"
-                                      className="sr-only"
-                                      accept=".pdf,application/pdf"
-                                      onChange={handleFileSelect}
-                                      disabled={isUploading || isSubmitting}
-                                    />
-                                  </label>
-                                  <p className="pl-1">or drag and drop</p>
-                                </div>
-                                <p className="text-xs text-gray-500">PDF up to 5MB</p>
-                              </>
-                            )}
-                          </div>
-                        </div>
+                     <div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Upload Your Solution (PDF only, max 5MB)
+  </label>
+  
+  <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-[#4D2C5E] transition-colors duration-200 cursor-pointer">
+    {/* Wrap the entire card content in a label */}
+    <label className="cursor-pointer w-full text-center">
+      <div className="space-y-2 w-full">
+        {file ? (
+          <div className="flex flex-col items-center">
+            <FiFile className="h-12 w-12 text-green-500" />
+            <p className="text-sm text-gray-900 font-medium mt-2">{fileName}</p>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation(); // Prevent triggering the file input
+                setFile(null);
+                setFileName('');
+              }}
+              className="mt-2 text-sm text-red-600 hover:text-red-800"
+              disabled={isUploading || isSubmitting}
+            >
+              Remove File
+            </button>
+          </div>
+        ) : (
+          <>
+            <FiUpload className="mx-auto h-12 w-12 text-gray-400" />
+            <div className="flex text-sm text-gray-600 justify-center">
+              <span className="relative rounded-md font-medium text-[#4D2C5E] hover:text-[#3A2152]">
+                Upload a file
+              </span>
+              <p className="pl-1">or drag and drop</p>
+            </div>
+            <p className="text-xs text-gray-500">PDF up to 5MB</p>
+          </>
+        )}
+      </div>
+      
+      {/* Hidden file input that's accessible via the label */}
+      <input
+        type="file"
+        className="sr-only"
+        accept=".pdf,application/pdf"
+        onChange={handleFileSelect}
+        disabled={isUploading || isSubmitting || !!file}
+        id="file-upload-input"
+      />
+    </label>
+  </div>
 
-                        {/* Upload Progress */}
-                        {isUploading && (
-                          <div className="mt-4">
-                            <div className="flex justify-between text-xs text-gray-600 mb-1">
-                              <span>Uploading...</span>
-                              <span>{uploadProgress}%</span>
-                            </div>
-                            <div className="w-full bg-gray-200 rounded-full h-2">
-                              <div
-                                className="bg-green-500 h-2 rounded-full transition-all duration-300"
-                                style={{ width: `${uploadProgress}%` }}
-                              ></div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
+  {/* Upload Progress */}
+  {isUploading && (
+    <div className="mt-4">
+      <div className="flex justify-between text-xs text-gray-600 mb-1">
+        <span>Uploading...</span>
+        <span>{uploadProgress}%</span>
+      </div>
+      <div className="w-full bg-gray-200 rounded-full h-2">
+        <div
+          className="bg-green-500 h-2 rounded-full transition-all duration-300"
+          style={{ width: `${uploadProgress}%` }}
+        ></div>
+      </div>
+    </div>
+  )}
+</div>
 
                       <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-2">
                         <button

@@ -605,7 +605,7 @@ const TeacherAssignments = () => {
                           className="text-sm text-[#4D2C5E] hover:text-green-600 flex items-center px-3 py-1.5 border border-gray-200 rounded-md hover:border-green-300 hover:bg-green-50 transition-colors"
                         >
                           <FiUsers className="mr-1 h-4 w-4" />
-                          Submissions ({countSubmissions(assignment._id)})
+                          Submissions
                         </button>
                       </div>
                     </div>

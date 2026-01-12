@@ -182,6 +182,9 @@ const StudentFooter = () => {
       {/* Copyright Section */}
       <div className="w-full border-t border-gray-200 bg-[#F8F9FA]">
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-2 sm:gap-4">
+            <NavLink to="/PrivacyPolicy" className="text-[#FF7426] text-sm hover:underline">Privacy Policy</NavLink>
+          </div>
           <p className="text-center text-sm mt-2">© {new Date().getFullYear()} Upskillab.com. All rights reserved.</p>
         </div>
       </div>

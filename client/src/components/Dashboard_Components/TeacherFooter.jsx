@@ -99,7 +99,7 @@ function TeacherFooter() {
                 </li>
                 <li>
                   <NavLink 
-                    to="/Teacher/Doubts" 
+                    to="/Teacher/Doubt" 
                     className="text-[#606060] hover:text-[#4D2C5E] text-sm sm:text-base block flex items-center justify-center sm:justify-start"
                   >
                     <FiMessageSquare className="mr-1 text-xs" />
@@ -180,6 +180,7 @@ function TeacherFooter() {
       {/* Copyright Section - Matches header style */}
       <div className="w-full border-t border-gray-200 bg-[#F8F9FA]">
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
+          
           <p className="text-center text-sm mt-2">© {new Date().getFullYear()} Upskillab.com. All rights reserved.</p>
         </div>
       </div>
