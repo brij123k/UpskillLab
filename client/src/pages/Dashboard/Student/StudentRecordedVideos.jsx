@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FiSearch, FiX, FiVideo, FiClock, FiBook, FiFilter, FiUser, FiChevronDown } from 'react-icons/fi';
+import { FiSearch, FiX, FiVideo, FiClock, FiBook, FiArrowDown,FiArrowUp , FiUser, FiChevronDown } from 'react-icons/fi';
 import { getDataHandlerWithToken } from '../../../config/services';
 import ReactPlayer from 'react-player';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,7 @@ const StudentRecordedVideos = () => {
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [sortOrder, setSortOrder] = useState('old-to-new');
   const navigate = useNavigate();
 
 const getCourses = async () => {
@@ -115,7 +116,16 @@ const getCourses = async () => {
     
     return duration;
   };
-
+const sortedVideos = [...filteredVideos].sort((a, b) => {
+  const dateA = new Date(a.createdAt);
+  const dateB = new Date(b.createdAt);
+  
+  if (sortOrder === 'new-to-old') {
+    return dateB - dateA; // Newest first
+  } else {
+    return dateA - dateB; // Oldest first
+  }
+});
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -138,6 +148,7 @@ const getCourses = async () => {
     setActiveCourse('all');
     setActiveTeacher('all');
     setSearchQuery('');
+    setSortOrder('old-to-new');
   };
 
   return (
@@ -158,6 +169,32 @@ const getCourses = async () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+
+          {/* Time Sort Dropdown - ADD THIS */}
+            <div className="relative">
+              <div className="relative">
+                <select
+                  value={sortOrder}
+                  onChange={(e) => setSortOrder(e.target.value)}
+                  className="w-full sm:w-48 px-4 py-2 border border-gray-300 rounded-lg appearance-none bg-white focus:outline-none focus:ring-2 focus:ring-[#4D2C5E]/50 pr-10"
+                >
+                  <option value="old-to-new">
+                    <span className="flex items-center gap-2">
+                      <FiArrowUp size={14} />
+                      Old to New
+                    </span>
+                  </option>
+                  <option value="new-to-old">
+                    <span className="flex items-center gap-2">
+                      <FiArrowDown size={14} />
+                      New to Old
+                    </span>
+                  </option>
+                  
+                </select>
+                <FiChevronDown className="absolute right-3 top-3 text-gray-400 pointer-events-none" />
+              </div>
+            </div>
 
           {/* Dropdown Filters */}
           <div className="flex flex-col sm:flex-row gap-3">
@@ -228,7 +265,16 @@ const getCourses = async () => {
                     </button>
                   </span>
                 )}
+                {sortOrder !== 'new-to-old' && (
+                  <span className="inline-flex items-center gap-1 bg-[#4D2C5E]/10 text-[#4D2C5E] px-3 py-1 rounded-full text-sm">
+                    Sort: {sortOrder === 'old-to-new' ? 'Old to New' : 'New to Old'}
+                    <button onClick={() => setSortOrder('new-to-old')} className="ml-1 hover:text-red-600">
+                      <FiX size={14} />
+                    </button>
+                  </span>
+                )}
               </div>
+
               <button
                 onClick={clearFilters}
                 className="px-3 py-1 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-100 rounded-lg"
@@ -288,8 +334,8 @@ const getCourses = async () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {filteredVideos.length > 0 ? (
-            filteredVideos.map(video => (
+          {sortedVideos.length > 0 ? (
+            sortedVideos.map(video => (
               <div key={video._id} className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow duration-300">
                 {/* Video Thumbnail with 16:9 aspect ratio */}
                 <div className="relative">
