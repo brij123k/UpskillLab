@@ -283,25 +283,49 @@ const StudentExamDashboard = () => {
                             </motion.button>
                           )}
                           
-                          {exam.status === 'ongoing' && (
-                            <motion.button
-                              whileHover={{ scale: 1.03 }}
-                              whileTap={{ scale: 0.97 }}
-                              className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white py-2.5 rounded-lg hover:opacity-90 transition-all font-medium text-sm"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(`/Student/exam/${exam._id}`);
-                              }}
-                            >
-                              Join Exam
-                            </motion.button>
-                          )}
-                          
-                          {(exam.status === 'completed' || exam.status === 'result_published') && (
-                            <div className="text-center text-sm text-gray-500 py-2">
-                              {exam.status === 'result_published' ? 'Results available' : 'Exam completed'}
-                            </div>
-                          )}
+                          {/* ONGOING EXAM */}
+{exam.status === 'ongoing' && !exam.submitted && (
+  <motion.button
+    whileHover={{ scale: 1.03 }}
+    whileTap={{ scale: 0.97 }}
+    className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white py-2.5 rounded-lg hover:opacity-90 transition-all font-medium text-sm"
+    onClick={(e) => {
+      e.stopPropagation();
+      navigate(`/Student/exam/${exam._id}`);
+    }}
+  >
+    Join Exam
+  </motion.button>
+)}
+
+{exam.status === 'ongoing' && exam.submitted && (
+  <button
+    disabled
+    className="w-full bg-gray-200 text-gray-600 py-2.5 rounded-lg font-medium text-sm cursor-not-allowed"
+  >
+    Attempted
+  </button>
+)}
+
+{/* COMPLETED / RESULT PUBLISHED */}
+{(exam.status === 'completed' || exam.status === 'result_published') && exam.submitted && (
+  <button
+    disabled
+    className="w-full bg-gray-100 text-gray-500 py-2 rounded-lg text-xs font-medium cursor-not-allowed"
+  >
+   {exam.status === 'result_published' ? 'Results available' : 'Exam completed'} (Attempted)
+  </button>
+)}
+
+{(exam.status === 'completed' || exam.status === 'result_published') && !exam.submitted && (
+  <button
+    disabled
+    className="w-full bg-red-50 text-red-600 py-2 rounded-lg text-xs font-medium cursor-not-allowed"
+  >
+    {exam.status === 'result_published' ? 'Results available' : 'Exam completed'} (Missed)
+  </button>
+)}
+
                         </div>
                       </div>
                     </div>

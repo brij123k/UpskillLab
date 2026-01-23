@@ -6,6 +6,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getDataHandlerWithToken, postDataHandlerWithToken, putDataHandlerWithToken } from '../../../config/services';
 import { useNavigate, useParams } from 'react-router-dom';
 import ApiConfig from '../../../config/apiConfig';
+import { FiInfo, FiPlay, FiActivity, FiPause, FiWifi, FiFileText, 
+         FiAlertTriangle } from 'react-icons/fi';
 const StudentExam = () => {
      const navigate = useNavigate();
     const { examId } = useParams();
@@ -19,6 +21,8 @@ const StudentExam = () => {
   const [showInstructions, setShowInstructions] = useState(false);
   const [permissionGranted, setPermissionGranted] = useState(false);
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
+  const [checkboxes, setCheckboxes] = useState([false, false, false, false]);
+const [allChecked, setAllChecked] = useState(false);
   
   const mediaStreamRef = useRef(null);
   const visibilityChangeTimeRef = useRef(null);
@@ -124,6 +128,7 @@ const StudentExam = () => {
       await requestMediaPermissions();
       const endpoint = ApiConfig.startExam(examId)
       const response = await postDataHandlerWithToken(endpoint,{data:"attempt"},true);
+      console.log(response,"1")
       if(response.message=="You already attempted this exam"){
         toast.error(response.message)
         navigate("/Student/Exam");
@@ -142,9 +147,19 @@ const StudentExam = () => {
       setExamStatus('exam');
       
       // Set exam timer based on endAt time
-      const endTime = new Date(examData.endAt);
-      const now = new Date();
-      setTimeLeft(Math.max(0, endTime - now));
+      const startedAt = new Date(response.submission.startedAt);
+    const durationMs = examData.durationMinutes * 60 * 1000;
+
+    const attemptEndTime = new Date(startedAt.getTime() + durationMs);
+    const now = new Date();
+
+    const remainingTime = Math.max(0, attemptEndTime.getTime() - now.getTime());
+    console.log(remainingTime)
+    if(remainingTime<=0){
+      toast.error('Your Time is Over! Contact Support Team');
+      navigate("/Student/Exam");
+    }
+    setTimeLeft(remainingTime);
     } catch (error) {
       toast.error('Failed to start the exam. Please try again.');
       console.error('Error starting exam:', error);
@@ -173,6 +188,18 @@ const StudentExam = () => {
     }));
   };
 
+  const handleCheckboxChange = (index, checked) => {
+  const newCheckboxes = [...checkboxes];
+  newCheckboxes[index] = checked;
+  setCheckboxes(newCheckboxes);
+  setAllChecked(newCheckboxes.every(Boolean));
+};
+
+const handleStartClick = () => {
+  if (allChecked) {
+    setShowInstructions(true);
+  }
+};
   // Count words for subjective answers
   const countWords = (text) => {
     return text ? text.trim().split(/\s+/).length : 0;
@@ -230,6 +257,7 @@ const StudentExam = () => {
       
       // Prepare answers including unanswered questions
       const submissionAnswers = prepareSubmissionAnswers();
+      console.log(submissionAnswers)
       const endpoint = ApiConfig.submitExam(attemptData.submission._id)
       await postDataHandlerWithToken(endpoint, {
         answers: submissionAnswers
@@ -326,73 +354,98 @@ const StudentExam = () => {
     
     return (
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8 border border-gray-100"
-      >
-        <div className="text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-[#4D2C5E] mb-4">{examData.title}</h2>
-          <p className="text-gray-600 mb-6">{examData.description}</p>
-          
-          <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">Exam Starts In:</h3>
-            <div className="flex justify-center space-x-4">
-              <div className="flex flex-col items-center">
-                <span className="text-3xl font-bold text-[#FF7426]">{hours.toString().padStart(2, '0')}</span>
-                <span className="text-sm text-gray-500">Hours</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-3xl font-bold text-[#FF7426]">{minutes.toString().padStart(2, '0')}</span>
-                <span className="text-sm text-gray-500">Minutes</span>
-              </div>
-              <div className="flex flex-col items-center">
-                <span className="text-3xl font-bold text-[#FF7426]">{seconds.toString().padStart(2, '0')}</span>
-                <span className="text-sm text-gray-500">Seconds</span>
-              </div>
-            </div>
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5 }}
+  className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 border border-gray-100 w-[95vw] sm:w-full"
+>
+  <div className="text-center">
+    {/* Responsive heading */}
+    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#4D2C5E] mb-3 sm:mb-4 md:mb-6">
+      {examData.title}
+    </h2>
+    
+    {/* Responsive description */}
+    <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 md:mb-8 px-2 sm:px-0">
+      {examData.description}
+    </p>
+    
+    {/* Countdown timer - responsive spacing and sizing */}
+    <div className="mb-6 sm:mb-8 md:mb-10">
+      <h3 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">
+        Exam Starts In:
+      </h3>
+      <div className="flex justify-center space-x-3 sm:space-x-4 md:space-x-6">
+        {[
+          { value: hours.toString().padStart(2, '0'), label: 'Hours' },
+          { value: minutes.toString().padStart(2, '0'), label: 'Minutes' },
+          { value: seconds.toString().padStart(2, '0'), label: 'Seconds' }
+        ].map((item, index) => (
+          <div key={index} className="flex flex-col items-center">
+            <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#FF7426]">
+              {item.value}
+            </span>
+            <span className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">
+              {item.label}
+            </span>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-            <div>
-              <p className="text-sm text-gray-500">Start Time</p>
-              <p className="font-medium">
-                {startTime.toLocaleString('en-IN', {
-                  weekday: 'short',
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  timeZone: 'Asia/Kolkata'
-                })}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">End Time</p>
-              <p className="font-medium">
-                {endTime.toLocaleString('en-IN', {
-                  weekday: 'short',
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                  timeZone: 'Asia/Kolkata'
-                })}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Duration</p>
-              <p className="font-medium">{examData.durationMinutes} minutes</p>
-            </div>
-            <div>
-              <p className="text-sm text-gray-500">Total Marks</p>
-              <p className="font-medium">{examData.totalMarks}</p>
-            </div>
-          </div>
-        </div>
-      </motion.div>
+        ))}
+      </div>
+    </div>
+    
+    {/* Grid responsive for all screens */}
+    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 text-left">
+      {/* Start Time */}
+      <div className="p-3 sm:p-4">
+        <p className="text-xs sm:text-sm text-gray-500 mb-1 sm:mb-2">Start Time</p>
+        <p className="text-sm sm:text-base font-medium break-words">
+          {startTime.toLocaleString('en-IN', {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZone: 'Asia/Kolkata'
+          })}
+        </p>
+      </div>
+      
+      {/* End Time */}
+      <div className="p-3 sm:p-4">
+        <p className="text-xs sm:text-sm text-gray-500 mb-1 sm:mb-2">End Time</p>
+        <p className="text-sm sm:text-base font-medium break-words">
+          {endTime.toLocaleString('en-IN', {
+            weekday: 'short',
+            year: 'numeric',
+            month: 'short',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            timeZone: 'Asia/Kolkata'
+          })}
+        </p>
+      </div>
+      
+      {/* Duration */}
+      <div className="p-3 sm:p-4">
+        <p className="text-xs sm:text-sm text-gray-500 mb-1 sm:mb-2">Duration</p>
+        <p className="text-sm sm:text-base font-medium">
+          {examData.durationMinutes} minutes
+        </p>
+      </div>
+      
+      {/* Total Marks */}
+      <div className="p-3 sm:p-4">
+        <p className="text-xs sm:text-sm text-gray-500 mb-1 sm:mb-2">Total Marks</p>
+        <p className="text-sm sm:text-base font-medium">
+          {examData.totalMarks}
+        </p>
+      </div>
+    </div>
+    
+  </div>
+</motion.div>
     );
   };
 
@@ -400,98 +453,208 @@ const StudentExam = () => {
   const renderInstructions = () => {
     return (
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-        className="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-6 md:p-8 border border-gray-100"
-      >
-        <h2 className="text-2xl md:text-3xl font-bold text-[#4D2C5E] mb-6 text-center">Exam Instructions</h2>
-        
-        <div className="prose prose-sm max-w-none mb-6">
-          <p className="font-semibold text-lg mb-4">Please read the following instructions carefully:</p>
-          
-          <ul className="space-y-3 mb-6">
-            <li className="flex items-start">
-              <FiClock className="h-5 w-5 text-[#4D2C5E] mr-2 mt-0.5 flex-shrink-0" />
-              <span>The exam duration is <strong>{examData.durationMinutes} minutes</strong>.</span>
-            </li>
-            <li className="flex items-start">
-              <FiAlertCircle className="h-5 w-5 text-[#4D2C5E] mr-2 mt-0.5 flex-shrink-0" />
-              <span>Once started, you cannot pause the exam.</span>
-            </li>
-            <li className="flex items-start">
-              <FiCamera className="h-5 w-5 text-[#4D2C5E] mr-2 mt-0.5 flex-shrink-0" />
-              <span>Camera access is required for proctoring purposes.</span>
-            </li>
-            <li className="flex items-start">
-              <FiMic className="h-5 w-5 text-[#4D2C5E] mr-2 mt-0.5 flex-shrink-0" />
-              <span>Microphone access is required for proctoring purposes.</span>
-            </li>
-            <li className="flex items-start">
-              <FiMonitor className="h-5 w-5 text-[#4D2C5E] mr-2 mt-0.5 flex-shrink-0" />
-              <span>Do not switch tabs or windows during the exam. This will be monitored.</span>
-            </li>
-            <li className="flex items-start">
-              <FiCheckCircle className="h-5 w-5 text-[#4D2C5E] mr-2 mt-0.5 flex-shrink-0" />
-              <span>Ensure you have a stable internet connection throughout the exam.</span>
-            </li>
-          </ul>
-          
-          <div className="bg-yellow-50 p-4 rounded-md border border-yellow-200">
-            <p className="font-medium text-yellow-800">Important:</p>
-            <p className="text-yellow-700">Any attempt to cheat or violate exam rules will result in disqualification.</p>
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.5 }}
+  className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 border border-gray-100 w-[95vw] sm:w-full"
+>
+  {/* Header with logo and title */}
+  <div className="flex flex-col sm:flex-row items-center justify-between mb-6 sm:mb-8">
+    <div className="flex items-center mb-4 sm:mb-0">
+      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] rounded-lg flex items-center justify-center mr-3">
+        <span className="text-white font-bold text-sm sm:text-base">U</span>
+      </div>
+      <h1 className="text-lg sm:text-xl font-bold text-gray-800">Upskillab</h1>
+    </div>
+    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#4D2C5E] text-center sm:text-right">
+      Exam Instructions
+    </h2>
+  </div>
+  
+  {/* Instructions content */}
+  <div className="space-y-6 sm:space-y-8">
+    {/* General Instructions */}
+    <div>
+      <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6 pb-2 border-b border-gray-200">
+        Please read the following instructions carefully:
+      </h3>
+      
+      <div className="bg-blue-50 p-4 sm:p-5 rounded-lg border border-blue-100 mb-6 sm:mb-8">
+        <div className="flex items-start">
+          <FiInfo className="h-5 w-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="font-medium text-blue-800 mb-1">Exam Duration: {examData.durationMinutes} minutes</p>
+            <p className="text-blue-700 text-sm sm:text-base">
+              The exam will auto-submit when time is complete. No extensions will be granted.
+            </p>
           </div>
         </div>
-        
-        <div className="text-center mt-8">
-          <button
-            onClick={() => setShowInstructions(true)}
-            className="bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white py-3 px-8 rounded-lg hover:opacity-90 transition-all font-medium text-lg"
+      </div>
+      
+      {/* Instruction Points */}
+      <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+        {[
+          { icon: FiClock, text: "You may start the exam anytime within this window" },
+          { icon: FiPlay, text: "Once 'Start Exam' is clicked, the timer begins immediately" },
+          { icon: FiActivity, text: "The exam must be completed in one continuous session within the allotted duration" },
+          { icon: FiPause, text: "No pause, restart, or reattempt is permitted" },
+          { icon: FiClock, text: "The exam will be auto-submitted upon time completion" },
+          { icon: FiWifi, text: "Ensure stable internet connectivity and a compatible device" },
+          { icon: FiFileText, text: "The exam is governed by the Upskillab Examination & Academic Integrity Policy" },
+          { icon: FiAlertTriangle, text: "Any policy violation may lead to disciplinary action" }
+        ].map((item, index) => (
+          <motion.li 
+            key={index}
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: index * 0.05 }}
+            className="flex items-start bg-gray-50 p-3 sm:p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200"
           >
-            I Understand, Start Exam
-          </button>
+            <item.icon className="h-5 w-5 sm:h-6 sm:w-6 text-[#4D2C5E] mr-3 sm:mr-4 mt-0.5 flex-shrink-0" />
+            <span className="text-sm sm:text-base text-gray-700">{item.text}</span>
+          </motion.li>
+        ))}
+      </ul>
+      
+      {/* Important Warning */}
+      <div className="bg-yellow-50 p-4 sm:p-5 rounded-lg border border-yellow-200">
+        <div className="flex items-start">
+          <FiAlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-600 mr-3 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="font-medium text-yellow-800 mb-2 text-sm sm:text-base">Important:</p>
+            <p className="text-yellow-700 text-sm sm:text-base">
+              Any attempt to cheat or violate exam rules will result in immediate disqualification and may lead to further disciplinary action as per Upskillab policy.
+            </p>
+          </div>
         </div>
-
-        {/* Confirmation Modal */}
-        <AnimatePresence>
-          {showInstructions && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+      </div>
+    </div>
+    
+    {/* Declaration & Consent */}
+    <div className="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
+      <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6">
+        Declaration & Consent (Mandatory)
+      </h3>
+      
+      <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+        {[
+          "I confirm that I have read and understood all the exam instructions.",
+          "I understand that once the exam starts, it must be completed in one attempt within the given time.",
+          "I agree to comply with the Upskillab Examination and Academic Integrity Policy.",
+          "I acknowledge that any violation may result in disciplinary action."
+        ].map((item, index) => (
+          <li key={index} className="flex items-start">
+            <input
+              type="checkbox"
+              id={`declaration-${index}`}
+              className="h-5 w-5 sm:h-6 sm:w-6 text-[#4D2C5E] bg-white border-2 border-gray-300 rounded mt-0.5 mr-3 sm:mr-4 flex-shrink-0 cursor-pointer"
+              onChange={(e) => handleCheckboxChange(index, e.target.checked)}
+            />
+            <label 
+              htmlFor={`declaration-${index}`}
+              className="text-sm sm:text-base text-gray-700 cursor-pointer select-none"
             >
-              <motion.div
-                initial={{ scale: 0.95, y: 20, opacity: 0 }}
-                animate={{ scale: 1, y: 0, opacity: 1 }}
-                exit={{ scale: 0.95, y: 20, opacity: 0 }}
-                transition={{ type: "spring", damping: 25, stiffness: 400 }}
-                className="bg-white rounded-xl shadow-xl w-full max-w-md p-6 border border-gray-100"
-              >
-                <h3 className="text-xl font-bold text-[#4D2C5E] mb-4">Final Confirmation</h3>
-                <p className="text-gray-600 mb-6">
-                  Are you ready to start the exam? Once you begin, the timer will start and cannot be paused.
-                </p>
-                
-                <div className="flex justify-end space-x-4">
-                  <button
-                    onClick={() => setShowInstructions(false)}
-                    className="px-5 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    onClick={handleStartExam}
-                    className="px-5 py-2.5 bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white rounded-lg hover:opacity-90 transition-all duration-200 font-medium"
-                  >
-                    Start Exam
-                  </button>
+              {item}
+            </label>
+          </li>
+        ))}
+      </ul>
+      
+      <div className="bg-white p-4 sm:p-5 rounded-lg border border-gray-300">
+        <p className="text-sm sm:text-base text-gray-600 italic">
+          By clicking "I Agree & Start Exam", I consent to the above terms and conditions.
+        </p>
+      </div>
+    </div>
+  </div>
+  
+  {/* Start Button */}
+  <div className="mt-8 sm:mt-12 text-center">
+    <button
+      onClick={handleStartClick}
+      disabled={!allChecked} // Disable if all checkboxes aren't checked
+      className={`
+        w-full sm:w-auto px-6 sm:px-10 py-3 sm:py-4 rounded-xl font-medium text-sm sm:text-base md:text-lg
+        transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]
+        ${allChecked 
+          ? 'bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white hover:shadow-lg hover:shadow-purple-200' 
+          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+        }
+      `}
+    >
+      I Agree & Start Exam
+    </button>
+    
+    <p className="text-xs sm:text-sm text-gray-500 mt-3 sm:mt-4">
+      {allChecked 
+        ? "You may now start the exam"
+        : "Please check all declaration boxes to continue"
+      }
+    </p>
+  </div>
+  
+  {/* Confirmation Modal */}
+  <AnimatePresence>
+    {showInstructions && (
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4"
+      >
+        <motion.div
+          initial={{ scale: 0.95, y: 20, opacity: 0 }}
+          animate={{ scale: 1, y: 0, opacity: 1 }}
+          exit={{ scale: 0.95, y: 20, opacity: 0 }}
+          transition={{ type: "spring", damping: 25, stiffness: 400 }}
+          className="bg-white rounded-xl shadow-xl w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg p-4 sm:p-6 md:p-8 border border-gray-100 mx-4"
+        >
+          <div className="mb-6 sm:mb-8">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#4D2C5E] mb-3 sm:mb-4">
+              Final Confirmation
+            </h3>
+            <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
+              Are you ready to start the exam? Once you begin, the timer will start and cannot be paused.
+            </p>
+            
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+              <div className="flex items-start">
+                <FiClock className="h-5 w-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-blue-800 text-sm sm:text-base">
+                    Exam Duration: {examData.durationMinutes} minutes
+                  </p>
+                  <p className="text-blue-700 text-xs sm:text-sm mt-1">
+                    The exam will auto-submit when time is complete
+                  </p>
                 </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
+            <button
+              onClick={() => setShowInstructions(false)}
+              className="px-5 py-2.5 sm:px-6 sm:py-3 border border-gray-300 text-gray-700 rounded-lg 
+                       hover:bg-gray-50 transition-all duration-200 font-medium text-sm sm:text-base 
+                       w-full sm:w-auto order-2 sm:order-1"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleStartExam}
+              className="px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] 
+                       text-white rounded-lg hover:opacity-90 transition-all duration-200 font-medium 
+                       text-sm sm:text-base w-full sm:w-auto order-1 sm:order-2"
+            >
+              Start Exam Now
+            </button>
+          </div>
+        </motion.div>
       </motion.div>
+    )}
+  </AnimatePresence>
+</motion.div>
     );
   };
 
@@ -658,7 +821,7 @@ const StudentExam = () => {
         
         <h2 className="text-2xl font-bold text-[#4D2C5E] mb-4">Exam Submitted Successfully!</h2>
         <p className="text-gray-600 mb-6">
-          Thank you for completing the exam. Your answers have been submitted successfully.
+          Your responses have been recorded successfully.
         </p>
         
         <button
