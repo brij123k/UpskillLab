@@ -167,6 +167,8 @@ const ApiConfig = {
   getExamPaper:(examId)=> `${url}/questions/exam/${examId}/student`,
   submitExam: (submissionId) => `${url}/attempts/${submissionId}/submit`,
   monitoringLog:(submissionId)=> `${url}/monitoring-logs/${submissionId}`,
+  submitRating:`${url}/exam-rating`,
+
   
 };
 

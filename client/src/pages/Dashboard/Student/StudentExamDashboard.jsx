@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiClock, FiCheckCircle, FiAlertCircle, FiBookOpen, FiCalendar, FiAward, FiChevronRight } from 'react-icons/fi';
+import { FiClock, FiCheckCircle, FiAlertCircle, FiBookOpen, FiCalendar, FiAward, FiChevronRight, FiInfo, FiEye } from 'react-icons/fi';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,6 +11,8 @@ const StudentExamDashboard = () => {
   const [filteredExams, setFilteredExams] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
+  const [showResultModal, setShowResultModal] = useState(false);
+  const [selectedExam, setSelectedExam] = useState(null);
   const navigate = useNavigate();
 
   // Fetch exams data
@@ -79,10 +81,22 @@ const StudentExamDashboard = () => {
   };
 
   // Handle exam card click
-  const handleExamClick = (examId, status) => {
-    if (status === 'scheduled' || status === 'ongoing') {
+  const handleExamClick = (examId, status, submitted) => {
+    if ((status === 'scheduled' || status === 'ongoing') && !submitted) {
       navigate(`/Student/exam/${examId}`);
     }
+  };
+
+  // Handle attempted exam click (show modal)
+  const handleAttemptedClick = (exam) => {
+    setSelectedExam(exam);
+    setShowResultModal(true);
+  };
+
+  // Handle view results click
+  const handleViewResults = () => {
+    setShowResultModal(false);
+    navigate('/Student/History');
   };
 
   // Get status badge info
@@ -210,8 +224,8 @@ const StudentExamDashboard = () => {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.2 }}
-                    className={`border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow duration-200 group ${(exam.status === 'scheduled' || exam.status === 'ongoing') ? 'cursor-pointer' : ''}`}
-                    onClick={() => handleExamClick(exam._id, exam.status)}
+                    className={`border border-gray-200 rounded-xl p-5 hover:shadow-md transition-shadow duration-200 group ${((exam.status === 'scheduled' || exam.status === 'ongoing') && !exam.submitted) ? 'cursor-pointer' : ''}`}
+                    onClick={() => handleExamClick(exam._id, exam.status, exam.submitted)}
                   >
                     <div className="flex flex-col h-full">
                       {/* Status Badge */}
@@ -221,7 +235,7 @@ const StudentExamDashboard = () => {
                           <span className="ml-1.5">{statusInfo.text}</span>
                         </span>
                         
-                        {(exam.status === 'scheduled' || exam.status === 'ongoing') && (
+                        {((exam.status === 'scheduled' || exam.status === 'ongoing') && !exam.submitted) && (
                           <FiChevronRight className="h-5 w-5 text-gray-400 group-hover:text-[#4D2C5E] transition-colors" />
                         )}
                       </div>
@@ -269,7 +283,8 @@ const StudentExamDashboard = () => {
                         
                         {/* Action Button */}
                         <div className="mt-4">
-                          {exam.status === 'scheduled' && (
+                          {/* UPCOMING EXAMS */}
+                          {exam.status === 'scheduled' && !exam.submitted && (
                             <motion.button
                               whileHover={{ scale: 1.03 }}
                               whileTap={{ scale: 0.97 }}
@@ -282,50 +297,72 @@ const StudentExamDashboard = () => {
                               View Exam
                             </motion.button>
                           )}
-                          
-                          {/* ONGOING EXAM */}
-{exam.status === 'ongoing' && !exam.submitted && (
-  <motion.button
-    whileHover={{ scale: 1.03 }}
-    whileTap={{ scale: 0.97 }}
-    className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white py-2.5 rounded-lg hover:opacity-90 transition-all font-medium text-sm"
-    onClick={(e) => {
-      e.stopPropagation();
-      navigate(`/Student/exam/${exam._id}`);
-    }}
-  >
-    Join Exam
-  </motion.button>
-)}
 
-{exam.status === 'ongoing' && exam.submitted && (
-  <button
-    disabled
-    className="w-full bg-gray-200 text-gray-600 py-2.5 rounded-lg font-medium text-sm cursor-not-allowed"
-  >
-    Attempted
-  </button>
-)}
+                          {/* ONGOING EXAM - NOT ATTEMPTED */}
+                          {exam.status === 'ongoing' && !exam.submitted && (
+                            <motion.button
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.97 }}
+                              className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white py-2.5 rounded-lg hover:opacity-90 transition-all font-medium text-sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/Student/exam/${exam._id}`);
+                              }}
+                            >
+                              Join Exam
+                            </motion.button>
+                          )}
 
-{/* COMPLETED / RESULT PUBLISHED */}
-{(exam.status === 'completed' || exam.status === 'result_published') && exam.submitted && (
-  <button
-    disabled
-    className="w-full bg-gray-100 text-gray-500 py-2 rounded-lg text-xs font-medium cursor-not-allowed"
-  >
-   {exam.status === 'result_published' ? 'Results available' : 'Exam completed'} (Attempted)
-  </button>
-)}
+                          {/* ONGOING EXAM - ATTEMPTED */}
+                          {exam.status === 'ongoing' && exam.submitted && (
+                            <motion.button
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.97 }}
+                              className="w-full bg-gray-200 text-gray-600 py-2.5 rounded-lg hover:bg-gray-300 transition-all font-medium text-sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleAttemptedClick(exam);
+                              }}
+                            >
+                              Attempted
+                            </motion.button>
+                          )}
 
-{(exam.status === 'completed' || exam.status === 'result_published') && !exam.submitted && (
-  <button
-    disabled
-    className="w-full bg-red-50 text-red-600 py-2 rounded-lg text-xs font-medium cursor-not-allowed"
-  >
-    {exam.status === 'result_published' ? 'Results available' : 'Exam completed'} (Missed)
-  </button>
-)}
+                          {/* COMPLETED / RESULT PUBLISHED - ATTEMPTED */}
+                          {(exam.status === 'completed') && exam.submitted && (
+                            <motion.button
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.97 }}
+                              className={`w-full py-2.5 rounded-lg font-medium text-sm transition-all ${exam.status === 'result_published' ? 'bg-purple-100 text-purple-700 hover:bg-purple-200' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleAttemptedClick(exam);
+                              }}
+                            >
+                              {exam.status === 'result_published' ? 'View Result' : 'Attempted'}
+                            </motion.button>
+                          )}
 
+                          {(exam.status === 'result_published') && exam.submitted && (
+                            <motion.button
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.97 }}
+                              className={`w-full py-2.5 rounded-lg font-medium text-sm transition-all ${exam.status === 'result_published' ? 'bg-purple-100 text-purple-700 hover:bg-purple-200' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`}
+                              onClick={()=>navigate('/Student/History')}
+                            >
+                              {exam.status === 'result_published' ? 'View Result' : 'Attempted'}
+                            </motion.button>
+                          )}
+
+                          {/* COMPLETED / RESULT PUBLISHED - NOT ATTEMPTED */}
+                          {(exam.status === 'completed' || exam.status === 'result_published') && !exam.submitted && (
+                            <button
+                              disabled
+                              className="w-full bg-red-50 text-red-600 py-2 rounded-lg text-xs font-medium cursor-not-allowed"
+                            >
+                              {exam.status === 'result_published' ? 'Results available' : 'Exam completed'} (Missed)
+                            </button>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -350,6 +387,69 @@ const StudentExamDashboard = () => {
           )}
         </div>
       </div>
+
+      {/* Result Status Modal */}
+      <AnimatePresence>
+        {showResultModal && selectedExam && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={() => setShowResultModal(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6 md:p-8"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="text-center mb-6">
+                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <FiInfo className="h-8 w-8 text-blue-600" />
+                </div>
+                <h3 className="text-2xl font-bold text-[#4D2C5E] mb-2">
+                  Result Status: Under Evaluation
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  {selectedExam.title}
+                </p>
+              </div>
+
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 mb-6">
+                <p className="text-blue-800 text-center">
+                  Thank you for completing your examination.
+                  Your result is currently under evaluation and will be published on the Upskillab LMS as per the assessment timeline.
+                </p>
+              </div>
+
+              <p className="text-gray-600 text-sm text-center mb-6">
+                Please monitor your LMS dashboard and registered email for updates.
+              </p>
+
+              <div className="flex flex-col sm:flex-row gap-3">
+                <button
+                  onClick={() => setShowResultModal(false)}
+                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all font-medium flex-1"
+                >
+                  Close
+                </button>
+                
+                {selectedExam.status === 'result_published' && (
+                  <button
+                    onClick={handleViewResults}
+                    className="px-6 py-3 bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white rounded-lg hover:opacity-90 transition-all font-medium flex-1 flex items-center justify-center gap-2"
+                  >
+                    <FiEye className="h-4 w-4" />
+                    View All Results
+                  </button>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

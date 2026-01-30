@@ -8,9 +8,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import ApiConfig from '../../../config/apiConfig';
 import { FiInfo, FiPlay, FiActivity, FiPause, FiWifi, FiFileText, 
          FiAlertTriangle } from 'react-icons/fi';
+
 const StudentExam = () => {
-     const navigate = useNavigate();
-    const { examId } = useParams();
+  const navigate = useNavigate();
+  const { examId } = useParams();
   const [examData, setExamData] = useState(null);
   const [attemptData, setAttemptData] = useState(null);
   const [questions, setQuestions] = useState([]);
@@ -22,10 +23,22 @@ const StudentExam = () => {
   const [permissionGranted, setPermissionGranted] = useState(false);
   const [tabSwitchCount, setTabSwitchCount] = useState(0);
   const [checkboxes, setCheckboxes] = useState([false, false, false, false]);
-const [allChecked, setAllChecked] = useState(false);
-  
+  const [allChecked, setAllChecked] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [review, setReview] = useState('');
+  const [isSubmittingRating, setIsSubmittingRating] = useState(false);
   const mediaStreamRef = useRef(null);
   const visibilityChangeTimeRef = useRef(null);
+
+  // Reset rating states when examStatus changes to completed
+  useEffect(() => {
+    if (examStatus === 'completed') {
+      setRating(0);
+      setReview('');
+      setShowRatingModal(false);
+    }
+  }, [examStatus]);
 
   // Fetch exam data
   useEffect(() => {
@@ -113,7 +126,6 @@ const [allChecked, setAllChecked] = useState(false);
       // Store the stream reference
       mediaStreamRef.current = stream;
       setPermissionGranted(true);
-    //   toast.success('Camera and microphone permissions granted');
     } catch (error) {
       console.error('Error accessing media devices:', error);
       toast.warning('Camera and microphone permissions are required for exam integrity');
@@ -148,23 +160,55 @@ const [allChecked, setAllChecked] = useState(false);
       
       // Set exam timer based on endAt time
       const startedAt = new Date(response.submission.startedAt);
-    const durationMs = examData.durationMinutes * 60 * 1000;
+      const durationMs = examData.durationMinutes * 60 * 1000;
 
-    const attemptEndTime = new Date(startedAt.getTime() + durationMs);
-    const now = new Date();
+      const attemptEndTime = new Date(startedAt.getTime() + durationMs);
+      const now = new Date();
 
-    const remainingTime = Math.max(0, attemptEndTime.getTime() - now.getTime());
-    console.log(remainingTime)
-    if(remainingTime<=0){
-      toast.error('Your Time is Over! Contact Support Team');
-      navigate("/Student/Exam");
-    }
-    setTimeLeft(remainingTime);
+      const remainingTime = Math.max(0, attemptEndTime.getTime() - now.getTime());
+      console.log(remainingTime)
+      if(remainingTime<=0){
+        toast.error('Your Time is Over! Contact Support Team');
+        navigate("/Student/Exam");
+      }
+      setTimeLeft(remainingTime);
     } catch (error) {
       toast.error('Failed to start the exam. Please try again.');
       console.error('Error starting exam:', error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Submit rating function
+  const handleSubmitRating = async () => {
+    if (rating === 0) {
+      toast.error('Please select a rating');
+      return;
+    }
+    
+    if (review.trim().split(/\s+/).length > 50) {
+      toast.error('Review must be 50 words or less');
+      return;
+    }
+
+    try {
+      setIsSubmittingRating(true);
+      // Make sure ApiConfig.submitRating is defined in your apiConfig.js
+      await postDataHandlerWithToken(ApiConfig.submitRating, {
+        examId: examId,
+        rating: rating,
+        review: review.trim()
+      }, true);
+      
+      toast.success('Thank you for your feedback!');
+      setShowRatingModal(false);
+      setExamStatus('completed');
+    } catch (error) {
+      toast.error('Failed to submit rating. Please try again.');
+      console.error('Error submitting rating:', error);
+    } finally {
+      setIsSubmittingRating(false);
     }
   };
 
@@ -189,17 +233,18 @@ const [allChecked, setAllChecked] = useState(false);
   };
 
   const handleCheckboxChange = (index, checked) => {
-  const newCheckboxes = [...checkboxes];
-  newCheckboxes[index] = checked;
-  setCheckboxes(newCheckboxes);
-  setAllChecked(newCheckboxes.every(Boolean));
-};
+    const newCheckboxes = [...checkboxes];
+    newCheckboxes[index] = checked;
+    setCheckboxes(newCheckboxes);
+    setAllChecked(newCheckboxes.every(Boolean));
+  };
 
-const handleStartClick = () => {
-  if (allChecked) {
-    setShowInstructions(true);
-  }
-};
+  const handleStartClick = () => {
+    if (allChecked) {
+      setShowInstructions(true);
+    }
+  };
+
   // Count words for subjective answers
   const countWords = (text) => {
     return text ? text.trim().split(/\s+/).length : 0;
@@ -266,7 +311,8 @@ const handleStartClick = () => {
       // Submit monitoring log
       await submitMonitoringLog();
       
-      setExamStatus('completed');
+      // Show rating modal
+      setShowRatingModal(true);
       toast.success('Exam submitted successfully!');
     } catch (error) {
       toast.error('Failed to submit exam automatically. Please contact support.');
@@ -308,7 +354,8 @@ const handleStartClick = () => {
       // Submit monitoring log
       await submitMonitoringLog();
       
-      setExamStatus('completed');
+      // Show rating modal
+      setShowRatingModal(true);
       toast.success('Exam submitted successfully!');
     } catch (error) {
       toast.error('Failed to submit exam. Please try again.');
@@ -354,98 +401,97 @@ const handleStartClick = () => {
     
     return (
       <motion.div
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.5 }}
-  className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 border border-gray-100 w-[95vw] sm:w-full"
->
-  <div className="text-center">
-    {/* Responsive heading */}
-    <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#4D2C5E] mb-3 sm:mb-4 md:mb-6">
-      {examData.title}
-    </h2>
-    
-    {/* Responsive description */}
-    <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 md:mb-8 px-2 sm:px-0">
-      {examData.description}
-    </p>
-    
-    {/* Countdown timer - responsive spacing and sizing */}
-    <div className="mb-6 sm:mb-8 md:mb-10">
-      <h3 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">
-        Exam Starts In:
-      </h3>
-      <div className="flex justify-center space-x-3 sm:space-x-4 md:space-x-6">
-        {[
-          { value: hours.toString().padStart(2, '0'), label: 'Hours' },
-          { value: minutes.toString().padStart(2, '0'), label: 'Minutes' },
-          { value: seconds.toString().padStart(2, '0'), label: 'Seconds' }
-        ].map((item, index) => (
-          <div key={index} className="flex flex-col items-center">
-            <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#FF7426]">
-              {item.value}
-            </span>
-            <span className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">
-              {item.label}
-            </span>
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-7xl mx-auto bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 border border-gray-100 w-[95vw] sm:w-full"
+      >
+        <div className="text-center">
+          {/* Responsive heading */}
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#4D2C5E] mb-3 sm:mb-4 md:mb-6">
+            {examData.title}
+          </h2>
+          
+          {/* Responsive description */}
+          <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6 md:mb-8 px-2 sm:px-0">
+            {examData.description}
+          </p>
+          
+          {/* Countdown timer - responsive spacing and sizing */}
+          <div className="mb-6 sm:mb-8 md:mb-10">
+            <h3 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800 mb-3 sm:mb-4">
+              Exam Starts In:
+            </h3>
+            <div className="flex justify-center space-x-3 sm:space-x-4 md:space-x-6">
+              {[
+                { value: hours.toString().padStart(2, '0'), label: 'Hours' },
+                { value: minutes.toString().padStart(2, '0'), label: 'Minutes' },
+                { value: seconds.toString().padStart(2, '0'), label: 'Seconds' }
+              ].map((item, index) => (
+                <div key={index} className="flex flex-col items-center">
+                  <span className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#FF7426]">
+                    {item.value}
+                  </span>
+                  <span className="text-xs sm:text-sm text-gray-500 mt-1 sm:mt-2">
+                    {item.label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
-    </div>
-    
-    {/* Grid responsive for all screens */}
-    <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 text-left">
-      {/* Start Time */}
-      <div className="p-3 sm:p-4">
-        <p className="text-xs sm:text-sm text-gray-500 mb-1 sm:mb-2">Start Time</p>
-        <p className="text-sm sm:text-base font-medium break-words">
-          {startTime.toLocaleString('en-IN', {
-            weekday: 'short',
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            timeZone: 'Asia/Kolkata'
-          })}
-        </p>
-      </div>
-      
-      {/* End Time */}
-      <div className="p-3 sm:p-4">
-        <p className="text-xs sm:text-sm text-gray-500 mb-1 sm:mb-2">End Time</p>
-        <p className="text-sm sm:text-base font-medium break-words">
-          {endTime.toLocaleString('en-IN', {
-            weekday: 'short',
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-            timeZone: 'Asia/Kolkata'
-          })}
-        </p>
-      </div>
-      
-      {/* Duration */}
-      <div className="p-3 sm:p-4">
-        <p className="text-xs sm:text-sm text-gray-500 mb-1 sm:mb-2">Duration</p>
-        <p className="text-sm sm:text-base font-medium">
-          {examData.durationMinutes} minutes
-        </p>
-      </div>
-      
-      {/* Total Marks */}
-      <div className="p-3 sm:p-4">
-        <p className="text-xs sm:text-sm text-gray-500 mb-1 sm:mb-2">Total Marks</p>
-        <p className="text-sm sm:text-base font-medium">
-          {examData.totalMarks}
-        </p>
-      </div>
-    </div>
-    
-  </div>
-</motion.div>
+          
+          {/* Grid responsive for all screens */}
+          <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 text-left">
+            {/* Start Time */}
+            <div className="p-3 sm:p-4">
+              <p className="text-xs sm:text-sm text-gray-500 mb-1 sm:mb-2">Start Time</p>
+              <p className="text-sm sm:text-base font-medium break-words">
+                {startTime.toLocaleString('en-IN', {
+                  weekday: 'short',
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  timeZone: 'Asia/Kolkata'
+                })}
+              </p>
+            </div>
+            
+            {/* End Time */}
+            <div className="p-3 sm:p-4">
+              <p className="text-xs sm:text-sm text-gray-500 mb-1 sm:mb-2">End Time</p>
+              <p className="text-sm sm:text-base font-medium break-words">
+                {endTime.toLocaleString('en-IN', {
+                  weekday: 'short',
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric',
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  timeZone: 'Asia/Kolkata'
+                })}
+              </p>
+            </div>
+            
+            {/* Duration */}
+            <div className="p-3 sm:p-4">
+              <p className="text-xs sm:text-sm text-gray-500 mb-1 sm:mb-2">Duration</p>
+              <p className="text-sm sm:text-base font-medium">
+                {examData.durationMinutes} minutes
+              </p>
+            </div>
+            
+            {/* Total Marks */}
+            <div className="p-3 sm:p-4">
+              <p className="text-xs sm:text-sm text-gray-500 mb-1 sm:mb-2">Total Marks</p>
+              <p className="text-sm sm:text-base font-medium">
+                {examData.totalMarks}
+              </p>
+            </div>
+          </div>
+        </div>
+      </motion.div>
     );
   };
 
@@ -453,208 +499,208 @@ const handleStartClick = () => {
   const renderInstructions = () => {
     return (
       <motion.div
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.5 }}
-  className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 border border-gray-100 w-[95vw] sm:w-full"
->
-  {/* Header with logo and title */}
-  <div className="flex flex-col sm:flex-row items-center justify-between mb-6 sm:mb-8">
-    <div className="flex items-center mb-4 sm:mb-0">
-      <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] rounded-lg flex items-center justify-center mr-3">
-        <span className="text-white font-bold text-sm sm:text-base">U</span>
-      </div>
-      <h1 className="text-lg sm:text-xl font-bold text-gray-800">Upskillab</h1>
-    </div>
-    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#4D2C5E] text-center sm:text-right">
-      Exam Instructions
-    </h2>
-  </div>
-  
-  {/* Instructions content */}
-  <div className="space-y-6 sm:space-y-8">
-    {/* General Instructions */}
-    <div>
-      <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6 pb-2 border-b border-gray-200">
-        Please read the following instructions carefully:
-      </h3>
-      
-      <div className="bg-blue-50 p-4 sm:p-5 rounded-lg border border-blue-100 mb-6 sm:mb-8">
-        <div className="flex items-start">
-          <FiInfo className="h-5 w-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
-          <div>
-            <p className="font-medium text-blue-800 mb-1">Exam Duration: {examData.durationMinutes} minutes</p>
-            <p className="text-blue-700 text-sm sm:text-base">
-              The exam will auto-submit when time is complete. No extensions will be granted.
-            </p>
-          </div>
-        </div>
-      </div>
-      
-      {/* Instruction Points */}
-      <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
-        {[
-          { icon: FiClock, text: "You may start the exam anytime within this window" },
-          { icon: FiPlay, text: "Once 'Start Exam' is clicked, the timer begins immediately" },
-          { icon: FiActivity, text: "The exam must be completed in one continuous session within the allotted duration" },
-          { icon: FiPause, text: "No pause, restart, or reattempt is permitted" },
-          { icon: FiClock, text: "The exam will be auto-submitted upon time completion" },
-          { icon: FiWifi, text: "Ensure stable internet connectivity and a compatible device" },
-          { icon: FiFileText, text: "The exam is governed by the Upskillab Examination & Academic Integrity Policy" },
-          { icon: FiAlertTriangle, text: "Any policy violation may lead to disciplinary action" }
-        ].map((item, index) => (
-          <motion.li 
-            key={index}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: index * 0.05 }}
-            className="flex items-start bg-gray-50 p-3 sm:p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200"
-          >
-            <item.icon className="h-5 w-5 sm:h-6 sm:w-6 text-[#4D2C5E] mr-3 sm:mr-4 mt-0.5 flex-shrink-0" />
-            <span className="text-sm sm:text-base text-gray-700">{item.text}</span>
-          </motion.li>
-        ))}
-      </ul>
-      
-      {/* Important Warning */}
-      <div className="bg-yellow-50 p-4 sm:p-5 rounded-lg border border-yellow-200">
-        <div className="flex items-start">
-          <FiAlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-600 mr-3 mt-0.5 flex-shrink-0" />
-          <div>
-            <p className="font-medium text-yellow-800 mb-2 text-sm sm:text-base">Important:</p>
-            <p className="text-yellow-700 text-sm sm:text-base">
-              Any attempt to cheat or violate exam rules will result in immediate disqualification and may lead to further disciplinary action as per Upskillab policy.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    {/* Declaration & Consent */}
-    <div className="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
-      <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6">
-        Declaration & Consent (Mandatory)
-      </h3>
-      
-      <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
-        {[
-          "I confirm that I have read and understood all the exam instructions.",
-          "I understand that once the exam starts, it must be completed in one attempt within the given time.",
-          "I agree to comply with the Upskillab Examination and Academic Integrity Policy.",
-          "I acknowledge that any violation may result in disciplinary action."
-        ].map((item, index) => (
-          <li key={index} className="flex items-start">
-            <input
-              type="checkbox"
-              id={`declaration-${index}`}
-              className="h-5 w-5 sm:h-6 sm:w-6 text-[#4D2C5E] bg-white border-2 border-gray-300 rounded mt-0.5 mr-3 sm:mr-4 flex-shrink-0 cursor-pointer"
-              onChange={(e) => handleCheckboxChange(index, e.target.checked)}
-            />
-            <label 
-              htmlFor={`declaration-${index}`}
-              className="text-sm sm:text-base text-gray-700 cursor-pointer select-none"
-            >
-              {item}
-            </label>
-          </li>
-        ))}
-      </ul>
-      
-      <div className="bg-white p-4 sm:p-5 rounded-lg border border-gray-300">
-        <p className="text-sm sm:text-base text-gray-600 italic">
-          By clicking "I Agree & Start Exam", I consent to the above terms and conditions.
-        </p>
-      </div>
-    </div>
-  </div>
-  
-  {/* Start Button */}
-  <div className="mt-8 sm:mt-12 text-center">
-    <button
-      onClick={handleStartClick}
-      disabled={!allChecked} // Disable if all checkboxes aren't checked
-      className={`
-        w-full sm:w-auto px-6 sm:px-10 py-3 sm:py-4 rounded-xl font-medium text-sm sm:text-base md:text-lg
-        transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]
-        ${allChecked 
-          ? 'bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white hover:shadow-lg hover:shadow-purple-200' 
-          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-        }
-      `}
-    >
-      I Agree & Start Exam
-    </button>
-    
-    <p className="text-xs sm:text-sm text-gray-500 mt-3 sm:mt-4">
-      {allChecked 
-        ? "You may now start the exam"
-        : "Please check all declaration boxes to continue"
-      }
-    </p>
-  </div>
-  
-  {/* Confirmation Modal */}
-  <AnimatePresence>
-    {showInstructions && (
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-4 sm:p-6 md:p-8 lg:p-10 border border-gray-100 w-[95vw] sm:w-full"
       >
-        <motion.div
-          initial={{ scale: 0.95, y: 20, opacity: 0 }}
-          animate={{ scale: 1, y: 0, opacity: 1 }}
-          exit={{ scale: 0.95, y: 20, opacity: 0 }}
-          transition={{ type: "spring", damping: 25, stiffness: 400 }}
-          className="bg-white rounded-xl shadow-xl w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg p-4 sm:p-6 md:p-8 border border-gray-100 mx-4"
-        >
-          <div className="mb-6 sm:mb-8">
-            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#4D2C5E] mb-3 sm:mb-4">
-              Final Confirmation
+        {/* Header with logo and title */}
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-6 sm:mb-8">
+          <div className="flex items-center mb-4 sm:mb-0">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] rounded-lg flex items-center justify-center mr-3">
+              <span className="text-white font-bold text-sm sm:text-base">U</span>
+            </div>
+            <h1 className="text-lg sm:text-xl font-bold text-gray-800">Upskillab</h1>
+          </div>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-[#4D2C5E] text-center sm:text-right">
+            Exam Instructions
+          </h2>
+        </div>
+        
+        {/* Instructions content */}
+        <div className="space-y-6 sm:space-y-8">
+          {/* General Instructions */}
+          <div>
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6 pb-2 border-b border-gray-200">
+              Please read the following instructions carefully:
             </h3>
-            <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
-              Are you ready to start the exam? Once you begin, the timer will start and cannot be paused.
-            </p>
             
-            <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+            <div className="bg-blue-50 p-4 sm:p-5 rounded-lg border border-blue-100 mb-6 sm:mb-8">
               <div className="flex items-start">
-                <FiClock className="h-5 w-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
+                <FiInfo className="h-5 w-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-medium text-blue-800 text-sm sm:text-base">
-                    Exam Duration: {examData.durationMinutes} minutes
+                  <p className="font-medium text-blue-800 mb-1">Exam Duration: {examData.durationMinutes} minutes</p>
+                  <p className="text-blue-700 text-sm sm:text-base">
+                    The exam will auto-submit when time is complete. No extensions will be granted.
                   </p>
-                  <p className="text-blue-700 text-xs sm:text-sm mt-1">
-                    The exam will auto-submit when time is complete
+                </div>
+              </div>
+            </div>
+            
+            {/* Instruction Points */}
+            <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+              {[
+                { icon: FiClock, text: "You may start the exam anytime within this window" },
+                { icon: FiPlay, text: "Once 'Start Exam' is clicked, the timer begins immediately" },
+                { icon: FiActivity, text: "The exam must be completed in one continuous session within the allotted duration" },
+                { icon: FiPause, text: "No pause, restart, or reattempt is permitted" },
+                { icon: FiClock, text: "The exam will be auto-submitted upon time completion" },
+                { icon: FiWifi, text: "Ensure stable internet connectivity and a compatible device" },
+                { icon: FiFileText, text: "The exam is governed by the Upskillab Examination & Academic Integrity Policy" },
+                { icon: FiAlertTriangle, text: "Any policy violation may lead to disciplinary action" }
+              ].map((item, index) => (
+                <motion.li 
+                  key={index}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.05 }}
+                  className="flex items-start bg-gray-50 p-3 sm:p-4 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+                >
+                  <item.icon className="h-5 w-5 sm:h-6 sm:w-6 text-[#4D2C5E] mr-3 sm:mr-4 mt-0.5 flex-shrink-0" />
+                  <span className="text-sm sm:text-base text-gray-700">{item.text}</span>
+                </motion.li>
+              ))}
+            </ul>
+            
+            {/* Important Warning */}
+            <div className="bg-yellow-50 p-4 sm:p-5 rounded-lg border border-yellow-200">
+              <div className="flex items-start">
+                <FiAlertTriangle className="h-5 w-5 sm:h-6 sm:w-6 text-yellow-600 mr-3 mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="font-medium text-yellow-800 mb-2 text-sm sm:text-base">Important:</p>
+                  <p className="text-yellow-700 text-sm sm:text-base">
+                    Any attempt to cheat or violate exam rules will result in immediate disqualification and may lead to further disciplinary action as per Upskillab policy.
                   </p>
                 </div>
               </div>
             </div>
           </div>
           
-          <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
-            <button
-              onClick={() => setShowInstructions(false)}
-              className="px-5 py-2.5 sm:px-6 sm:py-3 border border-gray-300 text-gray-700 rounded-lg 
-                       hover:bg-gray-50 transition-all duration-200 font-medium text-sm sm:text-base 
-                       w-full sm:w-auto order-2 sm:order-1"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleStartExam}
-              className="px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] 
-                       text-white rounded-lg hover:opacity-90 transition-all duration-200 font-medium 
-                       text-sm sm:text-base w-full sm:w-auto order-1 sm:order-2"
-            >
-              Start Exam Now
-            </button>
+          {/* Declaration & Consent */}
+          <div className="bg-gray-50 p-4 sm:p-6 rounded-xl border border-gray-200">
+            <h3 className="text-lg sm:text-xl font-semibold text-gray-800 mb-4 sm:mb-6">
+              Declaration & Consent (Mandatory)
+            </h3>
+            
+            <ul className="space-y-3 sm:space-y-4 mb-6 sm:mb-8">
+              {[
+                "I confirm that I have read and understood all the exam instructions.",
+                "I understand that once the exam starts, it must be completed in one attempt within the given time.",
+                "I agree to comply with the Upskillab Examination and Academic Integrity Policy.",
+                "I acknowledge that any violation may result in disciplinary action."
+              ].map((item, index) => (
+                <li key={index} className="flex items-start">
+                  <input
+                    type="checkbox"
+                    id={`declaration-${index}`}
+                    className="h-5 w-5 sm:h-6 sm:w-6 text-[#4D2C5E] bg-white border-2 border-gray-300 rounded mt-0.5 mr-3 sm:mr-4 flex-shrink-0 cursor-pointer"
+                    onChange={(e) => handleCheckboxChange(index, e.target.checked)}
+                  />
+                  <label 
+                    htmlFor={`declaration-${index}`}
+                    className="text-sm sm:text-base text-gray-700 cursor-pointer select-none"
+                  >
+                    {item}
+                  </label>
+                </li>
+              ))}
+            </ul>
+            
+            <div className="bg-white p-4 sm:p-5 rounded-lg border border-gray-300">
+              <p className="text-sm sm:text-base text-gray-600 italic">
+                By clicking "I Agree & Start Exam", I consent to the above terms and conditions.
+              </p>
+            </div>
           </div>
-        </motion.div>
+        </div>
+        
+        {/* Start Button */}
+        <div className="mt-8 sm:mt-12 text-center">
+          <button
+            onClick={handleStartClick}
+            disabled={!allChecked} // Disable if all checkboxes aren't checked
+            className={`
+              w-full sm:w-auto px-6 sm:px-10 py-3 sm:py-4 rounded-xl font-medium text-sm sm:text-base md:text-lg
+              transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]
+              ${allChecked 
+                ? 'bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white hover:shadow-lg hover:shadow-purple-200' 
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              }
+            `}
+          >
+            I Agree & Start Exam
+          </button>
+          
+          <p className="text-xs sm:text-sm text-gray-500 mt-3 sm:mt-4">
+            {allChecked 
+              ? "You may now start the exam"
+              : "Please check all declaration boxes to continue"
+            }
+          </p>
+        </div>
+        
+        {/* Confirmation Modal */}
+        <AnimatePresence>
+          {showInstructions && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-3 sm:p-4"
+            >
+              <motion.div
+                initial={{ scale: 0.95, y: 20, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                exit={{ scale: 0.95, y: 20, opacity: 0 }}
+                transition={{ type: "spring", damping: 25, stiffness: 400 }}
+                className="bg-white rounded-xl shadow-xl w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg p-4 sm:p-6 md:p-8 border border-gray-100 mx-4"
+              >
+                <div className="mb-6 sm:mb-8">
+                  <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#4D2C5E] mb-3 sm:mb-4">
+                    Final Confirmation
+                  </h3>
+                  <p className="text-gray-600 text-sm sm:text-base mb-4 sm:mb-6">
+                    Are you ready to start the exam? Once you begin, the timer will start and cannot be paused.
+                  </p>
+                  
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <div className="flex items-start">
+                      <FiClock className="h-5 w-5 text-blue-600 mr-3 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <p className="font-medium text-blue-800 text-sm sm:text-base">
+                          Exam Duration: {examData.durationMinutes} minutes
+                        </p>
+                        <p className="text-blue-700 text-xs sm:text-sm mt-1">
+                          The exam will auto-submit when time is complete
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4">
+                  <button
+                    onClick={() => setShowInstructions(false)}
+                    className="px-5 py-2.5 sm:px-6 sm:py-3 border border-gray-300 text-gray-700 rounded-lg 
+                             hover:bg-gray-50 transition-all duration-200 font-medium text-sm sm:text-base 
+                             w-full sm:w-auto order-2 sm:order-1"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleStartExam}
+                    className="px-5 py-2.5 sm:px-6 sm:py-3 bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] 
+                             text-white rounded-lg hover:opacity-90 transition-all duration-200 font-medium 
+                             text-sm sm:text-base w-full sm:w-auto order-1 sm:order-2"
+                  >
+                    Start Exam Now
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
-    )}
-  </AnimatePresence>
-</motion.div>
     );
   };
 
@@ -825,7 +871,7 @@ const handleStartClick = () => {
         </p>
         
         <button
-          onClick={() => window.location.reload()}
+          onClick={() => navigate("/Student/Exam")}
           className="bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white py-2 px-6 rounded-lg hover:opacity-90 transition-colors font-medium"
         >
           Return to Dashboard
@@ -835,9 +881,154 @@ const handleStartClick = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fdf8ee] p-4 md:p-6">
+    <div className="min-h-screen bg-[#c9bfac] p-4 md:p-6">
       <div className="max-w-7xl mx-auto">
         {renderContent()}
+        
+        {/* Rating Modal */}
+        <AnimatePresence>
+  {showRatingModal && (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-2 sm:p-3 md:p-4"
+      onClick={(e) => e.target === e.currentTarget && !isSubmittingRating && setShowRatingModal(false)}
+    >
+      <motion.div
+        initial={{ scale: 0.95, y: 20 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.95, y: 20 }}
+        className="bg-white rounded-xl sm:rounded-2xl shadow-xl w-full max-w-sm sm:max-w-md mx-2 sm:mx-4 max-h-[90vh] sm:max-h-[85vh] flex flex-col"
+      >
+        {/* Scrollable Content Container */}
+        <div className="overflow-y-auto flex-1 p-4 sm:p-5 md:p-6">
+          <div className="text-center mb-4 sm:mb-6">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#4D2C5E] mb-1 sm:mb-2">
+              Help Us Improve
+            </h3>
+            <p className="text-xs sm:text-sm text-gray-600 mb-3 sm:mb-4">
+              We value your feedback.
+            </p>
+          </div>
+
+          <div className="mb-4 sm:mb-6 text-center">
+            <p className="text-xs sm:text-sm text-gray-700 mb-4 sm:mb-6">
+              Please take a moment to share your exam experience. Your responses will help us enhance assessment quality and learner experience.
+            </p>
+            
+            {/* Rating Stars - Updated Title */}
+            <div className="mb-4 sm:mb-6">
+              <h4 className="text-xs sm:text-sm font-medium text-gray-700 mb-3 sm:mb-4">
+                How would you rate your overall exam experience?
+              </h4>
+              <div className="flex justify-center space-x-2 sm:space-x-3 mb-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setRating(star)}
+                    className="text-2xl sm:text-3xl focus:outline-none transition-transform hover:scale-110 active:scale-95 disabled:opacity-50"
+                    disabled={isSubmittingRating}
+                    aria-label={`Rate ${star} star${star !== 1 ? 's' : ''}`}
+                  >
+                    {star <= rating ? (
+                      <span className="text-yellow-500">★</span>
+                    ) : (
+                      <span className="text-gray-300">☆</span>
+                    )}
+                  </button>
+                ))}
+              </div>
+              <p className="text-xs sm:text-sm text-center text-gray-500">
+                {rating === 0 ? 'Select your rating (1-5 stars)' : `${rating} out of 5 stars`}
+              </p>
+            </div>
+
+            {/* Review Textarea */}
+            <div className="mb-4 sm:mb-6">
+              <label className="block text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2">
+                Additional comments (optional)
+              </label>
+              <textarea
+                value={review}
+                onChange={(e) => setReview(e.target.value)}
+                rows={3}
+                maxLength={250}
+                className="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4D2C5E]/50 focus:border-[#4D2C5E] resize-none text-xs sm:text-sm"
+                placeholder="Share any additional feedback or suggestions..."
+                disabled={isSubmittingRating}
+                aria-label="Additional feedback comments"
+              />
+              <div className="flex justify-between mt-1">
+                <span className="text-xs text-gray-400">
+                  Max 50 words
+                </span>
+                <span className={`text-xs ${review.length > 250 ? 'text-red-600' : 'text-gray-500'}`}>
+                  {review.length}/250 characters
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Time Estimate Note */}
+          <div className="mb-4 sm:mb-6 text-center">
+            <div className="inline-flex items-center bg-blue-50 text-blue-700 text-xs font-medium px-2 sm:px-3 py-1 sm:py-1.5 rounded-full">
+              <svg className="w-2.5 h-2.5 sm:w-3 sm:h-3 mr-1 sm:mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+              </svg>
+              <span className="text-xs">Takes less than 1 minute</span>
+            </div>
+          </div>
+
+          {/* Footer Note */}
+          <p className="text-center text-xs text-gray-400 mt-3 sm:mt-4">
+            No further action is required for now.
+          </p>
+        </div>
+
+        {/* Fixed Button Container at Bottom */}
+        <div className="border-t border-gray-100 p-3 sm:p-4 md:p-5 bg-white rounded-b-xl sm:rounded-b-2xl">
+          {/* Action Buttons - Updated Text */}
+          <div className="flex flex-col xs:flex-row gap-2 sm:gap-3">
+            <button
+              onClick={() => {
+                setShowRatingModal(false);
+                setExamStatus('completed');
+              }}
+              disabled={isSubmittingRating}
+              className="px-4 sm:px-5 py-2.5 sm:py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium text-xs sm:text-sm flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Skip feedback for now"
+            >
+              Maybe Later
+            </button>
+            <button
+              onClick={handleSubmitRating}
+              disabled={isSubmittingRating || rating === 0}
+              className={`
+                px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg font-medium text-xs sm:text-sm flex-1 transition-all duration-200
+                ${rating === 0 || isSubmittingRating
+                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  : 'bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white hover:opacity-90 hover:shadow-md'
+                }
+              `}
+              aria-label="Submit feedback"
+            >
+              {isSubmittingRating ? (
+                <span className="flex items-center justify-center">
+                  <div className="animate-spin rounded-full h-3.5 w-3.5 sm:h-4 sm:w-4 border-t-2 border-b-2 border-white mr-1.5 sm:mr-2"></div>
+                  <span className="text-xs sm:text-sm">Submitting...</span>
+                </span>
+              ) : (
+                'Share Feedback'
+              )}
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
       </div>
     </div>
   );

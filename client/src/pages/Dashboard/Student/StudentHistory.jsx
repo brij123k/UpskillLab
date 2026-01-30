@@ -40,7 +40,11 @@ const StudentHistory = () => {
       console.log(response)
       // Fetch results if student data is available
       if (response.students[0] && response.students[0].email) {
-        fetchResults(response.students[0].email);
+        fetchResults(
+    response.students[0].email,
+    response.students[0]
+  );
+
       }
     } catch (error) {
       console.error('Error fetching student history:', error);
@@ -49,17 +53,41 @@ const StudentHistory = () => {
     }
   };
 
-  const fetchResults = async (email) => {
-    try {
-      setResultsLoading(true);
-      const response = await getDataHandlerWithToken('getResult',{email});
-      setResults(response);
-    } catch (error) {
-      console.error('Error fetching results:', error);
-    } finally {
-      setResultsLoading(false);
-    }
-  };
+const fetchResults = async (email, student) => {
+  try {
+    setResultsLoading(true);
+    const response = await getDataHandlerWithToken('getResult', { email });
+
+    const studentBatches =
+      student?.orderHistory?.map(order => ({
+        batchId: order.batchId?._id,
+        courseName: order.courseTitle,
+      })) || [];
+
+    const resultsWithCourseNames = response.map(result => {
+      const examBatches = result.examId?.batchIds || [];
+
+      const matchedBatch = studentBatches.find(studentBatch =>
+        examBatches.some(examBatch =>
+          examBatch?._id === studentBatch.batchId ||
+          examBatch === studentBatch.batchId
+        )
+      );
+
+      return {
+        ...result,
+        courseName: matchedBatch?.courseName || 'Unknown Course',
+      };
+    });
+
+    setResults(resultsWithCourseNames);
+  } catch (error) {
+    console.error('Error fetching results:', error);
+  } finally {
+    setResultsLoading(false);
+  }
+};
+
 
   useEffect(() => {
     fetchStudentHistory();
@@ -660,82 +688,157 @@ const calculateAttendance = () => {
         )}
 
         {/* Results Section */}
-        {activeSection === 'results' && (
-          <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
-            <div className="p-6">
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-                <div>
-                  <h2 className="text-xl font-bold text-gray-800 mb-1">Exam Results</h2>
-                  <p className="text-gray-600">Your performance in all examinations</p>
-                </div>
-              </div>
-
-              {resultsLoading ? (
-                <div className="flex justify-center items-center py-12">
-                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#6C63FF]"></div>
-                </div>
-              ) : results.length === 0 ? (
-                <div className="text-center py-12">
-                  <FiAward className="mx-auto h-12 w-12 text-gray-400" />
-                  <h3 className="mt-4 text-lg font-medium text-gray-900">No results available</h3>
-                  <p className="mt-2 text-gray-500">You haven't taken any exams yet.</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {results.map(result => (
-                    <div key={result._id} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
-                      <div className="flex justify-between items-start mb-4">
-                        <div>
-                          <h3 className="text-lg font-bold text-gray-800">{result.examId.title}</h3>
-                          <p className="text-sm text-gray-600 mt-1">{result.examId.description}</p>
-                        </div>
-                        <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                          {result.status}
-                        </span>
-                      </div>
-                      
-                      <div className="grid grid-cols-2 gap-4 mb-4">
-                        <div>
-                          <p className="text-sm text-gray-600">Total Marks</p>
-                          <p className="text-lg font-bold text-gray-800">{result.totalMaxMarks}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-600">Obtained Marks</p>
-                          <p className="text-lg font-bold text-[#6C63FF]">{result.totalAwardedMarks}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-600">Percentage</p>
-                          <p className="text-lg font-bold text-gray-800">
-                            {((result.totalAwardedMarks / result.totalMaxMarks) * 100).toFixed(2)}%
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-600">Exam Date</p>
-                          <p className="text-sm font-medium text-gray-800">
-                            {new Date(result.examId.startAt).toLocaleDateString('en-US', { 
-                              day: 'numeric', 
-                              month: 'short', 
-                              year: 'numeric' 
-                            })}
-                          </p>
-                        </div>
-                      </div>
-                      
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm text-gray-500">
-                          Published: {new Date(result.updatedAt).toLocaleDateString('en-US')}
-                        </span>
-                        {/* <button className="text-sm text-[#6C63FF] hover:text-[#5A52E0] font-medium">
-                          View Details
-                        </button> */}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+      {/* Results Section */}
+{activeSection === 'results' && (
+  <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+    <div className="p-6">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <div>
+          <h2 className="text-xl font-bold text-gray-800 mb-1">Exam Results</h2>
+          <p className="text-gray-600">Your performance in all examinations</p>
+        </div>
+        
+        {/* Results Summary Stats */}
+        <div className="bg-[#6C63FF]/10 p-4 rounded-xl border border-[#6C63FF]/20">
+          <div className="flex items-center gap-4">
+            <div className="text-center">
+              <p className="text-xl font-bold text-[#6C63FF]">
+                {results.filter(r => {
+                  const percentage = (r.totalAwardedMarks / r.totalMaxMarks) * 100;
+                  return percentage >= 40;
+                }).length}/{results.length}
+              </p>
+              <p className="text-xs text-gray-600">Exams Qualified</p>
+            </div>
+            <div className="h-8 border-l border-gray-300"></div>
+            <div className="space-y-1">
+              <p className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-green-500"></span>
+                Qualified: {results.filter(r => {
+                  const percentage = (r.totalAwardedMarks / r.totalMaxMarks) * 100;
+                  return percentage >= 40;
+                }).length}
+              </p>
+              <p className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-red-500"></span>
+                Not Qualified: {results.filter(r => {
+                  const percentage = (r.totalAwardedMarks / r.totalMaxMarks) * 100;
+                  return percentage < 40;
+                }).length}
+              </p>
             </div>
           </div>
-        )}
+        </div>
+      </div>
+
+      {resultsLoading ? (
+        <div className="flex justify-center items-center py-12">
+          <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[#6C63FF]"></div>
+        </div>
+      ) : results.length === 0 ? (
+        <div className="text-center py-12">
+          <FiAward className="mx-auto h-12 w-12 text-gray-400" />
+          <h3 className="mt-4 text-lg font-medium text-gray-900">No results available</h3>
+          <p className="mt-2 text-gray-500">You haven't taken any exams yet.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {results.map(result => {
+            const percentage = (result.totalAwardedMarks / result.totalMaxMarks) * 100;
+            const isQualified = percentage >= 40;
+            
+            return (
+              <div key={result._id} className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-md transition-shadow">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-lg font-bold text-gray-800">{result.examId?.title || 'Untitled Exam'}</h3>
+                      <span className={`px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${isQualified ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                        {isQualified ? 'Qualified' : 'Not Qualified'}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-1">{result.courseName || 'General Exam'}</p>
+                    <p className="text-sm text-gray-600">{result.examId?.description}</p>
+                  </div>
+                  <span className="px-2.5 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                    {result.status}
+                  </span>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div>
+                    <p className="text-sm text-gray-600">Total Marks</p>
+                    <p className="text-lg font-bold text-gray-800">{result.totalMaxMarks}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Obtained Marks</p>
+                    <p className="text-lg font-bold text-[#6C63FF]">{result.totalAwardedMarks}</p>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Percentage</p>
+                    <div className="flex items-center gap-2">
+                      <p className={`text-lg font-bold ${isQualified ? 'text-green-600' : 'text-red-600'}`}>
+                        {percentage.toFixed(2)}%
+                      </p>
+                      {!isQualified && (
+                        <span className="text-xs text-red-500">
+                          (Min 40% required)
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <p className="text-sm text-gray-600">Exam Date</p>
+                    <p className="text-sm font-medium text-gray-800">
+                      {new Date(result.examId?.startAt || result.updatedAt).toLocaleDateString('en-US', { 
+                        day: 'numeric', 
+                        month: 'short', 
+                        year: 'numeric' 
+                      })}
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Progress Bar for Qualification */}
+                <div className="mb-4">
+                  <div className="flex justify-between text-xs text-gray-500 mb-1">
+                    <span>Qualification Progress (40% required)</span>
+                    <span>{percentage.toFixed(1)}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div 
+                      className={`h-2 rounded-full ${isQualified ? 'bg-green-500' : 'bg-red-500'}`}
+                      style={{ width: `${Math.min(percentage, 100)}%` }}
+                    ></div>
+                    {/* Mark for 40% threshold */}
+                    <div 
+                      className="relative"
+                      style={{ left: '40%', marginLeft: '-2px' }}
+                    >
+                      <div className="absolute w-1 h-3 bg-gray-700 top-1/2 transform -translate-y-1/2"></div>
+                      <span className="absolute text-xs text-gray-600 top-3">40%</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-500">
+                    Published: {new Date(result.updatedAt).toLocaleDateString('en-US')}
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className={`text-sm font-medium ${isQualified ? 'text-green-600' : 'text-red-600'}`}>
+                      {isQualified ? '✓ Qualified' : '✗ Not Qualified'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  </div>
+)}
       </div>
     </div>
   );
