@@ -13,7 +13,7 @@ const StudentRecordedVideos = () => {
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [sortOrder, setSortOrder] = useState('old-to-new');
+  // const [sortOrder, setSortOrder] = useState('old-to-new');
   const navigate = useNavigate();
 
 const getCourses = async () => {
@@ -116,16 +116,16 @@ const getCourses = async () => {
     
     return duration;
   };
-const sortedVideos = [...filteredVideos].sort((a, b) => {
-  const dateA = new Date(a.createdAt);
-  const dateB = new Date(b.createdAt);
+// const sortedVideos = [...filteredVideos].sort((a, b) => {
+//   const dateA = new Date(a.createdAt);
+//   const dateB = new Date(b.createdAt);
   
-  if (sortOrder === 'new-to-old') {
-    return dateB - dateA; // Newest first
-  } else {
-    return dateA - dateB; // Oldest first
-  }
-});
+//   if (sortOrder === 'new-to-old') {
+//     return dateB - dateA; // Newest first
+//   } else {
+//     return dateA - dateB; // Oldest first
+//   }
+// });
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -148,7 +148,7 @@ const sortedVideos = [...filteredVideos].sort((a, b) => {
     setActiveCourse('all');
     setActiveTeacher('all');
     setSearchQuery('');
-    setSortOrder('old-to-new');
+    // setSortOrder('old-to-new');
   };
 
   return (
@@ -171,7 +171,7 @@ const sortedVideos = [...filteredVideos].sort((a, b) => {
           </div>
 
           {/* Time Sort Dropdown - ADD THIS */}
-            <div className="relative">
+            {/* <div className="relative">
               <div className="relative">
                 <select
                   value={sortOrder}
@@ -194,7 +194,7 @@ const sortedVideos = [...filteredVideos].sort((a, b) => {
                 </select>
                 <FiChevronDown className="absolute right-3 top-3 text-gray-400 pointer-events-none" />
               </div>
-            </div>
+            </div> */}
 
           {/* Dropdown Filters */}
           <div className="flex flex-col sm:flex-row gap-3">
@@ -265,14 +265,14 @@ const sortedVideos = [...filteredVideos].sort((a, b) => {
                     </button>
                   </span>
                 )}
-                {sortOrder !== 'new-to-old' && (
+                {/* {sortOrder !== 'new-to-old' && (
                   <span className="inline-flex items-center gap-1 bg-[#4D2C5E]/10 text-[#4D2C5E] px-3 py-1 rounded-full text-sm">
                     Sort: {sortOrder === 'old-to-new' ? 'Old to New' : 'New to Old'}
                     <button onClick={() => setSortOrder('new-to-old')} className="ml-1 hover:text-red-600">
                       <FiX size={14} />
                     </button>
                   </span>
-                )}
+                )} */}
               </div>
 
               <button
@@ -334,8 +334,8 @@ const sortedVideos = [...filteredVideos].sort((a, b) => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {sortedVideos.length > 0 ? (
-            sortedVideos.map(video => (
+          {filteredVideos.length > 0 ? (
+            filteredVideos.map(video => (
               <div key={video._id} className="bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-shadow duration-300">
                 {/* Video Thumbnail with 16:9 aspect ratio */}
                 <div className="relative">
