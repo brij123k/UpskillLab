@@ -184,7 +184,6 @@ const AboutUpskillab = () => {
             >
               <h3 className="text-2xl font-bold text-[#4D2C5E] mb-4">Short-Term Vision</h3>
               <p className="text-gray-700">
-12:39
                 To contribute to improving India's global ranking in the Happiness Index by prioritizing mental wellbeing alongside skill development.
               </p>
             </motion.div>
