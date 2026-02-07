@@ -421,10 +421,10 @@ const getCourses = async () => {
 
                   {/* Date and Action Button */}
                   <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                    <div className="flex items-center text-xs text-gray-500">
+                    {/* <div className="flex items-center text-xs text-gray-500">
                       <FiClock className="mr-1" size={12} />
                       <span>{formatDate(video.createdAt)}</span>
-                    </div>
+                    </div> */}
                     <button
                       className="px-3 py-1.5 bg-[#4D2C5E] text-white rounded-lg hover:bg-[#3a2152] text-xs transition-colors duration-200"
                       onClick={() => navigate(`/Student/videos/${video._id}`)}
