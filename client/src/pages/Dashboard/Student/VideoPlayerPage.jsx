@@ -114,8 +114,6 @@ const VideoPlayerPage = () => {
                 <h1 className="text-2xl font-bold text-[#4D2C5E]">{video.title}</h1>
                 <div className="flex items-center mt-2 text-gray-600">
                   <FiClock className="mr-2" />
-                  <span>{formatDate(video.createdAt)}</span>
-                  <span className="mx-2">•</span>
                   <span>{formatDuration(video.duration)}</span>
                 </div>
               </div>
