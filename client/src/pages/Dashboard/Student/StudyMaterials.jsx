@@ -220,7 +220,6 @@ const StudyMaterials = () => {
           <div className="col-span-5">Name</div>
           <div className="col-span-3">Course</div>
           <div className="col-span-2">Chapter</div>
-          <div className="col-span-1">Date</div>
           <div className="col-span-1">Actions</div>
         </div>
         
@@ -243,9 +242,6 @@ const StudyMaterials = () => {
               </div>
               <div className="col-span-2 text-sm text-gray-600">
                 {material.chapter?.name || 'No chapter'}
-              </div>
-              <div className="col-span-1 text-sm text-gray-500">
-                {formatDate(material.createdAt)}
               </div>
               <div className="col-span-1 flex justify-end">
                 <a 
