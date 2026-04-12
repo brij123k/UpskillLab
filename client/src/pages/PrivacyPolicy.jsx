@@ -20,7 +20,7 @@ const PrivacyPolicy = () => {
     visible: {
       y: 0,
       opacity: 1,
-      transition: { 
+      transition: {
         type: "spring",
         stiffness: 100,
         damping: 10,
@@ -39,7 +39,7 @@ const PrivacyPolicy = () => {
   };
 
   return (
-    <motion.div 
+    <motion.div
       className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8"
       initial="hidden"
       animate="visible"
@@ -47,7 +47,7 @@ const PrivacyPolicy = () => {
     >
       <div className="max-w-4xl mx-auto">
         {/* Header with privacy icon */}
-        <motion.header 
+        <motion.header
           className="text-center mb-16"
           variants={item}
         >
@@ -61,14 +61,14 @@ const PrivacyPolicy = () => {
               </svg>
             </div>
           </motion.div>
-          
-          <motion.h1 
+
+          <motion.h1
             className="text-4xl font-bold text-[#4D2C5E] mb-6"
             whileHover={{ scale: 1.02 }}
           >
             Privacy Policy
           </motion.h1>
-          <motion.div 
+          <motion.div
             className="flex justify-center"
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
@@ -79,7 +79,7 @@ const PrivacyPolicy = () => {
         </motion.header>
 
         {/* Last Updated with shield icon */}
-        <motion.div 
+        <motion.div
           className="bg-white p-4 mb-12 rounded-lg shadow-sm border-l-4 border-[#FF7426] flex items-start"
           variants={item}
         >
@@ -92,24 +92,23 @@ const PrivacyPolicy = () => {
         </motion.div>
 
         {/* Introduction */}
-        <motion.section 
+        <motion.section
           className="mb-12 bg-white p-6 rounded-lg shadow-sm"
           variants={section}
         >
-          <motion.h2 
+          <motion.h2
             className="text-2xl font-semibold text-[#4D2C5E] mb-4 flex items-center"
             whileHover={{ x: 5 }}
           >
             <span className="w-3 h-3 bg-[#FF7426] rounded-full mr-3"></span>
             Our Commitment to Privacy
           </motion.h2>
-          <motion.p 
-            className="text-gray-700 mb-4 leading-relaxed"
-            variants={item}
-          >
-            At Upskillab, we are committed to protecting your privacy. This Privacy Policy explains how we collect, 
-            use, disclose, and safeguard your information when you use our platform.
+          <motion.p className="text-gray-700 mb-4 leading-relaxed">
+            At Trivision Partners Private Limited ("TVP ERP OR Upskillab), we are committed to protecting your privacy.
+            This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our
+            TVP ERP platform.
           </motion.p>
+
         </motion.section>
 
         {/* Main Content - Privacy Specific Sections */}
@@ -160,20 +159,20 @@ const PrivacyPolicy = () => {
             content: "We may update this policy periodically. We'll notify you of significant changes and indicate the effective date at the top of this page."
           }
         ].map((section, index) => (
-          <motion.section 
+          <motion.section
             key={index}
             className="mb-8 bg-white p-6 rounded-lg shadow-sm"
             variants={section}
             custom={index}
           >
-            <motion.h3 
+            <motion.h3
               className="text-xl font-semibold text-[#4D2C5E] mb-3 flex items-center"
               whileHover={{ color: '#FF7426' }}
             >
               <span className="text-lg mr-3">{section.icon}</span>
               {section.title}
             </motion.h3>
-            <motion.p 
+            <motion.p
               className="text-gray-700 leading-relaxed"
               variants={item}
             >
@@ -183,19 +182,19 @@ const PrivacyPolicy = () => {
         ))}
 
         {/* Contact Information */}
-        <motion.div 
+        <motion.div
           className="mt-12 bg-[#FFF5EF] border border-[#FFD9C5] rounded-lg p-6"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
         >
-          <motion.h3 
+          <motion.h3
             className="text-2xl font-bold text-[#4D2C5E] mb-4"
             whileHover={{ x: 3 }}
           >
             Contact Us
           </motion.h3>
-          <motion.p 
+          <motion.p
             className="text-gray-700 mb-6"
             variants={item}
           >
@@ -210,7 +209,7 @@ const PrivacyPolicy = () => {
         </motion.div>
 
         {/* Acceptance section */}
-        <motion.div 
+        <motion.div
           className="mt-16 text-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -220,14 +219,14 @@ const PrivacyPolicy = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
           >
-            <Link 
-              to="/" 
+            <Link
+              to="/"
               className="inline-block px-8 py-3 bg-[#4D2C5E] text-white rounded-md hover:bg-[#3A2250] transition-colors text-lg font-medium shadow-md"
             >
               Back to Homepage
             </Link>
           </motion.div>
-          <motion.p 
+          <motion.p
             className="text-gray-600 mt-8"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -238,7 +237,7 @@ const PrivacyPolicy = () => {
         </motion.div>
 
         {/* Decorative elements */}
-        <motion.div 
+        <motion.div
           className="fixed top-20 right-20 w-2 h-2 rounded-full bg-[#FF7426]"
           animate={{
             scale: [1, 1.5, 1],
@@ -246,7 +245,7 @@ const PrivacyPolicy = () => {
             transition: { repeat: Infinity, duration: 3 }
           }}
         />
-        <motion.div 
+        <motion.div
           className="fixed bottom-20 left-20 w-3 h-3 rounded-full bg-[#4D2C5E]"
           animate={{
             y: [0, -15, 0],
@@ -256,11 +255,13 @@ const PrivacyPolicy = () => {
       </div>
 
       <Helmet>
-  <title>Privacy Policy | Upskillab - Your Data, Your Control</title>
-  <meta name="description" content="Learn how Upskillab collects, uses, and protects your personal information while using our learning platform." />
-  <meta name="keywords" content="upskilllab privacy policy, data protection, education privacy, online education privacy, upskillab user data" />
-   <link rel="canonical" href="https://upskillab.com/privacypolicy" />
-</Helmet>
+        <title>Privacy Policy | Upskillab - Your Data, Your Control</title>
+        <meta name="description" content="Learn how Upskillab collects, uses, and protects your personal information while using our learning platform." />
+        <meta name="keywords" content="upskilllab privacy policy, data protection, education privacy, online education privacy, upskillab user data" />
+        <link rel="canonical" href="https://upskillab.com/privacypolicy" />
+      </Helmet>
+
+
     </motion.div>
   );
 };
