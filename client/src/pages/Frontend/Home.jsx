@@ -498,7 +498,7 @@ function Home() {
                 exit="hidden"
               >
                 <motion.div className="mb-2" variants={itemVariants}>
-                  <p className="text-2xl font-bold text-purple-700">
+                  <p className="text-2xl font-bold text-[#4d2c5e]">
                     <span className='text-[#FF7426]'>Get</span> In Touch
                   </p>
                 </motion.div>
