@@ -37,9 +37,9 @@ const ResetPasswordPage = lazy(() => import("./pages/Auth/ResetPassword"));
 const VerifyOTPPage = lazy(() => import("./pages/Auth/VerifyOTP"));
 const NotFoundPage = lazy(() => import("./pages/NotFound"));
 const CourseDetailsPage = lazy(() => import("./pages/Frontend/CourseDetail"));
-const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const PrivacyPolicy = lazy(() => import("./pages/privacypolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
-const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
+const RefundPolicy = lazy(() => import("./pages/refundpolicy"));
 const whyUpskillab = lazy(() => import("./pages/whyUpskillab"));
 const TeacherRegistration = lazy(() => import("./pages/TeacherRegistration"));
 const PCATExamPortal = lazy(()=> import("./pages/Frontend/PCATExamPortal"))
@@ -132,7 +132,7 @@ export const routes = [
   { exact: true, path: "/VerifyOTP", layout: Index, component: VerifyOTPPage},
   { exact: true, path: "/TermsOfService", layout: Index, component: TermsOfService},
   { exact: true, path: "/privacypolicy", layout: Index, component: PrivacyPolicy},
-  { exact: true, path: "/RefundPolicy", layout: Index, component: RefundPolicy},
+  { exact: true, path: "/refundpolicy", layout: Index, component: RefundPolicy},
   { exact: true, path: "/examAttempt/:examId", layout: Index, component: ExamAttempt},
   { exact: true, path: "/teacher/register", layout: Index, component: TeacherRegistration},
   { exact: true, path: "*", component: NotFoundPage },
