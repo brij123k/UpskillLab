@@ -37,9 +37,9 @@ const ResetPasswordPage = lazy(() => import("./pages/Auth/ResetPassword"));
 const VerifyOTPPage = lazy(() => import("./pages/Auth/VerifyOTP"));
 const NotFoundPage = lazy(() => import("./pages/NotFound"));
 const CourseDetailsPage = lazy(() => import("./pages/Frontend/CourseDetail"));
-const PrivacyPolicy = lazy(() => import("./pages/privacypolicy"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
-const RefundPolicy = lazy(() => import("./pages/refundpolicy"));
+const RefundPolicy = lazy(() => import("./pages/RefundPolicy"));
 const whyUpskillab = lazy(() => import("./pages/whyUpskillab"));
 const TeacherRegistration = lazy(() => import("./pages/TeacherRegistration"));
 const PCATExamPortal = lazy(()=> import("./pages/Frontend/PCATExamPortal"))
