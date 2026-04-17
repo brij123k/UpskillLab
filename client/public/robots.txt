@@ -1,43 +1,30 @@
-User-Agent: *
-Allow: /
+User-agent: *
+
+# ===== BLOCK PRIVATE/AUTHENTICATED PAGES =====
+Disallow: /Student/
+Disallow: /student/
+Disallow: /Dashboard/
+Disallow: /dashboard/
+Disallow: /dashboard/teacher
+Disallow: /dashboard/teacher/
+Disallow: /dashboard/student
+Disallow: /dashboard/student/
+
+# ===== BLOCK ADMIN AND API =====
 Disallow: /admin/
 Disallow: /private/
-Allow: /public/
-Allow: /courselist
-Allow: /about
-Allow: /contactus
-Allow: /successstory
-Allow: /upcomingbatches
-Allow: /blog
-Allow: /blogdetail
-Allow: /career
-Allow: /privacypolicy
-Allow: /termsOfservice
-Allow: /refundpolicy
-Allow: /teacherregistration
-Allow: /login
-Allow: /register
-Allow: /forgetpassword
-Allow: /resetpassword
-Allow: /verifyOTP
+Disallow: /api/
 
-# Teacher Dashboard
-Allow: /dashboard/teacher
-Allow: /dashboard/teacher/*
+# ===== BLOCK FUNCTIONAL/AUTH PAGES =====
+Disallow: /login
+Disallow: /register
+Disallow: /forgetpassword
+Disallow: /resetpassword
+Disallow: /verifyOTP
+Disallow: /teacherregistration
 
-# Student Dashboard
-Allow: /dashboard/student
-Allow: /dashboard/student/*
+# ===== BLOCK EXAM PORTAL =====
+Disallow: /PCATExamPortal
 
-# Scripts and Styles
-Allow: /*.js$
-Allow: /*.css$
-Allow: /*.png$
-Allow: /*.jpg$
-Allow: /*.jpeg$
-Allow: /*.gif$
-Allow: /*.webp$
-Allow: /*.svg$
-
-# Sitemap
+# ===== SITEMAP =====
 Sitemap: https://upskillab.com/sitemap.xml

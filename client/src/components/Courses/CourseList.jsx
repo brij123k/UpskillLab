@@ -6,9 +6,15 @@ import Course3 from '../../assets/course3.png';
 import { motion } from 'framer-motion';
 import {AllCourses} from "../../data";
 import { getDataHandler } from '../../config/services';
+import { Helmet } from 'react-helmet-async';
 
 function CourseList() {
   const [courses, setCourses] = useState([]);
+
+
+
+
+
   
   const handelCourses = async () => {
     const res = await getDataHandler('courseDisplay');
@@ -39,6 +45,38 @@ function CourseList() {
     handelCourses();
   },[]);
 
+
+  
+   const courseSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": courses.map((course, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Course",
+        "name": course.title,
+        "description": `Online course: ${course.title}`,
+        "provider": {
+          "@type": "Organization",
+          "name": "Upskillab",
+          "sameAs": "https://upskillab.com"
+        },
+        "url": `https://upskillab.com/${course.categoryName?.toLowerCase()}/course/${course.courseCode}`,
+        "image": course.image,
+        "offers": {
+          "@type": "Offer",
+          "price": course.discountedPrice,
+          "priceCurrency": "INR",
+          "availability": course.remainingSheets > 0 
+            ? "https://schema.org/InStock" 
+            : "https://schema.org/SoldOut"
+        }
+      }
+    }))
+  };
+
+  
   // const { data: coursesData } = useQuery({
   //   queryKey: ["courses", queryParams],
   //   queryFn: () => getDataHandler("courseDisplay", null, queryParams),
@@ -51,6 +89,18 @@ function CourseList() {
   // };
   return (
     <div className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+            {/* Inject schema into page head */}
+      {courses.length > 0 && (
+        <Helmet>
+          <script type="application/ld+json">
+            {JSON.stringify(courseSchema)}
+          </script>
+        </Helmet>
+      )}
+
+      <div className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
+        {/* your existing JSX unchanged */}
+      </div>
     <div className="mx-auto">
       <motion.div 
         className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 2xl:gap-5"

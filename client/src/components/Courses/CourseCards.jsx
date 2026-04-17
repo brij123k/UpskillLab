@@ -2,13 +2,22 @@ import React from 'react';
 import CourseList from './CourseList';
 import { FiClock, FiUsers, FiArrowRight } from 'react-icons/fi';
 import { NavLink, useNavigate } from 'react-router-dom';
-
+import { Helmet } from 'react-helmet-async';
 function CourseCards() {
 
  const navigation= useNavigate()
     
   return (
     <div className='bg-white relative overflow-hidden' id='Courses'>
+        <Helmet>
+        <title>Explore Online Courses | Upskillab</title>
+        <meta 
+          name="description" 
+          content="Browse certified online courses in Psychology, Cybersecurity and more. Job-ready bootcamps for Indian professionals." 
+        />
+        <meta property="og:title" content="Explore Online Courses | Upskillab" />
+        <meta property="og:description" content="Browse certified online courses in Psychology, Cybersecurity and more." />
+      </Helmet>
       {/* Background decorative elements */}
       <div className='w-[80%] h-[80%] absolute top-20 left-[-250px] blur-lg rounded-full bg-[#FF74261A] z-0'></div>
       <img 

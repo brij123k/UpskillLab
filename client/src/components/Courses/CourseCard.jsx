@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FiClock, FiBarChart2, FiArrowRight, FiBookmark } from 'react-icons/fi';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 const CourseCard = ({
   id,
   courseId,
@@ -17,7 +18,18 @@ const CourseCard = ({
   categoryName
 }) => {
   const navigate = useNavigate();
+  
   return (
+    <>
+      <Helmet>
+
+        <meta 
+          name="title" 
+          content={title} 
+        />
+        
+        <meta property="og:title" content={title}  />
+      </Helmet>
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -163,6 +175,7 @@ const CourseCard = ({
         />
       )}
     </motion.div>
+          </>
   );
 };
 

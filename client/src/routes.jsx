@@ -132,7 +132,7 @@ export const routes = [
   { exact: true, path: "/VerifyOTP", layout: Index, component: VerifyOTPPage},
   { exact: true, path: "/TermsOfService", layout: Index, component: TermsOfService},
   { exact: true, path: "/privacypolicy", layout: Index, component: PrivacyPolicy},
-  { exact: true, path: "/RefundPolicy", layout: Index, component: RefundPolicy},
+  { exact: true, path: "/refundpolicy", layout: Index, component: RefundPolicy},
   { exact: true, path: "/examAttempt/:examId", layout: Index, component: ExamAttempt},
   { exact: true, path: "/teacher/register", layout: Index, component: TeacherRegistration},
   { exact: true, path: "*", component: NotFoundPage },
