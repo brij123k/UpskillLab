@@ -35,7 +35,6 @@ const LandingPage = () => {
        setDatetime(getBootcamp.datetime[0])
      }
    }
-   console.log(heroSection)
    bootcampDataHandler()
     },[])
    return (
