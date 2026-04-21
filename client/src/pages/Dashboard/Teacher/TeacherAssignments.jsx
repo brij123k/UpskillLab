@@ -70,7 +70,7 @@ const TeacherAssignments = () => {
 
         // Fetch batches taught by this teacher
         const batchesResponse = await getDataHandlerWithToken('upcomingBatches');
-        setBatches(batchesResponse || []);
+        setBatches(batchesResponse?.filter(batch => batch.active) || []);
 
         // Fetch teacher's assignments
         await fetchAssignments();
