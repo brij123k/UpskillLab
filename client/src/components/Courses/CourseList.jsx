@@ -27,6 +27,8 @@ function CourseList() {
           courseId: course._id,
           courseCode: course.courseCode,
           title: course.courseName,
+          metaTitle: course.metaTitle,
+          metaDescription: course.metaDescription,
           categoryId: course.category,
           image: course.courseImage,
           courseLevel: course.courseLevel.name,
@@ -55,8 +57,8 @@ function CourseList() {
       "position": index + 1,
       "item": {
         "@type": "Course",
-        "name": course.title,
-        "description": `Online course: ${course.title}`,
+        "name": course.metaTitle,
+        "description": `Online course: ${course.metaDescription}`,
         "provider": {
           "@type": "Organization",
           "name": "Upskillab",

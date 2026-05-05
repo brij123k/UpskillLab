@@ -10,6 +10,8 @@ const CourseCard = ({
   courseLevel,
   image,
   title,
+  metaTitle,
+  metaDescription,
   duration,
   studentsEnrolled,
   originalPrice,
@@ -25,10 +27,10 @@ const CourseCard = ({
 
         <meta 
           name="title" 
-          content={title} 
+          content={metaTitle} 
         />
         
-        <meta property="og:title" content={title}  />
+        <meta property="og:title" content={metaTitle}  />
       </Helmet>
     <motion.div
       initial={{ opacity: 0, y: 20 }}
