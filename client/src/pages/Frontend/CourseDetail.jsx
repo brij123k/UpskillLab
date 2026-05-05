@@ -1936,6 +1936,8 @@ const CourseDetails = () => {
             id: response._id,
             batchId: response.batch?._id || "0",
             title: response.courseName,
+            metaTitle: response.metaTitle,
+            metaDescription: response.metaDescription,
             imageUrl: response.courseImage,
             certificateImage: response.certificate,
             batchCode: response.batch?.batchCode || "0",
@@ -2121,16 +2123,16 @@ const CourseDetails = () => {
     <Helmet>
       <title>
         {seoMetadata[id]?.title ||
-          (course?.title
-            ? `${course.title} | Upskillab Online Course`
+          (course?.metaTitle
+            ? `${course.metaTitle || course.title} | Upskillab`
             : "Online Course | Upskillab")}
       </title>
       <meta
         name="description"
         content={
-          seoMetadata[id]?.description ||
-          (course?.shortDescription
-            ? `${course.shortDescription} Learn with Upskillab's expert-led online courses in psychology, technology, management, and self-development.`
+          seoMetadata[id]?.metaDescription ||
+          (course?.metaDescription
+            ? `${course.metaDescription} Learn with Upskillab's expert-led online courses in psychology, technology, management, and self-development.`
             : "Learn with Upskillab's expert-led online courses in psychology, technology, management, and self-development to gain skills for today's competitive job market.")
         }
       />
@@ -2146,18 +2148,18 @@ const CourseDetails = () => {
       <meta
         property="og:title"
         content={
-          seoMetadata[id]?.title ||
-          (course?.title
-            ? `${course.title} | Upskillab`
+          seoMetadata[id]?.metaTitle ||
+          (course?.metaTitle
+            ? `${course.metaTitle} | Upskillab`
             : "Online Course | Upskillab")
         }
       />
       <meta
         property="og:description"
         content={
-          seoMetadata[id]?.description ||
-          (course?.shortDescription
-            ? course.shortDescription
+          seoMetadata[id]?.metaDescription ||
+          (course?.metaDescription
+            ? course.metaDescription
             : "Join Upskillab to master skills in psychology, technology, management, and self-development.")
         }
       />
@@ -2172,18 +2174,18 @@ const CourseDetails = () => {
       <meta
         name="twitter:title"
         content={
-          seoMetadata[id]?.title ||
-          (course?.title
-            ? `${course.title} | Upskillab`
+          seoMetadata[id]?.metaTitle ||
+          (course?.metaTitle
+            ? `${course.metaTitle} | Upskillab`
             : "Online Course | Upskillab")
         }
       />
       <meta
         name="twitter:description"
         content={
-          seoMetadata[id]?.description ||
-          (course?.shortDescription
-            ? course.shortDescription
+          seoMetadata[id]?.metaDescription ||
+          (course?.metaDescription
+            ? course.metaDescription
             : "Join Upskillab to master skills in psychology, technology, management, and self-development.")
         }
       />
