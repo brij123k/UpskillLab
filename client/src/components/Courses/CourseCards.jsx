@@ -10,12 +10,12 @@ function CourseCards() {
   return (
     <div className='bg-white relative overflow-hidden' id='Courses'>
         <Helmet>
-        <title>Explore Online Courses | Upskillab</title>
+        <title> India's Top Upskilling Platform | Psychology & Tech Courses</title>
         <meta 
           name="description" 
-          content="Browse certified online courses in Psychology, Cybersecurity and more. Job-ready bootcamps for Indian professionals." 
+          content="Join Upskillab’s Certificate Course in Counselling & Psychotherapy in India and build practical therapy skills. Explore expert-led online psychotherapy certification and career-focused training." 
         />
-        <meta property="og:title" content="Explore Online Courses | Upskillab" />
+        <meta property="og:title" content="India's Top Upskilling Platform | Psychology & Tech Courses" />
         <meta property="og:description" content="Browse certified online courses in Psychology, Cybersecurity and more." />
       </Helmet>
       {/* Background decorative elements */}
