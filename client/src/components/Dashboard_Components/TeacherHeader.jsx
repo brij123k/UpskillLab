@@ -127,6 +127,7 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
   };
 
   const unreadNotifications = notifications.filter(notification => !notification.read);
+  const latestUnreadNotification = unreadNotifications[0];
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <nav className="max-w-8xl mx-auto px-4 py-3 flex items-center justify-between">
@@ -201,6 +202,7 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
             <button 
               onClick={toggleNotificationDropdown}
               className="relative p-1 text-gray-700 hover:text-[#4D2C5E] focus:outline-none"
+              title={unreadNotifications.length > 0 ? unreadNotifications[0].message : 'Notifications'}
             >
               <FiBell className="text-xl" />
               {unreadNotifications.length > 0 && (
@@ -236,6 +238,7 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
             className={`px-4 py-3 border-b border-gray-100 cursor-pointer transition-colors duration-150 ease-in-out ${
               !notification.read ? 'bg-blue-50/50 hover:bg-blue-50' : 'hover:bg-gray-50'
             }`}
+            title={notification.message}
           >
             <div className="flex justify-between items-start">
               <div className="flex-1 min-w-0">
@@ -247,7 +250,7 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
                     {getTitleByType(notification.type)}
                   </p>
                 </div>
-                <p className="text-xs text-gray-600 mt-1 line-clamp-2">{notification.message}</p>
+                <p className="text-xs text-gray-600 mt-1 line-clamp-2" title={notification.message}>{notification.message}</p>
                 <div className="flex justify-between items-center mt-2">
                   <p className="text-xs text-gray-400">
                     {formatTimeAgo(notification.createdAt)}
@@ -371,6 +374,8 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
           {isMenuOpen ? <FiX className="h-6 w-6" /> : <FiMenu className="h-6 w-6" />}
         </button>
       </nav>
+
+      
 
       {/* Mobile Menu */}
       {isMenuOpen && (

@@ -17,7 +17,7 @@ import {
 import { getDataHandlerWithToken, patchTokenDataHandler, postDataHandlerWithToken } from '../../../config/services';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { format, isBefore, isAfter } from 'date-fns';
+import { format } from 'date-fns';
 import ApiConfig from '../../../config/apiConfig';
 
 const StudentClassSchedule = () => {
@@ -66,61 +66,73 @@ const StudentClassSchedule = () => {
     fetchMyFeedbacks();
   }, []);
 
-  // Filter classes
   const now = new Date();
-  
+
+  const getSessionStartDateTime = (session) => {
+    const start = new Date(session.scheduledDate);
+    if (!session.scheduledStartTime) return start;
+
+    const [hours, minutes] = session.scheduledStartTime.split(':').map(Number);
+    start.setHours(hours || 0, minutes || 0, 0, 0);
+    return start;
+  };
+
+  const getSessionEndDateTime = (session) => {
+    const end = new Date(session.scheduledDate);
+    if (!session.scheduledEndTime) return end;
+
+    const [hours, minutes] = session.scheduledEndTime.split(':').map(Number);
+    end.setHours(hours || 0, minutes || 0, 0, 0);
+    return end;
+  };
+
+  const isSameDay = (dateA, dateB) =>
+    dateA.getDate() === dateB.getDate() &&
+    dateA.getMonth() === dateB.getMonth() &&
+    dateA.getFullYear() === dateB.getFullYear();
+
   // Today's classes
   const todayClasses = classSessions.filter(session => {
     const sessionDate = new Date(session.scheduledDate);
-    return (
-      sessionDate.getDate() === now.getDate() &&
-      sessionDate.getMonth() === now.getMonth() &&
-      sessionDate.getFullYear() === now.getFullYear()
-    );
+    return isSameDay(sessionDate, now);
   });
 
   // Live classes (happening now)
   const liveClasses = todayClasses.filter(session => {
-    const start = new Date(session.scheduledDate);
-    const startTimeParts = session.scheduledStartTime.split(':');
-    start.setHours(parseInt(startTimeParts[0]), parseInt(startTimeParts[1]));
-    
-    const end = new Date(session.scheduledDate);
-    const endTimeParts = session.scheduledEndTime.split(':');
-    end.setHours(parseInt(endTimeParts[0]), parseInt(endTimeParts[1]));
-    
-    return isBefore(start, now) && isAfter(end, now);
+    const start = getSessionStartDateTime(session);
+    const end = getSessionEndDateTime(session);
+
+    return start.getTime() <= now.getTime() && end.getTime() > now.getTime();
   });
 
   // Upcoming classes today
   const upcomingTodayClasses = todayClasses.filter(session => {
-    const start = new Date(session.scheduledDate);
-    const startTimeParts = session.scheduledStartTime.split(':');
-    start.setHours(parseInt(startTimeParts[0]), parseInt(startTimeParts[1]));
-    return isAfter(start, now);
+    const start = getSessionStartDateTime(session);
+    return start.getTime() > now.getTime();
   }).sort((a, b) => {
-    const aStart = new Date(`${a.scheduledDate}T${a.scheduledStartTime}`);
-    const bStart = new Date(`${b.scheduledDate}T${b.scheduledStartTime}`);
+    const aStart = getSessionStartDateTime(a);
+    const bStart = getSessionStartDateTime(b);
     return aStart - bStart;
   });
 
   // All upcoming classes (future dates)
   const upcomingClasses = classSessions.filter(session => 
-    new Date(session.scheduledDate) > now
-  ).filter(session => 
-    !todayClasses.some(todaySession => todaySession._id === session._id)
+    getSessionStartDateTime(session) > now &&
+    !isSameDay(new Date(session.scheduledDate), now)
   ).sort((a, b) => {
-    const aDate = new Date(`${a.scheduledDate}T${a.scheduledStartTime}`);
-    const bDate = new Date(`${b.scheduledDate}T${b.scheduledStartTime}`);
+    const aDate = getSessionStartDateTime(a);
+    const bDate = getSessionStartDateTime(b);
     return aDate - bDate;
   });
 
   // Past classes
   const pastClasses = classSessions.filter(session => 
-    new Date(session.scheduledDate) < now
+    getSessionEndDateTime(session).getTime() <= now.getTime() &&
+    !liveClasses.some(liveSession => liveSession._id === session._id) &&
+    !upcomingTodayClasses.some(upcomingSession => upcomingSession._id === session._id)
   ).sort((a, b) => {
-    const aDate = new Date(`${a.scheduledDate}T${a.scheduledStartTime}`);
-    const bDate = new Date(`${b.scheduledDate}T${b.scheduledStartTime}`);
+    const aDate = getSessionStartDateTime(a);
+    const bDate = getSessionStartDateTime(b);
     return bDate - aDate;
   });
   const formatDate = (dateString) => {

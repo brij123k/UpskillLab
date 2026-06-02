@@ -81,6 +81,7 @@ const TeacherNotifications = () => {
   }, []);
 
   const {notifications, setNotifications} = useNotificationService(profileId,['teacher','teacherStudent','adminTeacher']);
+  const latestUnreadNotification = notifications.find(notification => !notification.read);
 
   // Filter notifications based on active filter and search query
   const filteredNotifications = notifications.filter(notification => {
@@ -161,6 +162,15 @@ const TeacherNotifications = () => {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
+      {latestUnreadNotification && (
+        <div className="mb-4 rounded-xl border border-orange-200 bg-orange-50 px-4 py-3 shadow-sm">
+          <p className="text-xs font-semibold uppercase tracking-wide text-[#4D2C5E]">New notification</p>
+          <p className="mt-1 text-sm text-gray-700 line-clamp-1" title={latestUnreadNotification.message}>
+            {latestUnreadNotification.message}
+          </p>
+        </div>
+      )}
+
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-[#4D2C5E] flex items-center">
           <FiBell className="mr-2" />
@@ -228,6 +238,7 @@ const TeacherNotifications = () => {
               <li 
                 key={notification._id} 
                 className={`hover:bg-gray-50 transition-colors ${!notification.read ? 'bg-blue-50' : ''}`}
+                title={notification.message}
               >
                 <div className="p-4">
                   <div className="flex justify-between items-start">
@@ -240,7 +251,7 @@ const TeacherNotifications = () => {
                           {notification.type?.replace(/_/g, ' ') || 'General'}
                         </span>
                       </div>
-                      <p className="text-gray-600 mt-1">{notification.message}</p>
+                      <p className="text-gray-600 mt-1" title={notification.message}>{notification.message}</p>
                       <div className="flex items-center text-xs text-gray-400 mt-2">
                         <span>{formatTimeAgo(notification.createdAt)}</span>
                         <span className="mx-2">•</span>
