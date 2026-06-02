@@ -197,8 +197,8 @@ const getCourses = async () => {
             </div> */}
 
           {/* Dropdown Filters */}
-          <div className="flex flex-col sm:flex-row gap-3">
-            {/* Course Dropdown */}
+          {/* <div className="flex flex-col sm:flex-row gap-3">
+          
             <div className="relative">
               <div className="relative">
                 <select
@@ -216,7 +216,7 @@ const getCourses = async () => {
               </div>
             </div>
 
-            {/* Teacher Dropdown */}
+           
             <div className="relative">
               <div className="relative">
                 <select
@@ -233,7 +233,8 @@ const getCourses = async () => {
                 <FiChevronDown className="absolute right-3 top-3 text-gray-400 pointer-events-none" />
               </div>
             </div>
-          </div>
+          </div> 
+          */}
         </div>
 
         {/* Active Filters Display */}
@@ -286,7 +287,7 @@ const getCourses = async () => {
         )}
       </div>
 
-      {/* Video Player Modal */}
+
       {selectedVideo && (
         <div className="fixed inset-0 bg-[#00000049] bg-opacity-75 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg w-full max-w-4xl max-h-[90vh] overflow-hidden">
@@ -380,11 +381,11 @@ const getCourses = async () => {
                     <h3 className="font-bold text-[#4D2C5E] line-clamp-2 text-sm leading-tight">
                       {video.title}
                     </h3>
-                    {video.status === 'APPROVED' && (
+                    {/* {video.status === 'APPROVED' && (
                       <span className="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full whitespace-nowrap ml-2 flex-shrink-0">
                         Approved
                       </span>
-                    )}
+                    )} */}
                   </div>
 
                   {/* Description */}
@@ -398,7 +399,7 @@ const getCourses = async () => {
 </p>
 
                   {/* Course Information */}
-                  <div className="mb-2">
+                  {/* <div className="mb-2">
                     <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
                       <FiBook size={12} />
                       <span className="font-medium">Course:</span>
@@ -406,10 +407,10 @@ const getCourses = async () => {
                     <p className="text-xs text-gray-700 line-clamp-1">
                       {getCourseNames(video)}
                     </p>
-                  </div>
+                  </div> */}
 
                   {/* Teacher Information */}
-                  <div className="mb-3">
+                  {/* <div className="mb-3">
                     <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
                       <FiUser size={12} />
                       <span className="font-medium">Teacher:</span>
@@ -417,7 +418,7 @@ const getCourses = async () => {
                     <p className="text-xs text-gray-700 line-clamp-1">
                       {getTeacherNames(video)}
                     </p>
-                  </div>
+                  </div> */}
 
                   {/* Date and Action Button */}
                   <div className="flex items-center justify-between pt-3 border-t border-gray-100">

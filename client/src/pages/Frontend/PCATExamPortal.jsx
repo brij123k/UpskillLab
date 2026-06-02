@@ -316,7 +316,7 @@ const getTimeUntilStart = (startDate, startTime) => {
       <div>
         <h3 className="text-base sm:text-lg font-semibold text-blue-800 mb-2">What is the PCAT (Psychology Career Admission Test)?</h3>
         <p className="text-sm sm:text-base text-gray-700">
-          The PCAT (Psychology Career Admission Test) is a national-level exam designed for students seeking a career in psychology and mental health services in India. Every year, over 20 crore Indians face psychological challenges such as anxiety, depression, career confusion, and emotional difficulties. Unfortunately, India has a shortage of qualified psychologists—according to the WHO, there are only 0.75 psychologists per 100,000 people in India, compared to the global average of 3.
+          The PCAT (Psychology Career Admission Test) is a national-level exam designed for students seeking a career in psychology and mental health services in India. Every year, over 20 crore Indians face psychological challenges such as anxiety, depression, career confusion, and emotional difficulties. Unfortunately, India has a shortage of qualified psychologists—according to the WHO, there are only 0.07 psychologists per 100,000 people in India, compared to the global recomedation of one.
         </p>
       </div>
     </div>

@@ -394,7 +394,7 @@ const CourseList = () => {
   // Enhanced course data
   const [queryParams, setQueryParams] = useState({
     skip: 0,
-    limit: 25,
+    limit: 100,
     categoryIds: location.state?.category
       ? [location.state.category.categoryId]
       : [],
