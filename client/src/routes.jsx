@@ -57,6 +57,7 @@ const LiveClasses= lazy(()=> import("./pages/Dashboard/Teacher/LiveClasses"))
 const DoubtHandling= lazy(()=> import("./pages/Dashboard/Teacher/DoubtHandling"))
 const TeacherNotifications= lazy(()=> import("./pages/Dashboard/Teacher/TeacherNotifications"))
 const TeacherAssignments= lazy(()=> import("./pages/Dashboard/Teacher/TeacherAssignments"))
+const TeacherCounselling= lazy(()=> import("./pages/Dashboard/Teacher/TeacherCounselling"))
 
 
 // Student Panel lazyImport
@@ -149,6 +150,7 @@ export const routes = [
   { exact: true, path:"/Teacher/Doubt", layout:TeacherProtectedLayout, component:DoubtHandling},
   { exact: true, path:"/Teacher/Notifications", layout:TeacherProtectedLayout, component:TeacherNotifications},
   { exact: true, path:"/Teacher/Assignments", layout:TeacherProtectedLayout, component:TeacherAssignments},
+  { exact: true, path:"/Teacher/Counselling", layout:TeacherProtectedLayout, component:TeacherCounselling},
   
   // Student Panel Routes
   { exact: true, path:"/Student/Onboarding", layout:Index, component:StudentOnboarding},

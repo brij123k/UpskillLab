@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { 
   FiHome, FiUpload, FiCalendar, FiMessageSquare, 
   FiTrendingUp, FiVideo, FiBell, FiUser, 
-  FiLogOut, FiSend, FiMenu, FiX, FiChevronRight,FiFileText 
+  FiLogOut, FiSend, FiMenu, FiX, FiChevronRight,FiFileText, FiUsers 
 } from "react-icons/fi";
 import { FaChalkboardTeacher} from "react-icons/fa";
 import { useAuth } from '../../context/AuthContext';
@@ -193,6 +193,8 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
             <FiMessageSquare className="mr-1" />
             Doubts
           </NavLink>
+
+          
         </div>
 
         {/* Right Side Icons */}
@@ -344,6 +346,13 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
                     Teacher Assignments
                   </NavLink>
                   <NavLink
+            to="/Teacher/Counselling"
+            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+          >
+            <FiUsers className="mr-1" />
+            Counselling
+          </NavLink>
+                  <NavLink
                     to="/Teacher/Notifications"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
                   >
@@ -461,6 +470,15 @@ const {notifications, setNotifications} = useNotificationService(profileId,['tea
               >
                 <FiMessageSquare className="inline mr-3" />
                 Doubt Handling
+              </NavLink>
+
+              <NavLink
+                to="/Teacher/Counselling"
+                className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <FiUsers className="inline mr-3" />
+                Student Counsellings
               </NavLink>
 
               <NavLink
