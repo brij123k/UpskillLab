@@ -4,14 +4,17 @@ import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import ApiConfig from '../../config/apiConfig';
 import { getDataHandler } from '../../config/services';
-
+import { Document, Page, pdfjs } from "react-pdf";
+import pdfWorker from "pdfjs-dist/build/pdf.worker.min.mjs?url";
 const EbookViewer = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
   const [ebook, setEbook] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
+  const [numPages, setNumPages] = useState(0);
+const [pageWidth, setPageWidth] = useState(900);
+pdfjs.GlobalWorkerOptions.workerSrc = pdfWorker;
   useEffect(() => {
     const fetchEbook = async () => {
       try {
@@ -33,6 +36,9 @@ const EbookViewer = () => {
     fetchEbook();
   }, [slug, navigate]);
 
+const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+};
   // Security measures - prevent right-click
   useEffect(() => {
     const preventDefault = (e) => e.preventDefault();
@@ -100,7 +106,6 @@ const EbookViewer = () => {
   }
 
   // Use Google Docs viewer to prevent download
-  const viewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(ebook.pdfLink)}&embedded=true`;
 
   return (
     <div className="min-h-screen bg-gray-900">
@@ -139,19 +144,38 @@ const EbookViewer = () => {
       </motion.div>
 
       {/* PDF Viewer */}
+      <div className="overflow-y-auto h-screen bg-gray-100">
+    <Document
+  file={ebook.pdfLink}
+  onLoadSuccess={onDocumentLoadSuccess}
+  onLoadError={(error) => {
+    console.log("FULL ERROR:", error);
+    console.log("MESSAGE:", error.message);
+    console.log("NAME:", error.name);
+  }}
+>
+        {Array.from(new Array(numPages), (_, index) => (
+            <div
+                key={index}
+                className="flex justify-center mb-4"
+            >
+                <Page
+                    pageNumber={index + 1}
+                    width={pageWidth}
+                    renderAnnotationLayer={false}
+                    renderTextLayer={false}
+                />
+            </div>
+        ))}
+    </Document>
+</div>
       <motion.div 
         className="h-screen bg-white"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <iframe
-          src={viewerUrl}
-          className="w-full h-full"
-          title={ebook.title}
-          frameBorder="0"
-          allowFullScreen
-        />
+  
         
         {/* Security overlay to prevent interactions */}
         <div 
