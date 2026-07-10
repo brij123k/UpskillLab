@@ -163,16 +163,19 @@ const StudentCounseling = () => {
 
   // Format date
   const formatDate = (dateString) => {
-    if (!dateString) return 'Not scheduled yet';
-    const options = { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    };
-    return new Date(dateString).toLocaleDateString(undefined, options);
-  };
+  if (!dateString) return 'Not scheduled yet';
+
+  const date = new Date(dateString.replace('Z', ''));
+
+  return date.toLocaleString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+};
 
   // Format month-year
   const formatMonthYear = (month, year) => {
