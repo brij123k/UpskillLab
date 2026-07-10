@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { FiCalendar, FiClock, FiLoader, FiUser, FiUsers, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { getDataHandlerWithToken } from '../../../config/services';
+import ApiConfig from '../../../config/apiConfig';
 
 const sectionConfig = [
   {
@@ -38,7 +39,7 @@ const TeacherCounselling = () => {
   const fetchCounsellings = async () => {
     try {
       setLoading(true);
-      const response = await getDataHandlerWithToken('http://localhost:3000/counselling/teacher', null, null, true);
+      const response = await getDataHandlerWithToken(ApiConfig.teacherCounseling, null, null, true);
       setCounsellings({
         upcoming: response?.upcoming || [],
         present: response?.present || [],
@@ -52,16 +53,20 @@ const TeacherCounselling = () => {
     }
   };
 
-  const formatDate = (dateString) => {
-    if (!dateString) return 'Not scheduled';
-    return new Date(dateString).toLocaleString(undefined, {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
+const formatDate = (dateString) => {
+  if (!dateString) return 'Not scheduled yet';
+
+  const date = new Date(dateString.replace('Z', ''));
+
+  return date.toLocaleString(undefined, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+};
 
   const getStatusBadge = (status) => {
     switch (status) {
