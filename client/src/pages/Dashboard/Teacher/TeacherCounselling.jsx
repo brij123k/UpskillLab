@@ -1,5 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { FiCalendar, FiClock, FiLoader, FiUser, FiUsers, FiCheckCircle, FiAlertCircle } from 'react-icons/fi';
+import { 
+  FiCalendar, 
+  FiClock, 
+  FiLoader, 
+  FiUser, 
+  FiUsers, 
+  FiCheckCircle, 
+  FiAlertCircle,
+  FiMail,
+  FiPhone,
+  FiBookOpen
+} from 'react-icons/fi';
 import { toast } from 'react-toastify';
 import { getDataHandlerWithToken } from '../../../config/services';
 import ApiConfig from '../../../config/apiConfig';
@@ -53,20 +64,20 @@ const TeacherCounselling = () => {
     }
   };
 
-const formatDate = (dateString) => {
-  if (!dateString) return 'Not scheduled yet';
+  const formatDate = (dateString) => {
+    if (!dateString) return 'Not scheduled yet';
 
-  const date = new Date(dateString.replace('Z', ''));
+    const date = new Date(dateString.replace('Z', ''));
 
-  return date.toLocaleString(undefined, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true,
-  });
-};
+    return date.toLocaleString(undefined, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+  };
 
   const getStatusBadge = (status) => {
     switch (status) {
@@ -81,6 +92,25 @@ const formatDate = (dateString) => {
       default:
         return 'bg-gray-100 text-gray-700';
     }
+  };
+
+  // Helper function to get student details
+  const getStudentDetails = (studentId) => {
+    if (!studentId) {
+      return {
+        name: 'Unknown Student',
+        email: 'N/A',
+        phone: 'N/A',
+        courseName: 'N/A',
+      };
+    }
+
+    return {
+      name: studentId.fullName || 'Unknown Student',
+      email: studentId.email || 'N/A',
+      phone: studentId.phone || studentId.mobile || 'N/A',
+      courseName: studentId.courseName || studentId.courseName || 'N/A',
+    };
   };
 
   return (
@@ -136,36 +166,69 @@ const formatDate = (dateString) => {
                     </div>
                   ) : (
                     <div className="grid gap-4 lg:grid-cols-2">
-                      {items.map((session) => (
-                        <article key={session._id} className="rounded-xl border border-gray-200 bg-[#fcfaf7] p-4 shadow-sm">
-                          <div className="mb-3 flex items-start justify-between gap-3">
-                            <div>
-                              <h3 className="font-semibold text-gray-800">
-                                {session.studentId?.fullName || 'Unknown student'}
-                              </h3>
-                              <p className="text-sm text-gray-500">Student ID: {session.studentId?._id || 'N/A'}</p>
+                      {items.map((session) => {
+                        const student = getStudentDetails(session.studentId);
+                        
+                        return (
+                          <article key={session._id} className="rounded-xl border border-gray-200 bg-[#fcfaf7] p-4 shadow-sm hover:shadow-md transition-shadow">
+                            <div className="mb-3 flex items-start justify-between gap-3">
+                              <div className="flex-1">
+                                <h3 className="font-semibold text-gray-800 text-lg">
+                                  {student.name}
+                                </h3>
+                                <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
+                                  <FiMail className="h-3.5 w-3.5" />
+                                  <span className="truncate">{student.email}</span>
+                                </div>
+                              </div>
+                              <span className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide whitespace-nowrap ${getStatusBadge(session.status)}`}>
+                                {session.status || 'unknown'}
+                              </span>
                             </div>
-                            <span className={`rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wide ${getStatusBadge(session.status)}`}>
-                              {session.status || 'unknown'}
-                            </span>
-                          </div>
 
-                          <div className="space-y-2 text-sm text-gray-600">
-                            <div className="flex items-center gap-2">
-                              <FiUser className="h-4 w-4 text-[#4D2C5E]" />
-                              <span>Counsellor: {session.counsellorId?.name || 'Unassigned'}</span>
+                            <div className="space-y-2 text-sm text-gray-600">
+                              {/* Student Contact Info */}
+                              <div className="flex items-center gap-2">
+                                <FiPhone className="h-4 w-4 text-[#4D2C5E]" />
+                                <span>{student.phone}</span>
+                              </div>
+
+                              {/* Course/College Info */}
+                              <div className="flex items-center gap-2">
+                                <FiBookOpen className="h-4 w-4 text-[#4D2C5E]" />
+                                <span>{student.courseName}</span>
+                              </div>
+
+                              {/* Counsellor Info */}
+                              {/* <div className="flex items-center gap-2">
+                                <FiUser className="h-4 w-4 text-[#4D2C5E]" />
+                                <span>Counsellor: {session.counsellorId?.name || 'Unassigned'}</span>
+                              </div> */}
+
+                              {/* Scheduled Date */}
+                              <div className="flex items-center gap-2">
+                                <FiCalendar className="h-4 w-4 text-[#4D2C5E]" />
+                                <span>{formatDate(session.scheduledAt)}</span>
+                              </div>
+
+                              {/* Month/Year */}
+                              <div className="flex items-center gap-2">
+                                <FiUsers className="h-4 w-4 text-[#4D2C5E]" />
+                                <span>{session.month}/{session.year}</span>
+                              </div>
+
+                              {/* Show reason if cancelled */}
+                              {session.status === 'cancelled' && session.reason && (
+                                <div className="mt-2 p-2 bg-red-50 rounded-md border border-red-100">
+                                  <p className="text-xs text-red-600">
+                                    <span className="font-semibold">Reason:</span> {session.reason}
+                                  </p>
+                                </div>
+                              )}
                             </div>
-                            <div className="flex items-center gap-2">
-                              <FiCalendar className="h-4 w-4 text-[#4D2C5E]" />
-                              <span>{formatDate(session.scheduledAt)}</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <FiUsers className="h-4 w-4 text-[#4D2C5E]" />
-                              <span>{session.month}/{session.year}</span>
-                            </div>
-                          </div>
-                        </article>
-                      ))}
+                          </article>
+                        );
+                      })}
                     </div>
                   )}
                 </section>
