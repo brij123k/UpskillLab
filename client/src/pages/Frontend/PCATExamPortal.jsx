@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { getDataHandler, postDataHandler } from '../../config/services';
 import ApiConfig from '../../config/apiConfig';
 import FAQSection from '../../components/PCATFAQ';
+import { useSearchParams } from "react-router-dom";
 const PCATExamPortal = () => {
   const [examData, setExamData] = useState(null);
   const [examStats, setExamStats] = useState(null);
@@ -19,14 +20,18 @@ const PCATExamPortal = () => {
     number: ''
   });
   const [loginForm, setLoginForm] = useState({
-    email: '',
+    user: '',
     otp: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [registrationSuccess, setRegistrationSuccess] = useState(null);
   const [loginSuccess, setLoginSuccess] = useState(null);
-
+  const [searchParams] = useSearchParams();
   // Fetch exam data
+
+   useEffect(() => {
+    setShowLoginModal(searchParams.get("e") === "true");
+  }, [searchParams]);
   useEffect(() => {
     const fetchExamData = async () => {
       try {
@@ -126,12 +131,12 @@ const getTimeUntilStart = (startDate, startTime) => {
       const response = await postDataHandler('varifyOTP', payload);
       setLoginSuccess(response);
       console.log(response.message)
-        toast.success(response.message+" Redirecting to exam..." || 'OTP verified successfully! Redirecting to exam...');
+        toast.success(response.message+" Redirecting to exam..." || 'verified successfully! Redirecting to exam...');
         
         // Store data in localStorage
         localStorage.setItem('pcatExamData', JSON.stringify({
           examId: examData._id,
-          email: loginForm.email,
+          user: loginForm.user,
           otp: loginForm.otp,
           submissionId: response.submission?._id,
           startedAt:response.submission.startedAt
@@ -145,7 +150,7 @@ const getTimeUntilStart = (startDate, startTime) => {
     } catch (error) {
       console.error('Login error:', error);
       console.log(error)
-      toast.error(error?.message|| 'OTP verification failed. Please try again.');
+      toast.error(error?.message|| 'verification failed. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -1030,11 +1035,11 @@ const getTimeUntilStart = (startDate, startTime) => {
                   </li>
                   <li className="flex items-start">
                     <span className="bg-[#4D2C5E] text-white rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-xs font-bold mr-2 flex-shrink-0 mt-0.5">3</span>
-                    You will receive an email with login details and OTP
+                    You will receive an email with login details and Password
                   </li>
                   <li className="flex items-start">
                     <span className="bg-[#4D2C5E] text-white rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center text-xs font-bold mr-2 flex-shrink-0 mt-0.5">4</span>
-                    Use the email and OTP to access the exam portal
+                    Use the email / Number and Password to access the exam portal
                   </li>
                 </ol>
                 
@@ -1111,7 +1116,7 @@ const getTimeUntilStart = (startDate, startTime) => {
               </div>
               <h4 className="text-base sm:text-lg font-medium text-gray-900 mb-2">Registration Successful!</h4>
               <p className="text-gray-600 text-sm sm:text-base mb-3 sm:mb-4">
-                {registrationSuccess.message || 'Check your email for OTP and further instructions.'}
+                {registrationSuccess.message || 'Check your email for password and further instructions.'}
               </p>
               
               {/* Additional instructions after registration */}
@@ -1128,7 +1133,7 @@ const getTimeUntilStart = (startDate, startTime) => {
                     <svg className="h-3 w-3 sm:h-4 sm:w-4 text-green-500 mr-1.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    Look for OTP in your inbox (check spam folder)
+                    Look for Password in your inbox (check spam folder)
                   </li>
                   <li className="flex items-center">
                     <svg className="h-3 w-3 sm:h-4 sm:w-4 text-green-500 mr-1.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -1210,14 +1215,14 @@ const getTimeUntilStart = (startDate, startTime) => {
                         <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1 text-[#4D2C5E]" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8l8 5 8-5v10zm-8-7L4 6h16l-8 5z"/>
                         </svg>
-                        Email Address *
+                        Email Address / Number *
                       </label>
                       <input
-                        type="email"
-                        value={loginForm.email}
-                        onChange={(e) => setLoginForm({...loginForm, email: e.target.value})}
+                        type="text"
+                        value={loginForm.user}
+                        onChange={(e) => setLoginForm({...loginForm, user: e.target.value})}
                         className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4D2C5E]/50 focus:border-[#4D2C5E] transition-all duration-200 text-sm sm:text-base"
-                        placeholder="Enter your registered email"
+                        placeholder="Enter your registered email or number"
                         required
                       />
                     </div>
@@ -1227,14 +1232,14 @@ const getTimeUntilStart = (startDate, startTime) => {
                         <svg className="w-3 h-3 sm:w-4 sm:h-4 mr-1 text-[#4D2C5E]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                         </svg>
-                        OTP (One-Time Password) *
+                        Password *
                       </label>
                       <input
                         type="text"
                         value={loginForm.otp}
                         onChange={(e) => setLoginForm({...loginForm, otp: e.target.value})}
                         className="w-full px-3 sm:px-4 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#4D2C5E]/50 focus:border-[#4D2C5E] transition-all duration-200 text-sm sm:text-base"
-                        placeholder="Enter 6-digit OTP received in email"
+                        placeholder="Enter 6-digit password received in email"
                         required
                         maxLength={6}
                       />
@@ -1242,7 +1247,7 @@ const getTimeUntilStart = (startDate, startTime) => {
                         <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                         </svg>
-                        Check your email inbox for the OTP code
+                        Check your email inbox for the Password
                       </p>
                     </div>
                     
