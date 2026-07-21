@@ -170,6 +170,7 @@ const ApiConfig = {
   monitoringLog:(submissionId)=> `${url}/monitoring-logs/${submissionId}`,
   submitRating:`${url}/exam-rating`,
 
+  getAllNewsEvent:`${url}/news-events`,
   
 };
 
