@@ -673,98 +673,104 @@ const handleViewAssignment = async (assignment) => {
           {filteredAssignments.length > 0 ? (
             <div className="space-y-4">
               {filteredAssignments.map((assignment) => (
-                <motion.div
-                  key={assignment._id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200 group"
-                >
-                  <div className="flex flex-col md:flex-row md:items-start gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1">
-                          <h3 className="text-lg font-semibold text-[#4D2C5E] group-hover:text-[#3A2152] transition-colors">
-                            {assignment.title}
-                          </h3>
-                          <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
-                            <span className="flex items-center">
-                              <FiCalendar className="mr-1 h-4 w-4" />
-                              {formatDate(assignment.createdAt)}
-                            </span>
-                            <span className="text-gray-300">•</span>
-                            <span className="flex items-center">
-                              <FiUsers className="mr-1 h-4 w-4" />
-                              {assignment.teacherId?.name || 'Unknown Teacher'}
-                            </span>
-                            <span className="text-gray-300">•</span>
-                            <span className="flex items-center">
-                              <FiUsers className="mr-1 h-4 w-4" />
-                              {assignment.batchId?.batchCode || 'Unknown Batch'}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          {/* <span className={`px-2 py-1 rounded text-xs font-medium ${assignment.isApproved
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-yellow-100 text-yellow-800'
-                            }`}>
-                            {assignment.isApproved ? 'Approved' : 'Pending'}
-                          </span> */}
-                          {/* Submission Status */}
-                          <span className={`px-2 py-1 rounded text-xs font-medium ${assignment.isSubmitted
-                              ? 'bg-green-100 text-green-800'
-                              : 'bg-yellow-100 text-yellow-800'
-                            }`}>
-                            {assignment.isSubmitted ? 'Submitted' : 'Not Submitted'}
-                          </span>
-                        </div>
-                      </div>
+  <motion.div
+    key={assignment._id}
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.2 }}
+    className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow duration-200 group"
+  >
+    <div className="flex flex-col md:flex-row md:items-start gap-4">
+      <div className="flex-1">
+        <div className="flex items-start justify-between mb-3">
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold text-[#4D2C5E] group-hover:text-[#3A2152] transition-colors">
+              {assignment.title}
+            </h3>
+            <div className="flex items-center gap-3 text-sm text-gray-500 mt-1">
+              <span className="flex items-center">
+                <FiCalendar className="mr-1 h-4 w-4" />
+                {formatDate(assignment.createdAt)}
+              </span>
+              <span className="text-gray-300">•</span>
+              <span className="flex items-center">
+                <FiUsers className="mr-1 h-4 w-4" />
+                {assignment.teacherId?.name || 'Unknown Teacher'}
+              </span>
+              <span className="text-gray-300">•</span>
+              <span className="flex items-center">
+                <FiUsers className="mr-1 h-4 w-4" />
+                {assignment.batchId?.batchCode || 'Unknown Batch'}
+              </span>
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            {/* Submission Status */}
+            <span className={`px-2 py-1 rounded text-xs font-medium ${assignment.isSubmitted
+                ? 'bg-green-100 text-green-800'
+                : 'bg-yellow-100 text-yellow-800'
+              }`}>
+              {assignment.isSubmitted ? 'Submitted' : 'Not Submitted'}
+            </span>
+          </div>
+        </div>
 
-                      <p className="text-gray-700 mb-4 line-clamp-2">
-                        {assignment.description}
-                      </p>
+        <p className="text-gray-700 mb-4 line-clamp-2">
+          {assignment.description}
+        </p>
 
-                      <div className="flex flex-wrap gap-2 mt-4">
-                        <button
-                          onClick={() => handleViewAssignment(assignment)}
-                          className="text-sm text-[#4D2C5E] hover:text-[#FF7426] flex items-center px-3 py-1.5 border border-gray-200 rounded-md hover:border-[#FF7426]/30 hover:bg-[#FF7426]/5 transition-colors"
-                        >
-                          <FiEye className="mr-1 h-4 w-4" />
-                          View Details
-                        </button>
-                        
-                        {assignment.isSubmitted ? (
-                          <div
-                            className="text-sm text-green-600 flex items-center px-3 py-1.5 rounded-md hover:border-green-300 hover:bg-green-50 transition-colors"
-                          >
-                            <FiCheck className="mr-1 h-4 w-4" />
-                            Submitted
-                          </div>
-                        ) : (
-                          <button
-                            onClick={() => handleOpenSubmit(assignment)}
-                            className="text-sm text-[#4D2C5E] hover:text-green-600 flex items-center px-3 py-1.5 border border-gray-200 rounded-md hover:border-green-300 hover:bg-green-50 transition-colors"
-                          >
-                            <FiUpload className="mr-1 h-4 w-4" />
-                            Submit Assignment
-                          </button>
-                        )}
-                        
-                        {assignment.submitted && assignment.submissionFile && (
-                          <button
-                            onClick={() => window.open(assignment.submissionFile, '_blank')}
-                            className="text-sm text-blue-600 hover:text-blue-800 flex items-center px-3 py-1.5 border border-blue-200 rounded-md hover:border-blue-300 hover:bg-blue-50 transition-colors"
-                          >
-                            <FiDownload className="mr-1 h-4 w-4" />
-                            Download Submission
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+        {/* Document Attachment Badge - ADD THIS SECTION */}
+        {assignment.docs && (
+          <div className="mb-3">
+            <span className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+              <FiFile className="mr-1.5 h-3.5 w-3.5" />
+              <span className="truncate max-w-[200px]">
+                {assignment.docs.split('/').pop().split('?')[0] || 'Document'}
+              </span>
+            </span>
+          </div>
+        )}
+
+        <div className="flex flex-wrap gap-2 mt-4">
+          <button
+            onClick={() => handleViewAssignment(assignment)}
+            className="text-sm text-[#4D2C5E] hover:text-[#FF7426] flex items-center px-3 py-1.5 border border-gray-200 rounded-md hover:border-[#FF7426]/30 hover:bg-[#FF7426]/5 transition-colors"
+          >
+            <FiEye className="mr-1 h-4 w-4" />
+            View Details
+          </button>
+          
+          {assignment.isSubmitted ? (
+            <div
+              className="text-sm text-green-600 flex items-center px-3 py-1.5 rounded-md hover:border-green-300 hover:bg-green-50 transition-colors"
+            >
+              <FiCheck className="mr-1 h-4 w-4" />
+              Submitted
+            </div>
+          ) : (
+            <button
+              onClick={() => handleOpenSubmit(assignment)}
+              className="text-sm text-[#4D2C5E] hover:text-green-600 flex items-center px-3 py-1.5 border border-gray-200 rounded-md hover:border-green-300 hover:bg-green-50 transition-colors"
+            >
+              <FiUpload className="mr-1 h-4 w-4" />
+              Submit Assignment
+            </button>
+          )}
+          
+          {assignment.submitted && assignment.submissionFile && (
+            <button
+              onClick={() => window.open(assignment.submissionFile, '_blank')}
+              className="text-sm text-blue-600 hover:text-blue-800 flex items-center px-3 py-1.5 border border-blue-200 rounded-md hover:border-blue-300 hover:bg-blue-50 transition-colors"
+            >
+              <FiDownload className="mr-1 h-4 w-4" />
+              Download Submission
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  </motion.div>
+))}
             </div>
           ) : (
             <div className="text-center py-8 md:py-12">
@@ -956,132 +962,159 @@ const handleViewAssignment = async (assignment) => {
         </AnimatePresence>
 
         {/* View Assignment Modal */}
-        <AnimatePresence>
-          {showViewModal && selectedAssignment && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+       {/* View Assignment Modal */}
+<AnimatePresence>
+  {showViewModal && selectedAssignment && (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+    >
+      <motion.div
+        initial={{ scale: 0.95, y: 20, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        exit={{ scale: 0.95, y: 20, opacity: 0 }}
+        transition={{ type: "spring", damping: 25, stiffness: 400 }}
+        className="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[95vh] overflow-y-auto border border-gray-100"
+      >
+        <div className="p-6 md:p-8">
+          <div className="flex justify-between items-start mb-6">
+            <div className="flex-1">
+              <h2 className="text-2xl md:text-3xl font-bold text-[#4D2C5E]">
+                {selectedAssignment.title}
+              </h2>
+              <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 mt-1">
+                <span>Teacher: {selectedAssignment.teacherId?.name}</span>
+                <span className="text-gray-300">•</span>
+                <span>Batch: {selectedAssignment.batchId?.batchCode}</span>
+                <span className="text-gray-300">•</span>
+                <span>Created: {formatDate(selectedAssignment.createdAt)}</span>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowViewModal(false)}
+              className="text-gray-400 hover:text-gray-600 transition-colors duration-200 p-1 -mt-2 -mr-2"
+              aria-label="Close modal"
             >
-              <motion.div
-                initial={{ scale: 0.95, y: 20, opacity: 0 }}
-                animate={{ scale: 1, y: 0, opacity: 1 }}
-                exit={{ scale: 0.95, y: 20, opacity: 0 }}
-                transition={{ type: "spring", damping: 25, stiffness: 400 }}
-                className="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[95vh] overflow-y-auto border border-gray-100"
-              >
-                <div className="p-6 md:p-8">
-                  <div className="flex justify-between items-start mb-6">
-                    <div className="flex-1">
-                      <h2 className="text-2xl md:text-3xl font-bold text-[#4D2C5E]">
-                        {selectedAssignment.title}
-                      </h2>
-                      <div className="flex flex-wrap items-center gap-3 text-sm text-gray-500 mt-1">
-                        <span>Teacher: {selectedAssignment.teacherId?.name}</span>
-                        <span className="text-gray-300">•</span>
-                        <span>Batch: {selectedAssignment.batchId?.batchCode}</span>
-                        <span className="text-gray-300">•</span>
-                        <span>Created: {formatDate(selectedAssignment.createdAt)}</span>
-                      </div>
+              <FiX className="h-6 w-6" />
+            </button>
+          </div>
+
+          <div className="space-y-6">
+            {/* Assignment Description */}
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
+              <div className="bg-gray-50 p-4 rounded-lg">
+                <p className="text-gray-700">{selectedAssignment.description}</p>
+              </div>
+            </div>
+
+            {/* Assignment Content */}
+            {selectedAssignment.content && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Detailed Instructions</h3>
+                <BlogContentRenderer content={selectedAssignment.content} />
+              </div>
+            )}
+
+            {/* Document Attachment - ADD THIS SECTION */}
+            {selectedAssignment.docs && (
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Attached Document</h3>
+                <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center">
+                    <FiFile className="h-6 w-6 text-blue-600 mr-3" />
+                    <div>
+                      <span className="text-sm font-medium text-gray-700">
+                        {selectedAssignment.docs.split('/').pop().split('?')[0] || 'Document'}
+                      </span>
+                      <span className="text-xs text-gray-500 ml-2">
+                        (Click download to view)
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => window.open(selectedAssignment.docs, '_blank')}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center text-sm"
+                  >
+                    <FiDownload className="mr-2 h-4 w-4" />
+                    Download
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Submission Status */}
+            <div className="border-t border-gray-200 pt-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Submission</h3>
+              
+              {selectedSubmission ? (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center">
+                      <FiCheckCircle className="h-5 w-5 text-green-600 mr-2" />
+                      <span className="font-medium text-green-800">Submitted</span>
+                    </div>
+                    <span className="text-sm text-green-600">
+                      Submitted on: {formatDate(selectedSubmission.createdAt)}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm text-green-700 mb-1">File: {selectedSubmission.content}</p>
+                      <p className="text-xs text-green-600">Status: Submitted successfully</p>
                     </div>
                     <button
-                      onClick={() => setShowViewModal(false)}
-                      className="text-gray-400 hover:text-gray-600 transition-colors duration-200 p-1 -mt-2 -mr-2"
-                      aria-label="Close modal"
+                      onClick={() => window.open(selectedSubmission.content, '_blank')}
+                      className="text-green-600 hover:text-green-800 flex items-center text-sm"
                     >
-                      <FiX className="h-6 w-6" />
+                      <FiDownload className="mr-1 h-4 w-4" />
+                      Download
                     </button>
                   </div>
-
-                  <div className="space-y-6">
-                    {/* Assignment Description */}
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
-                      <div className="bg-gray-50 p-4 rounded-lg">
-                        <p className="text-gray-700">{selectedAssignment.description}</p>
-                      </div>
+                </div>
+              ) : (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <FiAlertCircle className="h-5 w-5 text-yellow-600 mr-2" />
+                      <span className="font-medium text-yellow-800">Not Submitted Yet</span>
                     </div>
-
-                    {/* Assignment Content */}
-                    {selectedAssignment.content && (
-                      <div>
-                        <h3 className="text-lg font-semibold text-gray-900 mb-3">Detailed Instructions</h3>
-                        
-                        <BlogContentRenderer content={selectedAssignment.content} />
-                      </div>
-                    )}
-
-                    {/* Submission Status */}
-                    <div className="border-t border-gray-200 pt-6">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Your Submission</h3>
-                      
-                      {selectedSubmission ? (
-                        <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                          <div className="flex items-center justify-between mb-3">
-                            <div className="flex items-center">
-                              <FiCheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                              <span className="font-medium text-green-800">Submitted</span>
-                            </div>
-                            <span className="text-sm text-green-600">
-                              Submitted on: {formatDate(selectedSubmission.createdAt)}
-                            </span>
-                          </div>
-                          
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm text-green-700 mb-1">File: {selectedSubmission.content}</p>
-                              <p className="text-xs text-green-600">Status: Submitted successfully</p>
-                            </div>
-                            <button
-                              onClick={() => window.open(selectedSubmission.content, '_blank')}
-                              className="text-green-600 hover:text-green-800 flex items-center text-sm"
-                            >
-                              <FiDownload className="mr-1 h-4 w-4" />
-                              Download
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center">
-                              <FiAlertCircle className="h-5 w-5 text-yellow-600 mr-2" />
-                              <span className="font-medium text-yellow-800">Not Submitted Yet</span>
-                            </div>
-                            <button
-                              onClick={() => {
-                                setShowViewModal(false);
-                                handleOpenSubmit(selectedAssignment);
-                              }}
-                              className="text-sm bg-[#4D2C5E] text-white px-4 py-2 rounded-lg hover:bg-[#3A2152] transition-colors"
-                            >
-                              Submit Now
-                            </button>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex justify-end pt-4 border-t border-gray-200">
-                      {!selectedSubmission && (
-                        <button
-                          onClick={() => {
-                            setShowViewModal(false);
-                            handleOpenSubmit(selectedAssignment);
-                          }}
-                          className="px-4 py-2 bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white rounded-lg hover:opacity-90 transition-all duration-200 font-medium"
-                        >
-                          Submit Assignment
-                        </button>
-                      )}
-                    </div>
+                    <button
+                      onClick={() => {
+                        setShowViewModal(false);
+                        handleOpenSubmit(selectedAssignment);
+                      }}
+                      className="text-sm bg-[#4D2C5E] text-white px-4 py-2 rounded-lg hover:bg-[#3A2152] transition-colors"
+                    >
+                      Submit Now
+                    </button>
                   </div>
                 </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              )}
+            </div>
+
+            <div className="flex justify-end pt-4 border-t border-gray-200">
+              {!selectedSubmission && (
+                <button
+                  onClick={() => {
+                    setShowViewModal(false);
+                    handleOpenSubmit(selectedAssignment);
+                  }}
+                  className="px-4 py-2 bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white rounded-lg hover:opacity-90 transition-all duration-200 font-medium"
+                >
+                  Submit Assignment
+                </button>
+              )}
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
       </div>
     </div>
   );

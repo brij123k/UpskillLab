@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { 
   FiPlus, 
   FiX, 
@@ -16,7 +16,9 @@ import {
   FiSearch,
   FiToggleLeft,
   FiToggleRight,
-  FiChevronDown
+  FiChevronDown,
+  FiPaperclip,
+  FiFile
 } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -31,6 +33,8 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ApiConfig from '../../../config/apiConfig';
 import BlogContentRenderer from '../../../components/BlogContentRenderer';
+import { uploadFileHandler } from '../../../config/services';
+
 const TeacherAssignments = () => {
   const [showModal, setShowModal] = useState(false);
   const [showSubmissionsModal, setShowSubmissionsModal] = useState(false);
@@ -47,7 +51,7 @@ const TeacherAssignments = () => {
 
   // Filter states
   const [filterByBatch, setFilterByBatch] = useState('all');
-  const [filterByStatus, setFilterByStatus] = useState('all'); // 'all', 'approved', 'pending'
+  const [filterByStatus, setFilterByStatus] = useState('all');
   const [selectedBatchName, setSelectedBatchName] = useState('All Batches');
 
   // Form state
@@ -57,6 +61,13 @@ const TeacherAssignments = () => {
   const [selectedBatchId, setSelectedBatchId] = useState('');
   const [editingId, setEditingId] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Document upload states
+  const [documentFile, setDocumentFile] = useState(null);
+  const [existingDocument, setExistingDocument] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const fileInputRef = useRef(null);
 
   // Fetch teacher profile and batches
   useEffect(() => {
@@ -102,16 +113,13 @@ const TeacherAssignments = () => {
   const applyFilters = (assignmentsList = assignments) => {
     let filtered = [...assignmentsList];
 
-    // Apply batch filter
     if (filterByBatch !== 'all') {
       filtered = filtered.filter(a => {
-        // Check if batchId is an object or string
         const batchId = typeof a.batchId === 'object' ? a.batchId._id : a.batchId;
         return batchId === filterByBatch;
       });
     }
 
-    // Apply status filter
     if (filterByStatus !== 'all') {
       if (filterByStatus === 'approved') {
         filtered = filtered.filter(a => a.isApproved === true);
@@ -120,7 +128,6 @@ const TeacherAssignments = () => {
       }
     }
 
-    // Apply search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase().trim();
       filtered = filtered.filter(a =>
@@ -141,12 +148,71 @@ const TeacherAssignments = () => {
   // Fetch submissions for an assignment
   const fetchSubmissions = async (assignmentId) => {
     try {
-        const endpoint = ApiConfig.assignmentSubmissions(assignmentId)
-      const response = await getDataHandlerWithToken(endpoint,null,null,true);
+      const endpoint = ApiConfig.assignmentSubmissions(assignmentId);
+      const response = await getDataHandlerWithToken(endpoint, null, null, true);
       setSubmissions(response || []);
     } catch (error) {
       toast.error('Failed to load submissions');
       console.error('Error fetching submissions:', error);
+    }
+  };
+
+  // Upload document file
+  const uploadDocument = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+      setIsUploading(true);
+      setUploadProgress(0);
+      
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return 90;
+          }
+          return prev + 10;
+        });
+      }, 200);
+      
+      const response = await uploadFileHandler('uploadFiles', file, {
+        category: 'Assignment-documents'
+      });
+      
+      clearInterval(progressInterval);
+      setUploadProgress(100);
+      
+      return response.files[0]?.fileUrl;
+      
+    } catch (error) {
+      toast.error('Failed to upload document');
+      console.error('Upload Error:', error);
+      throw error;
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+    }
+  };
+
+  // Handle file selection
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check file size (max 10MB)
+      if (file.size > 10 * 1024 * 1024) {
+        toast.error('File size should be less than 10MB');
+        return;
+      }
+      setDocumentFile(file);
+    }
+  };
+
+  // Remove selected file
+  const removeFile = () => {
+    setDocumentFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
     }
   };
 
@@ -155,31 +221,32 @@ const TeacherAssignments = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    const payload = {
-      title,
-      description,
-      content,
-      batchId: selectedBatchId,
-      teacherId: teacherProfile?._id
-    };
-
     try {
+      let documentUrl = existingDocument || '';
+
+      // Upload document if a new file is selected
+      if (documentFile) {
+        documentUrl = await uploadDocument(documentFile);
+      }
+
+      const payload = {
+        title,
+        description,
+        content,
+        batchId: selectedBatchId,
+        teacherId: teacherProfile?._id,
+        docs: documentUrl
+      };
+
       if (editingId) {
-        console.log("hi")
-        // Update existing assignment
-        const endpoint = ApiConfig.updateTeacherAssignment(editingId)
-        await patchTokenDataHandler(endpoint, payload,true);
+        await patchTokenDataHandler(ApiConfig.updateTeacherAssignment(editingId), payload, true);
         toast.success('Assignment updated successfully!');
       } else {
-        // Create new assignment
         await postDataHandlerWithToken('teacherAssignment', payload);
         toast.success('Assignment created successfully!');
       }
 
-      // Refresh assignments list
       await fetchAssignments();
-
-      // Reset form
       setShowModal(false);
       resetForm();
     } catch (error) {
@@ -193,10 +260,15 @@ const TeacherAssignments = () => {
   // Edit assignment
   const handleEdit = (assignment) => {
     setTitle(assignment.title);
-    setDescription(assignment.description);
+    setDescription(assignment.description || '');
     setContent(assignment.content || '');
     setSelectedBatchId(typeof assignment.batchId === 'object' ? assignment.batchId._id : assignment.batchId);
     setEditingId(assignment._id);
+    setExistingDocument(assignment.docs || '');
+    setDocumentFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
     setShowModal(true);
   };
 
@@ -220,6 +292,11 @@ const TeacherAssignments = () => {
     setContent('');
     setSelectedBatchId('');
     setEditingId(null);
+    setDocumentFile(null);
+    setExistingDocument('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   // Format date
@@ -252,7 +329,21 @@ const TeacherAssignments = () => {
     }
   };
 
-  // Count submissions for an assignment (placeholder - you'll need to implement this)
+  // Get file name from URL
+  const getFileNameFromUrl = (url) => {
+    if (!url) return '';
+    try {
+      const decodedUrl = decodeURIComponent(url);
+      const parts = decodedUrl.split('/');
+      const fileName = parts[parts.length - 1];
+      // Remove query params if any
+      return fileName.split('?')[0] || 'Document';
+    } catch {
+      return 'Document';
+    }
+  };
+
+  // Count submissions for an assignment
   const countSubmissions = (assignmentId) => {
     // This should be fetched from your API
     return 0;
@@ -323,10 +414,9 @@ const TeacherAssignments = () => {
           </motion.button>
         </div>
 
-        {/* Enhanced Filter Controls */}
+        {/* Filter Controls */}
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-6 border border-gray-100">
           <div className="flex flex-col gap-4">
-            {/* Search Bar */}
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <FiSearch className="h-5 w-5 text-gray-400" />
@@ -340,9 +430,7 @@ const TeacherAssignments = () => {
               />
             </div>
 
-            {/* Filter Row */}
             <div className="flex flex-col md:flex-row gap-4">
-              {/* Batch Filter Dropdown */}
               <div className="relative flex-1">
                 <button
                   onClick={() => setShowBatchFilter(!showBatchFilter)}
@@ -355,7 +443,6 @@ const TeacherAssignments = () => {
                   <FiChevronDown className={`h-4 w-4 text-gray-400 transition-transform ${showBatchFilter ? 'rotate-180' : ''}`} />
                 </button>
                 
-                {/* Batch Dropdown */}
                 <AnimatePresence>
                   {showBatchFilter && (
                     <motion.div
@@ -387,7 +474,6 @@ const TeacherAssignments = () => {
                 </AnimatePresence>
               </div>
 
-              {/* Status Filter */}
               <div className="flex gap-2">
                 <button
                   onClick={() => setFilterByStatus('all')}
@@ -417,7 +503,6 @@ const TeacherAssignments = () => {
                 </button>
               </div>
 
-              {/* Clear Filters Button */}
               {(filterByBatch !== 'all' || filterByStatus !== 'all' || searchQuery) && (
                 <button
                   onClick={clearFilters}
@@ -429,7 +514,6 @@ const TeacherAssignments = () => {
               )}
             </div>
 
-            {/* Active Filters Display */}
             <div className="flex flex-wrap gap-2">
               {filterByBatch !== 'all' && (
                 <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
@@ -585,6 +669,18 @@ const TeacherAssignments = () => {
                         {assignment.description}
                       </p>
 
+                      {/* Document attachment badge */}
+                      {assignment.docs && (
+                        <div className="mb-3">
+                          <span className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                            <FiPaperclip className="mr-1.5 h-3.5 w-3.5" />
+                            <span className="truncate max-w-[200px]">
+                              {getFileNameFromUrl(assignment.docs)}
+                            </span>
+                          </span>
+                        </div>
+                      )}
+
                       <div className="flex flex-wrap gap-2 mt-4">
                         <button
                           onClick={() => handleView(assignment)}
@@ -647,7 +743,7 @@ const TeacherAssignments = () => {
           )}
         </div>
 
-        {/* New/Edit Assignment Modal - Keep the same as before */}
+        {/* New/Edit Assignment Modal */}
         <AnimatePresence>
           {showModal && (
             <motion.div
@@ -745,6 +841,95 @@ const TeacherAssignments = () => {
                           placeholder="Provide detailed instructions for the assignment..."
                         />
                       </div>
+
+                      {/* Document Upload Section */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
+                          Attachment (Optional)
+                        </label>
+                        <div className="space-y-3">
+                          {/* Existing document display */}
+                          {existingDocument && !documentFile && (
+                            <div className="flex items-center justify-between p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                              <div className="flex items-center">
+                                <FiFile className="h-5 w-5 text-blue-600 mr-2" />
+                                <span className="text-sm text-gray-700 truncate max-w-[200px]">
+                                  {getFileNameFromUrl(existingDocument)}
+                                </span>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setExistingDocument('');
+                                }}
+                                className="text-red-500 hover:text-red-700"
+                              >
+                                <FiX className="h-4 w-4" />
+                              </button>
+                            </div>
+                          )}
+
+                          {/* New file upload */}
+                          {!documentFile && !existingDocument && (
+                            <div className="flex items-center justify-center w-full">
+                              <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                  <FiPaperclip className="h-8 w-8 text-gray-400 mb-2" />
+                                  <p className="text-sm text-gray-500">
+                                    <span className="font-semibold">Click to upload</span> or drag and drop
+                                  </p>
+                                  <p className="text-xs text-gray-500 mt-1">
+                                    PDF, DOC, DOCX, TXT (Max 10MB)
+                                  </p>
+                                </div>
+                                <input
+                                  ref={fileInputRef}
+                                  type="file"
+                                  className="hidden"
+                                  accept=".pdf,.doc,.docx,.txt"
+                                  onChange={handleFileSelect}
+                                  disabled={isSubmitting}
+                                />
+                              </label>
+                            </div>
+                          )}
+
+                          {/* Selected file preview */}
+                          {documentFile && (
+                            <div className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                              <div className="flex items-center">
+                                <FiFile className="h-5 w-5 text-gray-600 mr-2" />
+                                <div>
+                                  <span className="text-sm text-gray-700">{documentFile.name}</span>
+                                  <span className="text-xs text-gray-500 ml-2">
+                                    ({(documentFile.size / 1024 / 1024).toFixed(2)} MB)
+                                  </span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                {isUploading && (
+                                  <div className="w-24">
+                                    <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                                      <div 
+                                        className="h-full bg-blue-600 transition-all duration-300"
+                                        style={{ width: `${uploadProgress}%` }}
+                                      />
+                                    </div>
+                                  </div>
+                                )}
+                                <button
+                                  type="button"
+                                  onClick={removeFile}
+                                  className="text-red-500 hover:text-red-700"
+                                  disabled={isUploading}
+                                >
+                                  <FiX className="h-4 w-4" />
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
 
                     <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-2">
@@ -762,15 +947,15 @@ const TeacherAssignments = () => {
                       <button
                         type="submit"
                         className="px-5 py-2.5 bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white rounded-lg hover:opacity-90 transition-all duration-200 font-medium shadow-sm flex items-center justify-center min-w-36"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || isUploading}
                       >
-                        {isSubmitting ? (
+                        {isSubmitting || isUploading ? (
                           <>
                             <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            {editingId ? 'Updating...' : 'Creating...'}
+                            {isUploading ? 'Uploading...' : editingId ? 'Updating...' : 'Creating...'}
                           </>
                         ) : (
                           editingId ? 'Update Assignment' : 'Create Assignment'
@@ -784,7 +969,7 @@ const TeacherAssignments = () => {
           )}
         </AnimatePresence>
 
-          {/* View Assignment Modal */}
+        {/* View Assignment Modal */}
         <AnimatePresence>
           {showViewModal && selectedAssignment && (
             <motion.div
@@ -836,6 +1021,30 @@ const TeacherAssignments = () => {
                       </div>
                     )}
 
+                    {/* Document attachment in view modal */}
+                    {selectedAssignment.docs && (
+                      <div>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Attached Document</h3>
+                        <div className="flex items-center justify-between p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                          <div className="flex items-center">
+                            <FiFile className="h-6 w-6 text-blue-600 mr-3" />
+                            <div>
+                              <span className="text-sm font-medium text-gray-700">
+                                {getFileNameFromUrl(selectedAssignment.docs)}
+                              </span>
+                            </div>
+                          </div>
+                          <button
+                            onClick={() => window.open(selectedAssignment.docs, '_blank')}
+                            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center text-sm"
+                          >
+                            <FiDownload className="mr-2 h-4 w-4" />
+                            Download
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="flex items-center justify-between pt-6 border-t border-gray-200">
                       <div className="flex items-center space-x-4">
                         <span className={`px-3 py-1 rounded-full text-sm font-medium ${selectedAssignment.isApproved
@@ -844,9 +1053,7 @@ const TeacherAssignments = () => {
                           }`}>
                           {selectedAssignment.isApproved ? 'Approved' : 'Pending Approval'}
                         </span>
-                        <span className="text-sm text-gray-500">
-                          Submissions: {countSubmissions(selectedAssignment._id)}
-                        </span>
+                       
                       </div>
                       <button
                         onClick={() => {
@@ -954,7 +1161,6 @@ const TeacherAssignments = () => {
                                 <div className="flex items-center space-x-2">
                                   <button
                                     onClick={() => {
-                                      // Handle download submission
                                       window.open(submission.content, '_blank');
                                     }}
                                     className="text-[#4D2C5E] hover:text-[#FF7426] flex items-center"
