@@ -25,12 +25,12 @@ const CourseCard = ({
     <>
       <Helmet>
 
-        <meta 
+        {/* <meta 
           name="title" 
           content={metaTitle} 
         />
         
-        <meta property="og:title" content={metaTitle}  />
+        <meta property="og:title" content={metaTitle}  /> */}
       </Helmet>
     <motion.div
       initial={{ opacity: 0, y: 20 }}

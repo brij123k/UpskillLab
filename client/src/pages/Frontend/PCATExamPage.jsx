@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getDataHandler, putDataHandler } from '../../config/services';
 import ApiConfig from '../../config/apiConfig';
+import { Helmet } from 'react-helmet-async';
 
 const PCATExamPage = () => {
   const { examId } = useParams();
@@ -477,6 +478,9 @@ const PCATExamPage = () => {
   return (
     <div className="min-h-screen bg-[#fdf8ee]">
       {/* Header */}
+      <Helmet>
+        <title>{examData?.title || 'PCAT Exam'} - Upskillab</title>
+      </Helmet>
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3 sm:py-4">
           <div className="flex flex-col gap-3 sm:gap-4">

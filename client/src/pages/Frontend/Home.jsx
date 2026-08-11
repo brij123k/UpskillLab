@@ -171,6 +171,8 @@ function Home() {
         />
         <meta property="og:url" content="https://upskillab.com" />
         <meta property="og:type" content="website" />
+        <meta property="og:image" content="/images/Logo.ico" />
+
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           name="twitter:title"
@@ -180,6 +182,8 @@ function Home() {
           name="twitter:description"
           content="Explore Upskillab's online courses to enhance your skills and career opportunities."
         />
+        <meta property="twitter:url" content="https://upskillab.com" />
+    <meta property="twitter:image" content="/images/Logo.ico" />
         <link rel="canonical" href="https://upskillab.com/" />
 
         {/* ✅ FAQ Schema JSON-LD */}

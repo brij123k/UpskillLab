@@ -404,9 +404,9 @@ const ExamAttemptPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* <Helmet>
+      <Helmet>
         <title>{exam.title} - Exam | Upskillab</title>
-      </Helmet> */}
+      </Helmet>
 
       {/* Exam Header */}
       <div className="bg-white shadow-lg border-b">

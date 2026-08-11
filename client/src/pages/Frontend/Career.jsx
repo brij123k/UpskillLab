@@ -846,6 +846,7 @@ const Careers = () => {
         />
       </div>
       <Helmet>
+     <title>Upskillab-Start Career Here</title>
   <link rel="canonical" href="https://upskillab.com/career" />
 </Helmet>
     </motion.div>

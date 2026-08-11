@@ -7,6 +7,7 @@ import { getDataHandler, postDataHandler } from '../../config/services';
 import ApiConfig from '../../config/apiConfig';
 import FAQSection from '../../components/PCATFAQ';
 import { useSearchParams } from "react-router-dom";
+import { Helmet } from 'react-helmet-async';
 const PCATExamPortal = () => {
   const [examData, setExamData] = useState(null);
   const [examStats, setExamStats] = useState(null);
@@ -195,6 +196,10 @@ const getTimeUntilStart = (startDate, startTime) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#4D2C5E] to-[#7B4B9E] py-8 px-4 md:px-6">
+        {/* Header */}
+            <Helmet>
+              <title>{examData?.title || 'PCAT Exam'} - Upskillab</title>
+            </Helmet>
       <div className="max-w-8xl mx-auto">
 
 
