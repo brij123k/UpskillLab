@@ -5,10 +5,21 @@ import { getUserDetails, refreshAuthToken } from '../config/services';
 
 const AuthContext = createContext();
 
+const getStoredAuth = () => {
+  if (typeof window === 'undefined') return null;
+
+  try {
+    const storedAuth = window.sessionStorage.getItem('auth');
+    return storedAuth ? JSON.parse(storedAuth) : null;
+  } catch (error) {
+    console.error('Failed to read auth from sessionStorage:', error);
+    return null;
+  }
+};
+
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-  const storedAuth = sessionStorage.getItem('auth');
-  const initialAuth = storedAuth ? JSON.parse(storedAuth) : null;
+  const initialAuth = getStoredAuth();
 
   const [auth, setAuth] = useState(initialAuth);
   const [userDetails, setUserDetails] = useState(null);
@@ -17,34 +28,35 @@ export const AuthProvider = ({ children }) => {
 
   const tokenRefreshTimeoutRef = useRef(null);
 
- useEffect(() => {
-  const initializeAuth = async () => {
-    try {
-      // 1️⃣ Read token if admin opened via URL
-      readAuthFromUrl();
+  useEffect(() => {
+    const initializeAuth = async () => {
+      try {
+        // 1️⃣ Read token if admin opened via URL
+        readAuthFromUrl();
 
-      // 2️⃣ Normal session-based auth
-      const stored = sessionStorage.getItem('auth');
-      if (stored) {
-        setAuth(JSON.parse(stored));
-        await fetchUserDetails();
-        setupTokenRefresh();
-        setIsAuthenticated(true);
+        // 2️⃣ Normal session-based auth
+        const stored = typeof window !== 'undefined' ? window.sessionStorage.getItem('auth') : null;
+        if (stored) {
+          const parsedStoredAuth = JSON.parse(stored);
+          setAuth(parsedStoredAuth);
+          await fetchUserDetails();
+          setupTokenRefresh();
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error('Auth init failed:', error);
+        logout();
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Auth init failed:', error);
-      logout();
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  initializeAuth();
+    initializeAuth();
 
-  return () => {
-    clearTimeout(tokenRefreshTimeoutRef.current);
-  };
-}, []);
+    return () => {
+      clearTimeout(tokenRefreshTimeoutRef.current);
+    };
+  }, []);
 
   const fetchUserDetails = async () => {
     try {
@@ -79,7 +91,9 @@ export const AuthProvider = ({ children }) => {
       if (authToken && authTokenExpiryDate) {
         const newAuth = { authToken, authTokenExpiryDate, refreshToken };
         setAuth(newAuth);
-        sessionStorage.setItem('auth', JSON.stringify(newAuth));
+        if (typeof window !== 'undefined') {
+          window.sessionStorage.setItem('auth', JSON.stringify(newAuth));
+        }
         return authToken;
       }
 
@@ -114,7 +128,9 @@ export const AuthProvider = ({ children }) => {
       };
 
       setAuth(newAuth);
-      sessionStorage.setItem('auth', JSON.stringify(newAuth));
+      if (typeof window !== 'undefined') {
+        window.sessionStorage.setItem('auth', JSON.stringify(newAuth));
+      }
 
       const details = await fetchUserDetails();
 
@@ -134,34 +150,38 @@ export const AuthProvider = ({ children }) => {
   };
 
   const readAuthFromUrl = () => {
-  const params = new URLSearchParams(window.location.search);
+    if (typeof window === 'undefined') return;
 
-  const token = params.get('token');
-  const refreshToken = params.get('refreshToken');
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    const refreshToken = params.get('refreshToken');
 
-  if (token && refreshToken) {
-    const newAuth = {
-      authToken: token,
-      refreshToken,
-      // optional: backend should validate token anyway
-      authTokenExpiryDate: null,
-    };
+    if (token && refreshToken) {
+      const newAuth = {
+        authToken: token,
+        refreshToken,
+        authTokenExpiryDate: null,
+      };
 
-    sessionStorage.setItem('auth', JSON.stringify(newAuth));
-    setAuth(newAuth);
-    setIsAuthenticated(true);
+      if (typeof window !== 'undefined') {
+        window.sessionStorage.setItem('auth', JSON.stringify(newAuth));
+      }
 
-    // Remove tokens from URL (VERY IMPORTANT)
-    params.delete('token');
-    params.delete('refreshToken');
-    window.history.replaceState({}, '', window.location.pathname);
-  }
-};
+      setAuth(newAuth);
+      setIsAuthenticated(true);
+
+      params.delete('token');
+      params.delete('refreshToken');
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  };
 
   const logout = () => {
     setAuth(null);
     setUserDetails(null);
-    sessionStorage.removeItem('auth');
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.removeItem('auth');
+    }
     setIsAuthenticated(false);
     clearTimeout(tokenRefreshTimeoutRef.current);
     toast.success('Logged out successfully');

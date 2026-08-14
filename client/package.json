@@ -46,7 +46,8 @@
     "slugify": "^1.6.6",
     "socket.io-client": "^4.8.1",
     "swiper": "^11.2.8",
-    "yup": "^1.6.1"
+    "yup": "^1.6.1",
+    "vite-prerender-plugin": "^0.5.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
@@ -60,7 +61,7 @@
     "postcss": "^8.5.3",
     "sass-embedded": "^1.86.0",
     "tailwindcss": "^4.0.16",
-    "vite": "^6.2.0",
-    "vite-prerender-plugin": "^0.5.13"
+    "vite": "^6.2.0"
+    
   }
 }
