@@ -152,14 +152,14 @@ const StudentsBlog = () => {
         </div>
 
         <div className="relative max-w-7xl mx-auto text-center">
-          <motion.h1
+          <motion.h2
             className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
             initial={{ y: -20 }}
             animate={{ y: 0 }}
             transition={{ duration: 0.5 }}
           >
             Upskillab <span className="text-[#FF7426]">Blog</span>
-          </motion.h1>
+          </motion.h2>
 
           <motion.p
             className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto"

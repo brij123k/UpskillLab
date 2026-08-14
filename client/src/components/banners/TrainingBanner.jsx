@@ -83,7 +83,7 @@ const TrainingBanner = () => {
             className="lg:w-1/2 space-y-4"
             variants={itemVariants}
           >
-            <motion.h1
+            <motion.h2
               variants={itemVariants}
               className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#4d2c5e]"
             >
@@ -105,7 +105,7 @@ const TrainingBanner = () => {
               >
                 Upskillab's
               </motion.span>
-            </motion.h1>
+            </motion.h2>
             
             <motion.p
               variants={itemVariants}

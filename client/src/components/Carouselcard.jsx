@@ -170,7 +170,7 @@ const slideVariants = {
           >
             {/* Content Section */}
             <div className="w-full md:w-1/2 p-4 sm:p-6 md:p-12 flex flex-col justify-center z-10 order-2 md:order-1">
-              <motion.h1
+              <motion.h2
                 custom={0}
                 initial="hidden"
                 animate="visible"
@@ -186,7 +186,7 @@ const slideVariants = {
                     {word}{' '}
                   </motion.span>
                 ))}
-              </motion.h1>
+              </motion.h2>
 
               <motion.h2
                 custom={1}

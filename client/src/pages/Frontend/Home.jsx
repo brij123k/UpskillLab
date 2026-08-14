@@ -358,7 +358,7 @@ function Home() {
             >
               {/* Main Heading + Features */}
               <div className='flex-1 max-w-[600px] 2xl:max-w-[700px]'>
-                <motion.h1
+                <motion.h2
                   className='text-3xl sm:text-4xl md:text-5xl xl:text-[3.25rem] 2xl:text-[3.75rem] font-bold leading-tight md:leading-snug'
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -382,7 +382,7 @@ function Home() {
                       Premium <span className='text-[#FF7426]'>Learning</span> Experience
                     </>
                   )}
-                </motion.h1>
+                </motion.h2>
 
                 <div className='mt-8 sm:mt-10 md:mt-12 space-y-4 sm:space-y-5'>
                   {/* Feature 1 */}

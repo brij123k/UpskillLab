@@ -3,6 +3,10 @@ import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Modal = ({ isOpen, onClose, children, title = "Modal", disableOutsideClick = true }) => {
+    if (typeof document === "undefined") {
+        return null;
+    }
+
     return createPortal(
         <AnimatePresence>
             {isOpen && (

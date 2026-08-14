@@ -263,9 +263,14 @@ export const getBlogs = async (params = {}) => {
 };
 
 
-export const initiateOtpLogin = async (email) => {
+export const initiateOtpLogin = async (value, isEmail) => {
   try {
-    const response = await axios.post(ApiConfig.otpLogin, { email });
+    // Prepare the request payload based on the contact type
+    const payload = isEmail 
+      ? { email: value } 
+      : { number: value };
+    
+    const response = await axios.post(ApiConfig.otpLogin, payload);
     
     if (response?.status === 200 || response?.status === 201) {
       return response.data; // Contains attemptId

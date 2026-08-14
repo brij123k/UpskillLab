@@ -25,11 +25,6 @@ const styles = StyleSheet.create({
   tableCol: {
     padding: 5,
   },
-  logoImage: {
-    width: 100, // Increased from 50
-    height: 100, // Increased from 50
-    marginBottom: -4,
-  },
   col100: { width: '100%' },
   col25: { width: '25%' },
   col15: { width: '15%' },
@@ -75,7 +70,7 @@ const styles = StyleSheet.create({
 
 
  
-logoImage: {
+  logoImage: {
   width: '40%',
   objectFit: 'contain',
   marginBottom: -4,

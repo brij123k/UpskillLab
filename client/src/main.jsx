@@ -1,12 +1,18 @@
-// src/main.jsx
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./sccs/main.scss";
-import { HelmetProvider } from 'react-helmet-async';
+import "./index.css";
+import "react-toastify/dist/ReactToastify.css";
+import "react-quill/dist/quill.snow.css";
+import "react-multi-carousel/lib/styles.css";
+import { HelmetProvider } from "react-helmet-async";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <HelmetProvider>
-  <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
   </HelmetProvider>
 );

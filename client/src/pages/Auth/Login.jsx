@@ -8,20 +8,38 @@ import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
 import { FaHome, FaArrowLeft } from 'react-icons/fa';
 import { Helmet } from 'react-helmet-async';
+
 const LoginPage = () => {
     const [otpAttemptId, setOtpAttemptId] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [isSendingOtp, setIsSendingOtp] = useState(false);
+    const [contactMethod, setContactMethod] = useState('email'); // 'email' or 'phone'
     const navigate = useNavigate();
     const { login } = useAuth();
 
+    // Helper function to validate email
+    const isValidEmail = (value) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    };
+
+    // Helper function to validate phone number
+    const isValidPhone = (value) => {
+        const cleaned = value.replace(/\s/g, '');
+        return /^[0-9+\-()]{10,15}$/.test(cleaned);
+    };
+
     const form = useFormik({
         initialValues: {
-            email: '',
+            contact: '',
             otp: '',
         },
         validationSchema: Yup.object({
-            email: Yup.string().email('Invalid email address').required('Required'),
+            contact: Yup.string()
+                .test('valid-contact', 'Please enter a valid email or phone number', function(value) {
+                    if (!value) return false;
+                    return isValidEmail(value) || isValidPhone(value);
+                })
+                .required('Required'),
             otp: Yup.string().when('$otpAttemptId', {
                 is: (value) => !!value,
                 then: () => Yup.string()
@@ -51,15 +69,40 @@ const LoginPage = () => {
     });
 
     const handleSendOtp = async () => {
-        if (!form.values.email || form.errors.email) return;
+        if (!form.values.contact || form.errors.contact) return;
+
+        const contactValue = form.values.contact.trim();
+        console.log(contactValue)
+        const isPhone = isValidPhone(contactValue);
+        const isEmail = isValidEmail(contactValue);
+        console.log(isPhone,isEmail)
+
+        if (!isEmail && !isPhone) {
+            form.setFieldError('contact', 'Please enter a valid email or phone number');
+            return;
+        }
 
         setIsSendingOtp(true);
         try {
-            const response = await initiateOtpLogin(form.values.email);
+            // Send the appropriate value based on type
+            const response = await initiateOtpLogin(contactValue,isEmail);
             setOtpAttemptId(response.attemptId);
-            toast.success(`OTP sent to ${form.values.email}`);
+            
+            // Show success message with the correct type
+            if (isEmail) {
+                toast.success(`OTP sent to your email: ${contactValue}`);
+            } else if (isPhone) {
+                toast.success(`OTP sent to your phone number: ${contactValue}`);
+            }
         } catch (error) {
-            form.setFieldError('email', 'Failed to send OTP. Please try again.');
+            // Handle error and suggest the other method
+            if (isEmail) {
+                form.setFieldError('contact', 'Failed to send OTP via email. Please try using your phone number instead.');
+                setContactMethod('phone');
+            } else if (isPhone) {
+                form.setFieldError('contact', 'Failed to send OTP via phone number. Please try using your email instead.');
+                setContactMethod('email');
+            }
         } finally {
             setIsSendingOtp(false);
         }
@@ -92,7 +135,6 @@ const LoginPage = () => {
             {/* Home Button */}
             <NavLink to="/">
                 <motion.button
-
                     className="absolute top-4 left-4 flex items-center gap-2 text-[#4D2C5E] hover:text-[#FF7426] transition-colors z-50"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -120,33 +162,33 @@ const LoginPage = () => {
                             Welcome Back!
                         </h2>
                         <p className="text-gray-600">
-                            Login with your email to continue
+                            Login with your email or phone number to continue
                         </p>
                     </motion.div>
 
-                    {/* Email Input with Send OTP Button */}
+                    {/* Contact Input with Send OTP Button */}
                     <motion.div variants={item} className="space-y-6">
                         <div className="relative">
                             <input
-                                type="email"
-                                id="email"
-                                name="email"
+                                type="text"
+                                id="contact"
+                                name="contact"
                                 onChange={form.handleChange}
                                 onBlur={form.handleBlur}
-                                value={form.values.email}
+                                value={form.values.contact}
                                 className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:border-[#4D2C5E] focus:ring-2 focus:ring-[#4D2C5E]/20 transition-all"
                                 disabled={isSendingOtp || otpAttemptId}
-                                placeholder="Enter your email"
+                                placeholder="Enter email or phone number"
                             />
                             <AnimatePresence>
-                                {form.touched.email && form.errors.email && (
+                                {form.touched.contact && form.errors.contact && (
                                     <motion.p
                                         className="mt-1 text-sm text-red-500"
                                         initial={{ opacity: 0, height: 0 }}
                                         animate={{ opacity: 1, height: 'auto' }}
                                         exit={{ opacity: 0, height: 0 }}
                                     >
-                                        {form.errors.email}
+                                        {form.errors.contact}
                                     </motion.p>
                                 )}
                             </AnimatePresence>
@@ -157,7 +199,7 @@ const LoginPage = () => {
                                 type="button"
                                 onClick={handleSendOtp}
                                 className="w-full bg-[#4D2C5E] text-white py-3 px-4 rounded-lg font-medium hover:bg-[#5F3A73] transition-colors flex items-center justify-center gap-2"
-                                disabled={!form.values.email || !!form.errors.email || isSendingOtp}
+                                disabled={!form.values.contact || !!form.errors.contact || isSendingOtp}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >
@@ -278,7 +320,7 @@ const LoginPage = () => {
                                         className="w-full text-[#4D2C5E] py-2 px-4 rounded-lg font-medium hover:underline transition-colors flex items-center justify-center gap-2"
                                         disabled={isLoading}
                                     >
-                                        <FaArrowLeft /> Change Email
+                                        <FaArrowLeft /> Change Contact
                                     </button>
                                 </div>
                             </motion.div>
@@ -337,20 +379,15 @@ const LoginPage = () => {
                                 ease: 'easeInOut',
                             }}
                         />
-
                     </motion.div>
                 </motion.div>
             </motion.div>
-
-
 
             <Helmet>
                 <title>Login | Upskillab - Access Your Learning Dashboard</title>
                 <meta name="description" content="Login to your Upskillab account to access your courses, progress, and personalized learning dashboard." />
                 <meta name="keywords" content="upskilllab login, upkillab login, online education login, upskillab dashboard, login to upskilllab" />
             </Helmet>
-
-
         </div>
     );
 };

@@ -920,7 +920,7 @@ const TeachingPlan = ({ course }) => {
         `}
       </style>
       <main className="max-w-4xl mx-auto relative z-10">
-        <motion.h1
+        <motion.h2
           initial={{ opacity: 0, y: -20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
@@ -928,7 +928,7 @@ const TeachingPlan = ({ course }) => {
           style={{ color: 'rgb(77, 44, 94)' }} /* Purple primary */
         >
           Course Sessions for <span style={{ color: 'rgb(255, 116, 38)' }}>{courseId}</span> {/* Orange accent */}
-        </motion.h1>
+        </motion.h2>
 
         <section className="space-y-4 relative timeline" id="sessions">
           {allSessions.map((session, index) => (

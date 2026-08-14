@@ -26,6 +26,10 @@ const VideoModal = ({
     };
   }, [isOpen, onClose]);
 
+  if (typeof document === "undefined") {
+    return null;
+  }
+
   return createPortal(
     <AnimatePresence>
       {isOpen && (

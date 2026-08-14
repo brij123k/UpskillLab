@@ -135,14 +135,14 @@ const BlogDetailPage = () => {
               {blog.category || 'Blog Post'}
             </motion.span>
 
-            <motion.h1
+            <motion.h2
               className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6"
               initial={{ y: -20 }}
               animate={{ y: 0 }}
               transition={{ duration: 0.5 }}
             >
               {blog.title}
-            </motion.h1>
+            </motion.h2>
 
             <motion.div
               className="flex flex-wrap items-center justify-center text-white/80 text-sm gap-4"

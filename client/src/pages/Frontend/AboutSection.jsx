@@ -27,8 +27,8 @@ const AboutUpskillab = () => {
     <>
         <Helmet>
         <title>About Upskillab: E-Learning in Psychology, Technology, Management & Self-Development</title>
-        <meta name="description" content=" Upskillab offers online courses in psychology, technology, management, and self-development to help you gain the skills needed for success in today’s competitive job market.." />
-        <link rel="canonical" href="https://upskillab.com/About" />
+        <meta name="description" content=" Upskillab offers online courses in psychology, technology, management, and self-development to help you gain the skills needed for success in todayâ€™s competitive job market.." />
+        <link rel="canonical" href="https://upskillab.com/about" />
       </Helmet>
 
 
@@ -71,10 +71,10 @@ const AboutUpskillab = () => {
       Our Unique Approach
     </h2>
     <p className="text-lg text-gray-700 mb-6">
-      At Upskillab, we redefine online education by combining professional upskilling with mental wellbeing support—empowering learners to succeed both career-wise and personally.
+      At Upskillab, we redefine online education by combining professional upskilling with mental wellbeing supportâ€”empowering learners to succeed both career-wise and personally.
     </p>
     <p className="text-lg text-gray-700">
-      We are one of the first e-learning platforms in India to introduce a dual-benefit model, offering job-ready certification courses alongside mental health services. Our approach bridges the gap between skill acquisition and emotional resilience, which is essential in today’s fast-paced and high-pressure job market.
+      We are one of the first e-learning platforms in India to introduce a dual-benefit model, offering job-ready certification courses alongside mental health services. Our approach bridges the gap between skill acquisition and emotional resilience, which is essential in todayâ€™s fast-paced and high-pressure job market.
     </p>
   </motion.div>
   <motion.div
@@ -93,7 +93,7 @@ const AboutUpskillab = () => {
           <h3 className="text-xl font-bold">Integrated Model</h3>
         </div>
         <p className="text-base mb-4">
-         We go beyond academics—blending career skills with mental wellness. Our model boosts emotional intelligence, resilience, and real-world readiness for a thriving future.
+         We go beyond academicsâ€”blending career skills with mental wellness. Our model boosts emotional intelligence, resilience, and real-world readiness for a thriving future.
         </p>
         {/* <div>
           <h4 className="text-sm font-semibold text-gray-200 mb-2">Key Benefits:</h4>
@@ -149,7 +149,7 @@ const AboutUpskillab = () => {
               Our mission is to nurture both professional growth and personal wellness, helping individuals thrive in today's fast-paced world.
             </p>
             <p className="text-2xl font-semibold">
-              By bridging the gap between education and emotional health, we prepare you not just for a job — but for a fulfilling life.
+              By bridging the gap between education and emotional health, we prepare you not just for a job â€” but for a fulfilling life.
             </p>
           </div>
         </motion.div>
@@ -193,7 +193,7 @@ const AboutUpskillab = () => {
             >
               <h3 className="text-2xl font-bold text-[#FF7426] mb-4">Long-Term Vision</h3>
               <p className="text-gray-700">
-                To establish a counseling center within every 5 km radius across India by 2050, starting from the historic land of Prayagraj — building a nation that is emotionally resilient, professionally strong, and truly empowered.
+                To establish a counseling center within every 5 km radius across India by 2050, starting from the historic land of Prayagraj â€” building a nation that is emotionally resilient, professionally strong, and truly empowered.
               </p>
             </motion.div>
           </div>
@@ -213,37 +213,37 @@ const AboutUpskillab = () => {
               {
                 title: "Holistic Growth",
                 description: "We believe in nurturing both professional skills and personal wellbeing",
-                icon: "🌱",
+                icon: "ðŸŒ±",
                 color: "bg-[#4D2C5E]"
               },
               {
                 title: "Innovation",
                 description: "Constantly evolving our approach to education and mental health",
-                icon: "💡",
+                icon: "ðŸ’¡",
                 color: "bg-[#FF7426]"
               },
               {
                 title: "Accessibility",
                 description: "Making quality education and counseling available to all",
-                icon: "🌍",
+                icon: "ðŸŒ",
                 color: "bg-[#4D2C5E]"
               },
               {
                 title: "Empathy",
                 description: "Understanding the real challenges our learners face",
-                icon: "❤️",
+                icon: "â¤ï¸",
                 color: "bg-[#FF7426]"
               },
               {
                 title: "Excellence",
                 description: "Delivering top-tier courses and wellbeing services",
-                icon: "🏆",
+                icon: "ðŸ†",
                 color: "bg-[#4D2C5E]"
               },
               {
                 title: "Community",
                 description: "Building supportive networks for lifelong success",
-                icon: "🤝",
+                icon: "ðŸ¤",
                 color: "bg-[#FF7426]"
               }
             ].map((value, index) => (

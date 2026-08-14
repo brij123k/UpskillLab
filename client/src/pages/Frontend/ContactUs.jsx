@@ -120,7 +120,9 @@ const ContactCard = ({ icon, title, info, description }) => {
               transition: { duration: 0.2 }
             }}
           >
-            <p className="text-lg font-semibold text-[#4D2C5E]">{info}</p>
+            {(Array.isArray(info) ? info : [info]).map((item) => (
+              <p key={item} className="text-lg font-semibold text-[#4D2C5E]">{item}</p>
+            ))}
           </motion.div>
 
           {/* Description with fade-in effect */}
@@ -417,8 +419,7 @@ const ContactPage = () => {
       {
         icon: <FaPhone />,
       title: "Phone Number",
-      info: "+91-9319426464",
-      info: "+91-9319427070",
+      info: ["+91-9319426464", "+91-9319427070"],
       description: "Monday to Saturday, 10am to 7pm IST"
     },
       {

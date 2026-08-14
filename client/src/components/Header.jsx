@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import AdmissionFormModal from "./Modal/BasicEnrollNowModal";
 import { useQuery } from "@tanstack/react-query";
 // import { categoryAPI, courseAPI } from "../config/api-repository";
@@ -16,6 +16,7 @@ function Header() {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { isAuthenticated, logout, getUserRole } = useAuth();
   const [hoveredCourse, setHoveredCourse] = useState(null);
   const [hoverPosition, setHoverPosition] = useState({ x: 0, y: 0 });
@@ -163,7 +164,9 @@ try {
   const AllCourses = featuredCoursesData || [];
   const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
-    document.body.style.overflow = isDrawerOpen ? "auto" : "hidden";
+    if (typeof document !== "undefined") {
+      document.body.style.overflow = isDrawerOpen ? "auto" : "hidden";
+    }
   };
 
   const toggleCoursesDropdown = () => {
@@ -256,7 +259,7 @@ try {
         onClick={toggleCoursesDropdown}
         className="hover:text-[#FF7426] text-sm lg:text-xs xl:text-sm 2xl:text-base transition-colors whitespace-nowrap flex items-center cursor-pointer"
         style={
-          window.location.pathname === "/courses"
+          pathname === "/courses"
             ? { color: "#FF7426", fontWeight: "600" }
             : {}
         }
@@ -288,7 +291,7 @@ try {
             transition={{ duration: 0.2 }}
             className="absolute -left-1/2 mt-2 w-screen max-w-[95vw] sm:max-w-[90vw] md:max-w-[85vw] lg:w-[900px] xl:w-[1000px] bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50"
             onMouseLeave={() => {
-              if (window.innerWidth >= 1024) {
+              if (typeof window !== "undefined" && window.innerWidth >= 1024) {
                 setIsCoursesDropdownOpen(false);
               }
             }}
@@ -568,10 +571,10 @@ try {
     onClick={() => setIsResourcesDropdownOpen(!isResourcesDropdownOpen)}
     className="text-sm lg:text-xs xl:text-sm transition-colors whitespace-nowrap flex items-center"
     style={
-      window.location.pathname === "/self-test" || 
-      window.location.pathname === "/blog" || 
-      window.location.pathname === "/ebooks" ||
-      window.location.pathname === "/newsletter" 
+      pathname === "/self-test" || 
+      pathname === "/blog" || 
+      pathname === "/ebooks" ||
+      pathname === "/newsletter" 
         ? { color: "#FF7426", fontWeight: "600" }
         : {}
     }
@@ -596,7 +599,7 @@ try {
         transition={{ duration: 0.2 }}
         className="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50"
         onMouseLeave={() => {
-          if (window.innerWidth >= 1024) {
+          if (typeof window !== "undefined" && window.innerWidth >= 1024) {
             setIsResourcesDropdownOpen(false);
           }
         }}
@@ -950,7 +953,7 @@ try {
                             }}
                             className="block px-3 py-2 text-sm font-medium text-[#FF7426] hover:underline mt-4"
                           >
-                            View All Courses →
+                            View All Courses Ã¢â€ â€™
                           </NavLink>
                         </div>
                       )}
