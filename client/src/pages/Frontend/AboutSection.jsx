@@ -149,7 +149,7 @@ const AboutUpskillab = () => {
               Our mission is to nurture both professional growth and personal wellness, helping individuals thrive in today's fast-paced world.
             </p>
             <p className="text-2xl font-semibold">
-              By bridging the gap between education and emotional health, we prepare you not just for a job â€” but for a fulfilling life.
+              By bridging the gap between education and emotional health, we prepare you not just for a job” but for a fulfilling life.
             </p>
           </div>
         </motion.div>
@@ -213,37 +213,31 @@ const AboutUpskillab = () => {
               {
                 title: "Holistic Growth",
                 description: "We believe in nurturing both professional skills and personal wellbeing",
-                icon: "ðŸŒ±",
                 color: "bg-[#4D2C5E]"
               },
               {
                 title: "Innovation",
                 description: "Constantly evolving our approach to education and mental health",
-                icon: "ðŸ’¡",
                 color: "bg-[#FF7426]"
               },
               {
                 title: "Accessibility",
                 description: "Making quality education and counseling available to all",
-                icon: "ðŸŒ",
                 color: "bg-[#4D2C5E]"
               },
               {
                 title: "Empathy",
                 description: "Understanding the real challenges our learners face",
-                icon: "â¤ï¸",
                 color: "bg-[#FF7426]"
               },
               {
                 title: "Excellence",
                 description: "Delivering top-tier courses and wellbeing services",
-                icon: "ðŸ†",
                 color: "bg-[#4D2C5E]"
               },
               {
                 title: "Community",
                 description: "Building supportive networks for lifelong success",
-                icon: "ðŸ¤",
                 color: "bg-[#FF7426]"
               }
             ].map((value, index) => (
