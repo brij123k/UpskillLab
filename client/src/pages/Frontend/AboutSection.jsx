@@ -65,13 +65,13 @@ const AboutUpskillab = () => {
          <div className="grid md:grid-cols-2 gap-8">
   <motion.div
     className="p-8 md:p-12 flex flex-col justify-center"
-    variants={fadeIn}
+    variants={fadeIn
   >
     <h2 className="text-3xl font-bold text-gray-900 mb-6">
       Our Unique Approach
     </h2>
     <p className="text-lg text-gray-700 mb-6">
-      At Upskillab, we redefine online education by combining professional upskilling with mental wellbeing supportâ€”empowering learners to succeed both career-wise and personally.
+      At Upskillab, we redefine online education by combining professional upskilling with mental wellbeing support empowering learners to succeed both career-wise and personally.
     </p>
     <p className="text-lg text-gray-700">
       We are one of the first e-learning platforms in India to introduce a dual-benefit model, offering job-ready certification courses alongside mental health services. Our approach bridges the gap between skill acquisition and emotional resilience, which is essential in todayâ€™s fast-paced and high-pressure job market.
@@ -93,7 +93,7 @@ const AboutUpskillab = () => {
           <h3 className="text-xl font-bold">Integrated Model</h3>
         </div>
         <p className="text-base mb-4">
-         We go beyond academicsâ€”blending career skills with mental wellness. Our model boosts emotional intelligence, resilience, and real-world readiness for a thriving future.
+         We go beyond academics blending career skills with mental wellness. Our model boosts emotional intelligence, resilience, and real-world readiness for a thriving future.
         </p>
         {/* <div>
           <h4 className="text-sm font-semibold text-gray-200 mb-2">Key Benefits:</h4>
@@ -193,7 +193,7 @@ const AboutUpskillab = () => {
             >
               <h3 className="text-2xl font-bold text-[#FF7426] mb-4">Long-Term Vision</h3>
               <p className="text-gray-700">
-                To establish a counseling center within every 5 km radius across India by 2050, starting from the historic land of Prayagraj â€” building a nation that is emotionally resilient, professionally strong, and truly empowered.
+                To establish a counseling center within every 5 km radius across India by 2050, starting from the historic land of Prayagraj building a nation that is emotionally resilient, professionally strong, and truly empowered.
               </p>
             </motion.div>
           </div>
