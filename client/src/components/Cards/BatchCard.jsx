@@ -1,110 +1,258 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-
-const BatchCard = ({ 
+import React from "react";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+const BatchCard = ({
+  onEnroll,
   startDate,
   price,
+  remainingSeats,
+  originalPrice,
   title,
   batchId,
+  courseId,
+  courseCode,
+  batchCode,
   batchTime,
   duration,
-  mode 
+  categoryName,
+  mode,
 }) => {
-  const [day, month, year] = startDate.split(' ');
+  const navigate = useNavigate();
+
+  // Normalize dates for accurate comparison
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const batchDate = new Date(startDate);
+  batchDate.setHours(0, 0, 0, 0);
+
+  // Determine batch status
+  const getBatchStatus = () => {
+    if (batchDate < today) return "batch-started";
+    if (batchDate.getTime() === today.getTime()) return "starting-today";
+    return "upcoming";
+  };
+
+  const batchStatus = getBatchStatus();
+  const isEnrollable = batchStatus === "upcoming";
+  const isStartingToday = batchStatus === "starting-today";
+
+  // Format date display
+  const day = batchDate.getDate();
+  const month = batchDate.toLocaleString("default", { month: "short" });
+  const year = batchDate.getFullYear();
 
   return (
     <motion.div
-  className="bg-white rounded-xl overflow-hidden shadow-sm border border-[#FFE5D5] hover:shadow-md transition-all flex flex-col h-full"
-  whileHover={{ y: -3 }}
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
->
-  {/* Card Header with Accent */}
-  <div className="bg-[#FFF5EF] p-4 border-b border-[#FFD9C5]">
-    <div className="flex justify-between items-start">
-      {/* Date */}
-      <div className="flex items-center space-x-3">
-        <div className="bg-[#FF7426] text-white rounded-lg w-12 h-12 flex flex-col items-center justify-center">
-          <span className="text-lg font-bold leading-none">{day}</span>
-          <span className="text-xs uppercase mt-1">{month}</span>
+      className={`bg-white rounded-xl overflow-hidden shadow-sm border ${isEnrollable
+          ? "border-gray-200 cursor-pointer"
+          : "border-gray-300 opacity-90"
+        } flex flex-col h-full relative`}
+      whileHover={{
+        y: isEnrollable ? -5 : 0,
+        boxShadow: isEnrollable ? "0 8px 20px -5px rgba(0, 0, 0, 0.1)" : "none",
+      }}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 300 }}
+    >
+      {/* Status ribbon */}
+      {batchStatus !== "upcoming" && (
+        <div className={`absolute top-4 right-4 px-3 py-1 rounded-md text-xs font-bold text-white z-10 ${batchStatus === "batch-started" ? "bg-gray-500" : "bg-[#FF7426]"
+          } shadow-md`}>
+          {batchStatus === "batch-started" ? "Batch Started" : "Starting Today"}
         </div>
-        <span className="text-gray-500 text-sm">{year}</span>
-      </div>
-      
-      {/* Price */}
-      <div className="text-right">
-        <span className="text-2xl font-bold text-[#FF7426]">₹{price}</span>
-        <p className="text-xs text-gray-500 mt-1">Total Fee</p>
-      </div>
-    </div>
-  </div>
+      )}
 
-  {/* Card Body */}
-  <div className="p-4 flex-grow">
-    <h3 className="text-lg font-bold text-[#4d2c5e] mb-4 line-clamp-2">
-      {title}
-    </h3>
-    
-    {/* Details Grid */}
-    <div className="space-y-3">
-      <div className="flex items-center">
-        <div className="w-6 h-6 bg-[#FFF5EF] rounded-full mr-2 flex items-center justify-center text-[#FF7426]">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-          </svg>
-        </div>
-        <span className="text-sm text-gray-600">
-          <span className="text-gray-500">Batch ID:</span> {batchId}
-        </span>
-      </div>
-      
-      <div className="flex items-center">
-        <div className="w-6 h-6 bg-[#FFF5EF] rounded-full mr-2 flex items-center justify-center text-[#FF7426]">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <span className="text-sm text-gray-600">
-          <span className="text-gray-500">Time:</span> {batchTime}
-        </span>
-      </div>
-      
-      <div className="flex items-center">
-        <div className="w-6 h-6 bg-[#FFF5EF] rounded-full mr-2 flex items-center justify-center text-[#FF7426]">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-          </svg>
-        </div>
-        <span className="text-sm text-gray-600">
-          <span className="text-gray-500">Duration:</span> {duration}
-        </span>
-      </div>
-      
-      <div className="flex items-center">
-        <div className="w-6 h-6 bg-[#FFF5EF] rounded-full mr-2 flex items-center justify-center text-[#FF7426]">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-          </svg>
-        </div>
-        <span className="text-sm text-gray-600">
-          <span className="text-gray-500">Mode:</span> {mode}
-        </span>
-      </div>
-    </div>
-  </div>
+      {/* Solid color header */}
+      <motion.div
+        className={`p-4 border-b ${isEnrollable ? "bg-[#4D2C5E] border-[#3A2250]" : "bg-gray-500 border-gray-600"
+          }`}
+        whileHover={{
+          backgroundColor: isEnrollable ? "#3A2250" : "rgb(107 114 128)"
+        }}
+      >
+        <div className="flex justify-between items-start">
+          {/* Date with bounce animation */}
+          <motion.div
+            className="flex items-center space-x-3"
+            whileHover={{ scale: isEnrollable ? 1.03 : 1 }}
+          >
+            <motion.div
+              className={`rounded-lg w-12 h-12 flex flex-col items-center justify-center shadow-md ${isEnrollable ? "bg-[#FF7426] text-white" : "bg-gray-400 text-gray-700"
+                }`}
+              whileHover={{ scale: isEnrollable ? 1.1 : 1 }}
+            >
+              <span className="text-lg font-bold leading-none">{day}</span>
+              <span className="text-xs uppercase mt-1">{month}</span>
+            </motion.div>
+            <span className={`text-sm ${isEnrollable ? "text-gray-300" : "text-gray-200"
+              }`}>{year}</span>
+          </motion.div>
 
-  {/* Card Footer */}
-  <div className="p-4 border-t border-[#FFE5D5] bg-[#FFF9F5]">
-    <div className="flex justify-between">
-      <button className="text-[#FF7426] text-sm font-medium hover:underline px-3 py-1.5 rounded hover:bg-[#FFF0E5] transition-colors">
-        View Details
-      </button>
-      <button className="bg-[#FF7426] text-white text-sm font-medium px-4 py-1.5 rounded-md hover:bg-[#E56722] transition-colors shadow-sm">
-        Enroll Now
-      </button>
-    </div>
-  </div>
-</motion.div>
+          {/* Price with floating animation */}
+          <motion.div className="text-right">
+            <span className={`text-2xl font-bold ${isEnrollable ? "text-white" : "text-gray-100"
+              }`}>₹{price}</span>
+            <p className={`text-xs mt-1 ${isEnrollable ? "text-gray-300" : "text-gray-200"
+              }`}>Total Fee</p>
+          </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Card Body */}
+      <div className="p-4 flex-grow">
+        {/* Title with color change animation */}
+        <motion.h3
+          className={`text-lg font-bold mb-4 line-clamp-2 ${isEnrollable ? "text-[#4D2C5E] hover:text-[#FF7426]" : "text-gray-600"
+            }`}
+          whileHover={isEnrollable ? { x: 3 } : {}}
+          transition={{ type: "spring" }}
+        >
+          {title}
+        </motion.h3>
+
+        {/* Info chips with separate colors */}
+        <div className="grid grid-cols-2 gap-3 mb-4">
+          {/* Batch Time */}
+          <motion.div
+            className={`flex items-center px-3 py-2 rounded-lg border ${isEnrollable
+                ? "bg-[#FF7426]/10 border-[#FF7426]/20 text-[#FF7426]"
+                : "bg-gray-200/50 border-gray-300/50 text-gray-600"
+              }`}
+            whileHover={{ scale: isEnrollable ? 1.03 : 1 }}
+          >
+            <div className={`w-6 h-6 rounded-full mr-2 flex items-center justify-center ${isEnrollable ? "bg-[#FF7426] text-white" : "bg-gray-400 text-gray-200"
+              }`}>
+              ⏰
+            </div>
+            <span className="text-sm">{batchTime}</span>
+          </motion.div>
+
+          {/* Duration */}
+          <motion.div
+            className={`flex items-center px-3 py-2 rounded-lg border ${isEnrollable
+                ? "bg-[#4D2C5E]/10 border-[#4D2C5E]/20 text-[#4D2C5E]"
+                : "bg-gray-200/50 border-gray-300/50 text-gray-600"
+              }`}
+            whileHover={{ scale: isEnrollable ? 1.03 : 1 }}
+          >
+            <div className={`w-6 h-6 rounded-full mr-2 flex items-center justify-center ${isEnrollable ? "bg-[#4D2C5E] text-white" : "bg-gray-400 text-gray-200"
+              }`}>
+              📆
+            </div>
+            <span className="text-sm">{duration}</span>
+          </motion.div>
+
+          {/* Mode */}
+          <motion.div
+            className={`flex items-center px-3 py-2 rounded-lg border ${isEnrollable
+                ? "bg-[#FF7426]/10 border-[#FF7426]/20 text-[#FF7426]"
+                : "bg-gray-200/50 border-gray-300/50 text-gray-600"
+              }`}
+            whileHover={{ scale: isEnrollable ? 1.03 : 1 }}
+          >
+            <div className={`w-6 h-6 rounded-full mr-2 flex items-center justify-center ${isEnrollable ? "bg-[#FF7426] text-white" : "bg-gray-400 text-gray-200"
+              }`}>
+              🖥️
+            </div>
+            <span className="text-sm">{mode}</span>
+          </motion.div>
+
+          {/* Remaining Seats */}
+          <motion.div
+            className={`flex items-center px-3 py-2 rounded-lg border ${isEnrollable
+                ? "bg-[#4D2C5E]/10 border-[#4D2C5E]/20 text-[#4D2C5E]"
+                : "bg-gray-200/50 border-gray-300/50 text-gray-600"
+              }`}
+            whileHover={{ scale: isEnrollable ? 1.03 : 1 }}
+          >
+            <div className={`w-6 h-6 rounded-full mr-2 flex items-center justify-center ${isEnrollable ? "bg-[#4D2C5E] text-white" : "bg-gray-400 text-gray-200"
+              }`}>
+              🔢
+            </div>
+            <span className="text-sm">
+              {remainingSeats} {remainingSeats === 1 ? "Seat" : "Seats"}
+            </span>
+          </motion.div>
+        </div>
+      </div>
+
+      {/* Card Footer with buttons */}
+      <div className="p-4 border-t border-gray-200">
+        <div className="flex justify-between gap-3">
+          {/* View Details Button */}
+          <NavLink
+            to={{
+              pathname: `/${categoryName.toLowerCase()}/course/${courseCode}`,
+            }}
+            state={{
+              courseId,
+              courseCode,
+              batchId,
+              batchCode,
+            }}
+            className="flex-1"
+          >
+            <motion.button
+              className={`text-sm font-medium px-4 py-2 rounded-md border-2 transition-colors w-full ${isEnrollable
+                  ? "text-[#4D2C5E] border-[#4D2C5E] hover:bg-[#4D2C5E] hover:text-white"
+                  : "text-gray-500 border-gray-400 hover:bg-gray-100"
+                }`}
+              whileHover={{
+                scale: 1.02,
+                boxShadow: isEnrollable
+                  ? "0 2px 8px -1px rgba(77, 44, 94, 0.3)"
+                  : "none",
+              }}
+              whileTap={{ scale: 0.98 }}
+              type="button"
+            >
+              View Details
+            </motion.button>
+          </NavLink>
+
+          {/* Enroll Button */}
+          <motion.button
+            className={`text-sm font-medium px-4 py-2 rounded-md transition-colors flex-1 shadow-sm ${isEnrollable
+                ? "bg-[#FF7426] text-white hover:bg-[#E56722]"
+                : isStartingToday
+                  ? "bg-gray-400 text-gray-700"
+                  : "bg-gray-300 text-gray-600 cursor-not-allowed"
+              }`}
+            onClick={isEnrollable ? onEnroll : null}
+            whileHover={
+              isEnrollable
+                ? {
+                  scale: 1.02,
+                  boxShadow: "0 3px 10px -1px rgba(255, 116, 38, 0.4)",
+                }
+                : {}
+            }
+            whileTap={isEnrollable ? { scale: 0.98 } : {}}
+            disabled={!isEnrollable}
+          >
+            {isEnrollable
+              ? "Enroll Now"
+              : isStartingToday
+                ? "Starting Today"
+                : "Batch Started"}
+          </motion.button>
+        </div>
+      </div>
+
+      {/* Floating decoration - only for enrollable batches */}
+      {isEnrollable && (
+        <motion.div
+          className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#FF7426]"
+          animate={{
+            scale: [1, 1.3, 1],
+            transition: { repeat: Infinity, duration: 2 },
+          }}
+        />
+      )}
+    </motion.div>
   );
 };
 

@@ -42,7 +42,7 @@ function LearningExperience() {
                   Easily Accessible
                 </h3>
                 <p className="text-gray-600 text-sm sm:text-base lg:text-base xl:text-lg">
-                  Learning will feel very comfortable with Upskilllab.
+                  Learning will feel very comfortable with Upskillab.
                 </p>
               </div>
             </div>
@@ -61,7 +61,7 @@ function LearningExperience() {
                   Fun Learning
                 </h3>
                 <p className="text-gray-600 text-sm sm:text-base lg:text-base xl:text-lg">
-                  Learning will feel very comfortable with Upskilllab.
+                  Learning will feel very comfortable with Upskillab.
                 </p>
               </div>
             </div>
