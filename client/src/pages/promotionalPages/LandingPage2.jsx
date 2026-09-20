@@ -14,681 +14,830 @@ const renderHTMLContent = (htmlString) => {
 // Component to render text with HTML highlighting
 const HighlightedText = ({ text, className = "" }) => {
   if (!text) return null;
-  
-  // Check if text contains HTML tags
+
   const containsHTML = /<[^>]*>/.test(text);
-  
+
   if (containsHTML) {
     return <div className={className} dangerouslySetInnerHTML={{ __html: text }} />;
   }
-  
+
   return <span className={className}>{text}</span>;
 };
 
 const LandingPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [heroSection, setHerSection] = useState({})
-  const [eligibility, seteligibility] = useState({})
-  const [curriculum, setCurriculum] = useState({})
-  const [speaker, setSpeaker] = useState({})
-  const [train, setTrain] = useState({})
-  const [datetime, setDatetime] = useState({})
+  const [heroSection, setHerSection] = useState({});
+  const [eligibility, seteligibility] = useState({});
+  const [curriculum, setCurriculum] = useState({});
+  const [speaker, setSpeaker] = useState({});
+  const [train, setTrain] = useState({});
+  const [datetime, setDatetime] = useState({});
 
   useEffect(() => {
     const bootcampDataHandler = async () => {
-      const getBootcamp = await getDataHandler('getBootCamp')
+      const getBootcamp = await getDataHandler('getBootCamp');
       if (getBootcamp && getBootcamp.hero[0]) {
-        setHerSection(getBootcamp.hero[0])
+        setHerSection(getBootcamp.hero[0]);
       }
       if (getBootcamp && getBootcamp.eligibility[0]) {
-        seteligibility(getBootcamp.eligibility[0])
+        seteligibility(getBootcamp.eligibility[0]);
       }
       if (getBootcamp && getBootcamp.curriculum[0]) {
-        setCurriculum(getBootcamp.curriculum[0])
+        setCurriculum(getBootcamp.curriculum[0]);
       }
       if (getBootcamp && getBootcamp.speaker[0]) {
-        setSpeaker(getBootcamp.speaker[0])
+        setSpeaker(getBootcamp.speaker[0]);
       }
       if (getBootcamp && getBootcamp.train[0]) {
-        setTrain(getBootcamp.train[0])
+        setTrain(getBootcamp.train[0]);
       }
       if (getBootcamp && getBootcamp.datetime[0]) {
-        setDatetime(getBootcamp.datetime[0])
+        setDatetime(getBootcamp.datetime[0]);
       }
-    }
-    bootcampDataHandler()
-  }, [])
+    };
+    bootcampDataHandler();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen bg-white">
       <Helmet>
         <title>{heroSection.title}</title>
         <meta name="description" content={heroSection.des} />
       </Helmet>
 
+      {/* Top Banner — Fixed Aspect Ratio */}
+<motion.section
+  initial={{ opacity: 0 }}
+  animate={{ opacity: 1 }}
+  transition={{ duration: 0.6 }}
+  className="relative w-full bg-gray-100"
+>
+  {/* Fixed 16:6 ratio for all breakpoints */}
+  <div className="relative w-full aspect-[16/6] overflow-hidden">
+    <img
+      src="/images/bootcampImage.png"
+      alt="Bootcamp Banner"
+      className="absolute inset-0 w-full h-full object-contain object-center"
+    />
+
+    {/* Banner Text Overlay */}
+    <div className="absolute inset-0 flex items-center">
+      <div className="max-w-7xl mx-auto w-full px-6 sm:px-10 lg:px-16">
+        <motion.div
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="max-w-lg"
+        >
+          {/* <h2 className="text-lg sm:text-2xl md:text-3xl font-bold text-white mb-2 leading-tight">
+            Transform Your Practice
+          </h2>
+          <p className="text-white/80 text-sm sm:text-base leading-relaxed">
+            Join the Habits & Nutrition Psychology Bootcamp
+          </p> */}
+        </motion.div>
+      </div>
+    </div>
+  </div>
+</motion.section>
+
       {/* Hero Section */}
-      <section className="relative min-h-screen pt-10 flex items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50">
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <motion.div
-            className="absolute top-1/4 left-1/4 w-20 h-20 rounded-full bg-gradient-to-r from-[#4D2C5E]/10 to-[#7B4B9E]/10 blur-xl"
-            animate={{
-              y: [0, -20, 0],
-              x: [0, 10, 0],
-            }}
-            transition={{
-              duration: 6,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-          <motion.div
-            className="absolute bottom-1/3 right-1/4 w-32 h-32 rounded-full bg-gradient-to-r from-[#FF7426]/10 to-[#FF8C42]/10 blur-xl"
-            animate={{
-              y: [0, 15, 0],
-              x: [0, -15, 0],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 1
-            }}
-          />
-          <motion.div
-            className="absolute top-1/3 right-1/3 w-16 h-16 rounded-full bg-gradient-to-r from-[#4D2C5E]/5 to-[#7B4B9E]/5 blur-lg"
-            animate={{
-              y: [0, -15, 0],
-              scale: [1, 1.1, 1],
-            }}
-            transition={{
-              duration: 7,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 2
-            }}
-          />
-          <div className="absolute inset-0 opacity-[0.02]">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `linear-gradient(#4D2C5E 1px, transparent 1px), linear-gradient(90deg, #4D2C5E 1px, transparent 1px)`,
-              backgroundSize: '50px 50px',
-            }} />
-          </div>
-        </div>
+<section className="relative min-h-[90vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 sm:py-10 overflow-hidden bg-white">
+  {/* Background Layers */}
+  <div className="absolute inset-0 pointer-events-none">
+    {/* Soft gradient orbs */}
+    <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-[#4D2C5E]/8 to-transparent blur-3xl" />
+    <div className="absolute -bottom-40 -left-40 w-[450px] h-[450px] rounded-full bg-gradient-to-tr from-[#FF7426]/8 to-transparent blur-3xl" />
 
-        {/* Main Content */}
-        <div className="max-w-7xl mx-auto text-center relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, ease: "easeOut" }}
+    {/* Fine grid pattern */}
+    <div
+      className="absolute inset-0 opacity-[0.025]"
+      style={{
+        backgroundImage: `linear-gradient(#4D2C5E 1px, transparent 1px), linear-gradient(90deg, #4D2C5E 1px, transparent 1px)`,
+        backgroundSize: '64px 64px',
+      }}
+    />
+
+    {/* Bottom fade */}
+    <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent" />
+  </div>
+
+  <div className="max-w-7xl mx-auto w-full relative z-10">
+    <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+      {/* LEFT — Content */}
+      <motion.div
+        className="lg:col-span-7 text-center lg:text-left order-2 lg:order-1"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      >
+        {/* Badge */}
+        <motion.div
+          className="inline-flex items-center px-4 py-2 rounded-full bg-emerald-50 border border-emerald-100 mb-6 sm:mb-8"
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+        >
+          <motion.span
+            className="w-2 h-2 bg-emerald-500 rounded-full mr-2.5"
+            animate={{ scale: [1, 1.4, 1], opacity: [1, 0.6, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          />
+          <span className="text-xs sm:text-sm font-semibold text-emerald-700 tracking-wide uppercase">
+            {heroSection.sec}
+          </span>
+        </motion.div>
+
+        {/* Main Headline */}
+        <motion.h1
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl font-bold text-gray-900 mb-5 sm:mb-6 leading-[1.1] tracking-tight"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+        >
+          <HighlightedText text={heroSection?.title} />
+        </motion.h1>
+
+        {/* Sub-Headline */}
+        <motion.div
+          className="text-base sm:text-lg md:text-xl text-gray-500 max-w-xl mx-auto lg:mx-0 mb-8 sm:mb-10 leading-relaxed font-light"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.35 }}
+        >
+          <HighlightedText text={heroSection?.des} />
+        </motion.div>
+
+        {/* Feature Tags */}
+        <motion.div
+          className="flex flex-wrap justify-center lg:justify-start gap-2.5 sm:gap-3 mb-8 sm:mb-10"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+        >
+          {heroSection?.tags?.map((tag, index) => (
+            <motion.span
+              key={index}
+              className="inline-flex items-center px-3.5 py-2 bg-gray-50 rounded-lg border border-gray-200/80 text-xs sm:text-sm font-medium text-gray-700 hover:bg-white hover:border-[#4D2C5E]/30 hover:shadow-sm transition-all duration-300"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.5 + index * 0.08 }}
+              whileHover={{ y: -2 }}
+            >
+              <span className="w-1.5 h-1.5 bg-[#4D2C5E] rounded-full mr-2" />
+              {tag}
+            </motion.span>
+          ))}
+        </motion.div>
+
+        {/* CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+          className="flex flex-col items-center lg:items-start"
+        >
+          <motion.button
+            onClick={() => setIsModalOpen(true)}
+            className="group relative bg-[#4D2C5E] text-white px-7 sm:px-9 py-3.5 sm:py-4 rounded-xl font-semibold text-sm sm:text-base shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden w-full sm:w-auto"
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
           >
-            {/* Animated Badge */}
             <motion.div
-              className="inline-flex items-center px-6 py-3 rounded-full bg-white/80 backdrop-blur-sm border border-green-200/50 shadow-lg mb-8"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(34, 197, 94, 0.15)" }}
-            >
-              <motion.span
-                className="w-3 h-3 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full mr-3"
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-              <span className="text-sm font-semibold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                {heroSection.sec}
+              className="absolute inset-0 bg-gradient-to-r from-[#4D2C5E] via-[#6B3FA0] to-[#4D2C5E]"
+              animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'linear' }}
+              style={{ backgroundSize: '200% 200%' }}
+            />
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              <FaGraduationCap className="text-base sm:text-lg opacity-90" />
+              {heroSection.button}
+            </span>
+          </motion.button>
+
+          <motion.p
+            className="text-gray-400 text-xs sm:text-sm mt-4 flex items-center justify-center lg:justify-start gap-1.5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.9 }}
+          >
+            <FaHourglassHalf className="text-xs" />
+            {heroSection?.para}
+          </motion.p>
+        </motion.div>
+      </motion.div>
+
+      {/* RIGHT — Visual Card */}
+      <motion.div
+        className="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end"
+        initial={{ opacity: 0, x: 40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+      >
+        <div className="relative w-full max-w-md">
+          {/* Decorative glow */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#4D2C5E]/20 to-[#FF7426]/20 rounded-3xl blur-2xl scale-95" />
+
+          {/* Main card */}
+          <div className="relative bg-white rounded-3xl border border-gray-100 shadow-2xl p-6 sm:p-8 overflow-hidden">
+            {/* Card header */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#4D2C5E] to-[#6B3FA0] flex items-center justify-center">
+                  <FaGraduationCap className="text-white text-sm" />
+                </div>
+                <div>
+                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+                    Bootcamp
+                  </p>
+                  <p className="text-xs font-bold text-gray-900">Live Program</p>
+                </div>
+              </div>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                <span className="text-[10px] font-semibold text-emerald-700">OPEN</span>
               </span>
-            </motion.div>
+            </div>
 
-            {/* Main Headline with HTML support */}
-            <motion.div
-              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-            >
-              <HighlightedText text={heroSection?.title} />
-            </motion.div>
-
-            {/* Sub-Headline with HTML support */}
-            <motion.div
-              className="text-xl sm:text-2xl md:text-3xl text-gray-600 max-w-5xl mx-auto mb-12 leading-relaxed font-light"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-            >
-              <HighlightedText text={heroSection?.des} />
-            </motion.div>
-
-            {/* Floating Feature Cards */}
-            <motion.div
-              className="grid sm:grid-cols-3 gap-6 max-w-4xl mx-auto mb-12"
-              initial={{ opacity: 0, y: 40 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
-            >
-              {heroSection?.tags?.map((tag, index) => (
+            {/* Highlights */}
+            <div className="space-y-3.5">
+              {heroSection?.tags?.slice(0, 4).map((tag, i) => (
                 <motion.div
-                  key={index}
-                  className="flex flex-col items-center justify-center border-2 p-6 bg-white/70 backdrop-blur-sm rounded-2xl border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300"
-                  initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  whileHover={{
-                    y: -8,
-                    scale: 1.02,
-                    backgroundColor: "rgba(255, 255, 255, 0.9)"
-                  }}
-                  whileTap={{ scale: 0.98 }}
+                  key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.4, delay: 0.5 + i * 0.08 }}
+                  className="flex items-center gap-3 p-3 rounded-xl bg-gray-50/80 border border-gray-100 hover:bg-white hover:border-[#4D2C5E]/20 transition-all duration-200"
                 >
-                  <span className="text-sm font-medium text-gray-700 text-center leading-tight">
+                  <div className="w-7 h-7 rounded-lg bg-[#4D2C5E]/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-[#4D2C5E] text-[10px] font-bold">✓</span>
+                  </div>
+                  <span className="text-xs sm:text-sm font-medium text-gray-700 truncate">
                     {tag}
                   </span>
                 </motion.div>
               ))}
-            </motion.div>
+            </div>
 
-            {/* Animated CTA Button */}
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 1 }}
-            >
-              <motion.button
-                onClick={() => setIsModalOpen(true)}
-                className="group relative bg-gradient-to-r from-[#FF7426] to-[#FF8C42] text-white p-6 rounded-2xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden"
-                whileHover={{
-                  scale: 1.05,
-                  background: "linear-gradient(45deg, #FF7426, #FF8C42, #FF7426)",
-                  backgroundSize: "200% 200%"
-                }}
-                whileTap={{ scale: 0.95 }}
-                animate={{
-                  backgroundPosition: ['0% 0%', '100% 100%']
-                }}
-                transition={{
-                  backgroundPosition: {
-                    duration: 3,
-                    repeat: Infinity,
-                    repeatType: "reverse"
-                  }
-                }}
-              >
-                {/* Shine Effect */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -skew-x-12"
-                  animate={{ x: ['-100%', '200%'] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-                />
-
-                <span className="relative cursor-pointer z-10 flex items-center justify-center gap-1">
-                  <FaGraduationCap className='text-[#4D2C5E] hidden sm:flex' /> {heroSection.button}
-                </span>
-              </motion.button>
-
-              <motion.p
-                className="text-gray-500 text-sm mt-6 flex justify-center items-center gap-1"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.6, delay: 1.2 }}
-              >
-                <FaHourglassHalf /> {heroSection?.para}
-              </motion.p>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Eligibility Section */}
-      <section className="py-10 sm:py-12 bg-white px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-12">
-              {eligibility.sec}
-            </h2>
-
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Problem Points */}
-              <div className="space-y-6">
-                {eligibility?.que?.map((problem, index) => (
-                  <div key={index} className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-6 h-6 bg-red-100 rounded-full flex items-center justify-center mt-1">
-                      <span className="text-red-500 text-sm font-bold">!</span>
-                    </div>
-                    <p className="text-lg text-gray-700 leading-relaxed">{problem}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* Solution Card */}
-              <div className="bg-gradient-to-br from-[#4D2C5E] to-[#7B4B9E] rounded-2xl p-8 text-white">
-                <h3 className="text-2xl font-bold mb-4">
-                  <HighlightedText text={eligibility?.title} />
-                </h3>
-                <p className="text-lg mb-6 opacity-90">
-                  <HighlightedText text={eligibility?.description} />
+            {/* Card footer */}
+            <div className="mt-6 pt-5 border-t border-gray-100 flex items-center justify-between">
+              <div>
+                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+                  Duration
                 </p>
-                <div className="bg-white/10 rounded-xl p-4">
-                  <p className="font-semibold">{eligibility?.thought}</p>
+                <p className="text-sm font-bold text-gray-900">Limited Seats</p>
+              </div>
+              <div className="flex -space-x-2">
+                {[1, 2, 3, 4].map((i) => (
+                  <div
+                    key={i}
+                    className="w-7 h-7 rounded-full border-2 border-white bg-gradient-to-br from-[#4D2C5E] to-[#6B3FA0]"
+                  />
+                ))}
+                <div className="w-7 h-7 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center">
+                  <span className="text-[9px] font-bold text-gray-600">+</span>
                 </div>
               </div>
             </div>
-          </motion.div>
-        </div>
-      </section>
 
-      {/* Curriculum Section */}
-     <section id="curriculum" className="py-10 sm:py-12 bg-gray-50 px-4 sm:px-6 lg:px-8">
-  <div className="max-w-6xl mx-auto">
+            {/* Subtle accent */}
+            <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-gradient-to-br from-[#FF7426]/10 to-transparent rounded-full blur-2xl" />
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  </div>
+</section>
+
+      {/* Eligibility Section */}
+<section className="relative py-8 sm:py-10 lg:py-12 bg-white px-4 sm:px-6 lg:px-8 overflow-hidden">
+  {/* Subtle background accent */}
+  <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-[#4D2C5E]/[0.03] to-transparent rounded-full blur-3xl" />
+  </div>
+
+  <div className="max-w-6xl mx-auto relative z-10">
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
+      transition={{ duration: 0.7 }}
+      viewport={{ once: true, margin: '-100px' }}
     >
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">
-        <HighlightedText text={curriculum.title} />
-      </h2>
-      <p className="text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto">
-        <HighlightedText text={curriculum.description} />
-      </p>
+      {/* Section Header */}
+      <div className="text-center mb-14 sm:mb-16">
+        <motion.span
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="inline-block text-xs sm:text-sm font-semibold text-[#4D2C5E] uppercase tracking-[0.15em] mb-3"
+        >
+          Is This For You?
+        </motion.span>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight max-w-3xl mx-auto leading-tight">
+          <HighlightedText text={eligibility.sec} />
+        </h2>
+        <div className="w-16 h-1 bg-gradient-to-r from-[#4D2C5E] to-[#FF7426] rounded-full mx-auto" />
+      </div>
 
-      {/* Dynamic grid based on number of curriculum items */}
-      <div className={`
-        grid gap-8
-        ${curriculum?.curriculums?.length === 1 
-          ? 'grid-cols-1 max-w-2xl mx-auto' 
-          : curriculum?.curriculums?.length === 2 
-            ? 'grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto' 
-            : 'grid-cols-1 md:grid-cols-2 lg:grid-cols-2'
-        }
-      `}>
+      <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+        {/* LEFT — Problem Points */}
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="relative bg-gray-50/70 rounded-3xl p-6 sm:p-8 border border-gray-100"
+        >
+          {/* Label */}
+          <div className="flex items-center gap-2.5 mb-6 pb-5 border-b border-gray-200/70">
+            <div className="w-8 h-8 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center">
+              <span className="text-red-500 text-xs font-bold">!</span>
+            </div>
+            <div>
+              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+                The Challenge
+              </p>
+              <p className="text-sm font-bold text-gray-900">Common Struggles</p>
+            </div>
+          </div>
+
+          {/* Problem List */}
+          <div className="space-y-3">
+            {eligibility?.que?.map((problem, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, x: -15 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.4, delay: index * 0.08 }}
+                viewport={{ once: true }}
+                className="group flex items-start gap-3.5 p-4 rounded-xl bg-white border border-gray-100 hover:border-red-200/70 hover:shadow-sm transition-all duration-300"
+              >
+                <div className="flex-shrink-0 w-5 h-5 rounded-full bg-red-50 border border-red-100 flex items-center justify-center mt-0.5 group-hover:bg-red-100 transition-colors duration-300">
+                  <span className="text-red-500 text-[10px] font-bold">!</span>
+                </div>
+                <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                  {problem}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* RIGHT — Solution Card */}
+        <motion.div
+          initial={{ opacity: 0, x: 20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          viewport={{ once: true }}
+          className="relative rounded-3xl overflow-hidden"
+        >
+          {/* Gradient background */}
+          <div className="absolute inset-0 bg-gradient-to-br from-[#4D2C5E] via-[#5A3670] to-[#6B3FA0]" />
+
+          {/* Decorative elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-[#FF7426]/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3" />
+          <div
+            className="absolute inset-0 opacity-[0.04]"
+            style={{
+              backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+              backgroundSize: '28px 28px',
+            }}
+          />
+
+          {/* Content */}
+          <div className="relative z-10 p-6 sm:p-8 lg:p-10 h-full flex flex-col">
+            {/* Label */}
+            <div className="flex items-center gap-2.5 mb-6 pb-5 border-b border-white/15">
+              <div className="w-8 h-8 rounded-lg bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+                <span className="text-white text-xs font-bold">✓</span>
+              </div>
+              <div>
+                <p className="text-[10px] font-semibold text-white/50 uppercase tracking-wider">
+                  The Solution
+                </p>
+                <p className="text-sm font-bold text-white">What You'll Gain</p>
+              </div>
+            </div>
+
+            {/* Title & Description */}
+            <div className="flex-1">
+              <h3 className="text-xl sm:text-2xl font-bold mb-4 text-white leading-tight">
+                <HighlightedText text={eligibility?.title} />
+              </h3>
+              <p className="text-sm sm:text-base mb-6 text-white/75 leading-relaxed">
+                <HighlightedText text={eligibility?.description} />
+              </p>
+            </div>
+
+            {/* Thought Callout */}
+            <div className="relative bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/15 overflow-hidden">
+              <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#FF7426] to-[#FF8C42]" />
+              <div className="pl-3">
+                <p className="text-[10px] font-semibold text-[#FF8C42] uppercase tracking-wider mb-1.5">
+                  Key Insight
+                </p>
+                <p className="text-sm sm:text-base font-medium text-white/95 leading-relaxed">
+                  {eligibility?.thought}
+                </p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </motion.div>
+  </div>
+</section>
+
+      {/* Curriculum Section */}
+<section
+  id="curriculum"
+  className="relative py-8 sm:py-10 lg:py-12 bg-gray-50/70 px-4 sm:px-6 lg:px-8 overflow-hidden"
+>
+  {/* Subtle background accent */}
+  <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute top-1/3 -right-40 w-[500px] h-[500px] bg-gradient-to-bl from-[#4D2C5E]/[0.04] to-transparent rounded-full blur-3xl" />
+    <div className="absolute bottom-0 -left-40 w-[400px] h-[400px] bg-gradient-to-tr from-[#FF7426]/[0.04] to-transparent rounded-full blur-3xl" />
+  </div>
+
+  <div className="max-w-6xl mx-auto relative z-10">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7 }}
+      viewport={{ once: true, margin: '-100px' }}
+    >
+      {/* Section Header */}
+      <div className="text-center mb-14 sm:mb-16">
+        <motion.span
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="inline-block text-xs sm:text-sm font-semibold text-[#4D2C5E] uppercase tracking-[0.15em] mb-3"
+        >
+          Program Outline
+        </motion.span>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight max-w-3xl mx-auto leading-tight">
+          <HighlightedText text={curriculum.title} />
+        </h2>
+        <p className="text-sm sm:text-base md:text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
+          <HighlightedText text={curriculum.description} />
+        </p>
+        <div className="w-16 h-1 bg-gradient-to-r from-[#4D2C5E] to-[#FF7426] rounded-full mx-auto mt-6" />
+      </div>
+
+      {/* Curriculum Grid */}
+      <div
+        className={`grid gap-5 sm:gap-6 ${
+          curriculum?.curriculums?.length === 1
+            ? 'grid-cols-1 max-w-2xl mx-auto'
+            : curriculum?.curriculums?.length === 2
+            ? 'grid-cols-1 md:grid-cols-2 max-w-4xl mx-auto'
+            : 'grid-cols-1 md:grid-cols-2'
+        }`}
+      >
         {curriculum?.curriculums?.map((day, index) => {
-          // Define colors based on day number
           const colors = {
-            1: { bg: 'bg-blue-100', text: 'text-blue-600', dot: 'bg-blue-500' },
-            2: { bg: 'bg-green-100', text: 'text-green-600', dot: 'bg-green-500' },
-            3: { bg: 'bg-purple-100', text: 'text-purple-600', dot: 'bg-purple-500' },
-            4: { bg: 'bg-orange-100', text: 'text-orange-600', dot: 'bg-orange-500' },
-            5: { bg: 'bg-red-100', text: 'text-red-600', dot: 'bg-red-500' },
-            6: { bg: 'bg-indigo-100', text: 'text-indigo-600', dot: 'bg-indigo-500' },
-            7: { bg: 'bg-pink-100', text: 'text-pink-600', dot: 'bg-pink-500' }
+            1: { bg: 'bg-blue-50', text: 'text-blue-600', dot: 'bg-blue-500', border: 'border-blue-100', ring: 'ring-blue-100', grad: 'from-blue-500 to-blue-600' },
+            2: { bg: 'bg-emerald-50', text: 'text-emerald-600', dot: 'bg-emerald-500', border: 'border-emerald-100', ring: 'ring-emerald-100', grad: 'from-emerald-500 to-emerald-600' },
+            3: { bg: 'bg-purple-50', text: 'text-purple-600', dot: 'bg-purple-500', border: 'border-purple-100', ring: 'ring-purple-100', grad: 'from-purple-500 to-purple-600' },
+            4: { bg: 'bg-orange-50', text: 'text-orange-600', dot: 'bg-orange-500', border: 'border-orange-100', ring: 'ring-orange-100', grad: 'from-orange-500 to-orange-600' },
+            5: { bg: 'bg-rose-50', text: 'text-rose-600', dot: 'bg-rose-500', border: 'border-rose-100', ring: 'ring-rose-100', grad: 'from-rose-500 to-rose-600' },
+            6: { bg: 'bg-indigo-50', text: 'text-indigo-600', dot: 'bg-indigo-500', border: 'border-indigo-100', ring: 'ring-indigo-100', grad: 'from-indigo-500 to-indigo-600' },
+            7: { bg: 'bg-pink-50', text: 'text-pink-600', dot: 'bg-pink-500', border: 'border-pink-100', ring: 'ring-pink-100', grad: 'from-pink-500 to-pink-600' },
           };
-
-          const color = colors[day.day] || colors[1]; // Fallback to day 1 colors
+          const color = colors[day.day] || colors[1];
 
           return (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.5, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
-              className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 hover:shadow-xl transition-shadow duration-300"
+              whileHover={{ y: -4 }}
+              className="group relative bg-white rounded-2xl border border-gray-100 hover:border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
-              <div className="flex items-center mb-6">
-                <div className={`w-12 h-12 ${color.bg} rounded-xl flex items-center justify-center mr-4`}>
-                  <span className={`${color.text} font-bold text-xl`}>{day.day}</span>
+              {/* Top accent bar */}
+              <div className={`h-1 w-full bg-gradient-to-r ${color.grad} opacity-80 group-hover:opacity-100 transition-opacity duration-300`} />
+
+              <div className="p-6 sm:p-7">
+                {/* Header */}
+                <div className="flex items-start gap-4 mb-5 pb-5 border-b border-gray-100">
+                  {/* Day number */}
+                  {/* <div className={`relative flex-shrink-0 w-12 h-12 ${color.bg} rounded-xl flex items-center justify-center border ${color.border} group-hover:scale-105 transition-transform duration-300`}> */}
+                    {/* <span className={`${color.text} font-bold text-lg`}>{day.day}</span> */}
+                    {/* Ring on hover */}
+                    {/* <span className={`absolute inset-0 rounded-xl ring-2 ${color.ring} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} /> */}
+                  {/* </div> */}
+
+                  <div className="min-w-0 flex-1">
+                    {/* <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mb-1">
+                      Day {day.day}
+                    </p> */}
+                    <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-1.5 leading-snug">
+                      <HighlightedText text={day.title} />
+                    </h3>
+                    <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                      <HighlightedText text={day.des} />
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-gray-900">
-                    <HighlightedText text={day.title} />
-                  </h3>
-                  <p className="text-gray-600">
-                    <HighlightedText text={day.des} />
-                  </p>
-                </div>
+
+                {/* Topics list */}
+                <ul className="space-y-3">
+                  {day.info.map((item, itemIndex) => (
+                    <motion.li
+                      key={itemIndex}
+                      initial={{ opacity: 0, x: -8 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.08 + itemIndex * 0.05 }}
+                      viewport={{ once: true }}
+                      className="flex items-start group/item"
+                    >
+                      <div className={`flex-shrink-0 w-4 h-4 rounded-full ${color.bg} flex items-center justify-center mt-0.5 mr-3 border ${color.border} group-hover/item:scale-110 transition-transform duration-200`}>
+                        <span className={`w-1.5 h-1.5 ${color.dot} rounded-full`} />
+                      </div>
+                      <span className="text-xs sm:text-sm text-gray-600 leading-relaxed group-hover/item:text-gray-900 transition-colors duration-200">
+                        <HighlightedText text={item} />
+                      </span>
+                    </motion.li>
+                  ))}
+                </ul>
               </div>
 
-              <ul className="space-y-4">
-                {day.info.map((item, itemIndex) => (
-                  <li key={itemIndex} className="flex items-start group">
-                    <span className={`w-2 h-2 ${color.dot} rounded-full mt-2 mr-3 flex-shrink-0 group-hover:scale-125 transition-transform duration-200`}></span>
-                    <span className="text-gray-700 leading-relaxed">
-                      <HighlightedText text={item} />
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              {/* Corner decorative glow */}
+              <div className={`absolute -bottom-8 -right-8 w-28 h-28 ${color.bg} rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
             </motion.div>
           );
         })}
       </div>
-
-      {/* Optional: Add a decorative element for better visual balance */}
-      {curriculum?.curriculums?.length === 1 && (
-        <div className="flex justify-center mt-8">
-          <div className="w-24 h-1 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
-        </div>
-      )}
     </motion.div>
   </div>
 </section>
 
       {/* Experts Section */}
-    <section id="experts" className="py-16 sm:py-20 bg-white px-4 sm:px-6 lg:px-8">
-  <div className="max-w-6xl mx-auto">
+<section
+  id="experts"
+  className="relative py-8 sm:py-10 lg:py-12 bg-white px-4 sm:px-6 lg:px-8 overflow-hidden"
+>
+  {/* Subtle background accent */}
+  <div className="absolute inset-0 pointer-events-none">
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-gradient-to-b from-[#4D2C5E]/[0.03] to-transparent rounded-full blur-3xl" />
+  </div>
+
+  <div className="max-w-6xl mx-auto relative z-10">
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
+      transition={{ duration: 0.7 }}
+      viewport={{ once: true, margin: '-100px' }}
     >
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">
-        <HighlightedText text={speaker.title} />
-      </h2>
-      <p className="text-lg text-gray-600 text-center mb-12 max-w-3xl mx-auto">
-        <HighlightedText text={speaker.description} />
-      </p>
+      {/* Section Header */}
+      <div className="text-center mb-14 sm:mb-16">
+        <motion.span
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          viewport={{ once: true }}
+          className="inline-block text-xs sm:text-sm font-semibold text-[#4D2C5E] uppercase tracking-[0.15em] mb-3"
+        >
+          Meet Your Mentors
+        </motion.span>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight max-w-3xl mx-auto leading-tight">
+          <HighlightedText text={speaker.title} />
+        </h2>
+        <p className="text-sm sm:text-base md:text-lg text-gray-500 max-w-2xl mx-auto leading-relaxed">
+          <HighlightedText text={speaker.description} />
+        </p>
+        <div className="w-16 h-1 bg-gradient-to-r from-[#4D2C5E] to-[#FF7426] rounded-full mx-auto mt-6" />
+      </div>
 
-      {/* Dynamic grid based on number of speaker profiles */}
-      <div className={`
-        grid gap-8
-        ${speaker?.profile?.length === 1 
-          ? 'grid-cols-1 max-w-md mx-auto' 
-          : speaker?.profile?.length === 2 
-            ? 'grid-cols-1 sm:grid-cols-2 max-w-3xl mx-auto' 
-            : speaker?.profile?.length === 3 
-              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-6xl mx-auto'
-              : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-w-7xl mx-auto'
-        }
-      `}>
+      {/* Experts Grid */}
+      <div
+        className={`grid gap-6 sm:gap-7 ${
+          speaker?.profile?.length === 1
+            ? 'grid-cols-1 max-w-sm mx-auto'
+            : speaker?.profile?.length === 2
+            ? 'grid-cols-1 sm:grid-cols-2 max-w-2xl mx-auto'
+            : speaker?.profile?.length === 3
+            ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto'
+            : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-w-7xl mx-auto'
+        }`}
+      >
         {speaker?.profile?.map((expert, index) => {
-          // Define colors based on index for alternating colors
-          const colors = index % 2 === 0 ? {
-            border: 'border-[#4D2C5E]',
-            text: 'text-[#4D2C5E]',
-            bg: 'bg-[#4D2C5E]/5'
-          } : {
-            border: 'border-[#FF7426]',
-            text: 'text-[#FF7426]',
-            bg: 'bg-[#FF7426]/5'
-          };
+          const isEven = index % 2 === 0;
+          const accentBorder = isEven ? 'border-[#4D2C5E]' : 'border-[#FF7426]';
+          const accentText = isEven ? 'text-[#4D2C5E]' : 'text-[#FF7426]';
+          const accentBg = isEven ? 'bg-[#4D2C5E]' : 'bg-[#FF7426]';
+          const accentSoftBg = isEven ? 'bg-[#4D2C5E]/5' : 'bg-[#FF7426]/5';
+          const accentRing = isEven ? 'ring-[#4D2C5E]/20' : 'ring-[#FF7426]/20';
 
           return (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              transition={{ duration: 0.5, delay: index * 0.1, ease: [0.22, 1, 0.36, 1] }}
               viewport={{ once: true }}
-              className={`text-center p-6 rounded-2xl transition-all duration-300 hover:shadow-xl ${colors.bg} hover:scale-105`}
+              whileHover={{ y: -6 }}
+              className="group relative bg-white rounded-2xl border border-gray-100 hover:border-gray-200 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden"
             >
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.3 }}
-                className="relative inline-block"
-              >
-                <motion.img
-                  className={`w-32 h-32 rounded-full mx-auto mb-6 object-cover shadow-lg border-4 ${colors.border} transition-all duration-300`}
-                  src={expert.image}
-                  alt={expert.name}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                />
-                {/* Decorative ring animation for first speaker */}
-                {index === 0 && speaker?.profile?.length === 1 && (
-                  <motion.div
-                    className="absolute inset-0 rounded-full border-2 border-[#4D2C5E]"
-                    animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity }}
+              {/* Top colored strip */}
+              <div className={`h-1 w-full ${accentBg} opacity-70 group-hover:opacity-100 transition-opacity duration-300`} />
+
+              <div className="p-6 sm:p-7 text-center">
+                {/* Avatar */}
+                <div className="relative inline-block mb-5">
+                  {/* Glow ring behind avatar */}
+                  <div
+                    className={`absolute inset-0 rounded-full ${accentSoftBg} scale-110 blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
                   />
-                )}
-              </motion.div>
-              
-              <motion.h3 
-                className="text-xl font-bold text-gray-900 mb-2"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: index * 0.1 + 0.2 }}
-              >
-                {expert.name}
-              </motion.h3>
-              
-              <motion.p 
-                className={`${colors.text} font-semibold mb-4`}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: index * 0.1 + 0.3 }}
-              >
-                {expert.profession}
-              </motion.p>
-              
-              <motion.p 
-                className="text-gray-600"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: index * 0.1 + 0.4 }}
-              >
-                {expert.experience}
-              </motion.p>
+                  {/* Avatar image */}
+                  <motion.img
+                    className={`relative w-24 h-24 sm:w-28 sm:h-28 rounded-full mx-auto object-cover shadow-md border-[3px] ${accentBorder} group-hover:scale-105 transition-transform duration-300`}
+                    src={expert.image}
+                    alt={expert.name}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                  />
+                  {/* Small verified dot */}
+                  <div
+                    className={`absolute bottom-0 right-0 w-6 h-6 ${accentBg} rounded-full border-[3px] border-white flex items-center justify-center shadow-sm`}
+                  >
+                    <span className="text-white text-[9px] font-bold">✓</span>
+                  </div>
+                </div>
+
+                {/* Name */}
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-1 leading-snug">
+                  {expert.name}
+                </h3>
+
+                {/* Profession */}
+                <p className={`${accentText} font-semibold text-xs sm:text-sm mb-3.5 uppercase tracking-wide`}>
+                  {expert.profession}
+                </p>
+
+                {/* Divider */}
+                <div className="w-8 h-px bg-gray-200 mx-auto mb-3.5" />
+
+                {/* Experience */}
+                <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
+                  {expert.experience}
+                </p>
+              </div>
+
+              {/* Corner glow */}
+              <div
+                className={`absolute -bottom-10 -right-10 w-32 h-32 ${accentSoftBg} rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}
+              />
             </motion.div>
           );
         })}
       </div>
-
-      {/* Optional: Add a decorative element for better visual balance with single speaker */}
-      {speaker?.profile?.length === 1 && (
-        <motion.div 
-          className="flex justify-center mt-8"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          <div className="w-24 h-1 bg-gradient-to-r from-[#4D2C5E] to-[#FF7426] rounded-full"></div>
-        </motion.div>
-      )}
-
-      {/* Optional: Add a subtle gradient border for multiple speakers */}
-      {speaker?.profile?.length > 1 && speaker?.profile?.length <= 3 && (
-        <motion.div 
-          className="flex justify-center mt-8"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-        >
-          <div className="w-32 h-0.5 bg-gradient-to-r from-transparent via-gray-300 to-transparent rounded-full"></div>
-        </motion.div>
-      )}
     </motion.div>
   </div>
 </section>
 
       {/* Features Section */}
-      <section id="features" className="py-16 sm:py-20 bg-gray-50 px-4 sm:px-6 lg:px-8">
-  <div className="max-w-6xl mx-auto">
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      viewport={{ once: true }}
-    >
-      <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-4">
-        <HighlightedText text={train?.title} />
-      </h2>
-
-      {/* Dynamic grid based on number of feature cards */}
-      <div className={`
-        grid gap-6 mt-12
-        ${train?.cards?.length === 1 
-          ? 'grid-cols-1 max-w-md mx-auto' 
-          : train?.cards?.length === 2 
-            ? 'grid-cols-1 sm:grid-cols-2 max-w-3xl mx-auto' 
-            : train?.cards?.length === 3 
-              ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto'
-              : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-w-7xl mx-auto'
-        }
-      `}>
-        {train?.cards?.map((feature, index) => {
-          // Define color schemes based on index for visual variety
-          const colorSchemes = [
-            { bg: 'bg-gradient-to-br from-blue-50 to-indigo-50', border: 'border-blue-200', icon: 'text-blue-600', hover: 'hover:border-blue-300' },
-            { bg: 'bg-gradient-to-br from-green-50 to-emerald-50', border: 'border-green-200', icon: 'text-green-600', hover: 'hover:border-green-300' },
-            { bg: 'bg-gradient-to-br from-purple-50 to-pink-50', border: 'border-purple-200', icon: 'text-purple-600', hover: 'hover:border-purple-300' },
-            { bg: 'bg-gradient-to-br from-orange-50 to-red-50', border: 'border-orange-200', icon: 'text-orange-600', hover: 'hover:border-orange-300' },
-            { bg: 'bg-gradient-to-br from-teal-50 to-cyan-50', border: 'border-teal-200', icon: 'text-teal-600', hover: 'hover:border-teal-300' },
-            { bg: 'bg-gradient-to-br from-amber-50 to-yellow-50', border: 'border-amber-200', icon: 'text-amber-600', hover: 'hover:border-amber-300' }
-          ];
-          
-          const colorScheme = colorSchemes[index % colorSchemes.length];
-
-          return (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              whileHover={{ y: -5, transition: { duration: 0.2 } }}
-              className={`
-                ${colorScheme.bg} 
-                rounded-xl p-6 text-center 
-                shadow-sm border ${colorScheme.border} ${colorScheme.hover}
-                transition-all duration-300 
-                hover:shadow-lg
-                cursor-pointer
-              `}
-            >
-              <motion.div 
-                className={`text-4xl mb-4 flex justify-center ${colorScheme.icon}`}
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                transition={{ duration: 0.2 }}
-              >
-                {feature.icon}
-              </motion.div>
-              
-              <motion.h3 
-                className="font-bold text-gray-900 mb-3 text-lg"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: index * 0.1 + 0.2 }}
-              >
-                {feature.title}
-              </motion.h3>
-              
-              <motion.p 
-                className="text-gray-600 text-sm leading-relaxed"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.4, delay: index * 0.1 + 0.3 }}
-              >
-                <HighlightedText text={feature.description} />
-              </motion.p>
-
-              {/* Decorative element for single card */}
-              {train?.cards?.length === 1 && index === 0 && (
-                <motion.div 
-                  className="mt-4 h-1 w-12 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full mx-auto"
-                  initial={{ width: 0 }}
-                  whileInView={{ width: 48 }}
-                  transition={{ duration: 0.6, delay: 0.5 }}
-                />
-              )}
-            </motion.div>
-          );
-        })}
-      </div>
-
-      {/* Optional: Add a subtle gradient background for single card */}
-      {train?.cards?.length === 1 && (
-        <motion.div 
-          className="relative mt-8"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gray-200 to-transparent h-px"></div>
-        </motion.div>
-      )}
-    </motion.div>
-  </div>
-</section>
-
-      {/* Final CTA Section */}
-      <section className="py-10 sm:py-15 bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
+      <section id="features" className="py-1 bg-gray-50/70 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true, margin: '-100px' }}
           >
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-900 mb-14 tracking-tight">
+              <HighlightedText text={train?.title} />
+            </h2>
+
+            <div
+              className={`grid gap-5 ${
+                train?.cards?.length === 1
+                  ? 'grid-cols-1 max-w-sm mx-auto'
+                  : train?.cards?.length === 2
+                  ? 'grid-cols-1 sm:grid-cols-2 max-w-2xl mx-auto'
+                  : train?.cards?.length === 3
+                  ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto'
+                  : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 max-w-7xl mx-auto'
+              }`}
+            >
+              {train?.cards?.map((feature, index) => {
+                const colorSchemes = [
+                  { bg: 'bg-blue-50/80', border: 'border-blue-100', icon: 'text-blue-600' },
+                  { bg: 'bg-emerald-50/80', border: 'border-emerald-100', icon: 'text-emerald-600' },
+                  { bg: 'bg-purple-50/80', border: 'border-purple-100', icon: 'text-purple-600' },
+                  { bg: 'bg-orange-50/80', border: 'border-orange-100', icon: 'text-orange-600' },
+                  { bg: 'bg-teal-50/80', border: 'border-teal-100', icon: 'text-teal-600' },
+                  { bg: 'bg-amber-50/80', border: 'border-amber-100', icon: 'text-amber-600' },
+                ];
+                const scheme = colorSchemes[index % colorSchemes.length];
+
+                return (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.08 }}
+                    viewport={{ once: true }}
+                    whileHover={{ y: -4 }}
+                    className={`${scheme.bg} rounded-2xl p-6 text-center border ${scheme.border} hover:shadow-md transition-all duration-300 cursor-default`}
+                  >
+                    <div className={`text-3xl mb-4 flex justify-center ${scheme.icon}`}>
+                      {feature.icon}
+                    </div>
+
+                    <h3 className="font-bold text-gray-900 mb-2.5 text-base">{feature.title}</h3>
+
+                    <p className="text-gray-500 text-sm leading-relaxed">
+                      <HighlightedText text={feature.description} />
+                    </p>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="py-8 sm:py-10 bg-gradient-to-br from-[#4D2C5E] via-[#5A3670] to-[#6B3FA0] px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3" />
+          <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-[#FF7426]/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3" />
+        </div>
+
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7 }}
+            viewport={{ once: true, margin: '-100px' }}
+          >
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-10 tracking-tight">
               Don't Miss Out!
             </h2>
 
-            <motion.div
-              className="grid md:grid-cols-2 gap-6 lg:gap-8 max-w-3xl mx-auto mb-12"
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              viewport={{ once: true }}
-            >
+            <div className="grid sm:grid-cols-2 gap-5 max-w-2xl mx-auto mb-10">
               {/* Date & Time Card */}
               <motion.div
-                className="group relative"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+                viewport={{ once: true }}
+                className="bg-white/10 backdrop-blur-sm rounded-2xl p-7 border border-white/10 hover:border-white/20 hover:bg-white/[0.12] transition-all duration-300"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 rounded-3xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:border-white/30 transition-all duration-300">
-                  <motion.div
-                    className="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center text-2xl text-white mb-4 mx-auto shadow-lg"
-                  >
-                    <FaCalendarAlt />
-                  </motion.div>
-                  <h3 className="text-xl font-bold text-white mb-3">Dates & Time</h3>
-                  <div className="space-y-2">
-                    <p className="text-white/90 text-lg font-semibold">{datetime.date}</p>
-                    <p className="text-white/80">{datetime.time}</p>
-                  </div>
+                <div className="w-12 h-12 bg-purple-500/80 rounded-xl flex items-center justify-center text-xl text-white mb-4 mx-auto shadow-lg">
+                  <FaCalendarAlt />
+                </div>
+                <h3 className="text-base font-bold text-white mb-2.5">Dates & Time</h3>
+                <div className="space-y-1.5">
+                  <p className="text-white/90 font-semibold text-sm">{datetime.date}</p>
+                  <p className="text-white/60 text-sm">{datetime.time}</p>
                 </div>
               </motion.div>
 
               {/* Price Card */}
               <motion.div
-                className="group relative"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="bg-white/10 backdrop-blur-sm rounded-2xl p-7 border border-white/10 hover:border-white/20 hover:bg-white/[0.12] transition-all duration-300"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-[#FF7426]/20 to-[#FF8C42]/20 rounded-3xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500 -z-10"></div>
-                <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 hover:border-white/30 transition-all duration-300">
-                  <motion.div
-                    className="w-16 h-16 bg-gradient-to-br from-[#FF7426] to-[#FF8C42] rounded-2xl flex items-center justify-center text-2xl text-white mb-4 mx-auto shadow-lg"
-                  >
-                    <FaMoneyBillWave />
-                  </motion.div>
-                  <h3 className="text-xl font-bold text-white mb-3">Price</h3>
-                  <div className="space-y-2">
-                    <p className="text-2xl font-bold text-white">{datetime.price}</p>
-                    <p className="text-white/80 text-sm">{datetime.slot}</p>
-                  </div>
+                <div className="w-12 h-12 bg-gradient-to-br from-[#FF7426] to-[#FF8C42] rounded-xl flex items-center justify-center text-xl text-white mb-4 mx-auto shadow-lg">
+                  <FaMoneyBillWave />
+                </div>
+                <h3 className="text-base font-bold text-white mb-2.5">Price</h3>
+                <div className="space-y-1.5">
+                  <p className="text-xl font-bold text-white">{datetime.price}</p>
+                  <p className="text-white/60 text-sm">{datetime.slot}</p>
                 </div>
               </motion.div>
-            </motion.div>
+            </div>
 
             <motion.button
               onClick={() => setIsModalOpen(true)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r flex justify-center items-center gap-2 mx-auto cursor-pointer from-[#FF7426] to-[#FF8C42] text-white px-8 sm:px-12 py-4 sm:py-5 rounded-2xl font-bold text-lg sm:text-xl shadow-2xl hover:shadow-3xl transition-all duration-300"
+              whileHover={{ scale: 1.03, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              className="bg-gradient-to-r from-[#FF7426] to-[#FF8C42] text-white px-8 sm:px-12 py-4 sm:py-5 rounded-2xl font-bold text-base sm:text-lg shadow-xl hover:shadow-2xl transition-all duration-300 inline-flex items-center justify-center gap-2.5"
             >
-              <FaGraduationCap className='hidden sm:flex' /> {datetime.button}
+              <FaGraduationCap className="text-lg" />
+              {datetime.button}
             </motion.button>
 
-            <p className="text-white/80 mt-4 text-sm">Secure your spot before it's gone!</p>
+            <p className="text-white/50 mt-5 text-sm">Secure your spot before it's gone!</p>
           </motion.div>
         </div>
       </section>
+
       <PramotianalModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
