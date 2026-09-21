@@ -103,55 +103,55 @@ const LandingPage = () => {
 </motion.section>
 
       {/* Hero Section */}
-<section className="relative min-h-[90vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 sm:py-10 overflow-hidden bg-white">
+<section className="relative min-h-fit flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12 overflow-hidden bg-white">
   {/* Background Layers */}
   <div className="absolute inset-0 pointer-events-none">
-    {/* Soft gradient orbs */}
-    <div className="absolute -top-40 -right-40 w-[500px] h-[500px] rounded-full bg-gradient-to-br from-[#4D2C5E]/8 to-transparent blur-3xl" />
-    <div className="absolute -bottom-40 -left-40 w-[450px] h-[450px] rounded-full bg-gradient-to-tr from-[#FF7426]/8 to-transparent blur-3xl" />
+    {/* Soft gradient orbs - smaller on mobile */}
+    <div className="absolute -top-20 -right-20 sm:-top-40 sm:-right-40 w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] rounded-full bg-gradient-to-br from-[#4D2C5E]/8 to-transparent blur-3xl" />
+    <div className="absolute -bottom-20 -left-20 sm:-bottom-40 sm:-left-40 w-[220px] h-[220px] sm:w-[450px] sm:h-[450px] rounded-full bg-gradient-to-tr from-[#FF7426]/8 to-transparent blur-3xl" />
 
-    {/* Fine grid pattern */}
+    {/* Fine grid pattern - smaller grid on mobile */}
     <div
       className="absolute inset-0 opacity-[0.025]"
       style={{
         backgroundImage: `linear-gradient(#4D2C5E 1px, transparent 1px), linear-gradient(90deg, #4D2C5E 1px, transparent 1px)`,
-        backgroundSize: '64px 64px',
+        backgroundSize: '32px 32px',
       }}
     />
 
     {/* Bottom fade */}
-    <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white to-transparent" />
+    <div className="absolute inset-x-0 bottom-0 h-20 sm:h-32 bg-gradient-to-t from-white to-transparent" />
   </div>
 
   <div className="max-w-7xl mx-auto w-full relative z-10">
-    <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-16 items-center">
       {/* LEFT — Content */}
       <motion.div
-        className="lg:col-span-7 text-center lg:text-left order-2 lg:order-1"
+        className="lg:col-span-7 text-center lg:text-left order-2 lg:order-1 px-1 sm:px-0"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       >
         {/* Badge */}
         <motion.div
-          className="inline-flex items-center px-4 py-2 rounded-full bg-emerald-50 border border-emerald-100 mb-6 sm:mb-8"
+          className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-emerald-50 border border-emerald-100 mb-4 sm:mb-6 lg:mb-8"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
           <motion.span
-            className="w-2 h-2 bg-emerald-500 rounded-full mr-2.5"
+            className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-emerald-500 rounded-full mr-2 sm:mr-2.5"
             animate={{ scale: [1, 1.4, 1], opacity: [1, 0.6, 1] }}
             transition={{ duration: 2, repeat: Infinity }}
           />
-          <span className="text-xs sm:text-sm font-semibold text-emerald-700 tracking-wide uppercase">
+          <span className="text-[10px] sm:text-xs lg:text-sm font-semibold text-emerald-700 tracking-wide uppercase">
             {heroSection.sec}
           </span>
         </motion.div>
 
         {/* Main Headline */}
         <motion.h1
-          className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl font-bold text-gray-900 mb-5 sm:mb-6 leading-[1.1] tracking-tight"
+          className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl font-bold text-gray-900 mb-4 sm:mb-5 lg:mb-6 leading-[1.15] sm:leading-[1.1] tracking-tight px-1 sm:px-0"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
@@ -161,7 +161,7 @@ const LandingPage = () => {
 
         {/* Sub-Headline */}
         <motion.div
-          className="text-base sm:text-lg md:text-xl text-gray-500 max-w-xl mx-auto lg:mx-0 mb-8 sm:mb-10 leading-relaxed font-light"
+          className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-500 max-w-xl mx-auto lg:mx-0 mb-6 sm:mb-8 lg:mb-10 leading-relaxed font-light px-2 sm:px-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.7, delay: 0.35 }}
@@ -171,7 +171,7 @@ const LandingPage = () => {
 
         {/* Feature Tags */}
         <motion.div
-          className="flex flex-wrap justify-center lg:justify-start gap-2.5 sm:gap-3 mb-8 sm:mb-10"
+          className="flex flex-wrap justify-center lg:justify-start gap-2 sm:gap-2.5 lg:gap-3 mb-6 sm:mb-8 lg:mb-10 px-1 sm:px-0"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.5 }}
@@ -179,13 +179,13 @@ const LandingPage = () => {
           {heroSection?.tags?.map((tag, index) => (
             <motion.span
               key={index}
-              className="inline-flex items-center px-3.5 py-2 bg-gray-50 rounded-lg border border-gray-200/80 text-xs sm:text-sm font-medium text-gray-700 hover:bg-white hover:border-[#4D2C5E]/30 hover:shadow-sm transition-all duration-300"
+              className="inline-flex items-center px-2.5 sm:px-3.5 py-1.5 sm:py-2 bg-gray-50 rounded-lg border border-gray-200/80 text-[10px] sm:text-xs lg:text-sm font-medium text-gray-700 hover:bg-white hover:border-[#4D2C5E]/30 hover:shadow-sm transition-all duration-300"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.5 + index * 0.08 }}
               whileHover={{ y: -2 }}
             >
-              <span className="w-1.5 h-1.5 bg-[#4D2C5E] rounded-full mr-2" />
+              <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-[#4D2C5E] rounded-full mr-1.5 sm:mr-2" />
               {tag}
             </motion.span>
           ))}
@@ -196,11 +196,11 @@ const LandingPage = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
-          className="flex flex-col items-center lg:items-start"
+          className="flex flex-col items-center lg:items-start px-2 sm:px-0"
         >
           <motion.button
             onClick={() => setIsModalOpen(true)}
-            className="group relative bg-[#4D2C5E] text-white px-7 sm:px-9 py-3.5 sm:py-4 rounded-xl font-semibold text-sm sm:text-base shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden w-full sm:w-auto"
+            className="group relative bg-[#4D2C5E] text-white px-6 sm:px-7 lg:px-9 py-3 sm:py-3.5 lg:py-4 rounded-xl font-semibold text-xs sm:text-sm lg:text-base shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden w-full sm:w-auto max-w-xs sm:max-w-none"
             whileHover={{ scale: 1.02, y: -2 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -211,18 +211,18 @@ const LandingPage = () => {
               style={{ backgroundSize: '200% 200%' }}
             />
             <span className="relative z-10 flex items-center justify-center gap-2">
-              <FaGraduationCap className="text-base sm:text-lg opacity-90" />
+              <FaGraduationCap className="text-sm sm:text-base lg:text-lg opacity-90" />
               {heroSection.button}
             </span>
           </motion.button>
 
           <motion.p
-            className="text-gray-400 text-xs sm:text-sm mt-4 flex items-center justify-center lg:justify-start gap-1.5"
+            className="text-gray-400 text-[10px] sm:text-xs lg:text-sm mt-3 sm:mt-4 flex items-center justify-center lg:justify-start gap-1.5"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.9 }}
           >
-            <FaHourglassHalf className="text-xs" />
+            <FaHourglassHalf className="text-[10px] sm:text-xs" />
             {heroSection?.para}
           </motion.p>
         </motion.div>
@@ -230,50 +230,50 @@ const LandingPage = () => {
 
       {/* RIGHT — Visual Card */}
       <motion.div
-        className="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end"
+        className="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end px-2 sm:px-4 lg:px-0"
         initial={{ opacity: 0, x: 40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="relative w-full max-w-md">
+        <div className="relative w-full max-w-[320px] sm:max-w-md">
           {/* Decorative glow */}
-          <div className="absolute inset-0 bg-gradient-to-br from-[#4D2C5E]/20 to-[#FF7426]/20 rounded-3xl blur-2xl scale-95" />
+          <div className="absolute inset-0 bg-gradient-to-br from-[#4D2C5E]/20 to-[#FF7426]/20 rounded-2xl sm:rounded-3xl blur-xl sm:blur-2xl scale-95" />
 
           {/* Main card */}
-          <div className="relative bg-white rounded-3xl border border-gray-100 shadow-2xl p-6 sm:p-8 overflow-hidden">
+          <div className="relative bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-xl sm:shadow-2xl p-4 sm:p-6 lg:p-8 overflow-hidden">
             {/* Card header */}
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
               <div className="flex items-center gap-2">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#4D2C5E] to-[#6B3FA0] flex items-center justify-center">
-                  <FaGraduationCap className="text-white text-sm" />
+                <div className="w-7 h-7 sm:w-8 sm:h-8 lg:w-9 lg:h-9 rounded-lg sm:rounded-xl bg-gradient-to-br from-[#4D2C5E] to-[#6B3FA0] flex items-center justify-center">
+                  <FaGraduationCap className="text-white text-[10px] sm:text-xs lg:text-sm" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+                  <p className="text-[8px] sm:text-[9px] lg:text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
                     Bootcamp
                   </p>
-                  <p className="text-xs font-bold text-gray-900">Live Program</p>
+                  <p className="text-[10px] sm:text-[11px] lg:text-xs font-bold text-gray-900">Live Program</p>
                 </div>
               </div>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100">
-                <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-[10px] font-semibold text-emerald-700">OPEN</span>
+              <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-emerald-50 border border-emerald-100">
+                <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                <span className="text-[8px] sm:text-[9px] lg:text-[10px] font-semibold text-emerald-700">OPEN</span>
               </span>
             </div>
 
             {/* Highlights */}
-            <div className="space-y-3.5">
+            <div className="space-y-2 sm:space-y-3 lg:space-y-3.5">
               {heroSection?.tags?.slice(0, 4).map((tag, i) => (
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.4, delay: 0.5 + i * 0.08 }}
-                  className="flex items-center gap-3 p-3 rounded-xl bg-gray-50/80 border border-gray-100 hover:bg-white hover:border-[#4D2C5E]/20 transition-all duration-200"
+                  className="flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 lg:p-3 rounded-lg sm:rounded-xl bg-gray-50/80 border border-gray-100 hover:bg-white hover:border-[#4D2C5E]/20 transition-all duration-200"
                 >
-                  <div className="w-7 h-7 rounded-lg bg-[#4D2C5E]/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-[#4D2C5E] text-[10px] font-bold">✓</span>
+                  <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 rounded-md sm:rounded-lg bg-[#4D2C5E]/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-[#4D2C5E] text-[8px] sm:text-[9px] lg:text-[10px] font-bold">✓</span>
                   </div>
-                  <span className="text-xs sm:text-sm font-medium text-gray-700 truncate">
+                  <span className="text-[10px] sm:text-xs lg:text-sm font-medium text-gray-700 truncate">
                     {tag}
                   </span>
                 </motion.div>
@@ -281,28 +281,28 @@ const LandingPage = () => {
             </div>
 
             {/* Card footer */}
-            <div className="mt-6 pt-5 border-t border-gray-100 flex items-center justify-between">
+            <div className="mt-4 sm:mt-5 lg:mt-6 pt-3 sm:pt-4 lg:pt-5 border-t border-gray-100 flex items-center justify-between">
               <div>
-                <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
+                <p className="text-[8px] sm:text-[9px] lg:text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
                   Duration
                 </p>
-                <p className="text-sm font-bold text-gray-900">Limited Seats</p>
+                <p className="text-[10px] sm:text-xs lg:text-sm font-bold text-gray-900">Limited Seats</p>
               </div>
-              <div className="flex -space-x-2">
+              <div className="flex -space-x-1.5 sm:-space-x-2">
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
-                    className="w-7 h-7 rounded-full border-2 border-white bg-gradient-to-br from-[#4D2C5E] to-[#6B3FA0]"
+                    className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 rounded-full border-2 border-white bg-gradient-to-br from-[#4D2C5E] to-[#6B3FA0]"
                   />
                 ))}
-                <div className="w-7 h-7 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center">
-                  <span className="text-[9px] font-bold text-gray-600">+</span>
+                <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center">
+                  <span className="text-[7px] sm:text-[8px] lg:text-[9px] font-bold text-gray-600">+</span>
                 </div>
               </div>
             </div>
 
             {/* Subtle accent */}
-            <div className="absolute -bottom-8 -right-8 w-32 h-32 bg-gradient-to-br from-[#FF7426]/10 to-transparent rounded-full blur-2xl" />
+            <div className="absolute -bottom-6 -right-6 sm:-bottom-8 sm:-right-8 w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-gradient-to-br from-[#FF7426]/10 to-transparent rounded-full blur-xl sm:blur-2xl" />
           </div>
         </div>
       </motion.div>
