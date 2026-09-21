@@ -288,7 +288,7 @@ const LandingPage = () => {
                 </p>
                 <p className="text-[10px] sm:text-xs lg:text-sm font-bold text-gray-900">Limited Seats</p>
               </div>
-              <div className="flex -space-x-1.5 sm:-space-x-2">
+              {/* <div className="flex -space-x-1.5 sm:-space-x-2">
                 {[1, 2, 3, 4].map((i) => (
                   <div
                     key={i}
@@ -298,7 +298,7 @@ const LandingPage = () => {
                 <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center">
                   <span className="text-[7px] sm:text-[8px] lg:text-[9px] font-bold text-gray-600">+</span>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             {/* Subtle accent */}
@@ -391,7 +391,7 @@ const LandingPage = () => {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.15 }}
           viewport={{ once: true }}
-          className="relative rounded-3xl overflow-hidden"
+          className="relative h-fit sm:h-full rounded-3xl overflow-hidden"
         >
           {/* Gradient background */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#4D2C5E] via-[#5A3670] to-[#6B3FA0]" />
@@ -408,7 +408,7 @@ const LandingPage = () => {
           />
 
           {/* Content */}
-          <div className="relative z-10 p-6 sm:p-8 lg:p-10 h-full flex flex-col">
+          <div className="relative z-10 p-6 sm:p-8 lg:p-10 h-fit sm:h-full flex flex-col">
             {/* Label */}
             <div className="flex items-center gap-2.5 mb-6 pb-5 border-b border-white/15">
               <div className="w-8 h-8 rounded-lg bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center">
