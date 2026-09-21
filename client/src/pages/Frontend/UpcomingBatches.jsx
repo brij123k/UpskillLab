@@ -1,165 +1,282 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import BatchCard from '../../components/Cards/BatchCard';
-import TrainingBanner from '../../components//banners/TrainingBanner';
-import FeedbaackBanner from '../../components/banners/FeedbackBanner';
-import {Btches} from '../../data'; // Assuming you have a data file with batch information
+import React, { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import BatchCard from "../../components/Cards/BatchCard";
+import TrainingBanner from "../../components/banners/TrainingBanner";
+import FeedbaackBanner from "../../components/banners/FeedbackBanner";
+import Modal from "../../components/Modal/CommonModal";
+import BatchEnrollmentModal from "../../components/Modal/BatchEnrollmentModal";
+import { useQuery } from "@tanstack/react-query";
+import { getDataHandler } from "../../config/services"; // Updated import
+import { Helmet } from 'react-helmet-async';
 const UpcomingBatches = () => {
-    // Using a free educational image from Pexels
-    const bannerImageUrl = "https://images.pexels.com/photos/4144225/pexels-photo-4144225.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
-    const batches = Btches
-    // Animation variants
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.2,
-                delayChildren: 0.3
-            }
+  const [selectedBatch, setSelectedBatch] = useState(null);
+  const [enrollCourse, setEnrollCourse] = useState(null);
+  const bannerImageUrl =
+    "https://images.pexels.com/photos/4144225/pexels-photo-4144225.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2";
+
+  const {
+    data: batches = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["upcomingBatches"],
+    queryFn: () => getDataHandler("upcomingBatches", { limit: 20 }),
+    
+    select: (data) =>
+      data.map((batch) => {
+        let durationText = '';
+        const days = batch.durationInDays;
+        if (days >= 365) {
+          // Convert to years with decimal
+          const years = (days / 365).toFixed(1);
+          durationText = `${years} year${years !== '1.0' ? 's' : ''}`;
+        } else if (days >= 30) {
+          // Convert to months with decimal
+          const months = (days / 30).toFixed(1);
+          durationText = `${months} month${months !== '1.0' ? 's' : ''}`;
+        } else if (days >= 7) {
+          // Convert to weeks with decimal
+          const weeks = (days / 7).toFixed(1);
+          durationText = `${weeks} week${weeks !== '1.0' ? 's' : ''}`;
+        } else if (days >= 1) {
+          // Show days with decimal
+          durationText = `${days.toFixed(1)} day${days !== 1 ? 's' : ''}`;
+        } else {
+          // Show hours with decimal
+          const hours = (days * 24).toFixed(1);
+          durationText = `${hours} hour${hours !== '1.0' ? 's' : ''}`;
         }
-    };
+      
+        // Remove .0 decimal places for cleaner display
+        durationText = durationText.replace(/\.0/, '');
 
-    const itemVariants = {
-        hidden: { x: -20, opacity: 0 },
-        visible: {
-            x: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.6
-            }
-        }
-    };
+        return {
+          id: batch.batchId,
+          active: batch.active,
+          batchId: batch.batchId,
+          courseId: batch.courseId,
+          courseCode: batch.course.courseCode,
+          startDate: new Date(batch.startDate),
+          title: batch.courseName,
+          price: batch.fees,
+          originalPrice: batch.course.originalPrice,
+          duration: durationText,
+          startTime: batch.startTime
+            ? new Date(`2000-01-01T${batch.startTime}:00.000`).toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: 'numeric',
+                hour12: true,
+              })
+            : '',
+          batchCode: batch.batchCode,
+          mode: batch.classMode,
+          remainingSeats: batch.remainingSeats,
+          totalSeats: batch.totalSeats,
+          categoryName:batch.course.category.categoryName
+        };
+      })
+  });
 
-    return (
-        <div className='bg-[#F7F7F7] min-h-screen'>
-            <Header />
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
 
-            {/* Modern Split Banner */}
-            <motion.section
-    initial="hidden"
-    animate="visible"
-    variants={containerVariants}
-    className="relative bg-gradient-to-r from-[#ff7426] via-[#ff5e3a] to-[#ff2d6e] py-10 px-4 sm:px-6 lg:px-8 overflow-hidden"
->
-    {/* Abstract background shapes */}
-    <motion.div
-        className="absolute inset-0 overflow-hidden"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-    >
-        <div className="absolute top-1/4 -left-20 w-64 h-64 rounded-full bg-white/5"></div>
-        <div className="absolute bottom-1/4 -right-20 w-72 h-72 rounded-full bg-white/5"></div>
-    </motion.div>
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
 
-    <div className="relative max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-6 lg:gap-8 h-full">
-        {/* Image on left */}
+  return (
+    <div className="bg-[#F7F7F7] min-h-screen">
+      {/* Banner Section */}
+      <motion.section
+        initial="hidden"
+        animate="visible"
+        variants={containerVariants}
+        className="relative bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] py-10 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      >
         <motion.div
-            className="w-full lg:w-1/2 h-full"
-            variants={itemVariants}
+          className="absolute inset-0 overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
         >
-            <div className="relative rounded-xl overflow-hidden shadow-2xl h-[300px] sm:h-[350px] lg:h-full">
-                <img
-                    src={bannerImageUrl}
-                    alt="Students learning together at UpSkillLab"
-                    className="w-full h-full object-cover rounded-xl"
-                    loading="lazy"
-                />
-                <motion.div
-                    className="absolute inset-0 bg-[#4D2C5E]/20 mix-blend-multiply"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.5 }}
-                />
-            </div>
+          <div className="absolute top-1/4 -left-20 w-64 h-64 rounded-full bg-[#FF7426]/10"></div>
+          <div className="absolute bottom-1/4 -right-20 w-72 h-72 rounded-full bg-[#FF7426]/10"></div>
         </motion.div>
 
-        {/* Content on right */}
-        <motion.div
+        <div className="relative max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-6 lg:gap-8 h-full">
+          <motion.div
+            className="w-full lg:w-1/2 h-full"
+            variants={itemVariants}
+          >
+            <div className="relative rounded-xl overflow-hidden shadow-2xl h-[300px] sm:h-[350px] lg:h-full">
+              <img
+                src={bannerImageUrl}
+                alt="Students learning together at Upskillab"
+                className="w-full h-full object-cover rounded-xl"
+                loading="lazy"
+              />
+              <motion.div
+                className="absolute inset-0 bg-[#FF7426]/20 mix-blend-multiply"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.5 }}
+              />
+            </div>
+          </motion.div>
+
+          <motion.div
             className="w-full lg:w-1/2 text-center lg:text-left py-4 lg:py-0"
             variants={containerVariants}
-        >
+          >
             <motion.h1
-                className="text-3xl sm:text-4xl font-bold text-white mb-4"
-                variants={itemVariants}
-                whileHover={{ scale: 1.02 }}
+              className="text-3xl sm:text-4xl font-bold text-white mb-4"
+              variants={itemVariants}
+              whileHover={{ scale: 1.02 }}
             >
-                Upcoming <span className="text-[#4d2c5e]">Batches</span>
+              Upcoming <span className="text-[#FF7426]">Batches</span>
             </motion.h1>
 
             <motion.p
-                className="text-lg text-white/90 mb-6"
-                variants={itemVariants}
+              className="text-lg text-white/90 mb-6"
+              variants={itemVariants}
             >
-                Join our next cohort of aspiring professionals and transform your career
+              Join our next cohort of aspiring professionals and transform your
+              career
             </motion.p>
 
-            {/* Animated decorative elements */}
             <motion.div
-                className="flex justify-center lg:justify-start space-x-4"
-                variants={itemVariants}
+              className="flex justify-center lg:justify-start space-x-4"
+              variants={itemVariants}
             >
-                {['📅', '👩‍💻', '🎓'].map((icon, index) => (
-                    <motion.div
-                        key={index}
-                        className="text-3xl"
-                        animate={{
-                            rotate: [0, 10, -10, 0],
-                            y: [0, -8, 0]
-                        }}
-                        transition={{
-                            duration: 6,
-                            repeat: Infinity,
-                            repeatType: "reverse",
-                            delay: index * 0.5
-                        }}
-                        whileHover={{ scale: 1.2 }}
-                    >
-                        {icon}
-                    </motion.div>
-                ))}
+              {["📅", "👩‍💻", "🎓"].map((icon, index) => (
+                <motion.div
+                  key={index}
+                  className="text-3xl"
+                  animate={{
+                    rotate: [0, 10, -10, 0],
+                    y: [0, -8, 0],
+                  }}
+                  transition={{
+                    duration: 6,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    delay: index * 0.5,
+                  }}
+                  whileHover={{ scale: 1.2 }}
+                >
+                  {icon}
+                </motion.div>
+              ))}
             </motion.div>
-        </motion.div>
-    </div>
-</motion.section>
-
-            {/* Batch Listings Section */}
-            <motion.div
-                className="py-16 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto"
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.4 }}
-            >
-                <h2 className="text-3xl sm:text-4xl font-bold text-[#4d2c5e] text-center mb-12">
-                    Our <span className='text-[#ff7426]'>Upcoming Batches</span>
-                </h2>
-
-                <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {batches.map((batch, index) => (
-                        <BatchCard
-                            key={batch.id}
-                            startDate={batch.startDate}
-                            price={batch.price}
-                            title={batch.title}
-                            batchId={batch.batchId}
-                            batchTime={batch.batchTime}
-                            duration={batch.duration}
-                            mode={batch.mode}
-                        />
-                    ))}
-                </div>
-            </motion.div>
-
-
-            <TrainingBanner />
-            <FeedbaackBanner />
-
-            <Footer />
+          </motion.div>
         </div>
-    );
+      </motion.section>
+
+      {/* Batch Listings Section */}
+      <motion.div
+        initial="visible"
+        animate="visible"
+        className="py-16 sm:py-20 px-4 sm:px-6 max-w-7xl mx-auto"
+      >
+        <h2 className="text-3xl sm:text-4xl font-bold text-[#4d2c5e] text-center mb-12">
+          Our <span className="text-[#ff7426]">Upcoming Batches</span>
+        </h2>
+
+        {isLoading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4D2C5E]"></div>
+          </div>
+        ) : error ? (
+          <div className="text-center text-red-500">
+            Failed to load batches. Please try again later.
+          </div>
+        ) : (
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {batches
+            .filter(batch => {
+              
+              // If batch has no active property, show it (true)
+              // If batch has active property, only show if active === true
+              return typeof batch.active === 'undefined' ? true : batch.active === true
+            })
+            .map((batch, index) => (
+              <motion.div
+                key={batch.id}
+                variants={itemVariants}
+                initial="hidden"
+                animate="visible"
+                whileHover={{
+                  y: -5,
+                  boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+                  transition: { duration: 0.2 },
+                }}
+              >
+                <BatchCard
+                  startDate={batch.startDate}
+                  price={batch.originalPrice}
+                  originalPrice={batch.price}
+                  title={batch.title}
+                  batchCode={batch.batchCode}
+                  courseId={batch.courseId}
+                  remainingSeats={batch.remainingSeats}
+                  courseCode={batch.courseCode}
+                  batchId={batch.batchId}
+                  batchTime={batch.startTime}
+                  duration={batch.duration}
+                  categoryName={batch.categoryName}
+                  mode={batch.mode === "LIVE_ONLINE" ? "Online" : "Offline"}
+                  onEnroll={() => setEnrollCourse(batch)}
+                />
+              </motion.div>
+            ))}
+          </div>
+        )}
+        {enrollCourse && (
+          <BatchEnrollmentModal
+            batch={enrollCourse}
+            onClose={() => setEnrollCourse(null)}
+          />
+        )}
+      </motion.div>
+
+      <TrainingBanner />
+      <FeedbaackBanner />
+
+
+      <Helmet>
+  <title>Upcoming Course Batches | Upskillab Online Learning</title>
+  <meta name="description" content="Stay updated with Upskillab's upcoming course batches and enroll in the next session to advance your skills." />
+  <meta name="keywords" content="Upskillab upcoming batches, course schedule, online learning, enrollment dates" />
+  <meta property="og:title" content="Upcoming Course Batches | Upskillab Online Learning" />
+  <meta property="og:description" content="Check out the schedule for Upskillab's upcoming course batches and plan your learning journey." />
+  <meta property="og:url" content="https://upskillab.com/upcoming-batches" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Upcoming Course Batches | Upskillab Online Learning" />
+  <meta name="twitter:description" content="Find out when Upskillab's next course batches start and secure your spot today." />
+  <link rel="canonical" href="https://upskillab.com/upcoming-batches" />
+</Helmet>
+
+
+    </div>
+  );
 };
 
 export default UpcomingBatches;

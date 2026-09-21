@@ -1,25 +1,67 @@
-import React from 'react';
+import React, { useState, useEffect,useMemo  } from 'react';
 import { motion } from 'framer-motion';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 import StudentFeedBack from '../../components/Cards/StudentFeedBack';
 import TrainingBanner from '../../components/banners/TrainingBanner';
 import FeedbaackBanner from '../../components/banners/FeedbackBanner';
 import AdmissionForm from '../../components/Forms/AdmissionForm';
-
+import { getBlogs } from '../../config/services';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import slugify from "slugify";
 // Blog Card Component
-const BlogCard = ({
-  title,
-  excerpt,
-  author,
-  date,
-  readTime,
-  category,
-  imageUrl
-}) => {
+
+const TruncatedHTML = ({ html, maxLength = 150 }) => {
+  const truncated = useMemo(() => {
+    if (html.length <= maxLength) return html;
+    
+    // Create temporary element to parse HTML
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+    
+    // Get text content and truncate
+    const text = temp.textContent || temp.innerText || '';
+    return `${text.substring(0, maxLength)}...`;
+  }, [html, maxLength]);
+
   return (
-    <motion.div
-      className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all h-full flex flex-col"
+    <p 
+      className="text-sm text-gray-600 mb-4 flex-grow line-clamp-3"
+      dangerouslySetInnerHTML={{ __html: truncated }}
+    />
+  );
+};
+
+const BlogCard = ({
+  id,
+  title,
+  slug,
+  content,
+  category,
+  image,
+  createdAt
+}) => {
+  // Format date
+  const formattedDate = new Date(createdAt).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+ const navigate = useNavigate();
+  const handleClick = () => {
+    // const slug = slugify(title, { lower: true, strict: true });
+  navigate(`/blog/${slug}`, { state: { slug } });
+  }
+  // Estimate read time (assuming 200 words per minute)
+  const wordCount = content.split(/\s+/).length;
+  const readTime = Math.ceil(wordCount / 200);
+
+  return (
+
+    <motion.div 
+      onClick={handleClick}
+      key={id}
+      className="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200 hover:shadow-lg transition-all h-full flex flex-col cursor-pointer"
       whileHover={{ y: -3 }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -27,7 +69,7 @@ const BlogCard = ({
       {/* Blog Image */}
       <div className="h-40 sm:h-48 overflow-hidden">
         <img
-          src={imageUrl}
+          src={image || '/images/blog-placeholder.jpg'}
           alt={title}
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
           loading="lazy"
@@ -39,7 +81,7 @@ const BlogCard = ({
         {/* Category Tag */}
         <div className="mb-2">
           <span className="inline-block px-2 py-1 text-xs font-semibold text-[#ff7426] bg-[#ff7426]/10 rounded-full">
-            {category}
+            {category || 'General'}
           </span>
         </div>
 
@@ -47,114 +89,77 @@ const BlogCard = ({
         <h3 className="text-lg font-bold text-gray-800 mb-2 line-clamp-2">{title}</h3>
 
         {/* Excerpt */}
-        <p className="text-sm text-gray-600 mb-4 flex-grow line-clamp-3">{excerpt}</p>
+        <TruncatedHTML html={content} maxLength={150} />
 
         {/* Meta Info */}
         <div className="flex items-center justify-between text-xs text-gray-500 border-t border-gray-100 pt-3">
-          <span>{author}</span>
+          <span>Upskillab</span>
           <div className="flex items-center space-x-2">
-            <span>{date}</span>
+            <span>{formattedDate}</span>
             <span>•</span>
-            <span>{readTime} read</span>
+            <span>{readTime} min read</span>
           </div>
         </div>
       </div>
     </motion.div>
+
   );
 };
 
 // Main Blog Page Component
 const StudentsBlog = () => {
-  // Sample blog data
-  const blogs = [
-    {
-      id: 1,
-      title: "How I Transitioned from Mechanical Engineering to Data Science",
-      excerpt: "My journey from traditional engineering to cutting-edge data science with UpSkillLab's PGP program and how it transformed my career path completely.",
-      author: "Rahul Sharma",
-      date: "May 15, 2023",
-      readTime: "5 min",
-      category: "Student Stories",
-      imageUrl: "https://images.pexels.com/photos/4144225/pexels-photo-4144225.jpeg"
-    },
-    {
-      id: 2,
-      title: "10 Python Libraries Every Data Science Beginner Should Know",
-      excerpt: "Essential Python libraries that helped me during my UpSkillLab journey and how to get started with each of them effectively.",
-      author: "Priya Patel",
-      date: "Jun 2, 2023",
-      readTime: "7 min",
-      category: "Learning Tips",
-      imageUrl: "https://images.pexels.com/photos/577585/pexels-photo-577585.jpeg"
-    },
-    {
-      id: 3,
-      title: "Balancing Full-Time Work with UpSkillLab's Evening Batches",
-      excerpt: "Practical strategies I used to manage my job while completing the PGP in Data Science through UpSkillLab's flexible learning model.",
-      author: "Arjun Mehta",
-      date: "Apr 28, 2023",
-      readTime: "4 min",
-      category: "Student Stories",
-      imageUrl: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg"
-    },
-    {
-      id: 4,
-      title: "My Capstone Project Experience at UpSkillLab",
-      excerpt: "A deep dive into how my capstone project helped me land my first data science role at a Fortune 500 company.",
-      author: "Neha Gupta",
-      date: "Jul 10, 2023",
-      readTime: "6 min",
-      category: "Projects",
-      imageUrl: "https://images.pexels.com/photos/590016/pexels-photo-590016.jpeg"
-    },
-    {
-      id: 5,
-      title: "The Complete Guide to UpSkillLab's Placement Support",
-      excerpt: "How I utilized UpSkillLab's career services to prepare for interviews and secure multiple job offers in the AI field.",
-      author: "Vikram Singh",
-      date: "Mar 22, 2023",
-      readTime: "8 min",
-      category: "Career Guidance",
-      imageUrl: "https://images.pexels.com/photos/3769021/pexels-photo-3769021.jpeg"
-    },
-    {
-      id: 6,
-      title: "From Basics to Advanced: My Machine Learning Journey",
-      excerpt: "How UpSkillLab's structured curriculum helped me build machine learning expertise from scratch in just 6 months.",
-      author: "Ananya Reddy",
-      date: "Aug 5, 2023",
-      readTime: "9 min",
-      category: "Learning Tips",
-      imageUrl: "https://images.pexels.com/photos/3861969/pexels-photo-3861969.jpeg"
-    }
-  ];
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        setLoading(true);
+        const response = await getBlogs({
+          limit: 100 // Adjust based on how many blogs you want to show
+        });
+        if (response.blogs) {
+          setBlogs(response.blogs);
+        } else {
+          throw new Error(response.message || 'Failed to fetch blogs');
+        }
+      } catch (err) {
+        setError(err.message);
+        toast.error('Failed to load blogs. Please try again later.');
+        console.error('Error fetching blogs:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, []);
 
   return (
     <div className='bg-[#F7F7F7] min-h-screen'>
-      <Header />
-
       {/* Blog Banner */}
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="relative bg-gradient-to-r from-[#ff7426] to-[#ff8e3a] py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
+        className="relative bg-gradient-to-r from-[#4D2C5E] to-[#7B4B9E] py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
       >
         {/* Decorative elements */}
         <div className="absolute inset-0 overflow-hidden opacity-10">
-          <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-white"></div>
-          <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full bg-white"></div>
+          <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-[#FF7426]"></div>
+          <div className="absolute bottom-10 right-10 w-40 h-40 rounded-full bg-[#FF7426]"></div>
         </div>
 
         <div className="relative max-w-7xl mx-auto text-center">
-          <motion.h1
+          <motion.h2
             className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
             initial={{ y: -20 }}
             animate={{ y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            UpSkillLab <span className="text-[#4D2C5E]">Student Blog</span>
-          </motion.h1>
+            Upskillab <span className="text-[#FF7426]">Blog</span>
+          </motion.h2>
 
           <motion.p
             className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto"
@@ -167,37 +172,41 @@ const StudentsBlog = () => {
         </div>
       </motion.section>
 
-      {/* Main Blog Content - Only Blog Cards */}
+      {/* Main Blog Content */}
       <motion.main
         className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {blogs.map((blog) => (
-            <BlogCard
-              key={blog.id}
-              title={blog.title}
-              excerpt={blog.excerpt}
-              author={blog.author}
-              date={blog.date}
-              readTime={blog.readTime}
-              category={blog.category}
-              imageUrl={blog.imageUrl}
-            />
-          ))}
-        </div>
-
-        {/* Pagination */}
-        <div className="mt-12 flex justify-center">
-          <nav className="flex items-center space-x-2">
-            <button className="px-3 py-1 rounded-md bg-[#ff7426] text-white font-medium">1</button>
-            <button className="px-3 py-1 rounded-md hover:bg-gray-200">2</button>
-            <button className="px-3 py-1 rounded-md hover:bg-gray-200">3</button>
-            <button className="px-3 py-1 rounded-md hover:bg-gray-200">Next →</button>
-          </nav>
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#4D2C5E]"></div>
+          </div>
+        ) : error ? (
+          <div className="text-center py-12 text-red-500">
+            {error}
+          </div>
+        ) : blogs.length === 0 ? (
+          <div className="text-center py-12 text-gray-500">
+            No blogs available at the moment.
+          </div>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {blogs.map((blog) => (
+              <BlogCard
+                key={blog._id}
+                id={blog._id}
+                title={blog.title}
+                slug={blog.slug}
+                content={blog.description}
+                category={blog.tag}
+                image={blog.image}
+                createdAt={blog.createdAt}
+              />
+            ))}
+          </div>
+        )}
       </motion.main>
 
       <StudentFeedBack />
@@ -206,7 +215,23 @@ const StudentsBlog = () => {
       </div>
       <TrainingBanner />
       <FeedbaackBanner />
-      <Footer />
+
+      <Helmet>
+  <title>Upskillab Student Blog | Insights and Tips for Online Learners</title>
+  <meta name="description" content="Explore articles, tips, and insights from Upskillab students to enhance your online learning experience." />
+  <meta name="keywords" content="Upskillab blog, student insights, online learning tips, education articles" />
+  <meta property="og:title" content="Upskillab Student Blog | Insights and Tips for Online Learners" />
+  <meta property="og:description" content="Read blog posts from Upskillab students sharing their experiences and advice on online learning." />
+  <meta property="og:url" content="https://upskillab.com/student-blog" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Upskillab Student Blog | Insights and Tips for Online Learners" />
+  <meta name="twitter:description" content="Gain valuable insights and tips from Upskillab's student community through our blog." />
+  <link rel="canonical" href="https://upskillab.com/blog" />
+</Helmet>
+
+
+
     </div>
   );
 };

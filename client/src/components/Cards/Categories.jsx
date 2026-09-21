@@ -1,167 +1,181 @@
-import { useRef } from 'react';
+import React,{useState,useEffect} from 'react';
+import { motion } from 'framer-motion';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
-import { motion, useInView } from 'framer-motion';
+import { getDataHandler } from '../../config/services';
+import { useNavigate } from 'react-router-dom';
+import { 
+  FiBriefcase, 
+  FiPenTool, 
+  FiCode, 
+  FiBarChart2, 
+  FiCamera, 
+  FiMic, 
+  FiMusic, 
+  FiFilm 
+} from 'react-icons/fi';
 
-// Custom Dot Component
-const CustomDot = ({ onClick, active }) => {
-  return (
-    <button
-      className={`w-3 h-3 rounded-full mx-1.5 transition-all duration-300 ${
-        active ? 'bg-[#4d2c5e] scale-125' : 'bg-gray-300'
-      }`}
-      onClick={() => onClick()}
-      aria-label={`Go to slide ${active ? 'current' : ''}`}
-    />
-  );
+const CategoryCarousel = () => {
+const navigate = useNavigate();
+const handleCategoryClick = (category) => {
+  console.log(category)
+  navigate(`/category/${category.title.toLowerCase()}`);
 };
+const colorPalette = ['#FF7426', '#4D2C5E'];
+const [categories, setCategories] = useState([]);
+const handelCategories = async () => {
+  const res=await getDataHandler('category');
+  if(res){
+    const newCategories = res.data
+    .filter((item) => item.active)
+    .map((category,index) => ({
+      id: index+1,
+      categoryId: category._id,
+      title: category.categoryName,
+      image: category.categoryImage,
+      icon: category.categoryLogo,
+      color: colorPalette[index % colorPalette.length],
+  }))
+  setCategories(newCategories);
+}
+}
 
-// CategoryCard Component with responsive sizing
-const CategoryCard = ({ imageSrc, categoryName }) => (
-  <motion.div
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-    className="flex-shrink-0 w-full bg-[#f3f4f8] rounded-xl overflow-hidden shadow-md transition-all duration-300 cursor-pointer p-6 sm:p-8 md:p-10 lg:p-12 xl:p-14 2xl:p-16 mx-1 sm:mx-2"
-  >
-    <motion.div
-      className="relative aspect-square"
-      whileHover={{ scale: 1.1 }}
-      transition={{ duration: 0.5 }}
-    >
-      <img
-        src={imageSrc}
-        alt={categoryName}
-        className="absolute w-full h-full object-cover"
-        loading="lazy"
-      />
-    </motion.div>
-    <div className="text-center mt-3 sm:mt-4 md:mt-5">
-      <h3 className="text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl font-semibold text-gray-800 truncate">
-        {categoryName}
-      </h3>
-    </div>
-  </motion.div>
-);
+useEffect(() => {
+  handelCategories();
+},[]);
 
-const ScrollableCategories = () => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
-  const categories = [
-    { imageSrc: "/images/Design.png", categoryName: "Design" },
-    { imageSrc: "/images/Development.png", categoryName: "Development" },
-    { imageSrc: "/images/Marketing.png", categoryName: "Marketing" },
-    { imageSrc: "/images/business.png", categoryName: "Business" },
-    { imageSrc: "/images/business.png", categoryName: "Business" },
-  ];
-
-  // Enhanced responsive breakpoints with XXL support
   const responsive = {
-    xxl: {
-      breakpoint: { max: 4000, min: 1920 },
-      items: 5,
-      partialVisibilityGutter: 60
-    },
-    xl: {
-      breakpoint: { max: 1920, min: 1536 },
-      items: 4,
-      partialVisibilityGutter: 50
-    },
-    lg: {
-      breakpoint: { max: 1536, min: 1280 },
+    superLargeDesktop: {
+      breakpoint: { max: 4000, min: 3000 },
       items: 4,
       partialVisibilityGutter: 40
     },
-    md: {
-      breakpoint: { max: 1280, min: 1024 },
-      items: 3,
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 4,
       partialVisibilityGutter: 30
     },
-    sm: {
-      breakpoint: { max: 1024, min: 768 },
+    tablet: {
+      breakpoint: { max: 1024, min: 464 },
       items: 2,
       partialVisibilityGutter: 20
     },
-    xs: {
-      breakpoint: { max: 768, min: 640 },
-      items: 2,
-      partialVisibilityGutter: 15
-    },
-    xxs: {
-      breakpoint: { max: 640, min: 0 },
+    mobile: {
+      breakpoint: { max: 464, min: 0 },
       items: 1,
       partialVisibilityGutter: 10
     }
   };
 
-  // Animation variants
-  const headingVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  };
+  const CustomDot = ({ onClick, active }) => (
+    <button
+      onClick={() => onClick()}
+      className={`mx-1 w-3 h-3 rounded-full transition-all duration-200 ${
+        active ? 'bg-[#FF7426] w-4' : 'bg-gray-300'
+      }`}
+      style={{ margin: '0 3px' }} // Tighter dot spacing
+    />
+  );
 
   return (
-    <div className='bg-white relative' ref={ref}>
-      {/* Background elements */}
-      <div className='hidden lg:block w-[400px] h-[400px] xl:w-[500px] xl:h-[500px] 2xl:w-[600px] 2xl:h-[600px] absolute top-20 left-[-150px] xl:left-[-100px] 2xl:left-[-50px] blur-lg rounded-full bg-[#FF74261A] z-0'></div>
-      <img
-        src="/images/PlanetIconImage.png"
-        alt="Planet Icon"
-        className="hidden sm:block absolute top-4 right-4 h-10 sm:h-12 md:h-14 lg:h-16 xl:h-20 2xl:h-24 z-10"
-      />
+    <div className="relative max-w-7xl mx-auto py-6 px-4">
+      <h2 className="text-2xl md:text-4xl font-bold text-center mb-12 text-gray-800">
+        Explore <span className="text-[#FF7426]">Categories</span>
+      </h2>
 
-      <div className="relative bg-gradient-to-b from-[#f2f0ff] to-white py-12 sm:py-16 lg:py-20 xl:py-24 2xl:py-28 px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 z-20">
-        <div className="container mx-auto max-w-8xl">
-          <motion.h2
-            variants={headingVariants}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            transition={{ duration: 0.5 }}
-            className="text-2xl lg:text-4xl 2xl:text-5xl font-semibold text-center mb-10 sm:mb-12 lg:mb-16 xl:mb-20"
-          >
-            Explore Our World's Best Courses
-          </motion.h2>
-
-          {/* Carousel Implementation */}
+      <Carousel
+          responsive={responsive}
+          infinite={true}
+          autoPlay={true}
+          autoPlaySpeed={3000}
+          keyBoardControl={true}
+          customTransition="transform 500ms ease-in-out"
+          containerClass="carousel-container"
+          itemClass="carousel-item-padding-10-px" // Custom class for tighter padding
+          showDots={true}
+          customDot={<CustomDot />}
+          arrows={false}
+          renderDotsOutside={true}
+          additionalTransfrom={0} // Prevents extra transform
+          ssr={true}
+        >
+        {categories.slice(0, 6).map((category, index) => (
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            onClick={() => handleCategoryClick(category)}
+            key={index}
+            className="h-[300px] mx-2 relative rounded-2xl overflow-hidden shadow-xl cursor-pointer"
+            style={{ 
+              borderBottom: `5px solid ${category.color}`,
+              boxShadow: `0 10px 20px ${category.color}20`
+            }}
+            whileHover={{
+              scale: 1.03,
+              transition: { duration: 0.3 }
+            }}
           >
-            <Carousel
-              responsive={responsive}
-              swipeable={true}
-              draggable={true}
-              showDots={true}
-              infinite={true}
-              autoPlay={true}
-              customDot={<CustomDot />}
-              autoPlaySpeed={3000}
-              keyBoardControl={true}
-              customTransition="transform 500ms ease-in-out"
-              transitionDuration={500}
-              containerClass="carousel-container pb-10"
-              removeArrowOnDeviceType={["xxs", "xs", "sm", "md", "lg", "xl", "xxl"]}
-              dotListClass="custom-dot-list-style mt-6 sm:mt-8 lg:mt-10 absolute bottom-0 left-0 right-0 flex justify-center mt-4"
-              itemClass="px-3 sm:px-4 lg:px-5"
-              sliderClass="gap-x-6 sm:gap-x-8 lg:gap-x-10"
-              centerMode={false}
-              additionalTransfrom={0}
-            >
-              {categories.map((category, index) => (
-                <div key={index} className="h-full">
-                  <CategoryCard
-                    imageSrc={category.imageSrc}
-                    categoryName={category.categoryName}
-                  />
+            {/* Background Image */}
+            <div className="absolute inset-0">
+              <img 
+                src={category.image} 
+                alt={category.title}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.onerror = null; 
+                  e.target.src = '/images/fallback.jpg';
+                }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-black/30" />
+            </div>
+
+            {/* Content */}
+            <div className="relative h-full flex flex-col items-center justify-end pb-8 px-6 text-center">
+              <motion.div 
+                className="mb-6 p-4 rounded-full"
+                style={{ 
+                  backgroundColor: `${category.color}40`,
+                  backdropFilter: 'blur(5px)'
+                }}
+                whileHover={{
+                  rotate: 10,
+                  scale: 1.1,
+                  transition: { duration: 0.3 }
+                }}
+              >
+                <div className="text-white">
+                  {/* {category.icon} */}
+                  <img 
+                src={category.icon} 
+                alt={category.title}
+                className="w-10 h-10 object-cover"
+                onError={(e) => {
+                  e.target.onerror = null; 
+                  e.target.src = '/images/fallback.jpg';
+                }}
+              />
                 </div>
-              ))}
-            </Carousel>
+              </motion.div>
+
+              <h3 
+                className="text-2xl font-bold text-white mb-4"
+                style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}
+              >
+                {category.title}
+              </h3>
+
+              <motion.div 
+                className="w-16 h-1 rounded-full"
+                style={{ backgroundColor: category.color }}
+                whileHover={{
+                  scaleX: 1.5,
+                  transition: { duration: 0.3 }
+                }}
+              />
+            </div>
           </motion.div>
-        </div>
-      </div>
+        ))}
+      </Carousel>
     </div>
   );
 };
 
-export default ScrollableCategories;
+export default CategoryCarousel;

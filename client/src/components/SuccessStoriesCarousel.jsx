@@ -1,65 +1,132 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-
+import { getDataHandler } from '../config/services';
 const SuccessStoriesCarousel = () => {
+  const [successStories, setSuccessStories] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [direction, setDirection] = useState(1);
+  
+    // Auto-rotate stories every 8 seconds
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setDirection(1);
+        setCurrentIndex((prevIndex) => 
+          prevIndex === successStories.length - 1 ? 0 : prevIndex + 1
+        );
+      }, 8000);
+      return () => clearInterval(interval);
+    }, [successStories.length]);
+  
+    const student = successStories[currentIndex];
+
+
+    const handleTransformativeStories = async () => {
+        try {
+          setIsLoading(true);
+          const res = await getDataHandler('successStroy');
+          if (!res || !res.stories) {
+            throw new Error('Invalid API response structure');
+          }
+    
+          const newStory = res.stories.map((item, index) => ({
+            id: index + 1,
+            name: item.name || 'Default Heading',
+            role: item.jobTitle || 'Default Subheading',
+            company: item.companyName || 'Default Company',
+            photo: item.userImageUrl || 'default-image.png',
+            story: item.description || 'Default Story',
+            salaryIncrease: item.salaryIncrease || 'Default description',
+            skills: item.skills || ['Default Skill'],
+            before: item.before || 'Default Before',
+            after: item.after || 'Default After',
+            duration: item.duration || 'Default Subheading'
+          }));
+    
+          setSuccessStories(newStory);
+          setError(null);
+        } catch (err) {
+          console.error("Failed to load banners:", err);
+          setError(err.message);
+          setSuccessStories([]);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+    
+      useEffect(() => {
+        handleTransformativeStories();
+      }, []);
+    
+      if (isLoading) {
+        return (
+          <div className="w-full h-[600px] flex items-center justify-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF7426]"></div>
+          </div>
+        );
+      }
+    
+      if (error) {
+        return (
+          <div className="w-full h-[600px] flex items-center justify-center text-red-500">
+            Error loading These Stories: {error}
+            <button 
+              onClick={handleTransformativeStories}
+              className="ml-4 px-4 py-2 bg-[#FF7426] text-white rounded"
+            >
+              Retry
+            </button>
+          </div>
+        );
+      }
+
+
+
   // Sample student success stories data
-  const successStories = [
-    {
-      id: 1,
-      name: "Rahul Sharma",
-      role: "Senior Software Engineer",
-      company: "Microsoft",
-      photo: "https://randomuser.me/api/portraits/men/32.jpg",
-      story: "After completing the Full Stack Development program, I transitioned from a support role to a ₹22 LPA engineering position at Microsoft within 6 months. The hands-on projects and career coaching were game-changers for me.",
-      salaryIncrease: "300%",
-      duration: "6 months",
-      skills: ["React", "Node.js", "AWS"],
-      before: "IT Support Engineer",
-      after: "Senior Software Engineer"
-    },
-    {
-      id: 2,
-      name: "Priya Patel",
-      role: "Data Scientist",
-      company: "Amazon",
-      photo: "https://randomuser.me/api/portraits/women/44.jpg",
-      story: "The Data Science bootcamp gave me the practical skills I needed. I went from analyst to Data Scientist with a 200% salary hike in just 4 months! The real-world datasets we worked with prepared me perfectly for interviews.",
-      salaryIncrease: "200%",
-      duration: "4 months",
-      skills: ["Python", "Machine Learning", "SQL"],
-      before: "Business Analyst",
-      after: "Data Scientist II"
-    },
-    {
-      id: 3,
-      name: "Arjun Singh",
-      role: "Product Manager",
-      company: "Google",
-      photo: "https://randomuser.me/api/portraits/men/67.jpg",
-      story: "The Product Management certification helped me systemize my approach. I now lead a team of 10 PMs at Google after switching from marketing. The capstone project became a key talking point in my interviews.",
-      salaryIncrease: "180%",
-      duration: "8 months",
-      skills: ["Agile", "UX", "Roadmapping"],
-      before: "Marketing Manager",
-      after: "Product Lead"
-    }
-  ];
+  // const successStories = [
+  //   {
+  //     id: 1,
+  //     name: "Rahul Sharma",
+  //     role: "Senior Software Engineer",
+  //     company: "Microsoft",
+  //     photo: "https://randomuser.me/api/portraits/men/32.jpg",
+  //     story: "After completing the Full Stack Development program, I transitioned from a support role to a ₹22 LPA engineering position at Microsoft within 6 months. The hands-on projects and career coaching were game-changers for me.",
+  //     salaryIncrease: "300%",
+  //     duration: "6 months",
+  //     skills: ["React", "Node.js", "AWS"],
+  //     before: "IT Support Engineer",
+  //     after: "Senior Software Engineer"
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Priya Patel",
+  //     role: "Data Scientist",
+  //     company: "Amazon",
+  //     photo: "https://randomuser.me/api/portraits/women/44.jpg",
+  //     story: "The Data Science bootcamp gave me the practical skills I needed. I went from analyst to Data Scientist with a 200% salary hike in just 4 months! The real-world datasets we worked with prepared me perfectly for interviews.",
+  //     salaryIncrease: "200%",
+  //     duration: "4 months",
+  //     skills: ["Python", "Machine Learning", "SQL"],
+  //     before: "Business Analyst",
+  //     after: "Data Scientist II"
+  //   },
+  //   {
+  //     id: 3,
+  //     name: "Arjun Singh",
+  //     role: "Product Manager",
+  //     company: "Google",
+  //     photo: "https://randomuser.me/api/portraits/men/67.jpg",
+  //     story: "The Product Management certification helped me systemize my approach. I now lead a team of 10 PMs at Google after switching from marketing. The capstone project became a key talking point in my interviews.",
+  //     salaryIncrease: "180%",
+  //     duration: "8 months",
+  //     skills: ["Agile", "UX", "Roadmapping"],
+  //     before: "Marketing Manager",
+  //     after: "Product Lead"
+  //   }
+  // ];
 
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
-
-  // Auto-rotate stories every 8 seconds
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDirection(1);
-      setCurrentIndex((prevIndex) => 
-        prevIndex === successStories.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 8000);
-    return () => clearInterval(interval);
-  }, [successStories.length]);
-
-  const student = successStories[currentIndex];
+ 
 
   return (
     <section className="py-8 sm:py-12 2xl:py-16 px-4 sm:px-6 lg:px-8 bg-[#FFF9F5]">
@@ -102,7 +169,7 @@ const SuccessStoriesCarousel = () => {
               </div>
               <h3 className="text-lg sm:text-xl 2xl:text-2xl font-bold text-[#4d2c5e] text-center">{student.name}</h3>
               <p className="text-[#FF7426] font-medium text-sm sm:text-base 2xl:text-lg">{student.role}</p>
-              <p className="text-gray-600 mb-2 sm:mb-3 2xl:mb-4 text-xs sm:text-sm 2xl:text-base">at {student.company}</p>
+              <p className="text-gray-600 mb-2 sm:mb-3 2xl:mb-4 text-xs sm:text-sm 2xl:text-base"> {student.company}</p>
               
               <div className="mt-3 sm:mt-4 2xl:mt-6 w-full max-w-[200px] 2xl:max-w-[250px]">
                 <div className="flex justify-between text-xs 2xl:text-sm mb-1">
@@ -120,7 +187,7 @@ const SuccessStoriesCarousel = () => {
             <div className="w-full sm:w-3/5 p-4 sm:p-6 2xl:p-8 flex flex-col">
               <div className="mb-3 sm:mb-4 2xl:mb-6">
                 <div className="text-2xl sm:text-3xl md:text-4xl 2xl:text-5xl font-bold text-[#FF7426]">
-                  {student.salaryIncrease}
+                  {student.salaryIncrease}X
                 </div>
                 <p className="text-gray-600 text-xs sm:text-sm 2xl:text-base">Salary increase in {student.duration}</p>
               </div>

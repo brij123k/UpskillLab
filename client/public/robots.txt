@@ -1,0 +1,30 @@
+User-agent: *
+
+# ===== BLOCK PRIVATE/AUTHENTICATED PAGES =====
+Disallow: /Student/
+Disallow: /student/
+Disallow: /Dashboard/
+Disallow: /dashboard/
+Disallow: /dashboard/teacher
+Disallow: /dashboard/teacher/
+Disallow: /dashboard/student
+Disallow: /dashboard/student/
+
+# ===== BLOCK ADMIN AND API =====
+Disallow: /admin/
+Disallow: /private/
+Disallow: /api/
+
+# ===== BLOCK FUNCTIONAL/AUTH PAGES =====
+Disallow: /login
+Disallow: /register
+Disallow: /forgetpassword
+Disallow: /resetpassword
+Disallow: /verifyOTP
+Disallow: /teacherregistration
+
+# ===== BLOCK EXAM PORTAL =====
+Disallow: /PCATExamPortal
+
+# ===== SITEMAP =====
+Sitemap: https://upskillab.com/sitemap.xml

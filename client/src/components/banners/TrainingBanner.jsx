@@ -1,95 +1,234 @@
-import React from "react";
+import React,{useState} from "react";
 import { motion, useAnimation } from 'framer-motion';
-const TrainingBanner = () =>{
-    return (
-        <motion.div 
-  initial={{ opacity: 0 }}
-  animate={{ opacity: 1 }}
-  transition={{ duration: 0.8 }}
-  className="w-full bg-white py-8 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
->
-  {/* Floating orange decorative elements */}
-  <motion.div
-    initial={{ opacity: 0, scale: 0.8 }}
-    animate={{ opacity: 0.08, scale: 1 }}
-    transition={{ duration: 12, repeat: Infinity, repeatType: "reverse" }}
-    className="absolute -right-20 -top-20 w-64 h-64 rounded-full bg-[#FF7426] blur-xl"
-  />
-  <motion.div
-    initial={{ opacity: 0, scale: 0.8 }}
-    animate={{ opacity: 0.05, scale: 1 }}
-    transition={{ duration: 15, repeat: Infinity, repeatType: "reverse", delay: 3 }}
-    className="absolute -left-10 bottom-10 w-48 h-48 rounded-full bg-[#FF9142] blur-xl"
-  />
+import { useInView } from 'react-intersection-observer';
+import { useEffect } from 'react';
+import AdmissionFormModal from "../Modal/BasicEnrollNowModal";
+const TrainingBanner = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const controls = useAnimation();
+  const [ref, inView] = useInView({
+    threshold: 0.1,
+    triggerOnce: false
+  });
 
-  <div className="max-w-7xl mx-auto relative z-10">
-    <div className="block lg:flex flex-col lg:flex-row items-center justify-between gap-8">
-      {/* Text Content */}
-      <div className="lg:w-1/2 space-y-4">
-        <motion.h1
-          initial={{ y: -10 }}
-          animate={{ y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="text-2xl sm:text-3xl lg:text-4xl font-bold leading-tight text-[#4d2c5e]"
-        >
-          Fast Forward your career in Tech Fields with <span className="text-[#FF7426]">UpskillLab's</span>
-        </motion.h1>
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.4 }}
-          className="text-base sm:text-lg text-gray-600"
-        >
-          Best-in-class Training Programs.
-        </motion.p>
+  useEffect(() => {
+    if (inView) {
+      controls.start("visible");
+    } else {
+      controls.start("hidden");
+    }
+  }, [controls, inView]);
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        when: "beforeChildren",
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={containerVariants}
+      className="w-full bg-white py-12 px-4 sm:px-6 lg:px-8 relative overflow-hidden"
+    >
+      {/* Floating background elements */}
+      {[...Array(5)].map((_, i) => (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6 }}
-          className="pt-2"
-        >
-          <p className="text-gray-600 mb-4 text-sm">
-            Here are some steps you can take to accelerate your career in the technology industry
-          </p>
-          <div className="flex flex-wrap gap-3">
-            <button className="px-5 py-2.5 bg-[#FF7426] text-white font-medium rounded-lg hover:bg-[#E65100] transition-all shadow-sm hover:shadow-md text-sm">
-              Explore Program
-            </button>
-            <button className="px-5 py-2.5 border-2 border-[#FF7426] text-[#FF7426] font-medium rounded-lg hover:bg-[#FFF5EF] transition-all text-sm">
-              Enrol Now
-            </button>
-          </div>
-        </motion.div>
-      </div>
+          key={`bg-${i}`}
+          className="absolute rounded-full bg-[#FF7426]/10 z-0"
+          style={{
+            width: Math.random() * 100 + 50,
+            height: Math.random() * 100 + 50,
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+          }}
+          animate={{
+            y: [0, (Math.random() - 0.5) * 50],
+            x: [0, (Math.random() - 0.5) * 50],
+            opacity: [0.05, 0.15, 0.05],
+            rotate: [0, 180, 360]
+          }}
+          transition={{
+            duration: Math.random() * 20 + 15,
+            repeat: Infinity,
+            repeatType: "loop",
+            ease: "linear"
+          }}
+        />
+      ))}
 
-      {/* Image/Illustration */}
-      <motion.div
-        initial={{ x: 30 }}
-        animate={{ x: 0 }}
-        transition={{ delay: 0.3 }}
-        className="lg:w-1/2 mt-6 lg:mt-0"
-      >
-        <div className="relative">
-          <div className="absolute -inset-2 bg-[#FFE0B2]/40 rounded-lg blur-md"></div>
-          <img 
-            src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-            alt="Tech professionals learning" 
-            className="relative rounded-lg w-full h-auto object-cover shadow-xl border-2 border-white max-h-[250px]"
-          />
-          <motion.div
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            transition={{ delay: 0.6, type: "spring" }}
-            className="absolute -bottom-2 -right-2 bg-[#FF7426] text-white px-3 py-1 rounded-md shadow-md font-bold text-xs"
+      <div className="max-w-7xl mx-auto relative z-10">
+        <div className="lg:flex  flex-col lg:flex-row items-center gap-8">
+          {/* Text Content */}
+          <motion.div 
+            className="lg:w-1/2 space-y-4"
+            variants={itemVariants}
           >
-            90% Placement Rate
+            <motion.h2
+              variants={itemVariants}
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#4d2c5e]"
+            >
+              Fast Forward your career in Tech Fields with{" "}
+              <motion.span 
+                className="text-[#FF7426] inline-block"
+                variants={{
+                  hidden: { scale: 0, opacity: 0 },
+                  visible: { 
+                    scale: 1, 
+                    opacity: 1,
+                    transition: {
+                      type: "spring",
+                      stiffness: 300,
+                      delay: 0.4
+                    }
+                  }
+                }}
+              >
+                Upskillab's
+              </motion.span>
+            </motion.h2>
+            
+            <motion.p
+              variants={itemVariants}
+              className="text-lg text-gray-600"
+            >
+              Best-in-class Training Programs.
+            </motion.p>
+            
+            <motion.div
+              variants={itemVariants}
+              className="pt-2"
+            >
+              <motion.p
+                variants={itemVariants}
+                className="text-gray-600 mb-4 text-sm"
+              >
+                Here are some steps you can take to accelerate your career in the technology industry
+              </motion.p>
+              
+              <motion.div
+                variants={itemVariants}
+                className="flex flex-wrap gap-3"
+              >
+                <motion.button
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: "0 10px 25px -5px rgba(255, 116, 38, 0.4)"
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-5 py-2.5 bg-[#FF7426] text-white rounded-lg font-medium relative overflow-hidden"
+                >
+                  <motion.span
+                    className="absolute inset-0 bg-white/20"
+                    initial={{ x: "-100%" }}
+                    animate={{ x: "100%" }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                  />
+                  Explore Program
+                </motion.button>
+                
+                <motion.button
+                onClick={() => setIsModalOpen(true)}
+                  whileHover={{ 
+                    scale: 1.05,
+                    boxShadow: "0 10px 25px -5px rgba(77, 44, 94, 0.4)"
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-5 py-2.5 border-2 border-[#FF7426] text-[#FF7426] rounded-lg font-medium"
+                >
+                  Enroll Now
+                </motion.button>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+
+          {/* Image Section */}
+          <motion.div
+            className="lg:w-1/2 mt-6 lg:mt-0"
+            variants={itemVariants}
+          >
+            <div className="relative">
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.4 }}
+                transition={{ delay: 0.6 }}
+                className="absolute -inset-2 bg-[#FFE0B2]/40 rounded-lg blur-md"
+              />
+              
+              <motion.img 
+                src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                alt="Tech professionals learning" 
+                className="relative rounded-lg w-full h-auto object-cover shadow-xl border-2 border-white max-h-[250px]"
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ 
+                  scale: 1, 
+                  opacity: 1,
+                  y: [0, -10, 0]
+                }}
+                transition={{
+                  y: {
+                    duration: 6,
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    ease: "easeInOut"
+                  }
+                }}
+                whileHover={{ scale: 1.02 }}
+              />
+              
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ 
+                  scale: 1, 
+                  opacity: 1,
+                  y: [0, -5, 0]
+                }}
+                transition={{ 
+                  y: {
+                    duration: 3,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                    ease: "easeInOut"
+                  }
+                }}
+                className="absolute -bottom-2 -right-2 bg-[#FF7426] text-white px-3 py-1 rounded-md shadow-md font-bold text-xs"
+              >
+                90% Placement Rate
+              </motion.div>
+            </div>
           </motion.div>
         </div>
-      </motion.div>
-    </div>
-  </div>
-</motion.div>
+      </div>
+      <AdmissionFormModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+      />
+    </motion.div>
     
-)}
+  );
+};
 
 export default TrainingBanner;

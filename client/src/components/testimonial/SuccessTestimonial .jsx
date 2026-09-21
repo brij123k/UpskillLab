@@ -1,12 +1,14 @@
 import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getDataHandler } from '../../config/services';
 
-const SuccessTestimonial  = () => {
+const SuccessTestimonial = () => {
   const [activeStudent, setActiveStudent] = useState(0);
   const scrollContainerRef = useRef(null);
   const scrollInterval = useRef(null);
   const [testimonials, setTestimonials] = useState([]);
   const [duplicatedTestimonials, setDuplicatedTestimonials] = useState([]);
+  const [direction, setDirection] = useState(1); // 1 for forward, -1 for backward
   const isMobile = typeof window !== 'undefined' ? window.innerWidth < 1024 : false;
 
   const handleTestimonialsData = async () => {
@@ -18,7 +20,7 @@ const SuccessTestimonial  = () => {
           name: testimonial.name,
           email: testimonial.email || 'Not provided',
           role: 'Student',
-          image: `/images/Ellipse ${119 + index * 2}.png`,
+          image: testimonial.testimonialImageUrl ||`/images/default-profile.png`,
           quote: testimonial.description,
           facebook: testimonial.socialMediaLinks?.find(link => link.platform.toLowerCase() === 'facebook')?.url,
           twitter: testimonial.socialMediaLinks?.find(link => link.platform.toLowerCase() === 'twitter')?.url,
@@ -26,7 +28,6 @@ const SuccessTestimonial  = () => {
           linkedin: testimonial.socialMediaLinks?.find(link => link.platform.toLowerCase() === 'linkedin')?.url
         }));
         setTestimonials(newTestimonials);
-        // Create duplicated array for infinite scroll effect
         setDuplicatedTestimonials([...newTestimonials, ...newTestimonials, ...newTestimonials]);
       }
     } catch (error) {
@@ -57,15 +58,14 @@ const SuccessTestimonial  = () => {
         behavior: smooth ? 'smooth' : 'auto'
       });
 
-      // Update active student based on real index
       const realIndex = index % testimonials.length;
       setActiveStudent(realIndex);
+      setDirection(realIndex > activeStudent ? 1 : -1);
     }
   };
 
   useEffect(() => {
     if (duplicatedTestimonials.length > 0) {
-      // Start in the middle section for infinite scroll
       const middleStartIndex = testimonials.length;
       scrollToStudent(middleStartIndex, false);
     }
@@ -95,19 +95,15 @@ const SuccessTestimonial  = () => {
         }
       });
 
-      // Calculate the real index in the original array
       const realIndex = closestIndex % testimonials.length;
       setActiveStudent(realIndex);
 
-      // Auto-scroll to middle section when near edges
       const middleSectionStart = testimonials.length;
       const middleSectionEnd = testimonials.length * 2;
       
       if (closestIndex < testimonials.length / 2) {
-        // Near beginning - scroll to middle section
         scrollToStudent(middleSectionStart + realIndex, false);
       } else if (closestIndex > middleSectionEnd + testimonials.length / 2) {
-        // Near end - scroll to middle section
         scrollToStudent(middleSectionStart + realIndex, false);
       }
     };
@@ -125,120 +121,243 @@ const SuccessTestimonial  = () => {
         const nextIndex = (activeStudent + 1) % testimonials.length;
         const middleSectionStart = testimonials.length;
         scrollToStudent(middleSectionStart + nextIndex);
-      }, 3000);
+      }, 5000);
     };
 
     startAutoScroll();
     return () => clearInterval(scrollInterval.current);
   }, [activeStudent, duplicatedTestimonials.length, testimonials.length]);
 
+  useEffect(() => {
+  if (testimonials.length > 0) {
+    testimonials.forEach(student => {
+      if (student.image) {
+        const img = new Image();
+        img.src = student.image;
+      }
+    });
+  }
+}, [testimonials]);
+
+  // Animation variants
+const testimonialVariants = {
+  enter: (direction) => ({
+    x: direction > 0 ? 50 : -50,
+    opacity: 0,
+    scale: 0.95
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1
+  },
+  exit: (direction) => ({
+    x: direction < 0 ? 50 : -50,
+    opacity: 0,
+    scale: 1.05
+  })
+};
+
   return (
-    <div className="bg-[#f3f4f8] p-6 md:py-10 md:px-30 rounded-xl">
-  <h2 className="text-2xl md:text-3xl font-bold text-center mb-10 text-gray-800">
-    What Our Students Have To Say
-  </h2>
-
-  <div className="flex flex-col lg:flex-row gap-2 lg:gap-8 items-center p-2 bg-white rounded-2xl min-h-[400px] xxl:h-[500px]">
-    {/* Column 1: Active Student's Large Image */}
-    <div className="w-full lg:w-3/7 flex justify-center relative min-h-[200px] md:min-h-[300px]">
-      <div className="absolute w-50 h-50 md:w-70 md:h-70 xxl:w-90 xxl:h-90">
-        <img src="/images/Elips.png" alt="Decorative background" className="w-full h-full object-contain" />
-      </div>
-      <div className="relative w-50 h-50 md:w-70 md:h-70 xxl:w-90 xxl:h-90">
-        <img
-          src={testimonials[activeStudent]?.image}
-          alt={testimonials[activeStudent]?.name}
-          className="w-full h-full"
-        />
-      </div>
-    </div>
-
-    {/* Column 2: Active Student's Testimonial */}
-    <div className="w-full lg:w-3/7 bg-white p-2 lg:p-6 rounded-lg space-y-4 text-center lg:text-left">
-      <h3 className="text-lg md:text-2xl xxl:text-4xl font-semibold text-gray-800">
-        {testimonials[activeStudent]?.name}
-      </h3>
-      <p className="text-gray-800 text-md xxl:text-2xl">
-        {testimonials[activeStudent]?.email}
-      </p>
-      <p className="text-lg text-gray-600 xxl:text-xl">
-        "{testimonials[activeStudent]?.quote}"
-      </p>
-      <div className="flex gap-4 pt-2 justify-center lg:justify-start">
-        <a href={testimonials[activeStudent]?.facebook} target="_blank" rel="noopener noreferrer">
-          <img src="/images/facebook.svg" alt="Facebook" className="w-6 h-6 xl:w-10 xl:h-10 opacity-70 hover:opacity-100 transition-opacity" />
-        </a>
-        <a href={testimonials[activeStudent]?.twitter} target="_blank" rel="noopener noreferrer">
-          <img src="/images/twitter.svg" alt="Twitter" className="w-6 h-6 xl:w-10 xl:h-10 opacity-70 hover:opacity-100 transition-opacity" />
-        </a>
-        <a href={testimonials[activeStudent]?.instagram} target="_blank" rel="noopener noreferrer">
-          <img src="/images/instagram.svg" alt="Instagram" className="w-6 h-6 xl:w-10 xl:h-10 opacity-70 hover:opacity-100 transition-opacity" />
-        </a>
-      </div>
-    </div>
-
-    {/* Column 3: Infinite Circular Thumbnail Carousel */}
-    <div className="w-full lg:w-1/4">
-      <div
-        ref={scrollContainerRef}
-        className="
-          flex lg:flex-col 
-          gap-4 
-          overflow-x-auto lg:overflow-y-auto 
-          scrollbar-hide 
-          h-[120px] lg:h-[400px]
-          px-4 lg:px-0
-          items-center lg:items-start
-          relative
-        "
+    <div className="bg-gradient-to-b from-[#f3f4f8] to-[#e9ecef] p-6 md:py-12 md:px-30 rounded-xl">
+      <motion.h2 
+        className="text-2xl md:text-4xl font-bold text-center mb-10 text-gray-800"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
       >
-        {duplicatedTestimonials?.map((student, index) => {
-          const realIndex = index % testimonials.length;
-          const isActive = activeStudent === realIndex;
-          const distanceFromCenter = Math.abs(
-            (index % testimonials.length) - activeStudent
-          );
-          const scale = 1 - (distanceFromCenter * 0.15);
-          const opacity = 1 - (distanceFromCenter * 0.3);
+        What Our <span className="text-[#FF7426]">Students</span> Say
+      </motion.h2>
 
-          return (
-            <div
-              key={`${student?.id}-${index}`}
-              className={`
-                flex-shrink-0 
-                transition-all duration-300 ease-in-out
-                ${isActive ? 'z-10' : 'z-0'}
-                cursor-pointer
-                mx-auto
-              `}
-              style={{
-                transform: `scale(${scale})`,
-                opacity: opacity
-              }}
-              onClick={() => {
-                const middleSectionStart = testimonials.length;
-                scrollToStudent(middleSectionStart + realIndex);
-              }}
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-center p-6 bg-white rounded-2xl min-h-[400px] xxl:h-[500px] shadow-lg">
+        {/* Column 1: Active Student's Large Image */}
+        <div className="w-full lg:w-2/5 flex justify-center relative min-h-[200px] md:min-h-[300px]">
+  <motion.div 
+    className="absolute w-50 h-50 md:w-70 md:h-70 xxl:w-90 xxl:h-90"
+    animate={{
+      rotate: 360,
+      transition: {
+        duration: 60,
+        repeat: Infinity,
+        ease: "linear"
+      }
+    }}
+  >
+    <img src="/images/Elips.png" alt="Decorative background" className="w-full h-full object-contain" />
+  </motion.div>
+  
+  <AnimatePresence mode="wait" custom={direction}>
+    <motion.div
+      key={activeStudent}
+      className="relative w-50 h-50 md:w-70 md:h-70 xxl:w-90 xxl:h-90"
+      whileHover={{ scale: 1.05 }}
+      custom={direction}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.1 }}
+      transition={{ duration: 0.3 }}
+    >
+      <img
+        src={testimonials[activeStudent]?.image || "/images/default-profile.png"}
+        alt={testimonials[activeStudent]?.name || "Student"}
+        className="w-full h-full object-cover rounded-full border-4 border-[#4D2C5E] shadow-lg"
+        onError={(e) => {
+          e.target.onerror = null; 
+          e.target.src = "/images/default-profile.png";
+        }}
+        // Preload the next image
+        onLoad={() => {
+          const nextIndex = (activeStudent + 1) % testimonials.length;
+          const nextImage = testimonials[nextIndex]?.image;
+          if (nextImage) {
+            const img = new Image();
+            img.src = nextImage;
+          }
+        }}
+      />
+    </motion.div>
+  </AnimatePresence>
+</div>
+
+        {/* Column 2: Active Student's Testimonial */}
+        <div className="w-full lg:w-2/5 bg-white p-4 lg:p-6 rounded-lg space-y-4">
+          <AnimatePresence custom={direction} mode="wait">
+            <motion.div
+              key={activeStudent}
+              custom={direction}
+              variants={testimonialVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
             >
-              <div className="flex flex-col items-center gap-2 p-2">
-                <img
-                  src={student?.image}
-                  alt={student?.name}
-                  className={`
-                    w-16 h-16 lg:w-20 lg:h-20
-                    rounded-full object-cover shadow-lg
-                    ${isActive ? 'ring-4 ring-[#FF7426]' : 'ring-2 ring-gray-200'}
-                  `}
-                />
+              <h3 className="text-xl text-center lg:text-left md:text-2xl xxl:text-3xl font-semibold text-gray-800">
+                {testimonials[activeStudent]?.name}
+              </h3>
+              <p className="text-[#4D2C5E] text-center lg:text-left text-md xxl:text-xl font-medium">
+                {testimonials[activeStudent]?.email}
+              </p>
+              <motion.p 
+                className="text-lg text-gray-600 xxl:text-xl mt-4 text-center lg:text-left"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2 }}
+              >
+                "{testimonials[activeStudent]?.quote}"
+              </motion.p>
+              <div className="flex gap-4 pt-4 justify-center lg:justify-start">
+                {testimonials[activeStudent]?.facebook && (
+                  <motion.a 
+                    href={testimonials[activeStudent]?.facebook} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    whileHover={{ y: -3, scale: 1.1 }}
+                  >
+                    <img src="/images/facebook.svg" alt="Facebook" className="w-6 h-6 xl:w-8 xl:h-8 opacity-70 hover:opacity-100 transition-opacity" />
+                  </motion.a>
+                )}
+                {testimonials[activeStudent]?.twitter && (
+                  <motion.a 
+                    href={testimonials[activeStudent]?.twitter} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    whileHover={{ y: -3, scale: 1.1 }}
+                  >
+                    <img src="/images/twitter.svg" alt="Twitter" className="w-6 h-6 xl:w-8 xl:h-8 opacity-70 hover:opacity-100 transition-opacity" />
+                  </motion.a>
+                )}
+                {testimonials[activeStudent]?.instagram && (
+                  <motion.a 
+                    href={testimonials[activeStudent]?.instagram} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    whileHover={{ y: -3, scale: 1.1 }}
+                  >
+                    <img src="/images/instagram.svg" alt="Instagram" className="w-6 h-6 xl:w-8 xl:h-8 opacity-70 hover:opacity-100 transition-opacity" />
+                  </motion.a>
+                )}
+                {testimonials[activeStudent]?.linkedin && (
+                  <motion.a 
+                    href={testimonials[activeStudent]?.linkedin} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    whileHover={{ y: -3, scale: 1.1 }}
+                  >
+                    <img src="/images/linkedin.svg" alt="LinkedIn" className="w-6 h-6 xl:w-8 xl:h-8 opacity-70 hover:opacity-100 transition-opacity" />
+                  </motion.a>
+                )}
               </div>
-            </div>
-          );
-        })}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Column 3: Infinite Circular Thumbnail Carousel */}
+        <div className="w-full lg:w-1/5">
+          <div
+            ref={scrollContainerRef}
+            className="
+              flex lg:flex-col 
+              gap-4 
+              overflow-x-auto lg:overflow-y-auto 
+              scrollbar-hide 
+              h-[120px] lg:h-[400px]
+              px-4 lg:px-0
+              items-center lg:items-start
+              relative
+            "
+          >
+            {duplicatedTestimonials?.map((student, index) => {
+              const realIndex = index % testimonials.length;
+              const isActive = activeStudent === realIndex;
+              const distanceFromCenter = Math.abs((index % testimonials.length) - activeStudent);
+              const scale = 1 - (distanceFromCenter * 0.15);
+              const opacity = 1 - (distanceFromCenter * 0.3);
+
+              return (
+                <motion.div
+                  key={`${student?.id}-${index}`}
+                  className="flex-shrink-0 cursor-pointer mx-auto"
+                  style={{
+                    transform: `scale(${scale})`,
+                    opacity: opacity
+                  }}
+                  whileHover={{ scale: 1.1 }}
+                  onClick={() => {
+                    const middleSectionStart = testimonials.length;
+                    scrollToStudent(middleSectionStart + realIndex);
+                  }}
+                >
+                  <div className="flex flex-col items-center gap-2 p-2">
+                    <motion.img
+                      src={student?.image || "/images/default-profile.png"}
+                      alt={student?.name || "Student"}
+                      className={`
+                        w-16 h-16 lg:w-20 lg:h-20
+                        rounded-full object-cover shadow-lg
+                        ${isActive ? 'ring-4 ring-[#FF7426]' : 'ring-2 ring-[#4D2C5E]'}
+                      `}
+                      onError={(e) => {
+                        e.target.onerror = null; 
+                        e.target.src = "/images/default-profile.png";
+                      }}
+                      animate={{
+                        y: isActive ? [0, -5, 0] : 0
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        repeatType: "loop"
+                      }}
+                    />
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
   );
 };
 
-export default SuccessTestimonial ;
+export default SuccessTestimonial;

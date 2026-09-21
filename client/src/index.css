@@ -38,14 +38,15 @@
 /* Ensure images have transparent backgrounds */
 .carousel-image {
   background: transparent;
+  
 }
 
 body {
   font-family: "Roboto", sans-serif;
 }
-body #root{
+/* body #root{
   overflow-x: hidden;
-}
+} */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
@@ -53,6 +54,16 @@ body #root{
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+/* Hide scrollbar but keep scroll functionality */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 
 
 .react-multi-carousel-dot--active button {
@@ -72,6 +83,11 @@ body #root{
 .react-multi-carousel-track {
   align-items: center !important;
   padding-bottom: 10px !important;
+}
+input[type="checkbox"]:checked {
+  background-color: #FF7426; /* Your orange color */
+  border-color: #FF7426;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e");
 }
 
 /* a {
@@ -131,4 +147,105 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   } */
+}
+.beautiful-scrollbar {
+  /* For Webkit browsers (Chrome, Safari, Edge) */
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+    border: 2px solid #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+  }
+
+  /* For Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 #f1f1f1;
+
+  /* For Internet Explorer */
+  scrollbar-base-color: #f1f1f1;
+  scrollbar-face-color: #c1c1c1;
+  scrollbar-3dlight-color: #f1f1f1;
+  scrollbar-highlight-color: #f1f1f1;
+  scrollbar-shadow-color: #c1c1c1;
+  scrollbar-darkshadow-color: #f1f1f1;
+  scrollbar-track-color: #f1f1f1;
+  scrollbar-arrow-color: #c1c1c1;
+}
+
+/* Dark theme variation */
+.beautiful-scrollbar-dark {
+  /* For Webkit browsers (Chrome, Safari, Edge) */
+  &::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #2d3748;
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #4a5568;
+    border-radius: 10px;
+    border: 2px solid #2d3748;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #718096;
+  }
+
+  /* For Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #4a5568 #2d3748;
+}
+
+.ql-editor {
+  min-height: 300px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.ql-container {
+  font-family: inherit;
+}
+
+.ql-toolbar {
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
+}
+
+.ql-container {
+  border-bottom-left-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+}
+
+
+/* Add these styles to your global CSS */
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.fixed.bottom-6.right-6 {
+  animation: slideInUp 0.3s ease-out forwards;
 }
