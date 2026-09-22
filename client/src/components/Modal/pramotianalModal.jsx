@@ -341,7 +341,7 @@ const PramotianalModal = ({
                         transition={{ duration: 0.4, delay: 0.2 }}
                         className="text-xl sm:text-2xl font-bold text-gray-900 mb-1.5 leading-tight"
                       >
-                        Secure Your Spot
+                        Understand the generation. Change the conversation.
                       </motion.h2>
                       <motion.p
                         initial={{ opacity: 0, y: 8 }}
