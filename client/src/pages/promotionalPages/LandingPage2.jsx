@@ -110,7 +110,7 @@ const LandingPage = () => {
     <div className="absolute -top-20 -right-20 sm:-top-40 sm:-right-40 w-[250px] h-[250px] sm:w-[500px] sm:h-[500px] rounded-full bg-gradient-to-br from-[#4D2C5E]/8 to-transparent blur-3xl" />
     <div className="absolute -bottom-20 -left-20 sm:-bottom-40 sm:-left-40 w-[220px] h-[220px] sm:w-[450px] sm:h-[450px] rounded-full bg-gradient-to-tr from-[#FF7426]/8 to-transparent blur-3xl" />
 
-    {/* Fine grid pattern - smaller grid on mobile */}
+    {/* Fine grid pattern */}
     <div
       className="absolute inset-0 opacity-[0.025]"
       style={{
@@ -127,7 +127,7 @@ const LandingPage = () => {
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-10 lg:gap-16 items-center">
       {/* LEFT — Content */}
       <motion.div
-        className="lg:col-span-7 text-center lg:text-left order-2 lg:order-1 px-1 sm:px-0"
+        className="lg:col-span-7 text-center lg:text-left px-1 sm:px-0"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -228,9 +228,9 @@ const LandingPage = () => {
         </motion.div>
       </motion.div>
 
-      {/* RIGHT — Visual Card */}
+      {/* RIGHT — Fixed Ratio Image Card */}
       <motion.div
-        className="lg:col-span-5 order-1 lg:order-2 flex justify-center lg:justify-end px-2 sm:px-4 lg:px-0"
+        className="lg:col-span-5 lg:flex justify-center hidden lg:justify-end px-2 sm:px-4 lg:px-0"
         initial={{ opacity: 0, x: 40 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.9, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
@@ -239,70 +239,29 @@ const LandingPage = () => {
           {/* Decorative glow */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#4D2C5E]/20 to-[#FF7426]/20 rounded-2xl sm:rounded-3xl blur-xl sm:blur-2xl scale-95" />
 
-          {/* Main card */}
-          <div className="relative bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-xl sm:shadow-2xl p-4 sm:p-6 lg:p-8 overflow-hidden">
-            {/* Card header */}
-            <div className="flex items-center justify-between mb-4 sm:mb-6">
-              <div className="flex items-center gap-2">
-                <div className="w-7 h-7 sm:w-8 sm:h-8 lg:w-9 lg:h-9 rounded-lg sm:rounded-xl bg-gradient-to-br from-[#4D2C5E] to-[#6B3FA0] flex items-center justify-center">
-                  <FaGraduationCap className="text-white text-[10px] sm:text-xs lg:text-sm" />
-                </div>
-                <div>
-                  <p className="text-[8px] sm:text-[9px] lg:text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
-                    Bootcamp
-                  </p>
-                  <p className="text-[10px] sm:text-[11px] lg:text-xs font-bold text-gray-900">Live Program</p>
-                </div>
-              </div>
-              <span className="inline-flex items-center gap-1 sm:gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-emerald-50 border border-emerald-100">
-                <span className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-[8px] sm:text-[9px] lg:text-[10px] font-semibold text-emerald-700">OPEN</span>
-              </span>
-            </div>
+          {/* Image Card — Fixed 4:5 ratio */}
+          <div className="relative bg-white rounded-2xl sm:rounded-3xl border border-gray-100 shadow-xl sm:shadow-2xl overflow-hidden">
+            {/* Fixed aspect ratio container */}
+            <div className="relative w-full aspect-[4/5]">
+              <img
+                src="/images/rasmi.png"
+                alt="Bootcamp"
+                className="absolute inset-0 w-full h-full object-cover object-center"
+              />
 
-            {/* Highlights */}
-            <div className="space-y-2 sm:space-y-3 lg:space-y-3.5">
-              {heroSection?.tags?.slice(0, 4).map((tag, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.4, delay: 0.5 + i * 0.08 }}
-                  className="flex items-center gap-2 sm:gap-3 p-2 sm:p-2.5 lg:p-3 rounded-lg sm:rounded-xl bg-gray-50/80 border border-gray-100 hover:bg-white hover:border-[#4D2C5E]/20 transition-all duration-200"
-                >
-                  <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 rounded-md sm:rounded-lg bg-[#4D2C5E]/10 flex items-center justify-center flex-shrink-0">
-                    <span className="text-[#4D2C5E] text-[8px] sm:text-[9px] lg:text-[10px] font-bold">✓</span>
-                  </div>
-                  <span className="text-[10px] sm:text-xs lg:text-sm font-medium text-gray-700 truncate">
-                    {tag}
+              {/* Optional subtle gradient overlay for depth */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+
+              {/* Optional floating badge (top-left) */}
+              <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
+                <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-white/95 backdrop-blur-sm shadow-sm">
+                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                  <span className="text-[9px] sm:text-[10px] font-semibold text-gray-800 uppercase tracking-wider">
+                    Live
                   </span>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Card footer */}
-            <div className="mt-4 sm:mt-5 lg:mt-6 pt-3 sm:pt-4 lg:pt-5 border-t border-gray-100 flex items-center justify-between">
-              <div>
-                <p className="text-[8px] sm:text-[9px] lg:text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
-                  Duration
-                </p>
-                <p className="text-[10px] sm:text-xs lg:text-sm font-bold text-gray-900">Limited Seats</p>
+                </span>
               </div>
-              {/* <div className="flex -space-x-1.5 sm:-space-x-2">
-                {[1, 2, 3, 4].map((i) => (
-                  <div
-                    key={i}
-                    className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 rounded-full border-2 border-white bg-gradient-to-br from-[#4D2C5E] to-[#6B3FA0]"
-                  />
-                ))}
-                <div className="w-5 h-5 sm:w-6 sm:h-6 lg:w-7 lg:h-7 rounded-full border-2 border-white bg-gray-100 flex items-center justify-center">
-                  <span className="text-[7px] sm:text-[8px] lg:text-[9px] font-bold text-gray-600">+</span>
-                </div>
-              </div> */}
             </div>
-
-            {/* Subtle accent */}
-            <div className="absolute -bottom-6 -right-6 sm:-bottom-8 sm:-right-8 w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-gradient-to-br from-[#FF7426]/10 to-transparent rounded-full blur-xl sm:blur-2xl" />
           </div>
         </div>
       </motion.div>
@@ -325,7 +284,7 @@ const LandingPage = () => {
       viewport={{ once: true, margin: '-100px' }}
     >
       {/* Section Header */}
-      <div className="text-center mb-14 sm:mb-16">
+      <div className="text-center mb-10 sm:mb-12 lg:mb-16">
         <motion.span
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -341,21 +300,21 @@ const LandingPage = () => {
         <div className="w-16 h-1 bg-gradient-to-r from-[#4D2C5E] to-[#FF7426] rounded-full mx-auto" />
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+      <div className="grid lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-10 items-start">
         {/* LEFT — Problem Points */}
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="relative bg-gray-50/70 rounded-3xl p-6 sm:p-8 border border-gray-100"
+          className="relative bg-gray-50/70 rounded-3xl p-5 sm:p-6 lg:p-8 border border-gray-100"
         >
           {/* Label */}
-          <div className="flex items-center gap-2.5 mb-6 pb-5 border-b border-gray-200/70">
-            <div className="w-8 h-8 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center">
+          <div className="flex items-center gap-2.5 mb-5 sm:mb-6 pb-4 sm:pb-5 border-b border-gray-200/70">
+            <div className="w-8 h-8 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center flex-shrink-0">
               <span className="text-red-500 text-xs font-bold">!</span>
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
                 The Challenge
               </p>
@@ -364,20 +323,20 @@ const LandingPage = () => {
           </div>
 
           {/* Problem List */}
-          <div className="space-y-3">
+          <div className="space-y-2.5 sm:space-y-3">
             {eligibility?.que?.map((problem, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, x: -15 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.08 }}
+                transition={{ duration: 0.4, delay: index * 0.06 }}
                 viewport={{ once: true }}
-                className="group flex items-start gap-3.5 p-4 rounded-xl bg-white border border-gray-100 hover:border-red-200/70 hover:shadow-sm transition-all duration-300"
+                className="group flex items-start gap-3 p-3.5 sm:p-4 rounded-xl bg-white border border-gray-100 hover:border-red-200/70 hover:shadow-sm transition-all duration-300"
               >
                 <div className="flex-shrink-0 w-5 h-5 rounded-full bg-red-50 border border-red-100 flex items-center justify-center mt-0.5 group-hover:bg-red-100 transition-colors duration-300">
                   <span className="text-red-500 text-[10px] font-bold">!</span>
                 </div>
-                <p className="text-sm sm:text-base text-gray-700 leading-relaxed">
+                <p className="text-sm sm:text-[15px] text-gray-700 leading-relaxed min-w-0">
                   {problem}
                 </p>
               </motion.div>
@@ -391,7 +350,7 @@ const LandingPage = () => {
           whileInView={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6, delay: 0.15 }}
           viewport={{ once: true }}
-          className="relative h-fit sm:h-full rounded-3xl overflow-hidden"
+          className="relative rounded-3xl overflow-hidden lg:sticky lg:top-8"
         >
           {/* Gradient background */}
           <div className="absolute inset-0 bg-gradient-to-br from-[#4D2C5E] via-[#5A3670] to-[#6B3FA0]" />
@@ -408,13 +367,13 @@ const LandingPage = () => {
           />
 
           {/* Content */}
-          <div className="relative z-10 p-6 sm:p-8 lg:p-10 h-fit sm:h-full flex flex-col">
+          <div className="relative z-10 p-5 sm:p-6 lg:p-8 flex flex-col">
             {/* Label */}
-            <div className="flex items-center gap-2.5 mb-6 pb-5 border-b border-white/15">
-              <div className="w-8 h-8 rounded-lg bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+            <div className="flex items-center gap-2.5 mb-5 sm:mb-6 pb-4 sm:pb-5 border-b border-white/15">
+              <div className="w-8 h-8 rounded-lg bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center flex-shrink-0">
                 <span className="text-white text-xs font-bold">✓</span>
               </div>
-              <div>
+              <div className="min-w-0">
                 <p className="text-[10px] font-semibold text-white/50 uppercase tracking-wider">
                   The Solution
                 </p>
@@ -423,23 +382,23 @@ const LandingPage = () => {
             </div>
 
             {/* Title & Description */}
-            <div className="flex-1">
-              <h3 className="text-xl sm:text-2xl font-bold mb-4 text-white leading-tight">
+            <div className="mb-5 sm:mb-6">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white leading-snug">
                 <HighlightedText text={eligibility?.title} />
               </h3>
-              <p className="text-sm sm:text-base mb-6 text-white/75 leading-relaxed">
+              <p className="text-sm sm:text-[15px] text-white/75 leading-relaxed">
                 <HighlightedText text={eligibility?.description} />
               </p>
             </div>
 
             {/* Thought Callout */}
-            <div className="relative bg-white/10 backdrop-blur-sm rounded-2xl p-5 border border-white/15 overflow-hidden">
+            <div className="relative bg-white/10 backdrop-blur-sm rounded-2xl p-4 sm:p-5 border border-white/15 overflow-hidden">
               <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-[#FF7426] to-[#FF8C42]" />
               <div className="pl-3">
                 <p className="text-[10px] font-semibold text-[#FF8C42] uppercase tracking-wider mb-1.5">
                   Key Insight
                 </p>
-                <p className="text-sm sm:text-base font-medium text-white/95 leading-relaxed">
+                <p className="text-sm sm:text-[15px] font-medium text-white/95 leading-relaxed">
                   {eligibility?.thought}
                 </p>
               </div>
