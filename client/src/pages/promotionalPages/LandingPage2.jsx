@@ -309,18 +309,6 @@ const LandingPage = () => {
           viewport={{ once: true }}
           className="relative bg-gray-50/70 rounded-3xl p-5 sm:p-6 lg:p-8 border border-gray-100"
         >
-          {/* Label */}
-          <div className="flex items-center gap-2.5 mb-5 sm:mb-6 pb-4 sm:pb-5 border-b border-gray-200/70">
-            <div className="w-8 h-8 rounded-lg bg-red-50 border border-red-100 flex items-center justify-center flex-shrink-0">
-              <span className="text-red-500 text-xs font-bold">!</span>
-            </div>
-            <div className="min-w-0">
-              <p className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">
-                The Challenge
-              </p>
-              <p className="text-sm font-bold text-gray-900">Common Struggles</p>
-            </div>
-          </div>
 
           {/* Problem List */}
           <div className="space-y-2.5 sm:space-y-3">
@@ -368,19 +356,6 @@ const LandingPage = () => {
 
           {/* Content */}
           <div className="relative z-10 p-5 sm:p-6 lg:p-8 flex flex-col">
-            {/* Label */}
-            <div className="flex items-center gap-2.5 mb-5 sm:mb-6 pb-4 sm:pb-5 border-b border-white/15">
-              <div className="w-8 h-8 rounded-lg bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center flex-shrink-0">
-                <span className="text-white text-xs font-bold">✓</span>
-              </div>
-              <div className="min-w-0">
-                <p className="text-[10px] font-semibold text-white/50 uppercase tracking-wider">
-                  The Solution
-                </p>
-                <p className="text-sm font-bold text-white">What You'll Gain</p>
-              </div>
-            </div>
-
             {/* Title & Description */}
             <div className="mb-5 sm:mb-6">
               <h3 className="text-lg sm:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 text-white leading-snug">
@@ -800,7 +775,7 @@ const LandingPage = () => {
       <PramotianalModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        subjectName="Habits & Nutrition Psychology Bootcamp"
+        subjectName={heroSection.title}
         where="postpramotionBootcamp"
       />
     </div>

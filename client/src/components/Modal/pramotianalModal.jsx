@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 const PramotianalModal = ({
   isOpen,
   onClose,
-  subjectName = "Habits & Nutrition Psychology Bootcamp",
+  subjectName = "",
   where = "postPramotional"
 }) => {
   const [formData, setFormData] = useState({
@@ -349,7 +349,7 @@ const PramotianalModal = ({
                         transition={{ duration: 0.4, delay: 0.25 }}
                         className="text-gray-500 text-xs sm:text-sm leading-relaxed"
                       >
-                        Join the {subjectName}
+                      {subjectName}
                       </motion.p>
                     </div>
 
