@@ -244,7 +244,7 @@ const LandingPage = () => {
             {/* Fixed aspect ratio container */}
             <div className="relative w-full aspect-[4/5]">
               <img
-                src="/images/rasmi.png"
+                src="/images/genZjpeg.jpeg"
                 alt="Bootcamp"
                 className="absolute inset-0 w-full h-full object-cover object-center"
               />
