@@ -167,7 +167,7 @@ const StudentOnboarding = () => {
                     <div className="mx-auto w-40 h-40 bg-gradient-to-r from-[#4D2C5E] to-[#7B4D8D] rounded-full flex items-center justify-center mb-6 shadow-lg">
                         <FiUser className="text-5xl text-white" />
                     </div>
-                    <h2 className="text-3xl font-bold text-[#4D2C5E] mb-4">Welcome TO Upskillab</h2>
+                    <h2 className="text-3xl font-bold text-[#4D2C5E] mb-4">Welcome to Upskillab</h2>
                     <p className="text-gray-600 mb-8 text-lg">
                         Let's personalize your learning experience. We'll help you set up your profile in just a few steps.
                     </p>
