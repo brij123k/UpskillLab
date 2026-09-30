@@ -13,12 +13,13 @@ import {
 import { postDataHandler, getDataHandler } from '../../config/services';
 import { toast } from "react-toastify";
 import AdmissionFormModal from '../Modal/BasicEnrollNowModal';
-
+import {useNavigate } from "react-router-dom";
 const ExitIntentModalData = ({ onClose }) => {
   const [loader, setLoader] = useState(false);
   const [courses, setCourses] = useState([]);
   const [imageData, setImageData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
   const handelCourses = async () => {
     const res = await getDataHandler('courseDisplay');
     if (res && res.data) {
@@ -168,8 +169,12 @@ const ExitIntentModalData = ({ onClose }) => {
               </div>
               <div className="block mt-4 text-center">
                 <button
-                  onClick={() => {
-                    setIsModalOpen(true)
+                  // onClick={() => {
+                  //   setIsModalOpen(true)
+                  // }}
+                   onClick={() => {
+                    onClose(); // Close the modal
+                    navigate(`/landing-bootcamp`);
                   }}
                   className="inline-block bg-[#4D2C5E] hover:bg-[#3a2148] text-white font-medium py-2 px-6 rounded-lg transition-all duration-300"
                 >
