@@ -532,7 +532,11 @@ if (attendanceRes?.classes?.length > 0) {
             
             {studyMaterials.length > 3 && (
               <div className="mt-4 text-center">
-                <button className="text-[#4D2C5E] hover:text-[#FF7426] font-medium transition-colors">
+                <button
+                onClick={() => {
+                    navigate(`/student/studyMaterials`);
+                  }}
+                className="text-[#4D2C5E] hover:text-[#FF7426] font-medium transition-colors">
                   View All <FiChevronRight className="inline ml-1" />
                 </button>
               </div>
