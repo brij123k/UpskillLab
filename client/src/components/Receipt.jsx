@@ -1,214 +1,554 @@
 import { Page, Document, StyleSheet, View, Text, pdf, Image } from '@react-pdf/renderer';
 import { saveAs } from 'file-saver';
 
-// Create styles
+// Professional color palette (purple primary + orange accent)
+const colors = {
+  primary: '#4D2C5E',
+  primaryLight: '#F4F0F7',
+  primaryDark: '#3A1F49',
+  accent: '#F58220',       // orange accent
+  accentLight: '#FFF4E8',
+  border: '#D9D2E0',
+  text: '#2A2A2A',
+  textMuted: '#6B6B6B',
+  white: '#FFFFFF',
+  success: '#2E7D5B',
+  rowAlt: '#FAFAFB',
+};
+
 const styles = StyleSheet.create({
   page: {
-    padding: 30,
+    padding: 28,
     fontFamily: 'Helvetica',
-    fontSize: 12,
+    fontSize: 10,
+    color: colors.text,
+    backgroundColor: colors.white,
   },
+
   mainContainer: {
     borderWidth: 1,
     borderStyle: 'solid',
-    borderColor: 'black',
+    borderColor: colors.border,
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+
+  // Orange accent strip at the very top
+  topAccent: {
+    height: 4,
+    backgroundColor: colors.accent,
+  },
+
+  // ===== HEADER (logo left, title right) =====
+  header: {
+    flexDirection: 'row',
+    backgroundColor: colors.primary,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+  },
+  logoBox: {
+    width: 120,
+    height: 52,
+    backgroundColor: colors.white,
+    borderRadius: 4,
+    padding: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 16,
+  },
+  logoImage: {
+    width: 100,
+    height: 40,
+    objectFit: 'contain',
+  },
+  headerRight: {
+    flex: 1,
+  },
+  headerTitle: {
+    color: colors.white,
+    fontSize: 16,
+    fontFamily: 'Helvetica-Bold',
+    letterSpacing: 2,
+    marginBottom: 4,
+  },
+  headerSubtitle: {
+    color: colors.white,
+    fontSize: 8.5,
+    opacity: 0.85,
+    marginBottom: 6,
+  },
+  headerContactRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  headerContact: {
+    color: colors.white,
+    fontSize: 8,
+    opacity: 0.9,
+    marginRight: 10,
+  },
+  // Small orange badge in header
+  headerBadge: {
+    backgroundColor: colors.accent,
+    paddingVertical: 3,
+    paddingHorizontal: 8,
+    borderRadius: 2,
+    alignSelf: 'flex-start',
+    marginBottom: 6,
+  },
+  headerBadgeText: {
+    color: colors.white,
+    fontSize: 7.5,
+    fontFamily: 'Helvetica-Bold',
+    letterSpacing: 1.2,
+    textTransform: 'uppercase',
+  },
+
+  // ===== META BAR =====
+  metaBar: {
+    flexDirection: 'row',
+    backgroundColor: colors.primaryLight,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  metaItem: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  metaLabel: {
+    fontSize: 7.5,
+    color: colors.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 3,
+    fontFamily: 'Helvetica-Bold',
+  },
+  metaValue: {
+    fontSize: 10.5,
+    color: colors.primary,
+    fontFamily: 'Helvetica-Bold',
+  },
+  metaDivider: {
+    width: 1,
+    backgroundColor: colors.border,
+    marginHorizontal: 8,
+  },
+  // Orange highlighted meta item
+  metaItemHighlight: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: colors.accentLight,
+    paddingVertical: 4,
+    borderRadius: 3,
+    marginHorizontal: 4,
+  },
+  metaValueAccent: {
+    fontSize: 10.5,
+    color: colors.accent,
+    fontFamily: 'Helvetica-Bold',
+  },
+
+  // ===== SECTION =====
+  section: {
+    paddingHorizontal: 20,
+    paddingTop: 14,
+  },
+  sectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    paddingBottom: 6,
+    borderBottomWidth: 1.5,
+    borderBottomColor: colors.border,
+  },
+  // Orange marker before section title
+  sectionMarker: {
+    width: 4,
+    height: 14,
+    backgroundColor: colors.accent,
+    marginRight: 8,
+    borderRadius: 1,
+  },
+  sectionTitle: {
+    fontSize: 10.5,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.primary,
+    textTransform: 'uppercase',
+    letterSpacing: 1.4,
+  },
+
+  // ===== TWO COLUMN DETAILS =====
+  detailsRow: {
+    flexDirection: 'row',
+    marginBottom: 8,
+  },
+  detailsLeft: {
+    flex: 1.2,
+    paddingRight: 18,
+  },
+  detailsRight: {
+    flex: 1,
+    paddingLeft: 18,
+    borderLeftWidth: 1,
+    borderLeftColor: colors.border,
+  },
+  detailItem: {
+    flexDirection: 'row',
+    marginBottom: 7,
+  },
+  detailLabel: {
+    width: 82,
+    fontSize: 9,
+    color: colors.textMuted,
+    fontFamily: 'Helvetica-Bold',
+  },
+  detailValue: {
+    flex: 1,
+    fontSize: 9.5,
+    color: colors.text,
+  },
+  detailValueAccent: {
+    flex: 1,
+    fontSize: 9.5,
+    color: colors.accent,
+    fontFamily: 'Helvetica-Bold',
+  },
+
+  // ===== SUMMARY CARDS =====
+  summaryRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 12,
+  },
+  summaryCard: {
+    flex: 1,
+    backgroundColor: colors.rowAlt,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+  },
+  // Orange border on discount card
+  summaryCardAccent: {
+    backgroundColor: colors.accentLight,
+    borderColor: colors.accent,
+  },
+  summaryCardHighlight: {
+    backgroundColor: colors.primaryLight,
+    borderColor: colors.primary,
+  },
+  summaryLabel: {
+    fontSize: 7.5,
+    color: colors.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 4,
+    fontFamily: 'Helvetica-Bold',
+  },
+  summaryValue: {
+    fontSize: 12.5,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.text,
+  },
+  summaryValueAccent: {
+    fontSize: 12.5,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.accent,
+  },
+  summaryValuePrimary: {
+    fontSize: 12.5,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.primary,
+  },
+
+  // ===== PAYMENT TABLE =====
+  table: {
+    marginTop: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 4,
+    overflow: 'hidden',
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: colors.primary,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+  },
+  tableHeaderCell: {
+    fontSize: 8.5,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.white,
+    textTransform: 'uppercase',
+    letterSpacing: 0.8,
   },
   tableRow: {
     flexDirection: 'row',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
     borderBottomWidth: 1,
-    borderBottomStyle: 'solid',
-    borderBottomColor: 'black',
+    borderBottomColor: colors.border,
   },
-  lastTableRow: {
+  tableRowAlt: {
+    backgroundColor: colors.rowAlt,
+  },
+  tableCell: {
+    fontSize: 9.5,
+    color: colors.text,
+  },
+  tableCellAccent: {
+    fontSize: 9.5,
+    color: colors.accent,
+    fontFamily: 'Helvetica-Bold',
+  },
+
+  colDate: { width: '22%' },
+  colTxn: { width: '33%' },
+  colMode: { width: '22%' },
+  colAmount: { width: '23%', textAlign: 'right' },
+
+  // ===== TOTAL ROW =====
+  totalRow: {
     flexDirection: 'row',
+    backgroundColor: colors.primaryLight,
+    paddingVertical: 11,
+    paddingHorizontal: 12,
+    borderTopWidth: 1.5,
+    borderTopColor: colors.accent,
   },
-  tableCol: {
-    padding: 5,
+  totalLabel: {
+    flex: 1,
+    fontSize: 10.5,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.primary,
+    textAlign: 'right',
+    paddingRight: 20,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
-  col100: { width: '100%' },
-  col25: { width: '25%' },
-  col15: { width: '15%' },
-  col20: { width: '20%' },
-  col30: { width: '30%' },
-  col35: { width: '35%' },
-  col40: { width: '40%' },
-  col45: { width: '45%' },
-  textRight: { textAlign: 'right' },
-  textCenter: { textAlign: 'center' },
-  bold: { fontWeight: 'bold' },
-  sectionTitle: {
-    marginVertical: 5,
-    fontWeight: 'bold',
-    textDecoration: 'underline',
+  totalValue: {
+    width: '23%',
+    fontSize: 13,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.primary,
+    textAlign: 'right',
   },
-  logoContainer: {
-    alignItems: 'center',
-    marginBottom: 10,
+
+  // ===== AMOUNT IN WORDS =====
+  wordsBox: {
+    marginTop: 12,
     padding: 10,
+    backgroundColor: colors.accentLight,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.accent,
+    borderRadius: 2,
   },
-  logoText: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 8,
+  wordsLabel: {
+    fontSize: 7.5,
+    color: colors.textMuted,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+    marginBottom: 3,
+    fontFamily: 'Helvetica-Bold',
   },
-  contactInfo: {
-    fontSize: 10,
-    marginBottom: 5,
+  wordsValue: {
+    fontSize: 9.5,
+    color: colors.text,
+    fontStyle: 'italic',
   },
+
+  // ===== FOOTER =====
   footer: {
-    marginTop: 5,
+    marginTop: 18,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    backgroundColor: colors.primaryLight,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    alignItems: 'center',
+  },
+  footerText: {
+    fontSize: 8,
+    color: colors.textMuted,
     textAlign: 'center',
-    fontSize: 10,
-    padding: 10,
+    marginBottom: 3,
   },
-  verticalLine: {
-    borderRightWidth: 0.5,
-    borderRightStyle: 'solid',
-    borderRightColor: 'black',
-    height: '100%',
+  footerBrand: {
+    fontSize: 9,
+    fontFamily: 'Helvetica-Bold',
+    color: colors.primary,
+    letterSpacing: 1.5,
+    marginTop: 6,
   },
-
-
- 
-  logoImage: {
-  width: '40%',
-  objectFit: 'contain',
-  marginBottom: -4,
-   alignSelf: 'center', // Center the image
-},
-
+  // Small orange rule above the brand
+  footerRule: {
+    width: 30,
+    height: 2,
+    backgroundColor: colors.accent,
+    marginTop: 6,
+    marginBottom: 4,
+    borderRadius: 1,
+  },
 });
 
 // Receipt Component
 const PDFReceipt = ({ order }) => (
   <Document>
     <Page size="A4" style={styles.page}>
-      {/* Main Container with border that contains the entire receipt */}
       <View style={styles.mainContainer}>
-        {/* Header with Logo and Contact Info */}
-        
-        <View style={[styles.tableRow, { padding: 10 }]}>
-           
-          <View style={[styles.tableCol, styles.col100]}>
-             <Image
-                src="/images/Logo.png"
-                style={styles.logoImage}
-              />
-            <View style={styles.logoContainer}>
-            
-              <Text style={[styles.contactInfo, { textAlign: 'center' }]}>
-                Address: H-187, Lohia Rd, H Block, Sector 63, Noida, Uttar Pradesh 201301
+
+        {/* ===== TOP ORANGE ACCENT STRIP ===== */}
+        <View style={styles.topAccent} />
+
+        {/* ===== HEADER (Logo left, title right) ===== */}
+        <View style={styles.header}>
+          {/* Logo box on the left */}
+          <View style={styles.logoBox}>
+            <Image src="/images/Logo.png" style={styles.logoImage} />
+          </View>
+
+          {/* Title + contact on the right */}
+          <View style={styles.headerRight}>
+            <View style={styles.headerBadge}>
+              <Text style={styles.headerBadgeText}>Payment Receipt</Text>
+            </View>
+            <Text style={styles.headerTitle}>UPSKILLAB</Text>
+            <Text style={styles.headerSubtitle}>
+              Empowering Skills, Enabling Careers
+            </Text>
+            <View style={styles.headerContactRow}>
+              <Text style={styles.headerContact}>
+                H-187, Lohia Rd, Sector 63, Noida, UP 201301
               </Text>
-              <Text style={[styles.contactInfo, { textAlign: 'center' }]}>
-                Contact No. - 9319427070 Email: info@upskillab.com
-              </Text>
-              <Text style={[styles.contactInfo, { textAlign: 'center' }]}>
-                Website: upskillab.com
-              </Text>
+            </View>
+            <View style={styles.headerContactRow}>
+              <Text style={styles.headerContact}>+91 9319427070</Text>
+              <Text style={styles.headerContact}>info@upskillab.com</Text>
+              <Text style={styles.headerContact}>upskillab.com</Text>
             </View>
           </View>
         </View>
 
-        {/* Receipt Info Section */}
-        <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col20]}><Text>Receipt</Text></View>
-          <View style={[styles.tableCol, styles.col15]}><Text>{order.receiptNumber || '712'}</Text></View>
-          <View style={[styles.tableCol, styles.col15]}><Text>Batch: {order.batchNumber || '2'}</Text></View>
-          <View style={[styles.tableCol, styles.col15]}><Text></Text></View>
-          <View style={[styles.tableCol, styles.col15]}><Text>Date {order.date || '25 Apr 2025'}</Text></View>
+        {/* ===== META BAR ===== */}
+        <View style={styles.metaBar}>
+          <View style={styles.metaItem}>
+            <Text style={styles.metaLabel}>Receipt No.</Text>
+            <Text style={styles.metaValue}>{order.receiptNumber}</Text>
+          </View>
+          <View style={styles.metaDivider} />
+          <View style={styles.metaItem}>
+            <Text style={styles.metaLabel}>Date</Text>
+            <Text style={styles.metaValue}>{order.date}</Text>
+          </View>
+          <View style={styles.metaDivider} />
+          <View style={styles.metaItemHighlight}>
+            <Text style={styles.metaLabel}>Batch</Text>
+            <Text style={styles.metaValueAccent}>{order.batchNumber}</Text>
+          </View>
         </View>
 
-        {/* Student Name Row */}
-        <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col20]}><Text>Student Name:</Text></View>
-          <View style={[styles.tableCol, styles.col30]}><Text>{order.studentName || 'Harshit Sinha'}</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
-          <View style={[styles.tableCol, styles.col15]}><Text>Course Fee</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.textRight]}><Text>{order.courseFee || '74,999'}</Text></View>
+        {/* ===== STUDENT & COURSE DETAILS ===== */}
+        <View style={styles.section}>
+          <View style={styles.sectionTitleRow}>
+            <View style={styles.sectionMarker} />
+            <Text style={styles.sectionTitle}>Student Details</Text>
+          </View>
+
+          <View style={styles.detailsRow}>
+            <View style={styles.detailsLeft}>
+              <View style={styles.detailItem}>
+                <Text style={styles.detailLabel}>Name</Text>
+                <Text style={styles.detailValue}>{order.studentName}</Text>
+              </View>
+              <View style={styles.detailItem}>
+                <Text style={styles.detailLabel}>Email</Text>
+                <Text style={styles.detailValue}>{order.email}</Text>
+              </View>
+              <View style={styles.detailItem}>
+                <Text style={styles.detailLabel}>Contact</Text>
+                <Text style={styles.detailValue}>{order.contactNumber}</Text>
+              </View>
+            </View>
+
+            <View style={styles.detailsRight}>
+              <View style={styles.detailItem}>
+                <Text style={styles.detailLabel}>Course</Text>
+                <Text style={styles.detailValue}>{order.courseName}</Text>
+              </View>
+              <View style={styles.detailItem}>
+                <Text style={styles.detailLabel}>Payment Mode</Text>
+                <Text style={styles.detailValue}>{order.mode}</Text>
+              </View>
+              <View style={styles.detailItem}>
+                <Text style={styles.detailLabel}>Status</Text>
+                <Text style={styles.detailValueAccent}>{order.status || 'COMPLETED'}</Text>
+              </View>
+            </View>
+          </View>
+
+          {/* ===== SUMMARY CARDS ===== */}
+          <View style={styles.summaryRow}>
+            <View style={styles.summaryCard}>
+              <Text style={styles.summaryLabel}>Course Fee</Text>
+              <Text style={styles.summaryValue}>₹ {order.courseFee}</Text>
+            </View>
+            <View style={[styles.summaryCard, styles.summaryCardAccent]}>
+              <Text style={styles.summaryLabel}>Discount</Text>
+              <Text style={styles.summaryValueAccent}>− ₹ {order.discount}</Text>
+            </View>
+            <View style={[styles.summaryCard, styles.summaryCardHighlight]}>
+              <Text style={styles.summaryLabel}>Total Paid</Text>
+              <Text style={styles.summaryValuePrimary}>₹ {order.totalPaid}</Text>
+            </View>
+          </View>
         </View>
 
-        {/* Contact Number Row */}
-        <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col20]}><Text>Contact Number:</Text></View>
-          <View style={[styles.tableCol, styles.col30]}><Text>{order.contactNumber || '8881043033'}</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
-          <View style={[styles.tableCol, styles.col15]}><Text>Total Paid</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.textRight]}><Text>{order.totalPaid || '1'}</Text></View>
-        </View>
-
-        {/* Email Row */}
-        <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col20]}><Text>Email:</Text></View>
-          <View style={[styles.tableCol, styles.col30]}><Text>{order.email || 'sinha.sg111@gmail.com'}</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
-          <View style={[styles.tableCol, styles.col15]}><Text>Fee Due</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.textRight]}><Text>{order.feeDue || '74,998'}</Text></View>
-        </View>
-
-        {/* Course Row */}
-        <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col20]}><Text>Course:</Text></View>
-          <View style={[styles.tableCol, styles.col30]}><Text>{order.courseName || 'Post Graduate Program in Counselling Psychology'}</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
-          <View style={[styles.tableCol, styles.col15]}></View>
-          <View style={[styles.tableCol, styles.col15]}></View>
-        </View>
-
-        {/* Payment Details Section Header */}
-        <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col100]}>
+        {/* ===== PAYMENT TABLE ===== */}
+        <View style={styles.section}>
+          <View style={styles.sectionTitleRow}>
+            <View style={styles.sectionMarker} />
             <Text style={styles.sectionTitle}>Payment Details</Text>
           </View>
-        </View>
 
-        {/* Payment Details Header Row */}
-        <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col25]}><Text>Date</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
-          <View style={[styles.tableCol, styles.col35]}><Text>Transaction ID</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
-          <View style={[styles.tableCol, styles.col20]}><Text>Mode of Payment</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
-          <View style={[styles.tableCol, styles.col20, styles.textRight]}><Text>Amount</Text></View>
-        </View>
+          <View style={styles.table}>
+            <View style={styles.tableHeader}>
+              <Text style={[styles.tableHeaderCell, styles.colDate]}>Date</Text>
+              <Text style={[styles.tableHeaderCell, styles.colTxn]}>Transaction ID</Text>
+              <Text style={[styles.tableHeaderCell, styles.colMode]}>Mode</Text>
+              <Text style={[styles.tableHeaderCell, styles.colAmount]}>Amount</Text>
+            </View>
 
-        {/* Payment Row */}
-        <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col25]}><Text>{order.paymentDate || '21 Apr 2025'}</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
-          <View style={[styles.tableCol, styles.col35]}><Text>{order.transactionId || '511163572037'}</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
-          <View style={[styles.tableCol, styles.col20]}><Text>{order.mode}</Text></View>
-          <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
-          <View style={[styles.tableCol, styles.col20, styles.textRight]}><Text>{order.amountPaid || '1'}</Text></View>
-        </View>
+            <View style={[styles.tableRow, styles.tableRowAlt]}>
+              <Text style={[styles.tableCell, styles.colDate]}>{order.paymentDate}</Text>
+              <Text style={[styles.tableCell, styles.colTxn]}>{order.transactionId}</Text>
+              <Text style={[styles.tableCell, styles.colMode]}>{order.mode}</Text>
+              <Text style={[styles.tableCellAccent, styles.colAmount]}>₹ {order.amountPaid}</Text>
+            </View>
 
-        {/* Total Paid Row */}
-        <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col25]}></View>
-          <View style={[styles.tableCol, styles.col35]}></View>
-          <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
-          <View style={[styles.tableCol, styles.col20, styles.bold]}><Text>Total Paid</Text></View>
-          <View style={[styles.tableCol, styles.col20, styles.textRight]}><Text>{order.totalPaid || '1'}</Text></View>
-        </View>
-
-        {/* Amount in Words Row */}
-        {/* <View style={styles.tableRow}>
-          <View style={[styles.tableCol, styles.col100, { flexDirection: 'row' }]}>
-            <Text style={[styles.bold, { marginRight: 5 }]}>Paid Amount in Words:</Text>
-            <View style={[styles.tableCol, styles.col15, styles.verticalLine]}></View>
-            <Text>{order.amountInWords || 'One Rupee Only'}</Text>
-          </View>
-        </View> */}
-
-        {/* Footer Row */}
-        <View style={styles.lastTableRow}>
-          <View style={[styles.tableCol, styles.col100]}>
-            <Text style={styles.footer}>
-              This is a system-generated receipt and does not require a signature.
-            </Text>
+            <View style={styles.totalRow}>
+              <Text style={styles.totalLabel}>Total Paid</Text>
+              <Text style={styles.totalValue}>₹ {order.totalPaid}</Text>
+            </View>
           </View>
         </View>
+
+        {/* ===== FOOTER ===== */}
+        <View style={styles.footer}>
+          <Text style={styles.footerText}>
+            This is a system-generated receipt and does not require a signature.
+          </Text>
+          <Text style={styles.footerText}>
+            For any queries, please contact info@upskillab.com
+          </Text>
+          <View style={styles.footerRule} />
+          <Text style={styles.footerBrand}>UPSKILLAB</Text>
+        </View>
+
       </View>
     </Page>
   </Document>
@@ -216,7 +556,6 @@ const PDFReceipt = ({ order }) => (
 
 // Function to generate and download PDF
 const generateReceiptPDF = async (orderData) => {
-  // Transform your API data to match the expected format
   const formatDate = (dateString) => {
     const options = { day: 'numeric', month: 'short', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
@@ -238,38 +577,43 @@ const generateReceiptPDF = async (orderData) => {
     }
 
     if (amount < 1000) {
-      return `${words[Math.floor(amount / 100)]} Hundred ${amountInWords(amount % 100)}`;
+      const remainder = amount % 100;
+      return `${words[Math.floor(amount / 100)]} Hundred${remainder ? ' ' + amountInWords(remainder).replace(' Rupees Only', '') : ''} Rupees Only`;
     }
 
     if (amount < 100000) {
-      return `${words[Math.floor(amount / 1000)]} Thousand ${amountInWords(amount % 1000)}`;
+      const remainder = amount % 1000;
+      return `${words[Math.floor(amount / 1000)]} Thousand${remainder ? ' ' + amountInWords(remainder).replace(' Rupees Only', '') : ''} Rupees Only`;
+    }
+
+    if (amount < 10000000) {
+      const remainder = amount % 100000;
+      return `${words[Math.floor(amount / 100000)]} Lakh${remainder ? ' ' + amountInWords(remainder).replace(' Rupees Only', '') : ''} Rupees Only`;
     }
 
     return `${amount} Rupees Only`;
   };
-console.log(orderData)
+
   const formattedData = {
-    receiptNumber: orderData.serialNumber || '712',
-    batchNumber: orderData.batchId?.batchCode || '2',
-    date: orderData.createdAt ? formatDate(orderData.createdAt) : '25 Apr 2025',
-    studentName: orderData.user?.fullName || 'Harshit Sinha',
-    contactNumber: orderData?.user?.mobileNumber || '8881043033',
-    email: orderData.user?.email || 'sinha.sg111@gmail.com',
-    courseName: orderData?.courseTitle || 'Post Graduate Program in Counselling Psychology',
-    courseFee: orderData?.totalAmount?.toLocaleString('en-IN') || '74,999',
-    totalPaid: orderData?.amountPaid?.toLocaleString('en-IN') || '1',
-    feeDue: orderData ? (orderData.totalAmount - orderData.amountPaid).toLocaleString('en-IN') : '74,998',
-    paymentDate: orderData.paymentDate ? formatDate(orderData.paymentDate) : '21 Apr 2025',
-    mode:orderData.mode || "Cash",
-    transactionId: orderData.orderId || '511163572037',
-    amountPaid: orderData?.amountPaid?.toLocaleString('en-IN') || '1',
-    amountInWords: amountInWords(orderData?.amountPaid || 1)
+    receiptNumber: orderData.serialNumber || 'N/A',
+    batchNumber: orderData.batchId?.batchCode || 'N/A',
+    date: orderData.createdAt ? formatDate(orderData.createdAt) : formatDate(new Date()),
+    studentName: orderData.user?.fullName || 'N/A',
+    contactNumber: orderData?.user?.mobileNumber || 'N/A',
+    email: orderData.user?.email || 'N/A',
+    courseName: orderData?.courseTitle || 'N/A',
+    courseFee: orderData?.totalAmount?.toLocaleString('en-IN') || '0',
+    totalPaid: orderData?.amountPaid?.toLocaleString('en-IN') || '0',
+    discount: (orderData?.discount ?? 0).toLocaleString('en-IN'),
+    paymentDate: orderData.paymentDate ? formatDate(orderData.paymentDate) : formatDate(new Date()),
+    mode: orderData.mode || 'Cash',
+    status: orderData.status || 'COMPLETED',
+    transactionId: orderData.orderId || orderData.serialNumber || 'N/A',
+    amountPaid: orderData?.amountPaid?.toLocaleString('en-IN') || '0',
+    amountInWords: amountInWords(orderData?.amountPaid || 0)
   };
 
-  // Generate the PDF blob
   const blob = await pdf(<PDFReceipt order={formattedData} />).toBlob();
-
-  // Download the PDF
   saveAs(blob, `receipt-${formattedData.receiptNumber}.pdf`);
 };
 

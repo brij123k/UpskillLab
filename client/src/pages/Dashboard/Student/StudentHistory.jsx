@@ -661,6 +661,7 @@ const calculateAttendance = () => {
                                 },
                                 totalAmount: order.totalAmount,
                                 amountPaid: order.amountPaid,
+                                discount:order.discountAmount,
                                 createdAt: new Date().toISOString(),
                                 paymentDate:order.createdAt,
                                 mode:order.mode,
