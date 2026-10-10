@@ -99,9 +99,9 @@ const PramotianalModal = ({
       if (data.success && data.data?.paymentLink) {
         setApiMessage({
           type: 'success',
-          text: 'Registration successful! Redirecting to payment...'
+          text: 'Registration successful! Redirecting Now...'
         });
-        toast.success('Registration successful! Redirecting to payment...');
+        toast.success('Registration successful! Redirting ...');
 
         // Reset form fields
         setFormData({
