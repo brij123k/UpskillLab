@@ -426,7 +426,7 @@ const getReferralCodeFromURL = () => {
                 required
               />
               <label className="ml-2 text-xs sm:text-sm text-[#4D2C5E] flex-1">
-                I agree to the <a href="/TermsOfService" className="text-[#FF7426] underline">terms and conditions</a>
+                I agree to the <a href="/terms-of-service" className="text-[#FF7426] underline">terms and conditions</a>
               </label>
             </div>
 

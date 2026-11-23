@@ -1,310 +1,343 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <!-- ===== MAIN PAGES ===== -->
   <url>
     <loc>https://upskillab.com/</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2026-11-23</lastmod>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/about</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://upskillab.com/courselist</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2026-11-23</lastmod>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/success-stories</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.6</priority>
+    <loc>https://upskillab.com/blog</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/upcoming-batches</loc>
-    <lastmod>2025-04-14</lastmod>
+    <loc>https://upskillab.com/about</loc>
+    <lastmod>2026-11-23</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/whyus</loc>
-    <lastmod>2025-04-14</lastmod>
+    <loc>https://upskillab.com/upcoming-batches</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/success-stories</loc>
+    <lastmod>2026-11-23</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/contactus</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.5</priority>
+    <loc>https://upskillab.com/whyus</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/career</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://upskillab.com/medical-exams</loc>
-    <lastmod>2025-04-14</lastmod>
+    <loc>https://upskillab.com/self-test</loc>
+    <lastmod>2026-11-23</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://upskillab.com/ebooks</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2026-11-23</lastmod>
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://upskillab.com/PCATExamPortal</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/contactus</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/career</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
     <loc>https://upskillab.com/newsletter</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2026-11-23</lastmod>
     <priority>0.4</priority>
   </url>
-
-  <!-- ===== POLICY PAGES ===== -->
   <url>
     <loc>https://upskillab.com/privacypolicy</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2026-11-23</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/termsOfservice</loc>
-    <lastmod>2025-04-14</lastmod>
+    <loc>https://upskillab.com/terms-of-service</loc>
+    <lastmod>2026-11-23</lastmod>
     <priority>0.3</priority>
   </url>
   <url>
     <loc>https://upskillab.com/refundpolicy</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2026-11-23</lastmod>
     <priority>0.3</priority>
   </url>
-
-  <!-- ===== BLOG PAGES ===== -->
   <url>
-    <loc>https://upskillab.com/blog</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
+    <loc>https://upskillab.com/technology/course/certified-ai-ml-practitioner</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/blog/what-youll-learn-in-a-pg-program-in-psychology-a-deep-dive-for-working-professionals</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.7</priority>
+    <loc>https://upskillab.com/technology/course/java-programming-course-beginners</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/blog/cybersecurity-for-smes-an-urgent-necessity-interview-with-pierre-couture</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.7</priority>
+    <loc>https://upskillab.com/technology/course/full-stack-web-development-course</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/blog/the-future-of-web-development-in-2025</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.7</priority>
+    <loc>https://upskillab.com/management/course/excel-powerbi-databases-skills</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/foundation-of-psychology</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/technology/course/foundation-of-data-science</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/technology/course/foundations-of-cybersecurity-certificate</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/clinical-psychology-internship</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/counselling-psychology-internship</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/internship-program-in-industrial-organizational-psychology</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/post-graduate-program-counselling</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/pg-program-clinical-applied-psychology</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/professional-development/course/campus-placement-training</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/professional-development/course/pgp-in-sales-marketing-corporate-readiness</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/diploma-in-psychotherapy</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/advance-certificate-in-counselling-tools-and-techniques</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/diploma-in-artificial-intelligence-behavioural-science</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/advanced-certificate-in-psychometric-assessment-applications</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/diploma-in-child-and-school-counselling</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/certificate-in-neuro-linguistic-programming-nlp</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/diploma-in-nutrition-psychology</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/diploma-in-psychopathology</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/post-graduate-diploma-in-guidance-and-counselling</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/certificate-programme-in-child-counselling-special-needs</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/technology/course/growzio-ai-pro</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://upskillab.com/psychology/course/post-graduation-program-in-industrial-organizational-psychology</loc>
+    <lastmod>2026-11-23</lastmod>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://upskillab.com/blog/are-you-ready-for-a-career-in-psychology</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-12-29</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://upskillab.com/blog/best-online-counselling-diploma-courses-in-india-with-certificates</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-12-29</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://upskillab.com/blog/top-ai-and-ml-skills-every-professional-should-learn-in-2025</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-12-29</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://upskillab.com/blog/adhd-in-women-the-hidden-struggle-behind-the-diagnosis-gap</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-12-29</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://upskillab.com/blog/different-types-of-ocd-you-might-not-have-heard-about</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-12-29</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://upskillab.com/blog/this-world-mental-health-day-lets-learn-to-listen</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-12-29</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/blog/signs-of-autism-in-children-early-symptoms-of-asd-in-toddlers-upskillab</loc>
-    <lastmod>2025-04-14</lastmod>
+    <loc>https://upskillab.com/blog/signs-of-autism-in-children-early-symptoms-of-asd-in-toddlers-or-upskillab</loc>
+    <lastmod>2025-12-29</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://upskillab.com/blog/ocd-in-children-early-signs-every-parent-should-know</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-12-29</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://upskillab.com/blog/how-to-become-a-psychotherapist-in-india-stepbystep-guide</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-12-29</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://upskillab.com/blog/the-role-of-a-psychotherapist-in-promoting-mental-health</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-12-29</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://upskillab.com/blog/ma-clinical-psychology-is-replacing-mphil-what-does-that-mean-for-your-career</loc>
-    <lastmod>2025-04-14</lastmod>
+    <lastmod>2025-12-29</lastmod>
     <priority>0.7</priority>
   </url>
-
-  <!-- ===== TECHNOLOGY COURSES ===== -->
   <url>
-    <loc>https://upskillab.com/Technology/course/certified-ai-ml-practitioner</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
+    <loc>https://upskillab.com/blog/which-psychology-course-is-best-for-you-a-student-friendly-guide-after-12th</loc>
+    <lastmod>2025-12-29</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Technology/course/java-programming-course-beginners</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
+    <loc>https://upskillab.com/blog/top-psychology-courses-in-india-fees-eligibility-scope-career-paths</loc>
+    <lastmod>2025-12-29</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Technology/course/full-stack-web-development-course</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
+    <loc>https://upskillab.com/blog/clinical-vs-counselling-psychology-whats-the-difference-which-should-you-choose</loc>
+    <lastmod>2026-01-06</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Technology/course/foundation-of-data-science</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
+    <loc>https://upskillab.com/blog/online-vs-offline-psychology-courses</loc>
+    <lastmod>2026-01-18</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Technology/course/foundations-of-cybersecurity-certificate</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- ===== MANAGEMENT COURSES ===== -->
-  <url>
-    <loc>https://upskillab.com/Management/course/excel-powerbi-databases-skills</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- ===== PSYCHOLOGY COURSES ===== -->
-  <url>
-    <loc>https://upskillab.com/Psychology/course/certificate-in-psychotherapy</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
+    <loc>https://upskillab.com/blog/can-anyone-learn-psychotherapy-who-should-take-a-certificate-course</loc>
+    <lastmod>2026-04-13</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Psychology/course/foundation-of-psychology</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
+    <loc>https://upskillab.com/blog/the-role-of-a-psychotherapist-vs-a-psychiatrist-vs-a-counsellor-whats-the-difference</loc>
+    <lastmod>2026-04-20</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Psychology/course/professional-clinical-counselling-psychology</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
+    <loc>https://upskillab.com/blog/how-psychotherapy-helps-manage-anxiety-depression-and-stress</loc>
+    <lastmod>2026-04-27</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Psychology/course/child-psychology-and-parenting</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
+    <loc>https://upskillab.com/blog/top-10-psychological-disorders-every-aspiring-therapist-should-understand</loc>
+    <lastmod>2026-05-01</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Psychology/course/clinical-psychology-internship</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
+    <loc>https://upskillab.com/blog/how-to-start-a-career-in-mental-health-with-a-psychotherapy-diploma</loc>
+    <lastmod>2026-05-29</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Psychology/course/counselling-psychology-internship</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
+    <loc>https://upskillab.com/blog/what-is-cognitive-psychology-and-why-does-it-matter-in-daily-life</loc>
+    <lastmod>2026-06-23</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Psychology/course/internship-program-in-industrial-organizational-psychology</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
+    <loc>https://upskillab.com/blog/how-to-become-a-full-stack-developer-a-complete-beginners-guide</loc>
+    <lastmod>2026-06-23</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Psychology/course/post-graduate-program-counselling</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
+    <loc>https://upskillab.com/blog/best-ai-psychology-courses-in-india-fees-online-programs-career-opportunities-2026</loc>
+    <lastmod>2026-07-14</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Psychology/course/post-graduate-program-child-psychology</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
+    <loc>https://upskillab.com/blog/best-online-counselling-psychology-courses-in-india</loc>
+    <lastmod>2026-08-10</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Psychology/course/pg-program-clinical-applied-psychology</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
+    <loc>https://upskillab.com/blog/best-online-ai-psychology-certification-courses-in-india-2026-guide</loc>
+    <lastmod>2026-09-04</lastmod>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://upskillab.com/Psychology/course/diploma-in-psychotherapy</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
+    <loc>https://upskillab.com/blog/how-to-study-counselling-psychology-online-a-beginners-guide</loc>
+    <lastmod>2026-09-07</lastmod>
+    <priority>0.7</priority>
   </url>
-  <url>
-    <loc>https://upskillab.com/Psychology/course/advance-certificate-in-counselling-tools-and-techniques</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://upskillab.com/Psychology/course/diploma-in-artificial-intelligence-behavioural-science</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://upskillab.com/Psychology/course/advanced-certificate-in-psychometric-assessment-applications</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://upskillab.com/Psychology/course/diploma-in-child-and-school-counselling</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://upskillab.com/Psychology/course/diploma-in-guidance-and-counselling</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://upskillab.com/Psychology/course/certificate-in-neuro-linguistic-programming-nlp</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://upskillab.com/Psychology/course/diploma-in-nutrition-psychology</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://upskillab.com/Psychology/course/diploma-in-psychopathology</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- ===== MEDICAL COURSES ===== -->
-  <url>
-    <loc>https://upskillab.com/Medical/course/CRPC</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://upskillab.com/Medical/course/PPC</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- ===== PROFESSIONAL DEVELOPMENT COURSES ===== -->
-  <url>
-    <loc>https://upskillab.com/Professional-development/course/campus-placement-training</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://upskillab.com/Professional-development/course/pg-program-sales-marketing-financial-services</loc>
-    <lastmod>2025-04-14</lastmod>
-    <priority>0.8</priority>
-  </url>
-
 </urlset>

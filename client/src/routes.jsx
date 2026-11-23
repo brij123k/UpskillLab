@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import { Navigate } from "react-router-dom";
 import GuestLayout from "./layout/GuestLayout";
 import TeacherPanelLayout from "./layout/TeacherPanelLayout";
 import StudentPanelLayout from "./layout/StudentPanelLayout";
@@ -80,6 +81,7 @@ const StudentExamDashboard = lazy(()=> import('./pages/Dashboard/Student/Student
 const ExamAttempt = lazy(()=> import('./pages/Dashboard/Student/StudentExam'))
 const StudentAssignments = lazy(()=> import('./pages/Dashboard/Student/StudentAssignments'))
 const StudentCounseling = lazy(()=> import('./pages/Dashboard/Student/StudentCounseling'))
+const StudentSupportTickets = lazy(()=> import('./pages/Dashboard/Student/StudentSupportTickets'))
 
 
 const TeacherProtectedLayout = ({ children }) => (
@@ -131,7 +133,9 @@ export const routes = [
   { exact: true, path: "/forgetPassword", layout: Index, component: ForgotPasswordPage},
   { exact: true, path: "/ResetPassword", layout: Index, component: ResetPasswordPage},
   { exact: true, path: "/VerifyOTP", layout: Index, component: VerifyOTPPage},
-  { exact: true, path: "/TermsOfService", layout: Index, component: TermsOfService},
+  { exact: true, path: "/terms-of-service", layout: Index, component: TermsOfService},
+  // Old URL (router matching is case-insensitive, so this also covers /termsOfservice)
+  { exact: true, path: "/TermsOfService", component: () => <Navigate to="/terms-of-service" replace /> },
   { exact: true, path: "/privacypolicy", layout: Index, component: PrivacyPolicy},
   { exact: true, path: "/refundpolicy", layout: Index, component: RefundPolicy},
   { exact: true, path: "/examAttempt/:examId", layout: Index, component: ExamAttempt},
@@ -171,6 +175,7 @@ export const routes = [
   { exact: true, path: "/Student/Exam", layout: StudentProtectedLayout, component: StudentExamDashboard},
   { exact: true, path: "/Student/Assignments", layout: StudentProtectedLayout, component: StudentAssignments},
   { exact: true, path: "/Student/Counseling", layout: StudentProtectedLayout, component: StudentCounseling},
+  { exact: true, path: "/Student/Tickets", layout: StudentProtectedLayout, component: StudentSupportTickets},
   { exact: true, path: "/Student/exam/:examId", layout: StudentProtectedLayout, component: ExamAttempt},
 
 ];

@@ -256,7 +256,7 @@ const ForgotPasswordPage = () => {
                             variants={item}
                         >
                             <span className="text-gray-600">Remember your password? </span>
-                            <NavLink to="/Login">
+                            <NavLink to="/login">
                                 <motion.span
                                     className="text-[#FF7426] font-medium hover:underline cursor-pointer"
                                     whileHover={{ scale: 1.05 }}

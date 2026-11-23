@@ -33,7 +33,7 @@ const ContactCard = ({ icon, title, info, description }) => {
         <meta name="keywords" content="Upskillab contact, support, online courses help, customer service" />
         <meta property="og:title" content="Contact Upskillab | Get in Touch with Our Team" />
         <meta property="og:description" content="Reach out to Upskillab for any inquiries or support regarding our online learning programs." />
-        <meta property="og:url" content="https://upskillab.com/contact" />
+        <meta property="og:url" content="https://upskillab.com/contactus" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Contact Upskillab | Get in Touch with Our Team" />

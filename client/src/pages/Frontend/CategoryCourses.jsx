@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { Helmet } from 'react-helmet-async';
 import ScrollToTop from "../../components/ScrollToTop";
 import AdmissionFormModal from "../../components/Modal/BasicEnrollNowModal";
+import { categorySlug } from '../../utils/seo';
 
 const bannerVariants = {
   hidden: { opacity: 0 },
@@ -734,7 +735,7 @@ const CategoryCourses = () => {
                   >
                     <NavLink
                       to={{
-                        pathname: `/${course.category.categoryName.toLowerCase()}/course/${course.courseCode}`,
+                        pathname: `/${categorySlug(course.category.categoryName)}/course/${course.courseCode}`,
                       }}
                       state={{ courseCode: course.courseCode }}
                       className="block w-full text-left"
@@ -765,7 +766,7 @@ const CategoryCourses = () => {
                       window.scrollTo({ top: 0, behavior: "smooth" });
                     }}>
                     <a
-                      href={`/${course.category.categoryName.toLowerCase()}/course/${course.courseCode}`}
+                      href={`/${categorySlug(course.category.categoryName)}/course/${course.courseCode}`}
                       className="w-full text-center text-[#4D2C5E] font-medium hover:underline flex items-center justify-center py-2 border border-[#4D2C5E]/30 rounded-lg hover:bg-[#4D2C5E]/5 transition-colors cursor-pointer"
                     >
                       View Details

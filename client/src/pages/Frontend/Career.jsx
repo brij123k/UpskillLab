@@ -600,7 +600,7 @@ const Careers = () => {
             whileTap={{ scale: 0.98 }}
           >
             <button
-              onClick={() => navigate('/ContactUs')}
+              onClick={() => navigate('/contactus')}
               className="px-8 py-3 bg-[#FF7426] text-white rounded-md hover:bg-[#E56722] transition-colors text-lg font-medium shadow-md"
             >
               Contact Us
@@ -846,7 +846,8 @@ const Careers = () => {
         />
       </div>
       <Helmet>
-     <title>Upskillab-Start Career Here</title>
+     <title>Careers at Upskillab | Jobs & Opportunities in EdTech</title>
+  <meta name="description" content="Explore open roles at Upskillab and build your career in EdTech. Join our team of educators, mentors and professionals shaping online learning in India." />
   <link rel="canonical" href="https://upskillab.com/career" />
 </Helmet>
     </motion.div>

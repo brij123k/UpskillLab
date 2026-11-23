@@ -14,14 +14,19 @@ import { toast } from 'react-toastify';
 import { useLocation } from 'react-router-dom';
 import BlogContentRenderer from '../../components/BlogContentRenderer';
 import { Helmet } from 'react-helmet-async';
+import { useInitialData } from '../../utils/initialData';
+import { SITE_URL, DEFAULT_OG_IMAGE, truncate, stripHtml } from '../../utils/seo';
 const BlogDetailPage = () => {
   const { slug } = useParams(); // Get the blog slug from URL params
   const navigate = useNavigate();
-  const [blog, setBlog] = useState(null);
-  const [loading, setLoading] = useState(true);
+  // Blog fetched at build time by the prerenderer (if any).
+  const initialBlog = useInitialData(`blog:${slug}`);
+  const [blog, setBlog] = useState(initialBlog || null);
+  const [loading, setLoading] = useState(!initialBlog);
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (blog && blog.slug === slug) return; // already have prerendered data
     const fetchBlog = async () => {
       try {
         setLoading(true);
@@ -99,8 +104,41 @@ const BlogDetailPage = () => {
   });
 
   // Calculate read time based on description length
-  const wordCount = blog.description.split(/\s+/).length;
-  const readTime = Math.ceil(wordCount / 200);
+  const wordCount = stripHtml(blog.description || '').split(/\s+/).length;
+  const readTime = Math.max(1, Math.ceil(wordCount / 200));
+
+  // ----- SEO -----
+  const canonicalUrl = `${SITE_URL}/blog/${slug}`;
+  const seoTitle = blog.title.length > 52 ? blog.title : `${blog.title} | Upskillab Blog`;
+  const seoDescription = truncate(blog.des || stripHtml(blog.description || ''), 160);
+  const seoImage = blog.image || DEFAULT_OG_IMAGE;
+  const blogPostingSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: blog.title,
+    description: seoDescription,
+    image: seoImage,
+    url: canonicalUrl,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': canonicalUrl },
+    ...(blog.createdAt ? { datePublished: blog.createdAt } : {}),
+    ...(blog.updatedAt || blog.createdAt ? { dateModified: blog.updatedAt || blog.createdAt } : {}),
+    ...(blog.tag ? { keywords: Array.isArray(blog.tag) ? blog.tag.join(', ') : blog.tag } : {}),
+    author: { '@type': 'Organization', name: 'Upskillab', url: `${SITE_URL}/` },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Upskillab',
+      logo: { '@type': 'ImageObject', url: DEFAULT_OG_IMAGE },
+    },
+  };
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${SITE_URL}/` },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE_URL}/blog` },
+      { '@type': 'ListItem', position: 3, name: blog.title, item: canonicalUrl },
+    ],
+  };
 
   return (
     <div className="bg-[#F7F7F7] min-h-screen">
@@ -135,14 +173,14 @@ const BlogDetailPage = () => {
               {blog.category || 'Blog Post'}
             </motion.span>
 
-            <motion.h2
+            <motion.h1
               className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-6"
               initial={{ y: -20 }}
               animate={{ y: 0 }}
               transition={{ duration: 0.5 }}
             >
               {blog.title}
-            </motion.h2>
+            </motion.h1>
 
             <motion.div
               className="flex flex-wrap items-center justify-center text-white/80 text-sm gap-4"
@@ -217,7 +255,7 @@ const BlogDetailPage = () => {
             <div className="flex gap-4">
               {['Twitter', 'LinkedIn', 'Facebook', 'WhatsApp'].map((social) => {
                 const getShareUrl = () => {
-                  const currentUrl = encodeURIComponent(window.location.href);
+                  const currentUrl = encodeURIComponent(canonicalUrl);
                   const title = encodeURIComponent(blog.title);
 
                   switch (social.toLowerCase()) {
@@ -289,18 +327,21 @@ const BlogDetailPage = () => {
       </div>
       <TrainingBanner />
       <FeedbaackBanner />
-          <Helmet>
-              <title>{blog.title}</title>
-  <meta name="description" content={blog.des} />
-  <meta name="keywords" content="Upskillab blog, student insights, online learning tips, education articles" />
-  <meta property="og:title" content="Upskillab Student Blog | Insights and Tips for Online Learners" />
-  <meta property="og:description" content="Read blog posts from Upskillab students sharing their experiences and advice on online learning." />
-  <meta property="og:url" content="https://upskillab.com/student-blog" />
-  <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Upskillab Student Blog | Insights and Tips for Online Learners" />
-  <meta name="twitter:description" content="Gain valuable insights and tips from Upskillab's student community through our blog." />
-        <link rel="canonical" href={`https://upskillab.com/blog/${slug}`} />
+      <Helmet>
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
+        <link rel="canonical" href={canonicalUrl} />
+        <meta property="og:title" content={blog.title} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:url" content={canonicalUrl} />
+        <meta property="og:type" content="article" />
+        <meta property="og:image" content={seoImage} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={blog.title} />
+        <meta name="twitter:description" content={seoDescription} />
+        <meta name="twitter:image" content={seoImage} />
+        <script type="application/ld+json">{JSON.stringify(blogPostingSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
       </Helmet>
     </div>
     

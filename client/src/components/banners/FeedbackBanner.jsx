@@ -42,7 +42,7 @@ const FeedbackBanner = () => {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: 0.2 }}
                     >
-                        <NavLink to="/ContactUs">
+                        <NavLink to="/contactus">
                             <motion.button 
                                 whileHover={{ scale: 1.05, backgroundColor: "#E65100" }}
                                 whileTap={{ scale: 0.95 }}

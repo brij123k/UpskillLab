@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import {AllCourses} from "../../data";
 import { getDataHandler } from '../../config/services';
 import { Helmet } from 'react-helmet-async';
+import { categorySlug } from '../../utils/seo';
 
 function CourseList() {
   const [courses, setCourses] = useState([]);
@@ -64,7 +65,7 @@ function CourseList() {
           "name": "Upskillab",
           "sameAs": "https://upskillab.com"
         },
-        "url": `https://upskillab.com/${course.categoryName?.toLowerCase()}/course/${course.courseCode}`,
+        "url": `https://upskillab.com/${categorySlug(course.categoryName)}/course/${course.courseCode}`,
         "image": course.image,
         "offers": {
           "@type": "Offer",

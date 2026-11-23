@@ -1,5 +1,5 @@
 import React from 'react';
-import CourseList from './CourseList';
+import CourseList from './courselist';
 import { FiClock, FiUsers, FiArrowRight } from 'react-icons/fi';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -44,7 +44,7 @@ function CourseCards() {
 
           {/* Explore All button - properly aligned */}
           <div className="flex justify-center lg:justify-end mt-12 w-full">
-            <NavLink to="/CourseList">
+            <NavLink to="/courselist">
             <button
             
             className="bg-[#4d2c5e] hover:bg-[#3a2148] text-white px-6 py-3 rounded-lg font-medium transition-colors duration-300 flex items-center shadow-md hover:shadow-lg cursor-pointer">

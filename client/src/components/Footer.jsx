@@ -94,7 +94,7 @@ function Footer() {
                 <li><NavLink to="/contactus" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Help Center</NavLink></li>
                 <li><NavLink to="/privacypolicy" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Privacy</NavLink></li>
                 <li><NavLink to="/whyus" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Why Upskillab</NavLink></li>
-                <li><NavLink to="/termsOfservice" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Terms & Conditions</NavLink></li>
+                <li><NavLink to="/terms-of-service" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Terms & Conditions</NavLink></li>
                 <li><NavLink to="/refundpolicy" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Refund Policy</NavLink></li>
                 <li><NavLink to="/career" className="text-[#606060] hover:text-[#FF7426] text-sm sm:text-base transition-colors block">Career</NavLink></li>
               </ul>

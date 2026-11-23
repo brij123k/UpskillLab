@@ -439,9 +439,9 @@ const WhyUpskillab = () => {
 
       <Helmet>
         <title>Why Choose Upskillab | Best Online Learning Platform in India</title>
-        <meta name="description" content="Discover why Upskillab is India's best online learning platform for psychology, tech skills, and professional development with success stories and job guarantees." />
+        <meta name="description" content="Discover why Upskillab is a leading online learning platform in India for psychology, tech and professional skills, with real success stories." />
         <meta name="keywords" content="upskillab, online learning India, psychology courses, tech courses, professional skills, pay after placement, job guarantee" />
-        <link rel="canonical" href="https://upskillab.com/why-upskillab" />
+        <link rel="canonical" href="https://upskillab.com/whyus" />
       </Helmet>
       <AdmissionFormModal
         isOpen={isModalOpen}

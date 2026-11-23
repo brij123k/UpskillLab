@@ -119,14 +119,14 @@ const AdmissionForm = () => {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <motion.h1
+          <motion.h2
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-4xl md:text-5xl font-bold text-[#4D2C5E] mb-4"
           >
             Start Your <span className="text-[#FF7426]">Learning Journey</span>
-          </motion.h1>
+          </motion.h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Join our community of learners and transform your career with expert-led programs
           </p>
@@ -199,7 +199,7 @@ const AdmissionForm = () => {
                 <p className="text-gray-300 mb-3 sm:mb-4 text-sm sm:text-base">
                   Contact our admissions team for more information
                 </p>
-                <NavLink to="/ContactUs">
+                <NavLink to="/contactus">
                   <button className="bg-[#FF7426] hover:bg-[#E5671D] text-white font-medium py-2 px-4 sm:px-6 rounded-lg transition-all duration-300 cursor-pointer">
                     Contact Us
                   </button>

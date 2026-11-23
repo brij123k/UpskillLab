@@ -8,6 +8,7 @@ import { getDataHandler } from "../config/services";
 import { useAuth } from "../context/AuthContext";
 import ExitIntentModalData from "./CustomInputs/ExitIntentModalData";
 import Chatbot from "./Chatbot";
+import { categorySlug } from '../utils/seo';
 
 
 function Header() {
@@ -29,7 +30,7 @@ const [isResourcesDropdownOpen, setIsResourcesDropdownOpen] = useState(false);
 
 const handleCategoryClick = (category) => {
   console.log(category)
-  navigate(`/CourseList/`, { state: { category } });
+  navigate(`/courselist`, { state: { category } });
 };
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -380,7 +381,7 @@ try {
                   <NavLink
                     key={course.id}
                     to={{
-                      pathname: `/${category.name.toLowerCase()}/course/${course.courseCode}`,
+                      pathname: `/${categorySlug(category.name)}/course/${course.courseCode}`,
                     }}
                     state={{ courseId: course.id, courseCode: course.courseCode }}
                     onClick={() => setIsCoursesDropdownOpen(false)}
@@ -473,7 +474,7 @@ try {
                   <NavLink
                     key={course.id}
                     to={{
-                      pathname: `/${category.name.toLowerCase()}/course/${course.courseCode}`,
+                      pathname: `/${categorySlug(category.name)}/course/${course.courseCode}`,
                     }}
                     state={{ courseId: course.id, courseCode: course.courseCode }}
                     onClick={() => setIsCoursesDropdownOpen(false)}
@@ -724,7 +725,7 @@ try {
                 >
                   ENROLL NOW
                 </motion.button>
-                <NavLink to="/Login">
+                <NavLink to="/login">
                   <motion.button
                     whileHover={{ y: -2 }}
                     className="bg-[#FF7426] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#E65100] transition-all shadow-sm hover:shadow-md whitespace-nowrap cursor-pointer"
@@ -745,7 +746,7 @@ try {
                 <NavLink to={
                   getUserRole() === 'STUDENT' ? '/student/dashboard' :
                     getUserRole() === 'TEACHER' ? '/teacher/dashboard' :
-                      '/Login'
+                      '/login'
                 }>
                   <motion.button className="bg-[#4D2C5E] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#3A2150] transition-all shadow-sm hover:shadow-md whitespace-nowrap">
                     Dashboard
@@ -911,7 +912,7 @@ try {
                                           <NavLink
                                             key={course.id}
                                             to={{
-                                              pathname: `/${selectedCategory.name.toLowerCase()}/course/${course.courseCode}`,
+                                              pathname: `/${categorySlug(selectedCategory.name)}/course/${course.courseCode}`,
                                             }}
                                             state={{ courseId: course.id, courseCode: course.courseCode }}
                                             onClick={() => {
@@ -1116,7 +1117,7 @@ try {
                       >
                         ENROLL NOW
                       </motion.button>
-                      <NavLink to="/Login">
+                      <NavLink to="/login">
                         <motion.button
                           whileHover={{ y: -2 }}
                           className="w-full bg-[#FF7426] text-white px-4 py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 2xl:px-6 2xl:py-3 rounded-full text-xs lg:text-xs xl:text-sm 2xl:text-base font-medium hover:bg-[#E65100] transition-all shadow-sm hover:shadow-md whitespace-nowrap cursor-pointer"

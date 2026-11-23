@@ -16,6 +16,9 @@ import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import { NavLink, useLocation } from 'react-router-dom';
 import { getDataHandler } from '../../config/services';
 import { Helmet } from 'react-helmet-async';
+import { Navigate } from 'react-router-dom';
+import { useInitialData } from '../../utils/initialData';
+import { SITE_URL, DEFAULT_OG_IMAGE, categorySlug, coursePath, truncate, stripHtml } from '../../utils/seo';
 
 
 
@@ -822,7 +825,7 @@ const ProgramInfoWithEnroll = ({ course }) => {
                                     whileHover={{ x: 5 }}
                                 >
                                     <FiMessageSquare className="text-[#4D2C5E]" />
-                                    <NavLink to={`/ContactUs`}>
+                                    <NavLink to={`/contactus`}>
                                     <span className="font-medium text-black">Talk to an advisor</span>
                                     </NavLink>
                                 </motion.button>
@@ -1870,7 +1873,7 @@ const FAQSection = ({ course }) => {
                         <p className="text-[#4D2C5E]/80 mb-6 max-w-md mx-auto">
                             {course?.faqCtaText || "Our team is available 24/7 to help you with any inquiries about the program."}
                         </p>
-                        <NavLink to={course?.faqCtaLink || "/ContactUs"}>
+                        <NavLink to={course?.faqCtaLink || "/contactus"}>
                             <motion.button
                                 whileHover={{
                                     scale: 1.05,
@@ -1897,68 +1900,81 @@ const FAQSection = ({ course }) => {
     );
 };
 
+// Maps the /course/code/:code API response to the shape the page uses.
+const mapCourseResponse = (response) => ({
+    id: response._id,
+    batchId: response.batch?._id || "0",
+    title: response.courseName,
+    courseCode: response.courseCode,
+    categoryName: response.categoryName,
+    metaTitle: response.metaTitle,
+    metaDescription: response.metaDescription,
+    imageUrl: response.courseImage,
+    certificateImage: response.certificate,
+    batchCode: response.batch?.batchCode || "0",
+    shortDescription: response.shortDescription,
+    tags: response.tags,
+    youtubeUrl: response.youtubeUrl,
+    duration: response.courseDuration,
+    startDate: response.batch?.startDate || "",
+    programDetails: response.programDetails,
+    targetAudience: response.targetAudience,
+    weeks: response.weeks,
+    brochure: response.brochure,
+    courseMode: response.courseMode,
+    courseLevel: response.courseLevel?.name,
+    rating: response.courseRating,
+    discountedPrice: response.discountedPrice,
+    originalPrice: response.originalPrice,
+    faqs: response.faqs,
+    language: response.language?.languageName
+});
+
+// The URL's category must match the course's category (any letter case,
+// spaces or hyphens: "Professional development" == "professional-development").
+const categoryMatches = (response, category) =>
+    Boolean(response?.categoryName) && categorySlug(response.categoryName) === categorySlug(category);
+
 const CourseDetails = () => {
-    const [course, setCourse] = useState(null);
-    const [directCourse, setDirectCourse] = useState(null)
-    const [directBatch, setDirectBatch] = useState(null)
     const location = useLocation();
-    const courseId = location.state?.courseId;
-    const courseCode = location.state?.courseCode;
-    const batchId = location.state?.batchId;
-    const batchCode = location.state?.batchCode;
     const { id,category } = useParams();
-    const type = window.location.pathname.includes('/batch/') ? 'batch' : 'course';
+    const type = location.pathname.includes('/batch/') ? 'batch' : 'course';
+    // Course data fetched at build time by the prerenderer (if any).
+    const initialCourse = useInitialData(`course:${id}`);
+    const [course, setCourse] = useState(() =>
+        type === 'course' && initialCourse && categoryMatches(initialCourse, category)
+            ? mapCourseResponse(initialCourse)
+            : null
+    );
+    const [notFound, setNotFound] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     useEffect(() => {
         if (type === 'course') {
+            if (course?.courseCode === id) return; // already have prerendered data
             fetchCourse(id,category)
         } else if (type === 'batch') {
             fetchBtachCourse(id)
         }
     }, [type, id]);
-    
+
       useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
-{/* <ScrollToTop/> */}
   }, []);
 
     const fetchCourse = async (courseCode,category) => {
-        // Get the endpoint URL by calling the ApiConfig function
- 
         const endpointUrl = ApiConfig.getCourseByCode(courseCode);
-
-        const response = await getDataHandler(endpointUrl, null, null, true); // pass endpointUrl directly
-
-        if(response.categoryName.toLowerCase()===category){
-
-        
-        let custemDataSet = {
-            id: response._id,
-            batchId: response.batch?._id || "0",
-            title: response.courseName,
-            metaTitle: response.metaTitle,
-            metaDescription: response.metaDescription,
-            imageUrl: response.courseImage,
-            certificateImage: response.certificate,
-            batchCode: response.batch?.batchCode || "0",
-            shortDescription: response.shortDescription,
-            tags: response.tags,
-            youtubeUrl: response.youtubeUrl,
-            duration: response.courseDuration,
-            startDate: response.batch?.startDate || "",
-            programDetails: response.programDetails,
-            targetAudience: response.targetAudience,
-            weeks: response.weeks,
-            brochure: response.brochure,
-            courseMode: response.courseMode,
-            discountedPrice: response.discountedPrice,
-            originalPrice: response.originalPrice,
-            faqs: response.faqs,
-            language: response.language.languageName
+        let response = null;
+        try {
+            response = await getDataHandler(endpointUrl, null, null, true);
+        } catch (err) {
+            console.error('Error fetching course:', err);
         }
-        setCourse(custemDataSet);
-        }else{
-          setCourse(null);  
+
+        if (categoryMatches(response, category)) {
+            setCourse(mapCourseResponse(response));
+        } else {
+            setCourse(null);
+            setNotFound(true);
         }
     };
     const fetchBtachCourse = async (id) => {
@@ -1989,7 +2005,7 @@ const CourseDetails = () => {
             discountedPrice: res2.discountedPrice,
             originalPrice: res2.originalPrice,
             faqs: res2.faqs,
-            language: res2.language.languageName
+            language: res2.language?.languageName
         }
         setCourse(custemDataSet);
     };
@@ -2042,6 +2058,27 @@ const CourseDetails = () => {
         );
     };
 
+
+    // Old/mixed-case links such as /Psychology/course/x -> /psychology/course/x
+    if (type === 'course' && category && category !== categorySlug(category)) {
+        return <Navigate to={`/${categorySlug(category)}/course/${id}${location.search}`} replace />;
+    }
+
+    if (notFound) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-[#FDF8EE] p-4 text-center">
+                <Helmet>
+                    <title>Course Not Found | Upskillab</title>
+                    <meta name="robots" content="noindex,follow" />
+                </Helmet>
+                <h1 className="text-2xl font-bold text-[#4D2C5E] mb-2">Course not found</h1>
+                <p className="text-gray-600 mb-6">This course doesn't exist or is no longer available.</p>
+                <NavLink to="/courselist" className="bg-[#FF7426] text-white px-6 py-3 rounded-lg font-semibold">
+                    Browse all courses
+                </NavLink>
+            </div>
+        );
+    }
 
     if (!course) {
         return (
@@ -2117,84 +2154,89 @@ const CourseDetails = () => {
             </div>
         );
     }
+    // ----- SEO -----
+    const override = seoMetadata[id] || {};
+    const canonicalPath = type === 'course'
+        ? coursePath(course.categoryName || category, course.courseCode || id)
+        : location.pathname;
+    const canonicalUrl = `${SITE_URL}${canonicalPath}`;
+    const withBrand = (t) => (/upskillab/i.test(t) ? t : `${t} | Upskillab`);
+    const seoTitle = override.title || withBrand(course.metaTitle || course.title);
+    const seoDescription = truncate(
+        override.description
+            || course.metaDescription
+            || stripHtml(course.shortDescription)
+            || `Join ${course.title} at Upskillab - expert-led online course with certification.`,
+        160
+    );
+    const seoImage = course.imageUrl || DEFAULT_OG_IMAGE;
+    const categoryName = course.categoryName || category;
+    const courseSchema = {
+        "@context": "https://schema.org",
+        "@type": "Course",
+        name: course.title,
+        description: seoDescription,
+        url: canonicalUrl,
+        image: seoImage,
+        ...(course.language ? { inLanguage: course.language } : {}),
+        ...(course.tags?.length ? { keywords: course.tags.join(", ") } : {}),
+        provider: {
+            "@type": "Organization",
+            name: "Upskillab",
+            sameAs: `${SITE_URL}/`,
+        },
+        ...(course.discountedPrice || course.originalPrice ? {
+            offers: {
+                "@type": "Offer",
+                category: "Paid",
+                price: course.discountedPrice || course.originalPrice,
+                priceCurrency: "INR",
+                availability: "https://schema.org/InStock",
+                url: canonicalUrl,
+            },
+        } : {}),
+        hasCourseInstance: {
+            "@type": "CourseInstance",
+            courseMode: course.courseMode === "LIVE_ONLINE" || !course.courseMode ? "Online" : course.courseMode,
+            ...(course.duration ? { courseWorkload: `PT${course.duration}H` } : {}),
+            ...(course.startDate ? { startDate: String(course.startDate).slice(0, 10) } : {}),
+        },
+    };
+    const breadcrumbSchema = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: `${SITE_URL}/` },
+            { "@type": "ListItem", position: 2, name: "Courses", item: `${SITE_URL}/courselist` },
+            ...(categoryName ? [{ "@type": "ListItem", position: 3, name: categoryName, item: `${SITE_URL}/category/${categorySlug(categoryName)}` }] : []),
+            { "@type": "ListItem", position: categoryName ? 4 : 3, name: course.title, item: canonicalUrl },
+        ],
+    };
+
     return (
         <div>
 
     <Helmet>
-      <title>
-        {seoMetadata[id]?.title ||
-          (course?.metaTitle
-            ? `${course.metaTitle || course.title} | Upskillab`
-            : "Online Course | Upskillab")}
-      </title>
-      <meta
-        name="description"
-        content={
-          seoMetadata[id]?.metaDescription ||
-          (course?.metaDescription
-            ? `${course.metaDescription} Learn with Upskillab's expert-led online courses in psychology, technology, management, and self-development.`
-            : "Learn with Upskillab's expert-led online courses in psychology, technology, management, and self-development to gain skills for today's competitive job market.")
-        }
-      />
-      <meta
-        name="keywords"
-        content={
-          course?.tags?.length > 0
-            ? `${course.tags.join(", ")}, online course, upskillab, e-learning`
-            : "online course, upskillab, psychology, technology, management, self-development"
-        }
-      />
-      {/* Open Graph Tags for Social Media */}
-      <meta
-        property="og:title"
-        content={
-          seoMetadata[id]?.metaTitle ||
-          (course?.metaTitle
-            ? `${course.metaTitle} | Upskillab`
-            : "Online Course | Upskillab")
-        }
-      />
-      <meta
-        property="og:description"
-        content={
-          seoMetadata[id]?.metaDescription ||
-          (course?.metaDescription
-            ? course.metaDescription
-            : "Join Upskillab to master skills in psychology, technology, management, and self-development.")
-        }
-      />
-      <meta
-        property="og:image"
-        content={course?.imageUrl || "https://upskillab.com/default-image.jpg"}
-      />
-      <meta property="og:url" content={window.location.href} />
+      <title>{seoTitle}</title>
+      <meta name="description" content={seoDescription} />
+      {course?.tags?.length > 0 && (
+        <meta name="keywords" content={`${course.tags.join(", ")}, online course, upskillab`} />
+      )}
+      <link rel="canonical" href={canonicalUrl} />
+      {/* Open Graph */}
+      <meta property="og:title" content={seoTitle} />
+      <meta property="og:description" content={seoDescription} />
+      <meta property="og:image" content={seoImage} />
+      <meta property="og:url" content={canonicalUrl} />
       <meta property="og:type" content="website" />
-      {/* Twitter Card Tags */}
+      {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta
-        name="twitter:title"
-        content={
-          seoMetadata[id]?.metaTitle ||
-          (course?.metaTitle
-            ? `${course.metaTitle} | Upskillab`
-            : "Online Course | Upskillab")
-        }
-      />
-      <meta
-        name="twitter:description"
-        content={
-          seoMetadata[id]?.metaDescription ||
-          (course?.metaDescription
-            ? course.metaDescription
-            : "Join Upskillab to master skills in psychology, technology, management, and self-development.")
-        }
-      />
-      <meta
-        name="twitter:image"
-        content={course?.imageUrl || "https://upskillab.com/default-image.jpg"}
-      />
-      {/* Canonical URL */}
-      <link rel="canonical" href={window.location.href} />
+      <meta name="twitter:title" content={seoTitle} />
+      <meta name="twitter:description" content={seoDescription} />
+      <meta name="twitter:image" content={seoImage} />
+      {/* Structured data */}
+      <script type="application/ld+json">{JSON.stringify(courseSchema)}</script>
+      <script type="application/ld+json">{JSON.stringify(breadcrumbSchema)}</script>
     </Helmet>
             
             <CourseHero course={course} />

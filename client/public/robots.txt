@@ -18,13 +18,13 @@ Disallow: /api/
 # ===== BLOCK FUNCTIONAL/AUTH PAGES =====
 Disallow: /login
 Disallow: /register
+Disallow: /forgetPassword
 Disallow: /forgetpassword
+Disallow: /ResetPassword
 Disallow: /resetpassword
+Disallow: /VerifyOTP
 Disallow: /verifyOTP
 Disallow: /teacherregistration
-
-# ===== BLOCK EXAM PORTAL =====
-Disallow: /PCATExamPortal
 
 # ===== SITEMAP =====
 Sitemap: https://upskillab.com/sitemap.xml

@@ -274,7 +274,7 @@ const slideVariants = {
     Watch Demo
   </motion.button>
 ) : (
-  <NavLink to={"/CourseList"}>
+  <NavLink to={"/courselist"}>
     <motion.button
       custom={2}
       initial="hidden"

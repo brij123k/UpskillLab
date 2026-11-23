@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import { Helmet } from 'react-helmet-async';
 import ScrollToTop from "../../components/ScrollToTop";
 import AdmissionFormModal from "../../components/Modal/BasicEnrollNowModal";
+import { categorySlug } from '../../utils/seo';
 const bannerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -509,7 +510,7 @@ const CourseList = () => {
                 variants={itemVariants}
                 className="text-5xl font-bold leading-tight sm:text-6xl"
               >
-                <span className="block mb-3">Unlock Your</span>
+                <span className="block mb-3">Unlock Your</span>{" "}
                 <span className="block text-[#FF7426] drop-shadow-[0_4px_8px_rgba(77,44,94,0.3)]">
                   Tech Potential
                 </span>
@@ -782,7 +783,7 @@ const CourseList = () => {
                   >
                     <NavLink
                       to={{
-                        pathname: `/${course.category.categoryName.toLowerCase()}/course/${course.courseCode}`,
+                        pathname: `/${categorySlug(course.category.categoryName)}/course/${course.courseCode}`,
                       }}
                       state={{ courseCode: course.courseCode }}
                       className="block w-full text-left"
@@ -816,7 +817,7 @@ const CourseList = () => {
                     }}>
 
                     <a
-                      href={`/${course.category.categoryName.toLowerCase()}/course/${course.courseCode}`}
+                      href={`/${categorySlug(course.category.categoryName)}/course/${course.courseCode}`}
                       className="w-full text-center text-[#4D2C5E] font-medium hover:underline flex items-center justify-center py-2 border border-[#4D2C5E]/30 rounded-lg hover:bg-[#4D2C5E]/5 transition-colors cursor-pointer"
                     >
                       View Details
@@ -898,11 +899,11 @@ const CourseList = () => {
 
       <Helmet>
         <title>Upskillab Courses | Advance Your Skills Online</title>
-        <meta name="description" content="Browse Upskillab's extensive catalog of online courses to enhance your skills and career growth." />
+        <meta name="description" content="Browse Upskillab's online courses in psychology, technology and management - PG programs, diplomas, certificates and clinical internships with certification." />
         <meta name="keywords" content="Upskillab courses, online courses, skill development, upskilling, education online" />
         <meta property="og:title" content="Upskillab Courses | Advance Your Skills Online" />
         <meta property="og:description" content="Discover a variety of online courses at Upskillab designed to help you upskill and achieve your career goals." />
-        <meta property="og:url" content="https://upskillab.com/courses" />
+        <meta property="og:url" content="https://upskillab.com/courselist" />
         <meta property="og:type" content="website" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Upskillab Courses | Advance Your Skills Online" />

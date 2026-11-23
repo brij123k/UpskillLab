@@ -151,6 +151,7 @@ function Home() {
   ];
   return (
     <>
+      <h1 className="sr-only">Upskillab - Online Courses in Psychology, Technology &amp; Management</h1>
       <Helmet>
         <title>Upskillab | Empowering Your Career Through Online Learning</title>
         <meta
@@ -169,9 +170,9 @@ function Home() {
           property="og:description"
           content="Join Upskillab to access a wide range of online courses designed to boost your skills and career prospects."
         />
-        <meta property="og:url" content="https://upskillab.com" />
+        <meta property="og:url" content="https://upskillab.com/" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="/images/Logo.ico" />
+        <meta property="og:image" content="https://upskillab.com/images/Logo.png" />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta
@@ -183,7 +184,7 @@ function Home() {
           content="Explore Upskillab's online courses to enhance your skills and career opportunities."
         />
         <meta property="twitter:url" content="https://upskillab.com" />
-    <meta property="twitter:image" content="/images/Logo.ico" />
+    <meta name="twitter:image" content="https://upskillab.com/images/Logo.png" />
         <link rel="canonical" href="https://upskillab.com/" />
 
         {/* ✅ FAQ Schema JSON-LD */}
@@ -515,7 +516,7 @@ function Home() {
                 </motion.div>
 
                 <motion.div variants={itemVariants}>
-                  <NavLink to='/ContactUs'>
+                  <NavLink to='/contactus'>
                     <motion.button
                       className="bg-[#4d2c5e] hover:bg-[#3a2148] text-white font-bold py-3 px-6 rounded-4xl transition-all duration-300 flex items-center cursor-pointer"
                       whileHover={{ scale: 1.05 }}

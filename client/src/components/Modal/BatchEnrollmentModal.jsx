@@ -378,7 +378,7 @@ const EnrollmentModal = ({ batch, onClose }) => {
                   required
                 />
                 <label className="ml-2 text-xs sm:text-sm text-gray-700">
-                  I agree to the <a href="/TermsOfService" className="text-[#FF7426] underline">terms and conditions</a>
+                  I agree to the <a href="/terms-of-service" className="text-[#FF7426] underline">terms and conditions</a>
                 </label>
               </div>
             </motion.div>

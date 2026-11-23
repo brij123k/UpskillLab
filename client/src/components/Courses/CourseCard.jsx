@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FiClock, FiBarChart2, FiArrowRight, FiBookmark } from 'react-icons/fi';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { categorySlug } from '../../utils/seo';
 const CourseCard = ({
   id,
   courseId,
@@ -151,7 +152,7 @@ const CourseCard = ({
 
             <NavLink
               to={{
-                pathname: `/${categoryName.toLowerCase()}/course/${courseCode}`,
+                pathname: `/${categorySlug(categoryName)}/course/${courseCode}`,
               }}
               state={{ courseId, courseCode }}
             >

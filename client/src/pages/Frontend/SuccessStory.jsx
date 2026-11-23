@@ -135,7 +135,7 @@ const SuccessStory = () => {
           variants={itemVariants}
           className="text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl"
         >
-          <span className="block mb-2">From Learning</span>
+          <span className="block mb-2">From Learning</span>{" "}
           <span className="block text-[#FF7426] drop-shadow-[0_2px_4px_rgba(77,44,94,0.3)]">
             To Earning
           </span>

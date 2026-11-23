@@ -171,6 +171,13 @@ const ApiConfig = {
   submitRating:`${url}/exam-rating`,
 
   getAllNewsEvent:`${url}/news-events`,
+
+  // support tickets
+  supportTickets:`${url}/support-tickets`,
+  mySupportTickets:`${url}/support-tickets/my`,
+  supportTicketOptions:`${url}/support-tickets/options`,
+  editMySupportTicket:(id)=>`${url}/support-tickets/my/${id}`,
+  reopenSupportTicket:(id)=>`${url}/support-tickets/my/${id}/reopen`,
   
 };
 

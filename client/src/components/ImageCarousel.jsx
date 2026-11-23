@@ -193,7 +193,7 @@ const HiringPartnersShowcase = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8 }}
           >
-            <NavLink to="/ContactUs">
+            <NavLink to="/contactus">
               <motion.button
                   className="px-8 py-3 bg-[#4D2C5E] text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all cursor-pointer"  
                   whileHover={{ 
@@ -287,7 +287,7 @@ const HiringPartnersShowcase = () => {
       animate={{ opacity: 1 }}
       transition={{ delay: 0.8 }}
     >
-       <NavLink to="/ContactUs">
+       <NavLink to="/contactus">
         <motion.button
           className="px-6 py-2 bg-[#4D2C5E] text-white rounded-full font-medium shadow-md hover:shadow-lg transition-all cursor-pointer text-sm"  
           whileHover={{ 

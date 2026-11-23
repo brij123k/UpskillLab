@@ -472,7 +472,7 @@ const RegistrationPage = () => {
                         >
                             By continuing, you agree to the{' '}
                             <motion.a 
-                                href="/TermsOfService" 
+                                href="/terms-of-service" 
                                 className="text-[#FF7426] hover:underline"
                                 whileHover={{ scale: 1.05 }}
                             >

@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { NavLink } from "react-router-dom";
+import { categorySlug } from '../../utils/seo';
 const BatchCard = ({
   onEnroll,
   startDate,
@@ -185,7 +186,7 @@ const BatchCard = ({
           {/* View Details Button */}
           <NavLink
             to={{
-              pathname: `/${categoryName.toLowerCase()}/course/${courseCode}`,
+              pathname: `/${categorySlug(categoryName)}/course/${courseCode}`,
             }}
             state={{
               courseId,

@@ -152,14 +152,14 @@ const StudentsBlog = () => {
         </div>
 
         <div className="relative max-w-7xl mx-auto text-center">
-          <motion.h2
+          <motion.h1
             className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4"
             initial={{ y: -20 }}
             animate={{ y: 0 }}
             transition={{ duration: 0.5 }}
           >
             Upskillab <span className="text-[#FF7426]">Blog</span>
-          </motion.h2>
+          </motion.h1>
 
           <motion.p
             className="text-lg sm:text-xl text-white/90 max-w-3xl mx-auto"
@@ -222,7 +222,7 @@ const StudentsBlog = () => {
   <meta name="keywords" content="Upskillab blog, student insights, online learning tips, education articles" />
   <meta property="og:title" content="Upskillab Student Blog | Insights and Tips for Online Learners" />
   <meta property="og:description" content="Read blog posts from Upskillab students sharing their experiences and advice on online learning." />
-  <meta property="og:url" content="https://upskillab.com/student-blog" />
+  <meta property="og:url" content="https://upskillab.com/blog" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Upskillab Student Blog | Insights and Tips for Online Learners" />

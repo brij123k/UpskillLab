@@ -4,7 +4,7 @@ import {
   FiHome, FiBook, FiCalendar, FiVideo, FiStar,FiFileText,
   FiMessageSquare, FiTrendingUp, FiBriefcase, 
   FiBell, FiUser, FiLogOut, FiClock, FiMenu, FiX, FiChevronRight,
-  FiUserCheck
+  FiUserCheck, FiLifeBuoy
 } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import ApiConfig from '../../config/apiConfig';
@@ -264,7 +264,14 @@ const StudentHeader = () => {
         notifications.map(notification => (
           <div 
             key={notification._id}
-            onClick={() => markAsRead(notification._id)}
+            onClick={() => {
+              markAsRead(notification._id);
+              // Linked notifications (e.g. support ticket updates) open the related page
+              if (notification.link) {
+                setIsNotificationOpen(false);
+                navigate(notification.link);
+              }
+            }}
             className={`px-4 py-3 border-b border-gray-100 cursor-pointer transition-colors duration-150 ease-in-out ${
               !notification.read ? 'bg-blue-50/50 hover:bg-blue-50' : 'hover:bg-gray-50'
             }`}
@@ -412,6 +419,15 @@ const StudentHeader = () => {
                   >
                     <FiUserCheck  className="mr-2" />
                     Book Counselling
+                  </NavLink>
+
+                  <NavLink
+                    to="/Student/Tickets"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                    onClick={() => setIsProfileDropdownOpen(false)}
+                  >
+                    <FiLifeBuoy className="mr-2" />
+                    Support Tickets
                   </NavLink>
 
                   <NavLink
@@ -600,6 +616,15 @@ const StudentHeader = () => {
               >
                 <FiUserCheck  className="inline mr-3" />
                 Book Counselling
+              </NavLink>
+
+              <NavLink
+                to="/Student/Tickets"
+                className="block py-3 px-2 rounded-md text-gray-700 hover:bg-[#4D2C5E]/10 hover:text-[#4D2C5E]"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <FiLifeBuoy className="inline mr-3" />
+                Support Tickets
               </NavLink>
 
               <NavLink

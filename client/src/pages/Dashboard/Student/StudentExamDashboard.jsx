@@ -1,6 +1,54 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiClock, FiCheckCircle, FiAlertCircle, FiBookOpen, FiCalendar, FiAward, FiChevronRight, FiInfo, FiEye } from 'react-icons/fi';
+import { FiClock, FiCheckCircle, FiAlertCircle, FiBookOpen, FiCalendar, FiAward, FiChevronRight, FiInfo, FiEye, FiXCircle, FiX, FiTrendingUp } from 'react-icons/fi';
+
+/** Circular score indicator */
+const ScoreRing = ({ percentage, qualified, size = 64, stroke = 6 }) => {
+  const radius = (size - stroke) / 2;
+  const circumference = 2 * Math.PI * radius;
+  const value = Math.max(0, Math.min(percentage || 0, 100));
+  const color = qualified ? '#16a34a' : '#dc2626';
+  return (
+    <div className="relative flex-shrink-0" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="-rotate-90">
+        <circle cx={size / 2} cy={size / 2} r={radius} stroke="#e5e7eb" strokeWidth={stroke} fill="none" />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          stroke={color}
+          strokeWidth={stroke}
+          fill="none"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={circumference - (value / 100) * circumference}
+        />
+      </svg>
+      <span
+        className="absolute inset-0 flex items-center justify-center font-bold"
+        style={{ color, fontSize: size >= 100 ? 22 : 14 }}
+      >
+        {Number(percentage || 0).toFixed(size >= 100 ? 1 : 0)}%
+      </span>
+    </div>
+  );
+};
+
+/** Score bar with the qualifying mark */
+const QualifyBar = ({ percentage, qualified, qualifyPercentage = 40 }) => (
+  <div>
+    <div className="relative w-full bg-gray-200 rounded-full h-2">
+      <div
+        className={`h-2 rounded-full ${qualified ? 'bg-green-500' : 'bg-red-500'}`}
+        style={{ width: `${Math.max(0, Math.min(percentage || 0, 100))}%` }}
+      />
+      <div className="absolute top-1/2 -translate-y-1/2 w-0.5 h-3.5 bg-gray-700" style={{ left: `${qualifyPercentage}%` }} />
+    </div>
+    <div className="relative h-4 text-[10px] text-gray-500">
+      <span className="absolute -translate-x-1/2" style={{ left: `${qualifyPercentage}%` }}>{qualifyPercentage}% to qualify</span>
+    </div>
+  </div>
+);
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -87,7 +135,14 @@ const StudentExamDashboard = () => {
     }
   };
 
-  // Handle attempted exam click (show modal)
+  // Published results summary
+  const examsWithResult = exams.filter((e) => e.result);
+  const qualifiedCount = examsWithResult.filter((e) => e.result.qualified).length;
+  const averagePercentage = examsWithResult.length
+    ? examsWithResult.reduce((sum, e) => sum + (e.result.percentage || 0), 0) / examsWithResult.length
+    : 0;
+
+  // Handle attempted exam click (show modal: result if published, otherwise "under evaluation")
   const handleAttemptedClick = (exam) => {
     setSelectedExam(exam);
     setShowResultModal(true);
@@ -189,6 +244,35 @@ const StudentExamDashboard = () => {
           </div>
         </div>
 
+        {/* Results summary */}
+        {examsWithResult.length > 0 && (
+          <div className="bg-white rounded-xl shadow p-4 md:p-5 mb-6 border border-gray-100 flex flex-col md:flex-row md:items-center gap-4">
+            <div className="flex items-center gap-3 md:mr-6">
+              <div className="p-3 rounded-full bg-purple-100 text-purple-600">
+                <FiTrendingUp className="h-6 w-6" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-[#4D2C5E]">My Results</p>
+                <p className="text-xs text-gray-500">{examsWithResult.length} result{examsWithResult.length > 1 ? 's' : ''} published</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-3 flex-1">
+              <div className="text-center bg-gray-50 rounded-lg py-2">
+                <p className="text-xl font-bold text-[#4D2C5E]">{averagePercentage.toFixed(1)}%</p>
+                <p className="text-xs text-gray-500">Average Score</p>
+              </div>
+              <div className="text-center bg-green-50 rounded-lg py-2">
+                <p className="text-xl font-bold text-green-600">{qualifiedCount}</p>
+                <p className="text-xs text-gray-500">Qualified</p>
+              </div>
+              <div className="text-center bg-red-50 rounded-lg py-2">
+                <p className="text-xl font-bold text-red-600">{examsWithResult.length - qualifiedCount}</p>
+                <p className="text-xs text-gray-500">Not Qualified</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Filter Tabs */}
         <div className="bg-white rounded-xl shadow-lg p-4 md:p-6 mb-6 border border-gray-100">
           <div className="flex flex-wrap gap-2">
@@ -281,6 +365,33 @@ const StudentExamDashboard = () => {
                           </div>
                         )}
                         
+                        {/* Published result */}
+                        {exam.result && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAttemptedClick(exam);
+                            }}
+                            className={`w-full text-left mt-3 rounded-lg border p-3 transition hover:shadow-sm ${exam.result.qualified ? 'border-green-200 bg-green-50/60' : 'border-red-200 bg-red-50/60'}`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <ScoreRing percentage={exam.result.percentage} qualified={exam.result.qualified} size={56} stroke={5} />
+                              <div className="min-w-0">
+                                <p className="text-xs text-gray-500">Your Score</p>
+                                <p className="text-lg font-bold text-gray-800 leading-tight">
+                                  {exam.result.totalAwardedMarks}
+                                  <span className="text-sm font-medium text-gray-500"> / {exam.result.totalMaxMarks}</span>
+                                </p>
+                                <span className={`inline-flex items-center gap-1 text-xs font-semibold ${exam.result.qualified ? 'text-green-700' : 'text-red-700'}`}>
+                                  {exam.result.qualified ? <FiCheckCircle /> : <FiXCircle />}
+                                  {exam.result.qualified ? 'Qualified' : 'Not Qualified'}
+                                </span>
+                              </div>
+                            </div>
+                          </button>
+                        )}
+
                         {/* Action Button */}
                         <div className="mt-4">
                           {/* UPCOMING EXAMS */}
@@ -313,8 +424,23 @@ const StudentExamDashboard = () => {
                             </motion.button>
                           )}
 
+                          {/* RESULT AVAILABLE */}
+                          {exam.result && (
+                            <motion.button
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.97 }}
+                              className="w-full py-2.5 rounded-lg font-medium text-sm transition-all bg-purple-100 text-purple-700 hover:bg-purple-200 flex items-center justify-center gap-2"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleAttemptedClick(exam);
+                              }}
+                            >
+                              <FiAward className="h-4 w-4" /> View Result
+                            </motion.button>
+                          )}
+
                           {/* ONGOING EXAM - ATTEMPTED */}
-                          {exam.status === 'ongoing' && exam.submitted && (
+                          {exam.status === 'ongoing' && exam.submitted && !exam.result && (
                             <motion.button
                               whileHover={{ scale: 1.03 }}
                               whileTap={{ scale: 0.97 }}
@@ -328,29 +454,18 @@ const StudentExamDashboard = () => {
                             </motion.button>
                           )}
 
-                          {/* COMPLETED / RESULT PUBLISHED - ATTEMPTED */}
-                          {(exam.status === 'completed') && exam.submitted && (
+                          {/* COMPLETED / RESULT PUBLISHED - ATTEMPTED, RESULT NOT YET AVAILABLE */}
+                          {(exam.status === 'completed' || exam.status === 'result_published') && exam.submitted && !exam.result && (
                             <motion.button
                               whileHover={{ scale: 1.03 }}
                               whileTap={{ scale: 0.97 }}
-                              className={`w-full py-2.5 rounded-lg font-medium text-sm transition-all ${exam.status === 'result_published' ? 'bg-purple-100 text-purple-700 hover:bg-purple-200' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`}
+                              className="w-full py-2.5 rounded-lg font-medium text-sm transition-all bg-gray-200 text-gray-600 hover:bg-gray-300"
                               onClick={(e) => {
                                 e.stopPropagation();
                                 handleAttemptedClick(exam);
                               }}
                             >
-                              {exam.status === 'result_published' ? 'View Result' : 'Attempted'}
-                            </motion.button>
-                          )}
-
-                          {(exam.status === 'result_published') && exam.submitted && (
-                            <motion.button
-                              whileHover={{ scale: 1.03 }}
-                              whileTap={{ scale: 0.97 }}
-                              className={`w-full py-2.5 rounded-lg font-medium text-sm transition-all ${exam.status === 'result_published' ? 'bg-purple-100 text-purple-700 hover:bg-purple-200' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`}
-                              onClick={()=>navigate('/Student/History')}
-                            >
-                              {exam.status === 'result_published' ? 'View Result' : 'Attempted'}
+                              Attempted
                             </motion.button>
                           )}
 
@@ -398,6 +513,111 @@ const StudentExamDashboard = () => {
             className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             onClick={() => setShowResultModal(false)}
           >
+            {selectedExam.result ? (
+            <motion.div
+              initial={{ scale: 0.95, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.95, y: 20 }}
+              className="bg-white rounded-2xl shadow-xl w-full max-w-lg max-h-[92vh] overflow-y-auto relative"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setShowResultModal(false)}
+                className="absolute top-4 right-4 text-white/80 hover:text-white"
+                aria-label="Close"
+              >
+                <FiX className="h-6 w-6" />
+              </button>
+
+              <div className="bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white px-6 pt-6 pb-5 rounded-t-2xl">
+                <p className="text-xs uppercase tracking-wide text-white/70">Exam Result</p>
+                <h3 className="text-xl font-bold pr-8">{selectedExam.title}</h3>
+                {selectedExam.batchIds?.length > 0 && (
+                  <p className="text-xs text-white/70 mt-1">{selectedExam.batchIds.map((b) => b.batchCode).join(', ')}</p>
+                )}
+              </div>
+
+              <div className="p-6 space-y-5">
+                <div className="flex items-center gap-5">
+                  <ScoreRing
+                    percentage={selectedExam.result.percentage}
+                    qualified={selectedExam.result.qualified}
+                    size={110}
+                    stroke={9}
+                  />
+                  <div>
+                    <p className="text-sm text-gray-500">Marks Obtained</p>
+                    <p className="text-3xl font-bold text-gray-800">
+                      {selectedExam.result.totalAwardedMarks}
+                      <span className="text-lg font-medium text-gray-500"> / {selectedExam.result.totalMaxMarks}</span>
+                    </p>
+                    <span
+                      className={`mt-1 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-semibold ${selectedExam.result.qualified ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}
+                    >
+                      {selectedExam.result.qualified ? <FiCheckCircle /> : <FiXCircle />}
+                      {selectedExam.result.qualified ? 'Qualified' : 'Not Qualified'}
+                    </span>
+                  </div>
+                </div>
+
+                <QualifyBar
+                  percentage={selectedExam.result.percentage}
+                  qualified={selectedExam.result.qualified}
+                  qualifyPercentage={selectedExam.result.qualifyPercentage}
+                />
+                {!selectedExam.result.qualified && (
+                  <p className="text-xs text-red-600 -mt-2">
+                    Minimum {selectedExam.result.qualifyPercentage}% required to qualify.
+                  </p>
+                )}
+
+                <div className="grid grid-cols-2 gap-3 text-sm">
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <p className="text-gray-500 text-xs">Percentage</p>
+                    <p className={`font-bold ${selectedExam.result.qualified ? 'text-green-600' : 'text-red-600'}`}>
+                      {Number(selectedExam.result.percentage).toFixed(2)}%
+                    </p>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <p className="text-gray-500 text-xs">Duration</p>
+                    <p className="font-semibold text-gray-800">{selectedExam.durationMinutes} minutes</p>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <p className="text-gray-500 text-xs">Exam Date</p>
+                    <p className="font-semibold text-gray-800">{formatDate(selectedExam.startAt)}</p>
+                  </div>
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <p className="text-gray-500 text-xs">Result Published</p>
+                    <p className="font-semibold text-gray-800">
+                      {selectedExam.result.publishedAt ? formatDate(selectedExam.result.publishedAt) : '—'}
+                    </p>
+                  </div>
+                  {selectedExam.result.submittedAt && (
+                    <div className="bg-gray-50 rounded-lg p-3 col-span-2">
+                      <p className="text-gray-500 text-xs">Submitted On</p>
+                      <p className="font-semibold text-gray-800">{formatDate(selectedExam.result.submittedAt)}</p>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-3 pt-1">
+                  <button
+                    onClick={() => setShowResultModal(false)}
+                    className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all font-medium flex-1"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={handleViewResults}
+                    className="px-6 py-3 bg-gradient-to-r from-[#4D2C5E] to-[#3A2152] text-white rounded-lg hover:opacity-90 transition-all font-medium flex-1 flex items-center justify-center gap-2"
+                  >
+                    <FiEye className="h-4 w-4" />
+                    View All Results
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+            ) : (
             <motion.div
               initial={{ scale: 0.95, y: 20 }}
               animate={{ scale: 1, y: 0 }}
@@ -447,6 +667,7 @@ const StudentExamDashboard = () => {
                 )}
               </div>
             </motion.div>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

@@ -321,6 +321,14 @@ import React from 'react';
 import DOMPurify from 'dompurify';
 import PropTypes from 'prop-types';
 
+// Minimal server-side cleanup used only during prerendering.
+const stripUnsafeHtml = (html) =>
+  String(html)
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<(iframe|object|embed)[\s\S]*?<\/\1>/gi, '')
+    .replace(/\son[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s>]+)/gi, '')
+    .replace(/javascript:/gi, '');
+
 const BlogContentRenderer = ({ content }) => {
   // Function to process and style blog content
   const processBlogContent = (htmlContent) => {
@@ -789,14 +797,25 @@ const BlogContentRenderer = ({ content }) => {
     return doc.body.innerHTML;
   };
 
-  // Process the content if provided
-  const processedContent = content ? processBlogContent(content) : '';
+  // Process the content if provided. DOMParser/DOMPurify need a browser, so
+  // while prerendering (Node) emit the raw HTML minus scripts/event handlers;
+  // the browser re-renders it with the full processing on load.
+  const isBrowser = typeof window !== 'undefined' && typeof DOMParser !== 'undefined';
+  const processedContent = !content
+    ? ''
+    : isBrowser
+      ? processBlogContent(content)
+      : stripUnsafeHtml(content);
+  // The page title is the only <h1>; demote headings authored inside the post.
+  const contentHtml = processedContent
+    .replace(/<h1(\s|>)/gi, '<h2$1')
+    .replace(/<\/h1>/gi, '</h2>');
 
   return (
     <div className="w-full max-w-none">
       <div
         className="blog-content"
-        dangerouslySetInnerHTML={{ __html: processedContent }}
+        dangerouslySetInnerHTML={{ __html: contentHtml }}
       />
     </div>
   );
